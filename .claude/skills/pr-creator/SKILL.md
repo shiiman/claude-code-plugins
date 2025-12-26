@@ -10,41 +10,97 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ## ワークフロー
 
-### 1. ドキュメント参照
+### 1. 変更内容の確認
 
-`docs/pr.md` を Read ツールで参照（SSOT として扱う）。
+```bash
+git status
+git diff --staged
+git diff
+```
 
-### 2. コマンド実行
+### 2. 関連 Issue の特定
 
-`/create-pr` を SlashCommand ツールで実行（実装は Commands に委譲）。
+以下から関連 Issue を判定：
 
-## コマンド連携
+- コミットメッセージ
+- ブランチ名
+- ユーザーへの確認
 
-実際の処理は `/create-pr` に委譲します（SSOT として扱う）。
+### 3. ブランチの準備
 
-`/create-pr` コマンドは以下を行う:
+必要に応じて新しいブランチを作成：
 
-- 変更内容を確認（git status, git diff）
-- 関連 Issue を自動判定
-- ブランチを作成（必要な場合）
-- `gh pr create` で PR を作成
-- 作成された PR の URL を報告
+```bash
+# 現在のブランチ確認
+git branch --show-current
 
-## PR タイトルの命名規則
+# 必要ならブランチ作成
+git checkout -b feature/xxx
+```
 
-Conventional Commits 形式:
+### 4. PR 作成
 
-| タイプ   | 説明               |
-|----------|--------------------|
-| feat     | 新機能             |
-| fix      | バグ修正           |
-| docs     | ドキュメント       |
-| refactor | リファクタリング   |
-| chore    | その他の変更       |
+`gh pr create` で PR を作成。
+
+**PR タイトルの命名規則**（Conventional Commits 形式）:
+
+| タイプ   | 説明             | 例                                       |
+|----------|------------------|------------------------------------------|
+| feat     | 新機能           | `feat: shiiman-common プラグインを追加`  |
+| fix      | バグ修正         | `fix: コマンド名の typo を修正`          |
+| docs     | ドキュメント     | `docs: README を更新`                    |
+| refactor | リファクタリング | `refactor: スキル構造を整理`             |
+| chore    | その他の変更     | `chore: 依存関係を更新`                  |
+
+**PR 作成コマンド**:
+
+```bash
+gh pr create \
+  --title "feat: {変更内容の要約}" \
+  --body "## 概要
+
+{変更内容の説明}
+
+## 変更内容
+
+- {変更点1}
+- {変更点2}
+- {変更点3}
+
+## 関連 Issue
+
+Closes #{issue番号}
+
+## チェックリスト
+
+- [x] 命名規則に従っている
+- [x] README.md を更新した
+- [x] 動作確認済み"
+```
+
+### 5. 結果報告
+
+作成された PR の URL を報告。
+
+## Issue の自動クローズ
+
+PR 説明に以下のキーワードを含めると、マージ時に Issue が自動クローズ：
+
+- `Closes #1`
+- `Fixes #1`
+- `Resolves #1`
+
+複数 Issue をクローズする場合:
+
+```text
+Closes #1, #2, #3
+```
 
 ## 重要な注意事項
 
 - ✅ Conventional Commits 形式に従う
 - ✅ 関連 Issue を `Closes #N` で参照
 - ✅ 変更内容を箇条書きで記載
+- ✅ PR タイトルと本文は日本語で記載
 - ❌ Issue の自動クローズを忘れない
+- ❌ 変更内容と無関係な Issue を参照しない
