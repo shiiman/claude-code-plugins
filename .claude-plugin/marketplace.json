@@ -1,0 +1,8 @@
+{
+  "name": "shiiman-claude-code-plugins",
+  "description": "Personal Claude Code plugins marketplace",
+  "owner": {
+    "name": "shiiman"
+  },
+  "plugins": []
+}
