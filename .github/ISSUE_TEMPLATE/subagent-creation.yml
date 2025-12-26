@@ -1,0 +1,41 @@
+name: サブエージェント追加
+description: 既存プラグインに新しいサブエージェントを追加する
+title: "[Subagent] "
+labels: ["enhancement", "subagent"]
+body:
+  - type: input
+    id: plugin
+    attributes:
+      label: 対象プラグイン
+      description: サブエージェントを追加するプラグイン名（shiiman-xxx）
+      placeholder: shiiman-common
+    validations:
+      required: true
+
+  - type: input
+    id: subagent-name
+    attributes:
+      label: サブエージェント名
+      description: 小文字・ハイフン区切り（例：test-runner, code-analyzer）
+      placeholder: test-runner
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: サブエージェントの目的と使用ツール
+      placeholder: |
+        テストを実行して結果を報告するサブエージェント。
+        使用ツール: Bash, Read, Grep
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 追加情報（任意）
+      description: 実装の考慮ポイント等
+    validations:
+      required: false

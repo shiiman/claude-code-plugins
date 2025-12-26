@@ -1,0 +1,62 @@
+name: フック追加
+description: 既存プラグインに新しいフックを追加する
+title: "[Hook] "
+labels: ["enhancement", "hook"]
+body:
+  - type: input
+    id: plugin
+    attributes:
+      label: 対象プラグイン
+      description: フックを追加するプラグイン名（shiiman-xxx）
+      placeholder: shiiman-common
+    validations:
+      required: true
+
+  - type: dropdown
+    id: event
+    attributes:
+      label: イベント
+      description: フックを実行するタイミング
+      options:
+        - PreToolUse
+        - PostToolUse
+        - UserPromptSubmit
+        - SessionStart
+        - SessionEnd
+        - Stop
+        - Notification
+        - SubagentStop
+        - PreCompact
+    validations:
+      required: true
+
+  - type: input
+    id: matcher
+    attributes:
+      label: マッチャー（PreToolUse/PostToolUse のみ）
+      description: ツール名またはパターン（例：Bash, Write|Edit, *）
+      placeholder: Bash
+    validations:
+      required: false
+
+  - type: dropdown
+    id: hook-type
+    attributes:
+      label: フックタイプ
+      description: 実行方法
+      options:
+        - command
+        - prompt
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: フックの目的と実行内容
+      placeholder: |
+        Bash コマンド実行前にセキュリティチェックを行う。
+        コマンド: echo "実行前チェック"
+    validations:
+      required: true

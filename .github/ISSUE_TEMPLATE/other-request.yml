@@ -1,0 +1,35 @@
+name: その他のリクエスト
+description: 上記以外の機能追加・改善・質問など
+title: "[Request] "
+labels: ["question"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: リクエストタイプ
+      options:
+        - 機能追加
+        - バグ報告
+        - 改善提案
+        - 質問
+        - その他
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 内容
+      description: 要望や質問を自由に記載
+      placeholder: |
+        何を実現したいか、または何が問題かを具体的に記載してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 追加情報（任意）
+      description: 関連するファイル、スクリーンショット等
+    validations:
+      required: false

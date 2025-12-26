@@ -13,19 +13,24 @@ plugins/{plugin-name}/commands/{command-name}.md
 ## ファイル形式
 
 ```markdown
-## コマンド名
+# コマンド名
 
 このコマンドの説明。
 
-### 使い方
+## 使い方
 
-/command-name [オプション]
+/{command-name}
+/{command-name} --help
 
-### 例
+## オプション
 
-/command-name --option value
+| オプション | 説明                       |
+|------------|----------------------------|
+| `--help`   | このコマンドのヘルプを表示 |
 
-### Claude への指示
+## Claude への指示
+
+**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 このコマンドが呼び出されたときに Claude が実行する手順。
 ```
@@ -35,20 +40,37 @@ plugins/{plugin-name}/commands/{command-name}.md
 - 小文字とハイフンを使用: `my-command.md`
 - コマンド名はファイル名から（`.md` を除く）
 
+## --help オプション
+
+すべてのコマンドには `--help` オプションを含めてください。
+
+- **使い方セクション**: `/{command-name} --help` を記載
+- **オプションセクション**: `--help` オプションをテーブルに追加
+- **Claude への指示**: `--help` 時の動作（ファイル内容を要約して表示）を記載
+
 ## 例
 
-ファイル: `plugins/common/commands/hello.md`
+ファイル: `plugins/shiiman-common/commands/hello.md`
 
 ```markdown
-## Hello
+# Hello
 
 ユーザーに挨拶します。
 
-### 使い方
+## 使い方
 
 /hello [名前]
+/hello --help
 
-### Claude への指示
+## オプション
+
+| オプション | 説明                       |
+|------------|----------------------------|
+| `--help`   | このコマンドのヘルプを表示 |
+
+## Claude への指示
+
+**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 1. 名前が指定されていれば「こんにちは、{名前}さん！」と挨拶
 2. そうでなければ「こんにちは！」と挨拶

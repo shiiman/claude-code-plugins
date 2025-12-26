@@ -1,0 +1,22 @@
+name: プラグイン作成
+description: 新しいプラグインを作成する
+title: "[Plugin] "
+labels: ["enhancement", "plugin"]
+body:
+  - type: input
+    id: plugin-name
+    attributes:
+      label: プラグイン名
+      description: 小文字・ハイフン区切り。shiiman- プレフィックスは自動付与されます。
+      placeholder: common
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: プラグインの目的を1-2文で
+      placeholder: 汎用的なユーティリティコマンドを提供
+    validations:
+      required: true

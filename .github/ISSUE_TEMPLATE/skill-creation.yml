@@ -1,0 +1,41 @@
+name: スキル追加
+description: 既存プラグインに新しいスキルを追加する
+title: "[Skill] "
+labels: ["enhancement", "skill"]
+body:
+  - type: input
+    id: plugin
+    attributes:
+      label: 対象プラグイン
+      description: スキルを追加するプラグイン名（shiiman-xxx）
+      placeholder: shiiman-common
+    validations:
+      required: true
+
+  - type: input
+    id: skill-name
+    attributes:
+      label: スキル名
+      description: 小文字・ハイフン区切り（例：code-reviewer, test-generator）
+      placeholder: code-reviewer
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: スキルの目的とトリガーフレーズ
+      placeholder: |
+        コードレビューを行うスキル。
+        トリガー: 「レビューして」「コードチェック」
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 追加情報（任意）
+      description: 実装の考慮ポイント等
+    validations:
+      required: false

@@ -1,0 +1,40 @@
+# Issue/PR Labels
+# Synced via .github/workflows/sync-labels.yml
+
+# Issue タイプラベル（Issue テンプレートで使用）
+- name: "enhancement"
+  color: "a2eeef"
+  description: "新機能の追加"
+
+- name: "plugin"
+  color: "0366d6"
+  description: "プラグイン関連"
+
+- name: "command"
+  color: "5319e7"
+  description: "コマンド関連"
+
+- name: "skill"
+  color: "d93f0b"
+  description: "スキル関連"
+
+- name: "subagent"
+  color: "fbca04"
+  description: "サブエージェント関連"
+
+- name: "hook"
+  color: "0e8a16"
+  description: "フック関連"
+
+- name: "question"
+  color: "d876e3"
+  description: "質問・その他リクエスト"
+
+# カテゴリラベル（Auto Labeler で使用）
+- name: "documentation"
+  color: "0075ca"
+  description: "ドキュメント関連の変更"
+
+- name: "ci/cd"
+  color: "d4c5f9"
+  description: "CI/CD、GitHub Actions 関連"

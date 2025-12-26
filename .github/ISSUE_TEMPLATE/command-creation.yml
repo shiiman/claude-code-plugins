@@ -1,0 +1,39 @@
+name: コマンド追加
+description: 既存プラグインに新しいコマンドを追加する
+title: "[Command] "
+labels: ["enhancement", "command"]
+body:
+  - type: input
+    id: plugin
+    attributes:
+      label: 対象プラグイン
+      description: コマンドを追加するプラグイン名（shiiman-xxx）
+      placeholder: shiiman-common
+    validations:
+      required: true
+
+  - type: input
+    id: command-name
+    attributes:
+      label: コマンド名
+      description: 小文字・ハイフン区切り（例：analyze-code, generate-test）
+      placeholder: analyze-code
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: 何をするコマンドか1行で簡潔に
+      placeholder: コードを分析してベストプラクティスを提案
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 追加情報（任意）
+      description: 実装の考慮ポイント等
+    validations:
+      required: false

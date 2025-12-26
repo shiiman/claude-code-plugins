@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ドキュメント
+    url: https://github.com/shiiman/claude-code-plugins#readme
+    about: プラグインの使い方はREADMEを参照

@@ -22,11 +22,18 @@ plugins/{plugin-name}/
 
 ## Available Commands
 
+### Plugin Creation
+
 - `/create-plugin` - Create a new plugin
 - `/create-command` - Add a command to a plugin
 - `/create-skill` - Add a skill to a plugin
 - `/create-subagent` - Add a subagent to a plugin
 - `/create-hook` - Add a hook to a plugin
+
+### Workflow
+
+- `/create-issues` - Create multiple issues from a plan
+- `/create-pr` - Create a PR and close related issues
 
 ## Documentation
 
@@ -35,6 +42,8 @@ plugins/{plugin-name}/
 - docs/skill.md - Skill creation guide
 - docs/subagent.md - Subagent creation guide
 - docs/hook.md - Hook creation guide
+- docs/issues.md - Issue creation guide
+- docs/pr.md - PR creation guide
 
 ## Commit Messages
 
