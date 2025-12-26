@@ -15,6 +15,20 @@
 |------------|----------------------------|
 | `--help`   | このコマンドのヘルプを表示 |
 
+## 実行例
+
+```bash
+# 基本的な使用
+/create-issues
+→ 計画の内容を確認
+→ 作成する Issue 一覧を表示
+→ 確認後、一括作成
+
+# 結果:
+# - #1 [Plugin] shiiman-common
+# - #2 [Command] shiiman-common:commit
+```
+
 ## Claude への指示
 
 **`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
@@ -46,11 +60,21 @@
 作成しますか？ (y/n)
 ```
 
-**例**: 計画が「プラグインとコマンド1つ」のみの場合、上記のように2つだけ作成。
+**例**: 計画が「プラグインとコマンド 1 つ」のみの場合、上記のように 2 つだけ作成。
 
 ### ステップ 3: Issue 作成
 
 `gh issue create` コマンドで計画に含まれる Issue のみを作成。
+
+**Issue タイプと対応するラベル**:
+
+| タイプ           | タイトルプレフィックス | ラベル                |
+|------------------|------------------------|-----------------------|
+| プラグイン       | `[Plugin]`             | enhancement, plugin   |
+| コマンド         | `[Command]`            | enhancement, command  |
+| スキル           | `[Skill]`              | enhancement, skill    |
+| サブエージェント | `[Subagent]`           | enhancement, subagent |
+| フック           | `[Hook]`               | enhancement, hook     |
 
 **コマンドリファレンス**（必要なものだけ使用）:
 
@@ -137,13 +161,3 @@ Issue を作成しました:
 - 各 Issue の実装を開始
 - 実装完了後は /create-pr で PR を作成
 ```
-
-## Issue タイプと対応するラベル
-
-| タイプ | タイトルプレフィックス | ラベル |
-|--------|------------------------|--------|
-| プラグイン | `[Plugin]` | enhancement, plugin |
-| コマンド | `[Command]` | enhancement, command |
-| スキル | `[Skill]` | enhancement, skill |
-| サブエージェント | `[Subagent]` | enhancement, subagent |
-| フック | `[Hook]` | enhancement, hook |

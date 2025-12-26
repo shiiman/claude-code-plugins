@@ -15,6 +15,20 @@
 |------------|----------------------------|
 | `--help`   | このコマンドのヘルプを表示 |
 
+## 実行例
+
+```bash
+# 基本的な使用
+/create-hook
+→ 対象プラグイン: shiiman-common
+→ イベント: PreToolUse
+→ マッチャー: Bash
+→ フックタイプ: command
+→ コマンド: echo "Bash コマンドを実行します"
+
+# 結果: plugins/shiiman-common/hooks/hooks.json が作成/更新される
+```
+
 ## Claude への指示
 
 **`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
@@ -50,6 +64,18 @@
 - プラグインが存在するか確認
 - イベントが有効か確認
 - PreToolUse / PostToolUse の場合、マッチャーが指定されているか確認
+
+### イベント一覧
+
+| イベント           | matcher | 説明                           |
+|--------------------|---------|--------------------------------|
+| `PreToolUse`       | 必須    | ツール実行前（ブロック可能）   |
+| `PostToolUse`      | 必須    | ツール実行後                   |
+| `UserPromptSubmit` | 不要    | ユーザープロンプト送信時       |
+| `SessionStart`     | 不要    | セッション開始時               |
+| `SessionEnd`       | 不要    | セッション終了時               |
+| `Stop`             | 不要    | レスポンス完了時               |
+| `Notification`     | 不要    | 通知時                         |
 
 ### ステップ 3: hooks.json を作成または更新
 
@@ -116,6 +142,6 @@
 次のステップ:
 - /create-hook で別のフックを追加
 - /create-command でコマンドを追加
-- /create-skill で別のスキルを追加
+- /create-skill でスキルを追加
 - /create-subagent でサブエージェントを追加
 ```

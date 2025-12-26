@@ -1,6 +1,6 @@
 ---
 name: issues-creator
-description: 計画から複数の Issue を作成。「Issue 作成」「Issue を作って」「issues 作成」「計画から Issue」でトリガー。
+description: 計画から複数の GitHub Issue をまとめて作成する。「Issue 作成」「Issue を作って」「issues 作成」「計画から Issue」「Issue 追加」「Issue を追加したい」「まとめて Issue」などで起動。計画を Issue に分解して一括作成。
 allowed-tools: [Read, Bash, Glob]
 ---
 
@@ -8,12 +8,19 @@ allowed-tools: [Read, Bash, Glob]
 
 計画から複数の GitHub Issue をまとめて作成します。
 
-## 手順
+## ワークフロー
 
-トリガーされたら `/create-issues` コマンドを実行。
+### 1. ドキュメント参照
 
-1. `docs/issues.md` を参照として読む
-2. `/create-issues` を実行してユーザーを Issue 作成にガイド
+`docs/issues.md` を Read ツールで参照（SSOT として扱う）。
+
+### 2. コマンド実行
+
+`/create-issues` を SlashCommand ツールで実行（実装は Commands に委譲）。
+
+## コマンド連携
+
+実際の処理は `/create-issues` に委譲します（SSOT として扱う）。
 
 `/create-issues` コマンドは以下を行う:
 
@@ -24,10 +31,16 @@ allowed-tools: [Read, Bash, Glob]
 
 ## Issue タイプ
 
-| タイプ | プレフィックス | ラベル |
-|--------|----------------|--------|
-| プラグイン | `[Plugin]` | enhancement, plugin |
-| コマンド | `[Command]` | enhancement, command |
-| スキル | `[Skill]` | enhancement, skill |
-| サブエージェント | `[Subagent]` | enhancement, subagent |
-| フック | `[Hook]` | enhancement, hook |
+| タイプ           | プレフィックス | ラベル                |
+|------------------|----------------|-----------------------|
+| プラグイン       | `[Plugin]`     | enhancement, plugin   |
+| コマンド         | `[Command]`    | enhancement, command  |
+| スキル           | `[Skill]`      | enhancement, skill    |
+| サブエージェント | `[Subagent]`   | enhancement, subagent |
+| フック           | `[Hook]`       | enhancement, hook     |
+
+## 重要な注意事項
+
+- ✅ 計画に含まれる項目のみを Issue として作成
+- ✅ 適切なラベルを付与
+- ❌ 不要な Issue を含めない

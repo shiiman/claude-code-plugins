@@ -15,6 +15,17 @@
 |------------|----------------------------|
 | `--help`   | このコマンドのヘルプを表示 |
 
+## 実行例
+
+```bash
+# 基本的な使用
+/create-plugin
+→ プラグイン名: common
+→ 説明: 汎用ユーティリティコマンドを提供
+
+# 結果: plugins/shiiman-common/ が作成される
+```
+
 ## Claude への指示
 
 **`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
@@ -27,7 +38,7 @@
    - 例: `common`, `react`, `code-review`
    - `shiiman-` プレフィックスは省略可（自動付与される）
 
-2. **説明**（1-2文）
+2. **説明**（1-2 文）
 
 ### ステップ 2: 名前の正規化と検証
 
@@ -44,12 +55,12 @@
 
 **重要**: 他のマーケットプレイスとの競合を避けるため、プラグイン名には必ず `shiiman-` プレフィックスを付ける。
 
-| ルール | 例 |
-|--------|-----|
-| プレフィックス自動付与 | `common` → `shiiman-common` |
-| 小文字のみ | `shiiman-common` ✅ / `shiiman-Common` ❌ |
-| ハイフン区切り | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
-| コロン禁止 | `shiiman:common` ❌（コマンド区切りと競合） |
+| ルール                 | 例                                                  |
+|------------------------|-----------------------------------------------------|
+| プレフィックス自動付与 | `common` → `shiiman-common`                         |
+| 小文字のみ             | `shiiman-common` ✅ / `shiiman-Common` ❌           |
+| ハイフン区切り         | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
+| コロン禁止             | `shiiman:common` ❌（コマンド区切りと競合）         |
 
 **呼び出し形式**: `/shiiman-common:commit`
 

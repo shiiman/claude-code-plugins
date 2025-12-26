@@ -15,6 +15,20 @@
 |------------|----------------------------|
 | `--help`   | このコマンドのヘルプを表示 |
 
+## 実行例
+
+```bash
+# 基本的な使用
+/create-pr
+→ 変更内容を確認
+→ 関連 Issue を自動判定
+→ PR を作成
+
+# 結果:
+# https://github.com/shiiman/claude-code-plugins/pull/4
+# Closes #1, #2, #3
+```
+
 ## Claude への指示
 
 **`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
@@ -65,6 +79,18 @@ Closes #1, #2, #3
 - [x] 動作確認済み"
 ```
 
+### PR タイトルの命名規則
+
+Conventional Commits 形式:
+
+| タイプ   | 説明               | 例                                      |
+|----------|--------------------|-----------------------------------------|
+| feat     | 新機能             | `feat: shiiman-common プラグインを追加` |
+| fix      | バグ修正           | `fix: コマンド名の typo を修正`         |
+| docs     | ドキュメント       | `docs: README を更新`                   |
+| refactor | リファクタリング   | `refactor: スキル構造を整理`            |
+| chore    | その他の変更       | `chore: .gitignore を更新`              |
+
 ### ステップ 4: 報告
 
 ```text
@@ -81,14 +107,3 @@ https://github.com/shiiman/claude-code-plugins/pull/4
 - PR をレビュー
 - マージ後、Issue が自動でクローズされます
 ```
-
-## PR タイトルの命名規則
-
-Conventional Commits 形式:
-
-| タイプ | 説明 | 例 |
-|--------|------|-----|
-| feat | 新機能 | `feat: shiiman-common プラグインを追加` |
-| fix | バグ修正 | `fix: コマンド名のtypoを修正` |
-| docs | ドキュメント | `docs: README を更新` |
-| refactor | リファクタリング | `refactor: スキル構造を整理` |
