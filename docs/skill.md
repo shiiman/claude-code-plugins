@@ -328,6 +328,13 @@ my-skill/
 | テンプレートやスクリプトが必要 | 独自実装パターン |
 | 実装の重複を避けたい           | SSOT パターン    |
 
+### スキルのみで実装する場合
+
+以下のような機能は、コマンドを作成せずスキルのみで実装することを検討してください：
+
+- **シンプルな CLI ラッパー**: 既存 CLI コマンドを呼ぶだけの機能
+- **自然言語トリガーのみが必要**: 明示的なコマンド呼び出しが不要な機能
+
 ## ベストプラクティス
 
 ### 1. 簡潔さと "Claude は既に賢い" 原則
@@ -542,6 +549,34 @@ Claude が必要と判断できるよう、分かりやすいファイル名を�
 
 - **name フィールド**: 小文字、数字、ハイフン（`a-z`, `0-9`, `-`）のみ、最大 64 文字
 - **ディレクトリ名**: kebab-case、name フィールドと一致させる
+- **プラグイン名をプレフィックスに含めない**: `lister` ✅ / `plugin-lister` ❌
+
+### コマンドとスキルの名前の対応
+
+SSOT パターンでコマンドとスキルを連携させる場合、名前に一貫性を持たせます：
+
+```bash
+# ✅ 良い例: コマンドとスキルの名前が対応
+commands/list.md     → skills/lister/SKILL.md
+commands/show.md     → skills/shower/SKILL.md
+commands/install.md  → skills/installer/SKILL.md
+
+# ❌ 悪い例: 名前が不一致で分かりづらい
+commands/show.md     → skills/viewer/SKILL.md    # show と viewer が不一致
+commands/list.md     → skills/display/SKILL.md   # list と display が不一致
+```
+
+**命名パターン**:
+
+| コマンド | スキル（名詞形） |
+|----------|------------------|
+| list | lister |
+| show | shower |
+| install | installer |
+| uninstall | uninstaller |
+| enable | enabler |
+| disable | disabler |
+| update | updater |
 
 ### 命名パターン
 

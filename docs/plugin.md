@@ -51,5 +51,32 @@ plugins/{plugin-name}/
 | 小文字のみ | `shiiman-common` ✅ / `shiiman-Common` ❌ |
 | ハイフン区切り | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
 | コロン禁止 | `shiiman:common` ❌（コマンド区切りと競合） |
+| 簡潔な名前 | `shiiman-plugin` ✅ / `shiiman-plugin-manager` ❌ |
 
 **呼び出し形式**: `/shiiman-common:commit`
+
+### 良い命名の例
+
+```bash
+# ✅ 良い例: 簡潔で分かりやすい
+shiiman-plugin      # プラグイン管理
+shiiman-git         # Git 操作
+shiiman-react       # React 開発
+
+# ❌ 悪い例: 冗長
+shiiman-plugin-manager
+shiiman-git-operations
+shiiman-react-development-tools
+```
+
+## プラグイン管理コマンド
+
+Claude Code CLI でプラグインを管理できます：
+
+```bash
+claude plugin install <plugin>    # インストール（plugin@marketplace 形式も可）
+claude plugin uninstall <plugin>  # アンインストール
+claude plugin enable <plugin>     # 有効化
+claude plugin disable <plugin>    # 無効化
+claude plugin update <plugin>     # アップデート
+```

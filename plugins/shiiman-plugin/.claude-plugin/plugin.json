@@ -1,0 +1,8 @@
+{
+    "name": "shiiman-plugin",
+    "version": "1.0.0",
+    "description": "プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供",
+    "author": {
+        "name": "shiiman"
+    }
+}
