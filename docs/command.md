@@ -62,6 +62,22 @@ plugins/{plugin-name}/commands/{command-name}.md
 
 - 小文字とハイフンを使用: `my-command.md`
 - コマンド名はファイル名から（`.md` を除く）
+- **プラグイン名をプレフィックスに含めない**: `list.md` ✅ / `plugin-list.md` ❌
+
+### ファイル名の注意点
+
+コマンドファイル名にプラグイン名やリソース名のプレフィックスは不要です。プラグイン名は呼び出し時に自動的に付与されます。
+
+```bash
+# ✅ 良い例
+plugins/shiiman-plugin/commands/list.md      # → /shiiman-plugin:list
+plugins/shiiman-plugin/commands/show.md      # → /shiiman-plugin:show
+plugins/shiiman-plugin/commands/install.md   # → /shiiman-plugin:install
+
+# ❌ 悪い例（冗長）
+plugins/shiiman-plugin/commands/plugin-list.md
+plugins/shiiman-plugin/commands/plugin-show.md
+```
 
 ### コマンド特有のパターン
 
