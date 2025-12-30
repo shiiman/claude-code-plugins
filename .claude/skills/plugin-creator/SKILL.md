@@ -28,7 +28,7 @@ allowed-tools: [Read, Write, Bash, Glob]
 - shiiman- プレフィックスを自動付与
 - ディレクトリ構造を作成
 - plugin.json を生成
-- README.md を生成
+- README.md を生成（インストール方法を含む）
 - marketplace.json を更新
 
 ## 命名規則
@@ -40,9 +40,29 @@ allowed-tools: [Read, Write, Bash, Glob]
 - コロン（`:`）禁止（コマンド区切りと競合）
 - 例: `shiiman-common`, `shiiman-react`, `shiiman-code-review`
 
+## README の必須項目
+
+README には以下を必ず含める:
+
+- プラグイン名と説明
+- **インストール方法**:
+
+  ```bash
+  # マーケットプレイスを追加（初回のみ）
+  /plugin marketplace add shiiman/claude-code-plugins
+
+  # プラグインをインストール
+  /plugin install {plugin-name}@shiiman-claude-code-plugins
+  ```
+
+- コマンド一覧
+- スキル一覧
+- ライセンス
+
 ## 重要な注意事項
 
 - ✅ shiiman- プレフィックスを必ず付与
 - ✅ 小文字・ハイフン区切りを使用
+- ✅ README にインストール方法を必ず記載
 - ❌ アンダースコアやキャメルケースは使用しない
 - ❌ コロンは使用しない

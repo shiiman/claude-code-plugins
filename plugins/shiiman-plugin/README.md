@@ -2,6 +2,16 @@
 
 プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供します。
 
+## インストール
+
+```bash
+# マーケットプレイスを追加（初回のみ）
+/plugin marketplace add shiiman/claude-code-plugins
+
+# プラグインをインストール
+/plugin install shiiman-plugin@shiiman-claude-code-plugins
+```
+
 ## 機能一覧
 
 | 機能 | コマンド | スキル | 説明 |
