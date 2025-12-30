@@ -1,12 +1,12 @@
 # Create Hook
 
-プラグインに新しいフックを作成します。
+プロジェクトの `.claude/settings.json` に新しいフックを追加します。
 
 ## 使い方
 
 ```bash
-/create-hook
-/create-hook --help
+/shiiman-claude:create-hook
+/shiiman-claude:create-hook --help
 ```
 
 ## オプション
@@ -19,14 +19,13 @@
 
 ```bash
 # 基本的な使用
-/create-hook
-→ 対象プラグイン: shiiman-common
+/shiiman-claude:create-hook
 → イベント: PreToolUse
 → マッチャー: Bash
 → フックタイプ: command
 → コマンド: echo "Bash コマンドを実行します"
 
-# 結果: plugins/shiiman-common/.claude/settings.json の hooks セクションが更新される
+# 結果: .claude/settings.json の hooks セクションが更新される
 ```
 
 ## Claude への指示
@@ -37,10 +36,7 @@
 
 ユーザーに以下を聞く:
 
-1. **対象プラグイン** - どのプラグインにフックを追加するか
-   - `plugins/` ディレクトリから既存プラグインを一覧表示
-
-2. **イベント** - いつ実行するか
+1. **イベント** - いつ実行するか
    - `PreToolUse`: ツール実行前（ブロック可能、matcher 必須）
    - `PostToolUse`: ツール実行後（matcher 必須）
    - `UserPromptSubmit`: ユーザープロンプト送信時
@@ -51,21 +47,21 @@
    - `SessionStart`: セッション開始時
    - `SessionEnd`: セッション終了時
 
-3. **マッチャー**（PreToolUse / PostToolUse の場合のみ）
+2. **マッチャー**（PreToolUse / PostToolUse の場合のみ）
    - 例: `Bash`, `Write`, `Edit|Write`, `*`（すべて）
 
-4. **フックタイプ**
+3. **フックタイプ**
    - `command`: Bash コマンドを実行
    - `prompt`: LLM（Haiku）で評価
 
-5. **実行するコマンド**（type: command の場合）
+4. **実行するコマンド**（type: command の場合）
    - 例: `npm run lint`, `echo "完了"`
 
 ### ステップ 2: 検証
 
-- プラグインが存在するか確認
 - イベントが有効か確認
 - PreToolUse / PostToolUse の場合、マッチャーが指定されているか確認
+- `.claude/settings.json` が存在するか確認（なければ作成）
 
 ### イベント一覧
 
@@ -83,7 +79,7 @@
 
 ### ステップ 3: settings.json の hooks セクションを更新
 
-`plugins/{plugin-name}/.claude/settings.json` の hooks セクションを更新（ファイルがなければ作成）:
+`.claude/settings.json` の hooks セクションを更新:
 
 **PreToolUse / PostToolUse の場合（matcher 必須）:**
 
@@ -126,11 +122,7 @@
 
 既存の hooks セクションがある場合は、適切なイベントに追加する。
 
-### ステップ 4: プラグイン README を更新
-
-`plugins/{plugin-name}/README.md` のフックセクションにフックを追加。
-
-### ステップ 5: 報告
+### ステップ 4: 報告
 
 作成されたファイルと次のステップを表示:
 
@@ -138,12 +130,11 @@
 フックを作成しました: {イベント} {マッチャー（あれば）}
 
 更新:
-- plugins/{plugin-name}/.claude/settings.json
-- plugins/{plugin-name}/README.md
+- .claude/settings.json
 
 次のステップ:
-- /create-hook で別のフックを追加
-- /create-command でコマンドを追加
-- /create-skill でスキルを追加
-- /create-subagent でサブエージェントを追加
+- /shiiman-claude:create-hook で別のフックを追加
+- /shiiman-claude:create-command でコマンドを追加
+- /shiiman-claude:create-skill でスキルを追加
+- /shiiman-claude:create-subagent でサブエージェントを追加
 ```

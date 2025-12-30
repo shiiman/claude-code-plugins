@@ -6,8 +6,18 @@
 
 ## 配置場所
 
+フックは `settings.json` の `hooks` セクションに設定します。
+
+### プラグインの場合
+
 ```text
-plugins/{plugin-name}/hooks/hooks.json
+plugins/{plugin-name}/.claude/settings.json
+```
+
+### プロジェクト固有の場合
+
+```text
+.claude/settings.json
 ```
 
 ## Hook イベント
@@ -31,7 +41,9 @@ plugins/{plugin-name}/hooks/hooks.json
 | `command` | Bash コマンドを実行 |
 | `prompt` | LLM（Haiku）で評価 |
 
-## ファイル形式 (hooks.json)
+## 設定形式
+
+### settings.json に設定する場合
 
 ```json
 {

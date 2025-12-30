@@ -98,10 +98,22 @@ plugins/{plugin-name}/
 
 ### ステップ 5: README.md を生成
 
-```markdown
+**重要**: README には必ずインストール方法を含める。
+
+````markdown
 # {plugin-name}
 
 {説明}
+
+## インストール
+
+```bash
+# マーケットプレイスを追加（初回のみ）
+/plugin marketplace add shiiman/claude-code-plugins
+
+# プラグインをインストール
+/plugin install {plugin-name}@shiiman-claude-code-plugins
+```
 
 ## コマンド
 
@@ -110,7 +122,11 @@ plugins/{plugin-name}/
 ## スキル
 
 （まだありません）
-```
+
+## ライセンス
+
+MIT
+````
 
 ### ステップ 6: marketplace.json を更新
 

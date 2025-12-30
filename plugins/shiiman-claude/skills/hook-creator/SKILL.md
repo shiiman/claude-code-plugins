@@ -1,36 +1,30 @@
 ---
 name: hook-creator
-description: プラグインに新しいフックを作成する。「フック作成」「新しいフック」「フックを作って」「フック追加」「hook 作成」「フックを追加したい」「新規フック」などで起動。ツール実行前後やセッションイベントで実行されるフックを生成。
+description: プロジェクトの .claude/settings.json に新しいフックを追加する。「フック作成」「新しいフック」「フックを作って」「フック追加」「hook 作成」「フックを追加したい」「新規フック」などで起動。ツール実行前後やセッションイベントで実行されるフックを設定。
 allowed-tools: [Read, Write, Bash, Glob]
 ---
 
 # Hook Creator
 
-プラグインに新しいフックを作成します。
+プロジェクトの `.claude/settings.json` に新しいフックを追加します。
 
 ## ワークフロー
 
-### 1. ドキュメント参照
+### 1. コマンド実行
 
-`docs/hook.md` を Read ツールで参照（SSOT として扱う）。
-
-### 2. コマンド実行
-
-`/create-hook` を SlashCommand ツールで実行（実装は Commands に委譲）。
+`/shiiman-claude:create-hook` を SlashCommand ツールで実行（実装は Commands に委譲）。
 
 ## コマンド連携
 
-実際の処理は `/create-hook` に委譲します（SSOT として扱う）。
+実際の処理は `/shiiman-claude:create-hook` に委譲します（SSOT として扱う）。
 
-`/create-hook` コマンドは以下を行う:
+`/shiiman-claude:create-hook` コマンドは以下を行う:
 
-- 対象プラグインを聞く
 - イベントを聞く（PreToolUse, PostToolUse, SessionStart 等）
 - マッチャーを聞く（PreToolUse / PostToolUse の場合のみ）
 - フックタイプを聞く（command または prompt）
 - 実行するコマンドを聞く
 - settings.json の hooks セクションを更新
-- プラグイン README を更新
 
 ## Hook イベント
 
@@ -49,5 +43,6 @@ allowed-tools: [Read, Write, Bash, Glob]
 ## 重要な注意事項
 
 - ✅ PreToolUse / PostToolUse には必ず matcher を指定
-- ✅ settings.json の hooks セクションに設定
+- ✅ `.claude/settings.json` の hooks セクションに設定
 - ❌ matcher が必要なイベントで matcher を省略しない
+- ❌ 別ファイル（hooks.json）は使用しない
