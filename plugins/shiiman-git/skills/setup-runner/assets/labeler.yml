@@ -1,0 +1,32 @@
+# Auto Labeler Configuration
+# See: https://github.com/actions/labeler
+
+# Documentation
+"documentation":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**/*"
+          - "*.md"
+          - "!CHANGELOG.md"
+
+# CI/CD
+"ci/cd":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**/*"
+
+# Dependencies
+"dependencies":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "package-lock.json"
+          - "yarn.lock"
+          - "pnpm-lock.yaml"
+          - "go.mod"
+          - "go.sum"
+          - "requirements.txt"
+          - "Pipfile"
+          - "Pipfile.lock"
+          - "Gemfile"
+          - "Gemfile.lock"

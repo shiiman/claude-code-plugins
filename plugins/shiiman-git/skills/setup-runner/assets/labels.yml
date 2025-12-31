@@ -1,0 +1,62 @@
+# Issue/PR Labels
+# Synced via .github/workflows/sync-labels.yml
+
+# Type labels
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "improvement"
+  color: "84b6eb"
+  description: "Improvement to existing functionality"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Documentation updates"
+
+- name: "question"
+  color: "d876e3"
+  description: "Further information is requested"
+
+# Priority labels
+- name: "priority: high"
+  color: "b60205"
+  description: "High priority"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Medium priority"
+
+- name: "priority: low"
+  color: "0e8a16"
+  description: "Low priority"
+
+# Status labels
+- name: "wontfix"
+  color: "ffffff"
+  description: "This will not be worked on"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "This issue or PR already exists"
+
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+# Category labels (for Auto Labeler)
+- name: "ci/cd"
+  color: "d4c5f9"
+  description: "CI/CD and GitHub Actions"
+
+- name: "dependencies"
+  color: "0366d6"
+  description: "Dependency updates"

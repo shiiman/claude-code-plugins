@@ -1,0 +1,8 @@
+{
+  "name": "shiiman-git",
+  "version": "1.0.0",
+  "description": "Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
+  "author": {
+    "name": "shiiman"
+  }
+}
