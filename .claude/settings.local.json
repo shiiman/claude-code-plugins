@@ -4,7 +4,9 @@
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
       "Skill(pr-creator)",
-      "Skill(pr-creator:*)"
+      "Skill(pr-creator:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh pr create:*)"
     ]
   }
 }
