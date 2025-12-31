@@ -69,7 +69,8 @@ gh pr diff {pr番号}
 ### 5. GitHub コメント投稿
 
 ```bash
-gh pr review {pr番号} --comment --body "## コードレビュー結果
+gh pr review {pr番号} --comment --body "$(cat <<'EOF'
+## コードレビュー結果
 
 ### サマリー
 
@@ -102,7 +103,8 @@ gh pr review {pr番号} --comment --body "## コードレビュー結果
 ---
 
 レビュータイプ: {types}
-"
+EOF
+)"
 ```
 
 ### 6. 結果報告

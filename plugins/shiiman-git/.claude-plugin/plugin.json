@@ -4,5 +4,6 @@
   "description": "Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
   "author": {
     "name": "shiiman"
-  }
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
 }

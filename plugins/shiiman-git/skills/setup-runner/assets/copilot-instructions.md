@@ -7,6 +7,10 @@ GitHub Copilot review guidelines for this project.
 - **Repository**: {{REPO}}
 - **Type**: {{PROJECT_TYPE}}
 
+> **Note**: These values use template variables that are automatically replaced by the `setup` command when this file is generated:
+> - `{{REPO}}`: The target repository name configured during setup.
+> - `{{PROJECT_TYPE}}`: The project type (e.g., Web App, Backend, Library) selected during setup.
+
 ## Review Prefixes
 
 Use these prefixes for review comments:
