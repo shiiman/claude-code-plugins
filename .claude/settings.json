@@ -3,8 +3,7 @@
     "allow": [
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
-      "Skill(pr-creator)",
-      "Skill(pr-creator:*)"
+      "Skill(*)"
     ]
   }
 }
