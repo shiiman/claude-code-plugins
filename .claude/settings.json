@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(gh repo view:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Skill(*)"
     ]
   }
 }

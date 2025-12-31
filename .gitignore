@@ -27,3 +27,6 @@ venv/
 dist/
 build/
 *.egg-info/
+
+# Claude
+settings.local.json
