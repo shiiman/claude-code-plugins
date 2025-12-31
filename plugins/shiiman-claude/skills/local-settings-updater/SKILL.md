@@ -86,13 +86,13 @@ allowed-tools: [Read, Write, Bash, Glob]
 
 ### env
 
-個人の環境変数:
+個人の環境変数（**注意**: 機密情報は直接書かず、環境変数を参照）:
 
 ```json
 {
   "env": {
     "DEBUG": "true",
-    "MY_API_KEY": "xxx"
+    "LOG_LEVEL": "verbose"
   }
 }
 ```
