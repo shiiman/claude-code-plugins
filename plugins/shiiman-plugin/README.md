@@ -1,6 +1,6 @@
 # shiiman-plugin
 
-プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供します。
+プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート、Issue報告機能を提供します。
 
 ## インストール
 
@@ -23,6 +23,7 @@
 | 有効化 | - | enabler | プラグインを有効化 |
 | 無効化 | - | disabler | プラグインを無効化 |
 | アップデート | - | updater | プラグインを最新版に更新 |
+| Issue報告 | `/shiiman-plugin:report` | reporter | プラグインに関する要望・改善・バグを報告 |
 
 ## コマンド
 
@@ -75,6 +76,20 @@
 /shiiman-plugin:uninstall shiiman-common
 ```
 
+### `/shiiman-plugin:report`
+
+プラグインに関する要望、改善提案、バグ報告を shiiman/claude-code-plugins リポジトリに Issue として投稿します。
+
+```bash
+/shiiman-plugin:report
+```
+
+報告の種類:
+
+- 要望（新機能の追加）→ `enhancement` ラベル
+- 改善（既存機能の改善）→ `improvement` ラベル
+- バグ（不具合の報告）→ `bug` ラベル
+
 ## スキル（自然言語トリガー）
 
 以下のような自然言語でスキルを起動できます：
@@ -88,6 +103,7 @@
 | enabler | 「〇〇を有効にして」「プラグインをオンに」 |
 | disabler | 「〇〇を無効にして」「プラグインをオフに」 |
 | updater | 「〇〇をアップデート」「プラグインを最新に」 |
+| reporter | 「バグを報告」「要望を送りたい」「改善提案」 |
 
 ## 使用する CLI コマンド
 
@@ -99,6 +115,9 @@ claude plugin uninstall <plugin>  # アンインストール
 claude plugin enable <plugin>     # 有効化
 claude plugin disable <plugin>    # 無効化
 claude plugin update <plugin>     # アップデート
+
+# Issue報告では gh コマンドを使用
+gh issue create --repo shiiman/claude-code-plugins ...
 ```
 
 ## ライセンス

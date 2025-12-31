@@ -65,6 +65,23 @@ Use Conventional Commits format:
 
 **Invocation format**: `/shiiman-common:commit`
 
+## Plugin Versioning
+
+Follow [Semantic Versioning](https://semver.org/) (SemVer) for plugin versions:
+
+| Change Type                        | Version Bump | Example         |
+|------------------------------------|--------------|-----------------|
+| Breaking change                    | MAJOR        | 1.0.0 → 2.0.0   |
+| New feature (backward compatible)  | MINOR        | 1.0.0 → 1.1.0   |
+| Bug fix (backward compatible)      | PATCH        | 1.0.0 → 1.0.1   |
+
+**Rules**:
+
+- Update `plugin.json` version when adding/modifying plugin features
+- New command, skill, subagent, or hook → MINOR bump
+- Bug fix or documentation update → PATCH bump
+- Breaking API/behavior change → MAJOR bump
+
 ## Constraints
 
 - No dependencies between plugins
