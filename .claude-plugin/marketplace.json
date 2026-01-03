@@ -13,6 +13,13 @@
       "category": "utility"
     },
     {
+      "name": "shiiman-claude",
+      "description": "Claude Code プロジェクト設定管理 - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供",
+      "version": "1.0.0",
+      "source": "./plugins/shiiman-claude",
+      "category": "utility"
+    },
+    {
       "name": "shiiman-git",
       "description": "Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
       "version": "1.0.0",
