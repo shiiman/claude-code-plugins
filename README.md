@@ -2,10 +2,59 @@
 
 個人用 Claude Code プラグインマーケットプレイス。
 
-## 使い方
+## インストール
+
+### 方法 1: プロジェクト設定（推奨）
+
+プロジェクトの `.claude/settings.json` にマーケットプレイスを設定すると、プロジェクトを開くたびに自動的にプラグインを利用できるようになります。
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "shiiman-claude-code-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:shiiman/claude-code-plugins.git"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "shiiman-plugin@shiiman-claude-code-plugins": true,
+    "shiiman-claude@shiiman-claude-code-plugins": true,
+    "shiiman-git@shiiman-claude-code-plugins": true
+  }
+}
+```
+
+**メリット**:
+
+- プロジェクトを開くと自動的にインストール
+- プラグインのバージョン管理が容易
+- 設定を共有して同じプラグイン環境を維持
+
+### 方法 2: 個別インストール
+
+#### 1. マーケットプレイスを追加
 
 ```bash
-claude plugin marketplace add shiiman/claude-code-plugins
+/plugin marketplace add shiiman/claude-code-plugins
+```
+
+#### 2. プラグインをインストール
+
+| プラグイン                      | 説明                                                    | インストールコマンド                                  |
+| ------------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| [`shiiman-plugin`](plugins/shiiman-plugin/)     | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供                            | `/plugin install shiiman-plugin@shiiman-claude-code-plugins`   |
+| [`shiiman-claude`](plugins/shiiman-claude/)       | Claude Code プロジェクト設定管理プラグイン - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供                    | `/plugin install shiiman-claude@shiiman-claude-code-plugins`    |
+| [`shiiman-git`](plugins/shiiman-git/)             | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供                                           | `/plugin install shiiman-git@shiiman-claude-code-plugins`       |
+
+**インストール例**:
+
+```bash
+# すべてのプラグインをインストール
+/plugin install shiiman-plugin@shiiman-claude-code-plugins
+/plugin install shiiman-claude@shiiman-claude-code-plugins
+/plugin install shiiman-git@shiiman-claude-code-plugins
 ```
 
 ## 構造
