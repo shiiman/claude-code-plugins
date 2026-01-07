@@ -34,7 +34,7 @@ from google_utils import (
     print_json,
     print_table,
     handle_api_error,
-    get_active_token_path,
+    get_token_path,
 )
 
 try:
@@ -249,7 +249,7 @@ def main():
         sys.exit(1)
 
     # トークンパス決定
-    token_path = args.token if args.token else get_active_token_path()
+    token_path = args.token if args.token else get_token_path()
     if not token_path:
         print_error("アクティブなプロファイルがありません。'google_auth.py login' で認証してください。")
         sys.exit(1)
