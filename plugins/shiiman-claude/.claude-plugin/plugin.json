@@ -1,7 +1,7 @@
 {
     "name": "shiiman-claude",
-    "version": "1.0.0",
-    "description": "Claude Code プロジェクト設定管理 - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供",
+    "version": "1.1.0",
+    "description": "Claude Code プロジェクト設定管理 - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理、MCP サーバー管理機能を提供",
     "author": {
         "name": "shiiman"
     }
