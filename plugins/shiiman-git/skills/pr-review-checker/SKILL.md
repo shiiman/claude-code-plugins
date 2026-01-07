@@ -1,12 +1,14 @@
 ---
-name: pr-review-responder
-description: PR レビューの指摘に対応する。「レビュー対応」「指摘を修正」「レビューコメント対応」「PR の修正」「フィードバック対応」「レビュー指摘を直す」「コメントに対応」などで起動。指摘事項を分析し修正を実行。
+name: pr-review-checker
+description: 自分の PR に付いたレビューコメントを確認し、修正対応を実行する（PR作成者向け）。「レビュー対応」「レビューコメント確認」「指摘を修正」「PRコメント確認」などで起動。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
 ---
 
-# PR Review Responder
+# PR Review Checker
 
-PR レビューの指摘に対応します。
+**自分の PR** に付いたレビューコメントを確認し、修正対応を実行します。
+
+> **注意**: 他者の PR をレビューする場合は `pr-reviewer` を使用してください。
 
 ## ワークフロー
 

@@ -22,8 +22,8 @@ git diff
 
 以下から関連 Issue を判定：
 
+- ブランチ名（`feature/26` → Issue #26）
 - コミットメッセージ
-- ブランチ名
 - ユーザーへの確認
 
 ### 3. ブランチの準備
@@ -34,51 +34,61 @@ git diff
 # 現在のブランチ確認
 git branch --show-current
 
-# 必要ならブランチ作成
-git checkout -b feature/xxx
+# 必要ならブランチ作成（feature/[issue番号] 形式）
+git checkout -b feature/26
 ```
 
-### 4. PR 作成
+**ブランチ命名規則**: `feature/[issue番号]`
+
+### 4. コミット
+
+**コミットメッセージのルール**:
+
+- 日本語で記載
+- 1行で完結（改行なし）
+- Conventional Commits 形式
+
+| タイプ   | 説明             | 例                                         |
+|----------|------------------|--------------------------------------------|
+| feat     | 新機能           | `feat: shiiman-common プラグインを追加`    |
+| fix      | バグ修正         | `fix: コマンド名の typo を修正`            |
+| docs     | ドキュメント     | `docs: README を更新`                      |
+| refactor | リファクタリング | `refactor: スキル構造を整理`               |
+| chore    | その他の変更     | `chore: 依存関係を更新`                    |
+
+```bash
+# 1行のコミットメッセージ（改行なし）
+git commit -m "feat: shiiman-claude v1.1.0 リソース管理・設定表示・MCP管理機能を追加"
+```
+
+### 5. PR 作成
 
 `gh pr create` で PR を作成。
 
-**PR タイトルの命名規則**（Conventional Commits 形式）:
-
-| タイプ   | 説明             | 例                                       |
-|----------|------------------|------------------------------------------|
-| feat     | 新機能           | `feat: shiiman-common プラグインを追加`  |
-| fix      | バグ修正         | `fix: コマンド名の typo を修正`          |
-| docs     | ドキュメント     | `docs: README を更新`                    |
-| refactor | リファクタリング | `refactor: スキル構造を整理`             |
-| chore    | その他の変更     | `chore: 依存関係を更新`                  |
+**PR タイトル**: コミットメッセージと同様、Conventional Commits 形式・日本語・1行
 
 **PR 作成コマンド**:
 
 ```bash
 gh pr create \
   --title "feat: {変更内容の要約}" \
-  --body "## 概要
-
-{変更内容の説明}
-
-## 変更内容
+  --body "## Summary
 
 - {変更点1}
 - {変更点2}
 - {変更点3}
 
-## 関連 Issue
+## Test plan
+
+- [ ] {テスト項目1}
+- [ ] {テスト項目2}
 
 Closes #{issue番号}
 
-## チェックリスト
-
-- [x] 命名規則に従っている
-- [x] README.md を更新した
-- [x] 動作確認済み"
+🤖 Generated with [Claude Code](https://claude.com/claude-code)"
 ```
 
-### 5. 結果報告
+### 6. 結果報告
 
 作成された PR の URL を報告。
 
@@ -98,6 +108,8 @@ Closes #1, #2, #3
 
 ## 重要な注意事項
 
+- ✅ ブランチ名は `feature/[issue番号]` 形式
+- ✅ コミットメッセージは日本語で1行
 - ✅ Conventional Commits 形式に従う
 - ✅ 関連 Issue を `Closes #N` で参照
 - ✅ 変更内容を箇条書きで記載

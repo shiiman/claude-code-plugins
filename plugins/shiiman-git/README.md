@@ -18,6 +18,7 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 
 | コマンド | 説明 |
 |----------|------|
+| `/shiiman-git:dev-flow` | **Issue → 実装 → PR を自動実行** |
 | `/shiiman-git:setup` | GitHub 設定ファイルを一括生成 |
 | `/shiiman-git:commit-message` | コミットメッセージ命名規則の設定・表示 |
 | `/shiiman-git:issue-list` | オープン Issue 一覧を優先順位付きで表示 |
@@ -29,14 +30,15 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 |--------|------------|------|
 | setup-runner | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
 | commit-messenger | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
+| committer | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
 | branch-creator | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
 | gitignore-checker | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
 | issue-creator | 「Issue 作成」 | タスクを分割して Issue を作成 |
 | issue-updater | 「Issue 更新」 | Issue の状態を更新 |
 | issue-lister | 「Issue 一覧」 | オープン Issue を表示 |
 | pr-creator | 「PR 作成」 | PR を作成し関連 Issue を参照 |
-| pr-reviewer | 「PR レビュー」 | PR をレビューして GitHub にコメント |
-| pr-review-responder | 「レビュー対応」 | レビュー指摘を修正 |
+| pr-reviewer | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
+| pr-review-checker | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
 | pr-lister | 「PR 一覧」 | オープン PR を表示 |
 | pr-approver | 「PR 承認」 | PR を approve |
 | actions-debugger | 「Actions エラー」 | GitHub Actions のエラーを調査 |
@@ -89,3 +91,69 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 - `git reset --hard`
 - `git clean -fd`
 - `gh repo delete`
+
+## ワークフローガイド
+
+### 自動開発フロー（推奨）
+
+`/shiiman-git:dev-flow` を使うと、以下のフローを自動実行します:
+
+```
+[計画書] → Issue作成 → ブランチ作成 → 実装 → 自己レビュー → [確認] → コミット → プッシュ → PR作成
+```
+
+**計画書からの開始（デフォルト）**: plan mode で計画を立てた後、`/shiiman-git:dev-flow` を実行すると計画書をもとに Issue を作成できます。タスクの説明を直接指定する場合は `/shiiman-git:dev-flow タスクの説明` のように引数を渡します。
+
+### 手動フロー
+
+個別のスキルを使う場合:
+
+1. **作業開始時**
+   - `issue-creator` → タスクを Issue 化
+   - `branch-creator` → Issue 番号でブランチ作成
+
+2. **コミット時**
+   - `gitignore-checker` → 機密ファイルチェック
+   - `committer` → コミット＆プッシュ
+
+3. **PR 作成時**
+   - `pr-creator` → PR 作成
+
+4. **レビュー時**
+   - `pr-reviewer` → **他者の PR** をレビュー（レビュアーとして）
+   - `pr-review-checker` → **自分の PR** のレビューコメントに対応（作成者として）
+
+5. **完了時**
+   - `pr-approver` → PR 承認
+
+## トラブルシューティング
+
+### GitHub API レート制限
+
+エラー: `API rate limit exceeded`
+
+**対処法:**
+
+1. 待機: 制限リセットまで待つ（通常1時間）
+2. 確認: `gh api rate_limit` でリセット時間を確認
+3. 認証: Personal Access Token を使用してレート制限を緩和
+
+### 認証エラー
+
+エラー: `gh: Not logged in`
+
+**対処法:**
+
+```bash
+gh auth login
+gh auth status  # 認証状態確認
+```
+
+### 権限エラー
+
+エラー: `Resource not accessible by integration`
+
+**対処法:**
+
+- リポジトリへの適切な権限があるか確認
+- Organization リポジトリの場合は SSO 認証を確認

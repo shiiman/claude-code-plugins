@@ -32,9 +32,14 @@
 
 | 形式 | 例 |
 |------|-----|
-| Conventional Commits | `feat: 新機能を追加` |
-| 日本語形式 | `新機能: ユーザー認証を追加` |
+| Conventional Commits（日本語） | `feat: 新機能を追加` |
+| 日本語プレフィックス | `新機能: ユーザー認証を追加` |
 | カスタム | ユーザー定義 |
+
+**言語・行数ルール**:
+
+- **日本語で記述**
+- **1行で簡潔に**（50文字以内推奨）
 
 **使用するプレフィックス**（Conventional Commits の場合）:
 
@@ -71,6 +76,8 @@
   "git": {
     "commitMessage": {
       "format": "conventional",
+      "language": "ja",
+      "singleLine": true,
       "prefixes": ["feat", "fix", "docs", "refactor", "chore", "test"],
       "issueReference": true,
       "issueFormat": "(#N)"
@@ -85,6 +92,8 @@
 ## コミットメッセージ設定
 
 形式: Conventional Commits
+言語: 日本語
+行数: 1行
 プレフィックス: feat, fix, docs, refactor, chore, test
 Issue 参照: あり (末尾括弧形式)
 
@@ -92,7 +101,7 @@ Issue 参照: あり (末尾括弧形式)
 
 feat: ユーザー認証機能を追加 (#123)
 fix: ログイン時のエラーを修正 (#124)
-docs: README を更新
+docs: READMEを更新
 ```
 
 ## 重要な注意事項

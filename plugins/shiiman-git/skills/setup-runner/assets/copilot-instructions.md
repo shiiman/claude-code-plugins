@@ -1,44 +1,48 @@
-# Copilot Instructions
+# Copilot 指示
 
-GitHub Copilot review guidelines for this project.
+このプロジェクトの GitHub Copilot レビューガイドライン。
 
-## Project Overview
+## 言語
 
-- **Repository**: {{REPO}}
-- **Type**: {{PROJECT_TYPE}}
+- **すべてのレビューコメントは日本語で記述すること**
 
-> **Note**: These values use template variables that are automatically replaced by the `setup` command when this file is generated:
-> - `{{REPO}}`: The target repository name configured during setup.
-> - `{{PROJECT_TYPE}}`: The project type (e.g., Web App, Backend, Library) selected during setup.
+## プロジェクト概要
 
-## Review Prefixes
+- **リポジトリ**: {{REPO}}
+- **種類**: {{PROJECT_TYPE}}
 
-Use these prefixes for review comments:
+> **注**: これらの値は `setup` コマンドでファイル生成時に自動的に置換されるテンプレート変数です:
+> - `{{REPO}}`: セットアップ時に設定された対象リポジトリ名
+> - `{{PROJECT_TYPE}}`: セットアップ時に選択されたプロジェクト種類（例: Web App, Backend, Library）
 
-- **must.** - Required fix (security, correctness, breaking change)
-- **imo.** - Improvement suggestion (code quality, performance)
-- **nits.** - Minor issues (typos, formatting)
-- **q.** - Questions (clarification needed)
+## レビュープレフィックス
 
-## Priority Checks
+レビューコメントには以下のプレフィックスを使用:
 
-### Required (must)
+- **must.** - 必須の修正（セキュリティ、正確性、破壊的変更）
+- **imo.** - 改善提案（コード品質、パフォーマンス）
+- **nits.** - 軽微な指摘（タイポ、フォーマット）
+- **q.** - 質問（確認が必要）
 
-- Security vulnerabilities (OWASP Top 10)
-- Breaking changes without documentation
-- Hardcoded secrets or credentials
-- Missing error handling
+## 優先度チェック
 
-### Recommended (imo)
+### 必須 (must)
 
-- Code duplication
-- Missing tests for new functionality
-- Performance improvements
-- Documentation updates
+- セキュリティ脆弱性（OWASP Top 10）
+- ドキュメントなしの破壊的変更
+- ハードコードされた秘密情報や認証情報
+- エラーハンドリングの欠落
 
-## Do NOT
+### 推奨 (imo)
 
-- Make assumptions about intent
-- Suggest non-existent APIs or methods
-- Provide duplicate comments
-- Suggest over-optimization
+- コードの重複
+- 新機能に対するテストの欠落
+- パフォーマンス改善
+- ドキュメント更新
+
+## 禁止事項
+
+- 意図を推測しない
+- 存在しない API やメソッドを提案しない
+- 重複したコメントをしない
+- 過度な最適化を提案しない
