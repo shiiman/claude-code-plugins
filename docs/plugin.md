@@ -41,6 +41,68 @@ plugins/{plugin-name}/
 }
 ```
 
+## プラグインの更新手順
+
+プラグインを更新する際は、以下の手順に従ってください。
+
+### 1. plugin.json のバージョン更新
+
+`plugins/{plugin-name}/.claude-plugin/plugin.json` の `version` フィールドを更新します。
+
+**バージョニングルール**（[Semantic Versioning](https://semver.org/) に準拠）:
+
+| 変更内容 | バージョンアップ | 例 |
+|---------|----------------|-----|
+| 破壊的変更 | MAJOR | 1.0.0 → 2.0.0 |
+| 新機能追加（後方互換） | MINOR | 1.0.0 → 1.1.0 |
+| バグ修正（後方互換） | PATCH | 1.0.0 → 1.0.1 |
+
+**更新例**:
+
+```json
+{
+  "name": "plugin-name",
+  "version": "1.1.0",  // 1.0.0 から更新
+  "description": "プラグインの説明",
+  "author": {
+    "name": "shiiman"
+  }
+}
+```
+
+### 2. README.md の更新
+
+`plugins/{plugin-name}/README.md` を更新します（必要に応じて）。
+
+- 新機能の説明を追加
+- 変更履歴を追記
+- 使い方の更新
+
+### 3. marketplace.json のバージョン更新
+
+`.claude-plugin/marketplace.json` の該当プラグインエントリの `version` フィールドを更新します。
+
+**重要**: `plugin.json` のバージョンと `marketplace.json` のバージョンは一致させる必要があります。
+
+**更新例**:
+
+```json
+{
+  "name": "plugin-name",
+  "description": "プラグインの説明",
+  "version": "1.1.0",  // 1.0.0 から更新（plugin.json と一致させる）
+  "author": { "name": "shiiman" },
+  "source": "./plugins/plugin-name",
+  "category": "development"
+}
+```
+
+### 更新手順のまとめ
+
+1. ✅ `plugins/{plugin-name}/.claude-plugin/plugin.json` の `version` を更新
+2. ✅ `plugins/{plugin-name}/README.md` を更新（必要に応じて）
+3. ✅ `.claude-plugin/marketplace.json` の該当エントリの `version` を更新（plugin.json と一致させる）
+
 ## 命名規則
 
 **重要**: 他のマーケットプレイスとの競合を避けるため、プラグイン名には必ず `shiiman-` プレフィックスを付ける。
