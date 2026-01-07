@@ -3,6 +3,7 @@
 import argparse
 import datetime as dt
 import json
+import re
 from typing import List, Tuple
 
 from googleapiclient.discovery import build
@@ -75,6 +76,185 @@ def _range_for(period: str) -> Tuple[str, str]:
     return start.isoformat(), end.isoformat()
 
 
+# 日付形式のパターン
+DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")  # YYYY-MM-DD
+DATE_RANGE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$")  # YYYY-MM-DD:YYYY-MM-DD
+MONTH_PATTERN = re.compile(r"^\d{4}-\d{2}$")  # YYYY-MM
+
+# キーワード
+LEGACY_KEYWORDS = {"today", "week", "month"}
+RELATIVE_KEYWORDS = {"tomorrow", "yesterday", "next-week", "next-month"}
+
+
+def _parse_relative(keyword: str, now: dt.datetime) -> Tuple[str, str]:
+    """相対キーワードを解析する。
+
+    Args:
+        keyword: 相対キーワード ("tomorrow", "yesterday", "next-week", "next-month")
+        now: 現在日時
+
+    Returns:
+        (time_min, time_max) のタプル（ISO形式文字列）
+    """
+    if keyword == "tomorrow":
+        start = (now + dt.timedelta(days=1)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end = start + dt.timedelta(days=1)
+    elif keyword == "yesterday":
+        start = (now - dt.timedelta(days=1)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end = start + dt.timedelta(days=1)
+    elif keyword == "next-week":
+        # 来週の月曜日から
+        days_until_next_monday = (7 - now.weekday()) % 7
+        if days_until_next_monday == 0:
+            days_until_next_monday = 7
+        start = (now + dt.timedelta(days=days_until_next_monday)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end = start + dt.timedelta(days=7)
+    elif keyword == "next-month":
+        # 来月の初日から
+        if now.month == 12:
+            start = now.replace(
+                year=now.year + 1, month=1, day=1,
+                hour=0, minute=0, second=0, microsecond=0
+            )
+        else:
+            start = now.replace(
+                month=now.month + 1, day=1,
+                hour=0, minute=0, second=0, microsecond=0
+            )
+        # 再来月の初日
+        if start.month == 12:
+            end = start.replace(year=start.year + 1, month=1)
+        else:
+            end = start.replace(month=start.month + 1)
+    else:
+        raise ValueError(f"未知の相対キーワード: {keyword}")
+
+    return start.isoformat(), end.isoformat()
+
+
+def _parse_single_date(date_str: str) -> Tuple[str, str]:
+    """特定日付を解析する (YYYY-MM-DD)。
+
+    Args:
+        date_str: 日付文字列
+
+    Returns:
+        (time_min, time_max) のタプル（ISO形式文字列）
+    """
+    try:
+        date = dt.datetime.strptime(date_str, "%Y-%m-%d")
+        start = date.replace(tzinfo=dt.timezone.utc)
+        end = start + dt.timedelta(days=1)
+        return start.isoformat(), end.isoformat()
+    except ValueError as e:
+        raise ValueError(f"無効な日付形式です: {date_str}") from e
+
+
+def _parse_date_range(range_str: str) -> Tuple[str, str]:
+    """日付範囲を解析する (YYYY-MM-DD:YYYY-MM-DD)。
+
+    Args:
+        range_str: 日付範囲文字列
+
+    Returns:
+        (time_min, time_max) のタプル（ISO形式文字列）
+    """
+    try:
+        start_str, end_str = range_str.split(":")
+        start = dt.datetime.strptime(start_str, "%Y-%m-%d").replace(
+            tzinfo=dt.timezone.utc
+        )
+        end = dt.datetime.strptime(end_str, "%Y-%m-%d").replace(
+            tzinfo=dt.timezone.utc
+        )
+
+        if start > end:
+            raise ValueError(f"開始日が終了日より後です: {range_str}")
+
+        return start.isoformat(), end.isoformat()
+    except ValueError as e:
+        if "開始日が終了日より後" in str(e):
+            raise
+        raise ValueError(f"無効な日付範囲形式です: {range_str}") from e
+
+
+def _parse_month(month_str: str) -> Tuple[str, str]:
+    """月指定を解析する (YYYY-MM)。
+
+    Args:
+        month_str: 月指定文字列
+
+    Returns:
+        (time_min, time_max) のタプル（ISO形式文字列）
+    """
+    try:
+        date = dt.datetime.strptime(month_str + "-01", "%Y-%m-%d")
+        start = date.replace(tzinfo=dt.timezone.utc)
+
+        # 翌月の初日
+        if start.month == 12:
+            end = start.replace(year=start.year + 1, month=1)
+        else:
+            end = start.replace(month=start.month + 1)
+
+        return start.isoformat(), end.isoformat()
+    except ValueError as e:
+        raise ValueError(f"無効な月指定形式です: {month_str}") from e
+
+
+def parse_range(range_str: str) -> Tuple[str, str]:
+    """期間指定文字列を解析し、開始・終了日時を返す。
+
+    Args:
+        range_str: 期間指定文字列
+            - 既存: "today", "week", "month"
+            - 相対: "tomorrow", "yesterday", "next-week", "next-month"
+            - 特定日付: "YYYY-MM-DD"
+            - 日付範囲: "YYYY-MM-DD:YYYY-MM-DD"
+            - 月指定: "YYYY-MM"
+
+    Returns:
+        (time_min, time_max) のタプル（ISO形式文字列、半開区間 [start, end)）
+
+    Raises:
+        ValueError: 無効な形式の場合
+    """
+    now = dt.datetime.now(dt.timezone.utc)
+
+    # 既存キーワード（後方互換性）
+    if range_str in LEGACY_KEYWORDS:
+        return _range_for(range_str)
+
+    # 相対キーワード
+    if range_str in RELATIVE_KEYWORDS:
+        return _parse_relative(range_str, now)
+
+    # 日付範囲 (YYYY-MM-DD:YYYY-MM-DD)
+    if DATE_RANGE_PATTERN.match(range_str):
+        return _parse_date_range(range_str)
+
+    # 特定日付 (YYYY-MM-DD)
+    if DATE_PATTERN.match(range_str):
+        return _parse_single_date(range_str)
+
+    # 月指定 (YYYY-MM)
+    if MONTH_PATTERN.match(range_str):
+        return _parse_month(range_str)
+
+    # 無効な形式
+    valid_formats = (
+        "today, week, month, tomorrow, yesterday, next-week, next-month, "
+        "YYYY-MM-DD, YYYY-MM-DD:YYYY-MM-DD, YYYY-MM"
+    )
+    raise ValueError(f"無効な期間指定です: {range_str}\n有効な形式: {valid_formats}")
+
+
 def list_events(
     token_path: str,
     period: str = "today",
@@ -85,7 +265,8 @@ def list_events(
 
     Args:
         token_path: トークンファイルパス
-        period: 期間 ("today", "week", "month")
+        period: 期間指定文字列（today, week, month, tomorrow, yesterday,
+                next-week, next-month, YYYY-MM-DD, YYYY-MM-DD:YYYY-MM-DD, YYYY-MM）
         calendar_id: カレンダーID（デフォルト: primary）
         max_results: 最大取得件数
 
@@ -93,7 +274,7 @@ def list_events(
         イベントのリスト
     """
     service = _get_service(token_path)
-    time_min, time_max = _range_for(period)
+    time_min, time_max = parse_range(period)
 
     events_result = (
         service.events()
@@ -144,7 +325,8 @@ def list_all_events(
 
     Args:
         token_path: トークンファイルパス
-        period: 期間 ("today", "week", "month")
+        period: 期間指定文字列（today, week, month, tomorrow, yesterday,
+                next-week, next-month, YYYY-MM-DD, YYYY-MM-DD:YYYY-MM-DD, YYYY-MM）
         max_results: 最大取得件数（カレンダーごと）
 
     Returns:
@@ -437,9 +619,12 @@ def main() -> None:
     events_parser = subparsers.add_parser("events", help="予定一覧を取得")
     events_parser.add_argument(
         "--range",
-        choices=["today", "week", "month"],
         default="today",
-        help="期間 (デフォルト: today)",
+        help=(
+            "期間指定 (デフォルト: today). "
+            "キーワード: today, week, month, tomorrow, yesterday, next-week, next-month. "
+            "日付: YYYY-MM-DD. 範囲: YYYY-MM-DD:YYYY-MM-DD. 月: YYYY-MM"
+        ),
     )
     events_parser.add_argument(
         "--calendar",
@@ -494,9 +679,12 @@ def main() -> None:
     # 後方互換性のための引数（サブコマンドなしの場合）
     parser.add_argument(
         "--range",
-        choices=["today", "week", "month"],
         default="today",
-        help="期間 (デフォルト: today)",
+        help=(
+            "期間指定 (デフォルト: today). "
+            "キーワード: today, week, month, tomorrow, yesterday, next-week, next-month. "
+            "日付: YYYY-MM-DD. 範囲: YYYY-MM-DD:YYYY-MM-DD. 月: YYYY-MM"
+        ),
     )
     parser.add_argument(
         "--calendar",
