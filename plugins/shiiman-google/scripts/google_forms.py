@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Google Forms API操作スクリプト
 
-フォームの作成・取得・更新を行う。
+フォームの作成・取得・更新・回答取得を行う。
 
 使用例:
     # フォーム作成
@@ -14,6 +14,10 @@
     # 質問追加
     python google_forms.py add-question --form-id "xxx" --question "お名前は？" --type TEXT
     python google_forms.py add-question --form-id "xxx" --question "好きな色は？" --type RADIO --options "赤,青,緑"
+
+    # 回答取得
+    python google_forms.py responses --form-id "xxx"
+    python google_forms.py responses --form-id "xxx" --max 100
 """
 
 import argparse
@@ -33,6 +37,7 @@ from google_utils import (
     print_json,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -43,6 +48,7 @@ except ImportError:
 
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body",
+    "https://www.googleapis.com/auth/forms.responses.readonly",
     "https://www.googleapis.com/auth/drive.file",
 ]
 
@@ -217,6 +223,73 @@ def add_question(token_path: str, form_id: str, question: str, question_type: st
     }
 
 
+@retry_with_backoff()
+@handle_api_error
+def get_responses(token_path: str, form_id: str, max_results: int = 50) -> dict:
+    """フォームの回答を取得する
+
+    Args:
+        token_path: トークンファイルのパス
+        form_id: フォームID
+        max_results: 最大取得件数
+
+    Returns:
+        回答情報
+    """
+    creds = load_credentials(token_path, SCOPES)
+    service = build("forms", "v1", credentials=creds)
+
+    # フォーム情報を取得
+    form = service.forms().get(formId=form_id).execute()
+    form_title = form.get("info", {}).get("title", "")
+
+    # 質問IDと質問文のマッピングを作成
+    question_map = {}
+    for item in form.get("items", []):
+        if "questionItem" in item:
+            question_id = item["questionItem"]["question"].get("questionId")
+            if question_id:
+                question_map[question_id] = item.get("title", "")
+
+    # 回答を取得
+    responses_result = service.forms().responses().list(
+        formId=form_id,
+        pageSize=max_results
+    ).execute()
+
+    responses = []
+    for response in responses_result.get("responses", []):
+        response_data = {
+            "responseId": response.get("responseId"),
+            "createTime": response.get("createTime"),
+            "lastSubmittedTime": response.get("lastSubmittedTime"),
+            "answers": []
+        }
+
+        # 各回答を処理
+        for question_id, answer_data in response.get("answers", {}).items():
+            question_text = question_map.get(question_id, question_id)
+            text_answers = answer_data.get("textAnswers", {}).get("answers", [])
+            answer_values = [a.get("value", "") for a in text_answers]
+
+            response_data["answers"].append({
+                "question": question_text,
+                "questionId": question_id,
+                "values": answer_values
+            })
+
+        responses.append(response_data)
+
+    return {
+        "formId": form_id,
+        "formTitle": form_title,
+        "responseCount": len(responses),
+        "responses": responses,
+        "editUrl": f"https://docs.google.com/forms/d/{form_id}/edit",
+        "responsesUrl": f"https://docs.google.com/forms/d/{form_id}/edit#responses"
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Google Forms 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
@@ -242,6 +315,11 @@ def main():
                                       help="質問タイプ")
     add_question_parser.add_argument("--options", help="選択肢（カンマ区切り）")
     add_question_parser.add_argument("--required", action="store_true", help="必須にする")
+
+    # responses コマンド
+    responses_parser = subparsers.add_parser("responses", help="回答取得")
+    responses_parser.add_argument("--form-id", required=True, help="フォームID")
+    responses_parser.add_argument("--max", type=int, default=50, help="最大取得件数（デフォルト: 50）")
 
     args = parser.parse_args()
 
@@ -296,6 +374,22 @@ def main():
             print(f"  質問: {result['question']}")
             print(f"  タイプ: {result['type']}")
             print(f"  編集URL: {result['editUrl']}")
+
+    elif args.command == "responses":
+        result = get_responses(token_path, args.form_id, args.max)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"フォーム: {result['formTitle']}")
+            print(f"回答数: {result['responseCount']}")
+            print(f"回答URL: {result['responsesUrl']}")
+            print("-" * 40)
+            for i, response in enumerate(result['responses'], 1):
+                print(f"\n回答 {i} ({response['lastSubmittedTime']}):")
+                for answer in response['answers']:
+                    values = ", ".join(answer['values']) if answer['values'] else "(未回答)"
+                    print(f"  Q: {answer['question']}")
+                    print(f"  A: {values}")
 
 
 if __name__ == "__main__":

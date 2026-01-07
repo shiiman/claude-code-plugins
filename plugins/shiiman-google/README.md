@@ -36,6 +36,9 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | 検索 | `/shiiman-google:drive-search` | 「Drive 検索」 | ファイルを検索 |
 | 移動 | `/shiiman-google:drive-move` | - | ファイルをフォルダに移動 |
 | フォルダ作成 | `/shiiman-google:drive-create-folder` | - | フォルダを新規作成 |
+| **共有** | `/shiiman-google:drive-share` | 「ファイルを共有」 | ファイル共有設定（v1.2.0） |
+| **共有解除** | `/shiiman-google:drive-unshare` | - | 共有を解除（v1.2.0） |
+| **共有確認** | `/shiiman-google:drive-permissions` | 「共有状況確認」 | 共有設定一覧を取得（v1.2.0） |
 
 ### Google Calendar
 
@@ -43,6 +46,9 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 |------|----------|---------------|------|
 | 予定取得 | - | 「今日の予定」「今週の予定」「今月の予定」 | 期間を指定して予定を取得 |
 | 予定追加 | `/shiiman-google:calendar-add` | 「予定追加」「カレンダーに追加」 | 予定を追加（色・カレンダー指定可） |
+| **予定詳細** | `/shiiman-google:calendar-get` | - | イベント詳細を取得（v1.2.0） |
+| **予定更新** | `/shiiman-google:calendar-update` | 「予定を変更」 | 予定を編集（v1.2.0） |
+| **予定削除** | `/shiiman-google:calendar-delete` | 「予定を削除」 | 予定を削除（v1.2.0） |
 
 ### Gmail
 
@@ -55,6 +61,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | スター付き一覧 | - | 「スター付きメール」 | スター付きメッセージ一覧 |
 | 送信 | `/shiiman-google:gmail-send` | 「メール送信」「メールを送って」 | メールを送信 |
 | 下書き | `/shiiman-google:gmail-draft` | 「下書き作成」「下書きを保存」 | 下書きを作成 |
+| **検索** | `/shiiman-google:gmail-search` | 「メール検索」 | Gmail検索クエリで検索（v1.2.0） |
 
 ### Google Docs
 
@@ -65,6 +72,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | 作成 | `/shiiman-google:docs-create` | 「ドキュメント作成」 | 新規ドキュメントを作成 |
 | 取得 | `/shiiman-google:docs-get` | - | ドキュメント内容を取得 |
 | 更新 | `/shiiman-google:docs-update` | 「ドキュメント更新」 | テキストを追加 |
+| **エクスポート** | `/shiiman-google:docs-export` | 「DocsをPDFで」 | PDF/Word等でエクスポート（v1.2.0） |
 
 ### Google Sheets
 
@@ -75,6 +83,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | 作成 | `/shiiman-google:sheets-create` | 「スプレッドシート作成」 | 新規スプレッドシートを作成 |
 | 取得 | `/shiiman-google:sheets-get` | - | セルデータを取得 |
 | 更新 | `/shiiman-google:sheets-update` | 「スプレッドシート更新」 | セルを更新 |
+| **エクスポート** | `/shiiman-google:sheets-export` | 「SheetsをCSVで」 | CSV/Excel等でエクスポート（v1.2.0） |
 
 ### Google Slides
 
@@ -85,6 +94,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | 作成 | `/shiiman-google:slides-create` | 「プレゼン作成」 | 新規プレゼンテーションを作成 |
 | 取得 | `/shiiman-google:slides-get` | - | スライド情報を取得 |
 | スライド追加 | `/shiiman-google:slides-add-slide` | 「スライド追加」 | スライドを追加 |
+| **エクスポート** | `/shiiman-google:slides-export` | 「SlidesをPDFで」 | PDF/PowerPoint等でエクスポート（v1.2.0） |
 
 ### Google Forms
 
@@ -95,6 +105,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | 作成 | `/shiiman-google:forms-create` | 「フォーム作成」 | 新規フォームを作成 |
 | 取得 | `/shiiman-google:forms-get` | - | フォーム情報を取得 |
 | 質問追加 | `/shiiman-google:forms-add-question` | 「質問追加」 | 質問を追加 |
+| **回答取得** | `/shiiman-google:forms-responses` | 「フォームの回答」 | 回答一覧を取得（v1.2.0） |
 
 ### Google Apps Script
 

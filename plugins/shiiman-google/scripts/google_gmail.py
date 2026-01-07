@@ -17,6 +17,7 @@ from google_utils import (
     list_profiles,
     load_credentials,
     print_error,
+    retry_with_backoff,
 )
 
 DEFAULT_SCOPES = [
@@ -121,6 +122,43 @@ def list_starred(token_path: str, max_results: int = 20) -> List[dict]:
     service = _get_service(token_path)
     message_ids = _fetch_all_message_ids(service, "is:starred", max_results)
     return _get_message_metadata(service, message_ids)
+
+
+@retry_with_backoff()
+@handle_api_error
+def search_messages(
+    token_path: str,
+    query: str,
+    max_results: int = 20,
+    include_body: bool = False,
+) -> List[dict]:
+    """Gmail検索クエリでメッセージを検索する。
+
+    Args:
+        token_path: トークンファイルパス
+        query: Gmail検索クエリ
+            例: "from:example@gmail.com"
+                "subject:会議"
+                "after:2024/01/01 before:2024/12/31"
+                "has:attachment"
+                "is:unread from:boss@company.com"
+        max_results: 最大取得件数
+
+    Returns:
+        検索結果のメッセージリスト
+    """
+    service = _get_service(token_path)
+    message_ids = _fetch_all_message_ids(service, query, max_results)
+    results = _get_message_metadata(service, message_ids)
+
+    # 本文も取得する場合
+    if include_body:
+        for result in results:
+            body = read_message(token_path, result["id"])
+            # 本文を短く切り詰める（最初の500文字）
+            result["body_preview"] = body[:500] + "..." if len(body) > 500 else body
+
+    return results
 
 
 def read_message(token_path: str, message_id: str) -> str:
@@ -420,6 +458,12 @@ def main() -> None:
     draft_parser.add_argument("--bcc", help="BCC（カンマ区切り）")
     draft_parser.add_argument("--html", action="store_true", help="HTMLメールとして送信")
 
+    # search サブコマンド
+    search_parser = subparsers.add_parser("search", help="メール検索")
+    search_parser.add_argument("--query", required=True, help="Gmail検索クエリ（例: from:xxx subject:会議）")
+    search_parser.add_argument("--max", type=int, default=20, help="最大取得件数")
+    search_parser.add_argument("--include-body", action="store_true", help="本文プレビューを含める")
+
     args = parser.parse_args()
 
     # トークンパスの決定
@@ -526,6 +570,14 @@ def main() -> None:
             print(f"  件名: {result['subject']}")
             print(f"  下書きID: {result['id']}")
             print(f"  URL: {result['url']}")
+
+    elif args.command == "search":
+        items = search_messages(token_path, args.query, args.max, args.include_body)
+        if args.include_body:
+            search_headers = ["id", "subject", "from", "date", "body_preview"]
+        else:
+            search_headers = headers
+        format_output(items, search_headers, args.format)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Google Slides API操作スクリプト
 
-プレゼンテーションの作成・取得・更新を行う。
+プレゼンテーションの作成・取得・更新・エクスポートを行う。
 
 使用例:
     # プレゼンテーション作成
@@ -13,6 +13,10 @@
 
     # スライド追加
     python google_slides.py add-slide --presentation-id "xxx" --title "新しいスライド" --body "本文テキスト"
+
+    # PDFエクスポート
+    python google_slides.py export --presentation-id "xxx" --output "presentation.pdf"
+    python google_slides.py export --presentation-id "xxx" --output "presentation.pptx" --type pptx
 """
 
 import argparse
@@ -32,6 +36,7 @@ from google_utils import (
     print_json,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -205,6 +210,65 @@ def add_slide(token_path: str, presentation_id: str, title: str = None, body: st
     }
 
 
+@retry_with_backoff()
+@handle_api_error
+def export_presentation(
+    token_path: str,
+    presentation_id: str,
+    output_path: str,
+    mime_type: str = "application/pdf",
+) -> dict:
+    """プレゼンテーションをエクスポートする
+
+    Args:
+        token_path: トークンファイルのパス
+        presentation_id: プレゼンテーションID
+        output_path: 出力ファイルパス
+        mime_type: 出力形式のMIMEタイプ
+            - application/pdf: PDF
+            - application/vnd.openxmlformats-officedocument.presentationml.presentation: PowerPoint
+            - application/vnd.oasis.opendocument.presentation: ODP
+            - text/plain: プレーンテキスト（スライドノートのみ）
+
+    Returns:
+        エクスポート結果
+    """
+    creds = load_credentials(token_path, SCOPES)
+    drive_service = build("drive", "v3", credentials=creds)
+    slides_service = build("slides", "v1", credentials=creds)
+
+    # プレゼンテーション名を取得
+    presentation = slides_service.presentations().get(presentationId=presentation_id).execute()
+    title = presentation.get("title", "presentation")
+
+    # エクスポート実行
+    content = drive_service.files().export(
+        fileId=presentation_id,
+        mimeType=mime_type
+    ).execute()
+
+    # ファイルに保存
+    output_path = os.path.expanduser(output_path)
+    with open(output_path, "wb") as f:
+        f.write(content)
+
+    # MIMEタイプからフォーマット名を判定
+    format_name = {
+        "application/pdf": "PDF",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": "PowerPoint",
+        "application/vnd.oasis.opendocument.presentation": "ODP",
+        "text/plain": "テキスト",
+    }.get(mime_type, mime_type)
+
+    return {
+        "id": presentation_id,
+        "title": title,
+        "format": format_name,
+        "outputPath": output_path,
+        "fileSize": os.path.getsize(output_path),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Google Slides 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
@@ -229,6 +293,17 @@ def main():
     add_slide_parser.add_argument("--layout", default="TITLE_AND_BODY",
                                    choices=["BLANK", "TITLE", "TITLE_AND_BODY", "TITLE_AND_TWO_COLUMNS"],
                                    help="レイアウト種別")
+
+    # export コマンド
+    export_parser = subparsers.add_parser("export", help="プレゼンテーションをエクスポート")
+    export_parser.add_argument("--presentation-id", required=True, help="プレゼンテーションID")
+    export_parser.add_argument("--output", required=True, help="出力ファイルパス")
+    export_parser.add_argument(
+        "--type",
+        choices=["pdf", "pptx", "odp", "txt"],
+        default="pdf",
+        help="出力形式（デフォルト: pdf）"
+    )
 
     args = parser.parse_args()
 
@@ -278,6 +353,26 @@ def main():
             print(f"  プレゼンテーションID: {result['id']}")
             print(f"  スライドID: {result['slideId']}")
             print(f"  URL: {result['url']}")
+
+    elif args.command == "export":
+        # MIMEタイプのマッピング
+        mime_types = {
+            "pdf": "application/pdf",
+            "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "odp": "application/vnd.oasis.opendocument.presentation",
+            "txt": "text/plain",
+        }
+        mime_type = mime_types.get(args.type, "application/pdf")
+
+        result = export_presentation(token_path, args.presentation_id, args.output, mime_type)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"プレゼンテーションをエクスポートしました:")
+            print(f"  タイトル: {result['title']}")
+            print(f"  形式: {result['format']}")
+            print(f"  出力先: {result['outputPath']}")
+            print(f"  ファイルサイズ: {result['fileSize']} bytes")
 
 
 if __name__ == "__main__":

@@ -26,8 +26,7 @@ DEFAULT_SCOPES = [
     "https://www.googleapis.com/auth/presentations",
     "https://www.googleapis.com/auth/forms",
     "https://www.googleapis.com/auth/script.projects",
-    "https://www.googleapis.com/auth/colab",
-    "https://www.googleapis.com/auth/calendar.readonly",
+    "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/gmail.modify",
 ]
 

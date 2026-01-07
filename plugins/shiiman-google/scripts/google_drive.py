@@ -10,6 +10,8 @@ from google_utils import (
     get_token_path,
     handle_api_error,
     load_credentials,
+    print_json,
+    retry_with_backoff,
 )
 
 DEFAULT_SCOPES = ["https://www.googleapis.com/auth/drive"]
@@ -153,6 +155,161 @@ def copy_file(
     return result
 
 
+@retry_with_backoff()
+@handle_api_error
+def share_file(
+    token_path: str,
+    file_id: str,
+    email: Optional[str] = None,
+    role: str = "reader",
+    share_type: str = "user",
+    send_notification: bool = True,
+) -> dict:
+    """ファイルを共有する。
+
+    Args:
+        token_path: トークンファイルパス
+        file_id: ファイルID
+        email: 共有先メールアドレス（share_typeがuser/groupの場合必須）
+        role: 権限（reader=閲覧, writer=編集, commenter=コメント）
+        share_type: 共有タイプ（user=個人, group=グループ, anyone=リンク共有）
+        send_notification: 共有通知メールを送信するか
+
+    Returns:
+        作成されたパーミッション情報
+    """
+    service = _get_service(token_path)
+
+    permission = {
+        "role": role,
+        "type": share_type,
+    }
+
+    if share_type in ("user", "group"):
+        if not email:
+            raise ValueError(f"{share_type}タイプの共有にはメールアドレスが必要です")
+        permission["emailAddress"] = email
+
+    result = (
+        service.permissions()
+        .create(
+            fileId=file_id,
+            body=permission,
+            sendNotificationEmail=send_notification,
+            fields="id,type,role,emailAddress",
+        )
+        .execute()
+    )
+
+    # ファイル情報も取得して共有リンクを返す
+    file_info = (
+        service.files()
+        .get(fileId=file_id, fields="name,webViewLink")
+        .execute()
+    )
+
+    return {
+        "permissionId": result.get("id"),
+        "type": result.get("type"),
+        "role": result.get("role"),
+        "emailAddress": result.get("emailAddress", ""),
+        "fileName": file_info.get("name"),
+        "fileUrl": file_info.get("webViewLink"),
+    }
+
+
+@retry_with_backoff()
+@handle_api_error
+def unshare_file(
+    token_path: str,
+    file_id: str,
+    permission_id: Optional[str] = None,
+    email: Optional[str] = None,
+) -> dict:
+    """ファイルの共有を解除する。
+
+    Args:
+        token_path: トークンファイルパス
+        file_id: ファイルID
+        permission_id: 解除するパーミッションID（優先）
+        email: 解除するメールアドレス（permission_idがない場合に使用）
+
+    Returns:
+        削除結果
+    """
+    service = _get_service(token_path)
+
+    # permission_idが指定されていない場合、emailから検索
+    if not permission_id and email:
+        permissions = get_permissions(token_path, file_id)
+        for perm in permissions:
+            if perm.get("emailAddress") == email:
+                permission_id = perm.get("id")
+                break
+
+    if not permission_id:
+        raise ValueError("permission_id または email を指定してください")
+
+    service.permissions().delete(fileId=file_id, permissionId=permission_id).execute()
+
+    return {
+        "status": "deleted",
+        "fileId": file_id,
+        "permissionId": permission_id,
+    }
+
+
+@retry_with_backoff()
+@handle_api_error
+def get_permissions(
+    token_path: str,
+    file_id: str,
+) -> List[dict]:
+    """ファイルの共有設定一覧を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        file_id: ファイルID
+
+    Returns:
+        パーミッション情報のリスト
+    """
+    service = _get_service(token_path)
+
+    # ファイル情報を取得
+    file_info = (
+        service.files()
+        .get(fileId=file_id, fields="name,webViewLink")
+        .execute()
+    )
+
+    # パーミッション一覧を取得
+    result = (
+        service.permissions()
+        .list(
+            fileId=file_id,
+            fields="permissions(id,type,role,emailAddress,displayName)",
+        )
+        .execute()
+    )
+
+    permissions = []
+    for perm in result.get("permissions", []):
+        permissions.append({
+            "id": perm.get("id"),
+            "type": perm.get("type"),
+            "role": perm.get("role"),
+            "emailAddress": perm.get("emailAddress", ""),
+            "displayName": perm.get("displayName", ""),
+        })
+
+    return {
+        "fileName": file_info.get("name"),
+        "fileUrl": file_info.get("webViewLink"),
+        "permissions": permissions,
+    }
+
+
 @handle_api_error
 def main() -> None:
     parser = argparse.ArgumentParser(description="Google Drive 操作ツール")
@@ -190,6 +347,38 @@ def main() -> None:
     copy_parser.add_argument("--file-id", required=True, help="ファイルID")
     copy_parser.add_argument("--name", help="新しいファイル名")
     copy_parser.add_argument("--destination", help="コピー先フォルダID")
+
+    # share サブコマンド
+    share_parser = subparsers.add_parser("share", help="ファイル共有")
+    share_parser.add_argument("--file-id", required=True, help="ファイルID")
+    share_parser.add_argument("--email", help="共有先メールアドレス")
+    share_parser.add_argument(
+        "--role",
+        choices=["reader", "writer", "commenter"],
+        default="reader",
+        help="権限（reader=閲覧, writer=編集, commenter=コメント）",
+    )
+    share_parser.add_argument(
+        "--type",
+        choices=["user", "group", "anyone"],
+        default="user",
+        help="共有タイプ（user=個人, group=グループ, anyone=リンク共有）",
+    )
+    share_parser.add_argument(
+        "--no-notify",
+        action="store_true",
+        help="共有通知メールを送信しない",
+    )
+
+    # unshare サブコマンド
+    unshare_parser = subparsers.add_parser("unshare", help="共有解除")
+    unshare_parser.add_argument("--file-id", required=True, help="ファイルID")
+    unshare_parser.add_argument("--permission-id", help="パーミッションID")
+    unshare_parser.add_argument("--email", help="解除するメールアドレス")
+
+    # permissions サブコマンド
+    permissions_parser = subparsers.add_parser("permissions", help="共有設定確認")
+    permissions_parser.add_argument("--file-id", required=True, help="ファイルID")
 
     args = parser.parse_args()
 
@@ -244,6 +433,58 @@ def main() -> None:
         print(f"ファイルをコピーしました: {result.get('name')}")
         print(f"ID: {result.get('id')}")
         print(f"URL: {result.get('webViewLink')}")
+
+    elif args.command == "share":
+        result = share_file(
+            token_path,
+            args.file_id,
+            args.email,
+            args.role,
+            args.type,
+            not args.no_notify,
+        )
+        if args.format == "json":
+            print_json([result])
+        else:
+            role_ja = {"reader": "閲覧", "writer": "編集", "commenter": "コメント"}
+            type_ja = {"user": "ユーザー", "group": "グループ", "anyone": "リンク共有"}
+            print(f"ファイルを共有しました:")
+            print(f"  ファイル: {result.get('fileName')}")
+            print(f"  共有タイプ: {type_ja.get(result.get('type'), result.get('type'))}")
+            print(f"  権限: {role_ja.get(result.get('role'), result.get('role'))}")
+            if result.get("emailAddress"):
+                print(f"  共有先: {result.get('emailAddress')}")
+            print(f"  URL: {result.get('fileUrl')}")
+
+    elif args.command == "unshare":
+        result = unshare_file(
+            token_path,
+            args.file_id,
+            args.permission_id,
+            args.email,
+        )
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"共有を解除しました:")
+            print(f"  ファイルID: {result.get('fileId')}")
+            print(f"  パーミッションID: {result.get('permissionId')}")
+
+    elif args.command == "permissions":
+        result = get_permissions(token_path, args.file_id)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"ファイル: {result.get('fileName')}")
+            print(f"URL: {result.get('fileUrl')}")
+            print(f"共有設定:")
+            role_ja = {"owner": "オーナー", "reader": "閲覧", "writer": "編集", "commenter": "コメント"}
+            type_ja = {"user": "ユーザー", "group": "グループ", "anyone": "リンク共有"}
+            for perm in result.get("permissions", []):
+                perm_type = type_ja.get(perm.get("type"), perm.get("type"))
+                perm_role = role_ja.get(perm.get("role"), perm.get("role"))
+                email = perm.get("emailAddress") or perm.get("displayName") or ""
+                print(f"  - {perm_type}: {email} ({perm_role})")
 
 
 if __name__ == "__main__":
