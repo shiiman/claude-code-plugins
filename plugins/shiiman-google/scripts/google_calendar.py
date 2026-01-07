@@ -107,10 +107,9 @@ def _parse_relative(keyword: str, now: dt.datetime) -> Tuple[str, str]:
         )
         end = start + dt.timedelta(days=1)
     elif keyword == "next-week":
-        # 来週の月曜日から
-        days_until_next_monday = (7 - now.weekday()) % 7
-        if days_until_next_monday == 0:
-            days_until_next_monday = 7
+        # 来週の月曜日から（今日が月曜日の場合も 7 日後の月曜日を指す）
+        weekday = now.weekday()
+        days_until_next_monday = 7 - weekday if weekday != 0 else 7
         start = (now + dt.timedelta(days=days_until_next_monday)).replace(
             hour=0, minute=0, second=0, microsecond=0
         )
@@ -173,15 +172,13 @@ def _parse_date_range(range_str: str) -> Tuple[str, str]:
         end = dt.datetime.strptime(end_str, "%Y-%m-%d").replace(
             tzinfo=dt.timezone.utc
         )
-
-        if start > end:
-            raise ValueError(f"開始日が終了日より後です: {range_str}")
-
-        return start.isoformat(), end.isoformat()
     except ValueError as e:
-        if "開始日が終了日より後" in str(e):
-            raise
         raise ValueError(f"無効な日付範囲形式です: {range_str}") from e
+
+    if start > end:
+        raise ValueError(f"開始日が終了日より後です: {range_str}")
+
+    return start.isoformat(), end.isoformat()
 
 
 def _parse_month(month_str: str) -> Tuple[str, str]:
