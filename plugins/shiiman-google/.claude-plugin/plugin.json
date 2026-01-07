@@ -1,0 +1,8 @@
+{
+  "name": "shiiman-google",
+  "version": "1.1.0",
+  "description": "Google Workspace 操作（認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail）",
+  "author": {
+    "name": "shiiman"
+  }
+}
