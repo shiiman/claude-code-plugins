@@ -13,6 +13,7 @@ from google_utils import (
     handle_api_error,
     load_credentials,
     print_json,
+    retry_with_backoff,
 )
 
 # 読み書き両方可能なスコープに変更
@@ -132,6 +133,8 @@ def list_events(
     return results
 
 
+@retry_with_backoff()
+@handle_api_error
 def list_all_events(
     token_path: str,
     period: str = "today",
@@ -193,6 +196,8 @@ def list_calendars(token_path: str) -> List[dict]:
     return results
 
 
+@retry_with_backoff()
+@handle_api_error
 def get_event(
     token_path: str,
     event_id: str,
@@ -296,6 +301,8 @@ def create_event(
     }
 
 
+@retry_with_backoff()
+@handle_api_error
 def update_event(
     token_path: str,
     event_id: str,
@@ -377,6 +384,8 @@ def update_event(
     }
 
 
+@retry_with_backoff()
+@handle_api_error
 def delete_event(
     token_path: str,
     event_id: str,

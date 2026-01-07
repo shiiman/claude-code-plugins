@@ -37,6 +37,7 @@ from google_utils import (
     print_json,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -222,6 +223,7 @@ def add_question(token_path: str, form_id: str, question: str, question_type: st
     }
 
 
+@retry_with_backoff()
 @handle_api_error
 def get_responses(token_path: str, form_id: str, max_results: int = 50) -> dict:
     """フォームの回答を取得する

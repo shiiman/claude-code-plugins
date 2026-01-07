@@ -17,6 +17,7 @@ from google_utils import (
     list_profiles,
     load_credentials,
     print_error,
+    retry_with_backoff,
 )
 
 DEFAULT_SCOPES = [
@@ -123,6 +124,8 @@ def list_starred(token_path: str, max_results: int = 20) -> List[dict]:
     return _get_message_metadata(service, message_ids)
 
 
+@retry_with_backoff()
+@handle_api_error
 def search_messages(
     token_path: str,
     query: str,

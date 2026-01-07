@@ -39,6 +39,7 @@ from google_utils import (
     print_table,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -217,6 +218,7 @@ def append_spreadsheet(token_path: str, sheet_id: str, range_str: str, values: l
     }
 
 
+@retry_with_backoff()
 @handle_api_error
 def export_spreadsheet(
     token_path: str,

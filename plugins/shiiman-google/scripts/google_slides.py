@@ -36,6 +36,7 @@ from google_utils import (
     print_json,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -209,6 +210,7 @@ def add_slide(token_path: str, presentation_id: str, title: str = None, body: st
     }
 
 
+@retry_with_backoff()
 @handle_api_error
 def export_presentation(
     token_path: str,

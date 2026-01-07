@@ -36,6 +36,7 @@ from google_utils import (
     print_json,
     handle_api_error,
     get_token_path,
+    retry_with_backoff,
 )
 
 try:
@@ -189,6 +190,7 @@ def update_document(token_path: str, doc_id: str, content: str, append: bool = F
     }
 
 
+@retry_with_backoff()
 @handle_api_error
 def export_document(token_path: str, doc_id: str, output_path: str, mime_type: str = "application/pdf") -> dict:
     """ドキュメントをエクスポートする

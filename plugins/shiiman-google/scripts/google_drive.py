@@ -11,6 +11,7 @@ from google_utils import (
     handle_api_error,
     load_credentials,
     print_json,
+    retry_with_backoff,
 )
 
 DEFAULT_SCOPES = ["https://www.googleapis.com/auth/drive"]
@@ -154,6 +155,8 @@ def copy_file(
     return result
 
 
+@retry_with_backoff()
+@handle_api_error
 def share_file(
     token_path: str,
     file_id: str,
@@ -215,6 +218,8 @@ def share_file(
     }
 
 
+@retry_with_backoff()
+@handle_api_error
 def unshare_file(
     token_path: str,
     file_id: str,
@@ -254,6 +259,8 @@ def unshare_file(
     }
 
 
+@retry_with_backoff()
+@handle_api_error
 def get_permissions(
     token_path: str,
     file_id: str,
