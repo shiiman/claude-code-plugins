@@ -21,7 +21,8 @@
   "enabledPlugins": {
     "shiiman-plugin@shiiman-claude-code-plugins": true,
     "shiiman-claude@shiiman-claude-code-plugins": true,
-    "shiiman-git@shiiman-claude-code-plugins": true
+    "shiiman-git@shiiman-claude-code-plugins": true,
+    "shiiman-google@shiiman-claude-code-plugins": true
   }
 }
 ```
@@ -42,11 +43,12 @@
 
 #### 2. プラグインをインストール
 
-| プラグイン                      | 説明                                                    | インストールコマンド                                  |
-| ------------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
-| [`shiiman-plugin`](plugins/shiiman-plugin/)     | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供                            | `/plugin install shiiman-plugin@shiiman-claude-code-plugins`   |
-| [`shiiman-claude`](plugins/shiiman-claude/)       | Claude Code プロジェクト設定管理プラグイン - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供                    | `/plugin install shiiman-claude@shiiman-claude-code-plugins`    |
-| [`shiiman-git`](plugins/shiiman-git/)             | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供                                           | `/plugin install shiiman-git@shiiman-claude-code-plugins`       |
+| プラグイン | 説明 | インストールコマンド |
+| ---------- | ---- | -------------------- |
+| [`shiiman-plugin`](plugins/shiiman-plugin/) | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供 | `/plugin install shiiman-plugin@shiiman-claude-code-plugins` |
+| [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
+| [`shiiman-git`](plugins/shiiman-git/) | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
+| [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail 機能を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 
 **インストール例**:
 
@@ -55,6 +57,7 @@
 /plugin install shiiman-plugin@shiiman-claude-code-plugins
 /plugin install shiiman-claude@shiiman-claude-code-plugins
 /plugin install shiiman-git@shiiman-claude-code-plugins
+/plugin install shiiman-google@shiiman-claude-code-plugins
 ```
 
 ## 構造
