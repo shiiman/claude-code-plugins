@@ -50,19 +50,19 @@ allowedTools:
 | PreToolUse | 2 |
 | PostToolUse | 1 |
 
-### 環境変数 (env)
+### 環境変数（env）
 
 | 変数名 | 値 |
 |--------|-----|
 | NODE_ENV | development |
 
-### マーケットプレイス (extraKnownMarketplaces)
+### マーケットプレイス（extraKnownMarketplaces）
 
 | 名前 | ソース |
 |------|--------|
 | shiiman-claude-code-plugins | directory: . |
 
-### プラグイン (enabledPlugins)
+### プラグイン（enabledPlugins）
 
 | プラグイン | 状態 |
 |------------|------|
