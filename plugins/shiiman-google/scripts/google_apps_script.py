@@ -44,7 +44,7 @@ except ImportError:
 
 SCOPES = [
     "https://www.googleapis.com/auth/script.projects",
-    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive",
 ]
 
 
