@@ -1,6 +1,6 @@
 # shiiman-plugin
 
-プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート、Issue報告機能を提供します。
+プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート、検索、更新チェック、Issue報告機能を提供します。
 
 ## インストール
 
@@ -20,9 +20,11 @@
 | 詳細表示 | `/shiiman-plugin:show` | shower | プラグインの詳細情報を表示 |
 | インストール | `/shiiman-plugin:install` | installer | プラグインをインストール |
 | アンインストール | `/shiiman-plugin:uninstall` | uninstaller | プラグインをアンインストール |
-| 有効化 | - | enabler | プラグインを有効化 |
-| 無効化 | - | disabler | プラグインを無効化 |
-| アップデート | - | updater | プラグインを最新版に更新 |
+| 有効化 | `/shiiman-plugin:enable` | enabler | プラグインを有効化 |
+| 無効化 | `/shiiman-plugin:disable` | disabler | プラグインを無効化 |
+| アップデート | `/shiiman-plugin:update` | updater | プラグインを最新版に更新（--all で一括更新） |
+| 検索 | - | search | キーワードでプラグインを検索 |
+| 更新チェック | - | check-updates | 更新可能なプラグインを確認 |
 | Issue報告 | `/shiiman-plugin:report` | reporter | プラグインに関する要望・改善・バグを報告 |
 
 ## コマンド
@@ -76,6 +78,34 @@
 /shiiman-plugin:uninstall shiiman-common
 ```
 
+### `/shiiman-plugin:enable [plugin-name]`
+
+指定したプラグインを有効化します。
+
+```bash
+/shiiman-plugin:enable shiiman-common
+```
+
+### `/shiiman-plugin:disable [plugin-name]`
+
+指定したプラグインを無効化します。
+
+```bash
+/shiiman-plugin:disable shiiman-common
+```
+
+### `/shiiman-plugin:update [plugin-name]`
+
+指定したプラグインを最新バージョンに更新します。
+
+```bash
+# 単一プラグインの更新
+/shiiman-plugin:update shiiman-common
+
+# 全プラグインの一括更新
+/shiiman-plugin:update --all
+```
+
 ### `/shiiman-plugin:report`
 
 プラグインに関する要望、改善提案、バグ報告を shiiman/claude-code-plugins リポジトリに Issue として投稿します。
@@ -102,7 +132,9 @@
 | uninstaller | 「〇〇を削除して」「プラグインをアンインストール」 |
 | enabler | 「〇〇を有効にして」「プラグインをオンに」 |
 | disabler | 「〇〇を無効にして」「プラグインをオフに」 |
-| updater | 「〇〇をアップデート」「プラグインを最新に」 |
+| updater | 「〇〇をアップデート」「プラグインを最新に」「全部アップデート」 |
+| search | 「〇〇関連のプラグイン」「〇〇ができるプラグイン」 |
+| check-updates | 「更新があるか確認」「アップデート確認」 |
 | reporter | 「バグを報告」「要望を送りたい」「改善提案」 |
 
 ## 使用する CLI コマンド
