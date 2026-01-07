@@ -133,3 +133,13 @@ plugins/my-plugin/
   "category": "development"
 }
 ```
+
+## プラグインの更新
+
+プラグインを更新する際は、以下のファイルを更新してください:
+
+1. `plugins/{plugin-name}/.claude-plugin/plugin.json` - バージョンを更新
+2. `plugins/{plugin-name}/README.md` - 必要に応じて更新
+3. `.claude-plugin/marketplace.json` - 該当エントリのバージョンを更新（plugin.json と一致させる）
+
+詳細な手順は [docs/plugin.md](docs/plugin.md) の「プラグインの更新手順」を参照してください。

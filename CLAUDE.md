@@ -78,9 +78,19 @@ Follow [Semantic Versioning](https://semver.org/) (SemVer) for plugin versions:
 **Rules**:
 
 - Update `plugin.json` version when adding/modifying plugin features
+- Update `marketplace.json` version to match `plugin.json` version
 - New command, skill, subagent, or hook → MINOR bump
 - Bug fix or documentation update → PATCH bump
 - Breaking API/behavior change → MAJOR bump
+
+**Update Process**:
+
+When updating a plugin version:
+1. Update `plugins/{plugin-name}/.claude-plugin/plugin.json` version
+2. Update `plugins/{plugin-name}/README.md` (if needed)
+3. Update `.claude-plugin/marketplace.json` entry version (must match `plugin.json`)
+
+See [docs/plugin.md](docs/plugin.md) for detailed update procedures.
 
 ## Constraints
 
