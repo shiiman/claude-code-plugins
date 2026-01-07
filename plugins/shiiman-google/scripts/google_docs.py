@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Google Docs API操作スクリプト
 
-ドキュメントの作成・取得・更新を行う。
+ドキュメントの作成・取得・更新・エクスポートを行う。
 
 使用例:
     # ドキュメント作成
@@ -14,6 +14,9 @@
     # ドキュメント更新
     python google_docs.py update --doc-id "xxx" --content "追加テキスト"
     python google_docs.py update --doc-id "xxx" --content "追加テキスト" --append
+
+    # PDFエクスポート
+    python google_docs.py export --doc-id "xxx" --output "document.pdf"
 """
 
 import argparse
@@ -186,6 +189,63 @@ def update_document(token_path: str, doc_id: str, content: str, append: bool = F
     }
 
 
+@handle_api_error
+def export_document(token_path: str, doc_id: str, output_path: str, mime_type: str = "application/pdf") -> dict:
+    """ドキュメントをエクスポートする
+
+    Args:
+        token_path: トークンファイルのパス
+        doc_id: ドキュメントID
+        output_path: 出力ファイルパス
+        mime_type: 出力形式のMIMEタイプ
+            - application/pdf: PDF
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document: Word
+            - text/plain: プレーンテキスト
+            - text/html: HTML
+            - application/rtf: RTF
+            - application/epub+zip: EPUB
+
+    Returns:
+        エクスポート結果
+    """
+    creds = load_credentials(token_path, SCOPES)
+    drive_service = build("drive", "v3", credentials=creds)
+    docs_service = build("docs", "v1", credentials=creds)
+
+    # ドキュメント名を取得
+    doc = docs_service.documents().get(documentId=doc_id).execute()
+    doc_title = doc.get("title", "document")
+
+    # エクスポート実行
+    content = drive_service.files().export(
+        fileId=doc_id,
+        mimeType=mime_type
+    ).execute()
+
+    # ファイルに保存
+    output_path = os.path.expanduser(output_path)
+    with open(output_path, "wb") as f:
+        f.write(content)
+
+    # MIMEタイプから拡張子を判定
+    format_name = {
+        "application/pdf": "PDF",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "Word",
+        "text/plain": "テキスト",
+        "text/html": "HTML",
+        "application/rtf": "RTF",
+        "application/epub+zip": "EPUB",
+    }.get(mime_type, mime_type)
+
+    return {
+        "id": doc_id,
+        "title": doc_title,
+        "format": format_name,
+        "outputPath": output_path,
+        "fileSize": os.path.getsize(output_path),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Google Docs 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
@@ -208,6 +268,17 @@ def main():
     update_parser.add_argument("--doc-id", required=True, help="ドキュメントID")
     update_parser.add_argument("--content", required=True, help="挿入するテキスト")
     update_parser.add_argument("--append", action="store_true", help="末尾に追加（省略時は先頭に挿入）")
+
+    # export コマンド
+    export_parser = subparsers.add_parser("export", help="ドキュメントをエクスポート")
+    export_parser.add_argument("--doc-id", required=True, help="ドキュメントID")
+    export_parser.add_argument("--output", required=True, help="出力ファイルパス")
+    export_parser.add_argument(
+        "--type",
+        choices=["pdf", "docx", "txt", "html", "rtf", "epub"],
+        default="pdf",
+        help="出力形式（デフォルト: pdf）"
+    )
 
     args = parser.parse_args()
 
@@ -251,6 +322,28 @@ def main():
             print(f"  ID: {result['id']}")
             print(f"  モード: {'末尾追加' if result['mode'] == 'append' else '先頭挿入'}")
             print(f"  URL: {result['url']}")
+
+    elif args.command == "export":
+        # MIMEタイプのマッピング
+        mime_types = {
+            "pdf": "application/pdf",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "txt": "text/plain",
+            "html": "text/html",
+            "rtf": "application/rtf",
+            "epub": "application/epub+zip",
+        }
+        mime_type = mime_types.get(args.type, "application/pdf")
+
+        result = export_document(token_path, args.doc_id, args.output, mime_type)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"ドキュメントをエクスポートしました:")
+            print(f"  タイトル: {result['title']}")
+            print(f"  形式: {result['format']}")
+            print(f"  出力先: {result['outputPath']}")
+            print(f"  ファイルサイズ: {result['fileSize']} bytes")
 
 
 if __name__ == "__main__":

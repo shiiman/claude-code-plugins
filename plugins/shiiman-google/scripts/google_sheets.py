@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Google Sheets API操作スクリプト
 
-スプレッドシートの作成・取得・更新を行う。
+スプレッドシートの作成・取得・更新・エクスポートを行う。
 
 使用例:
     # スプレッドシート作成
@@ -15,6 +15,10 @@
     # データ更新
     python google_sheets.py update --sheet-id "xxx" --range "A1" --values '["Hello", "World"]'
     python google_sheets.py update --sheet-id "xxx" --range "A1:B2" --values '[["A1","B1"],["A2","B2"]]'
+
+    # CSVエクスポート
+    python google_sheets.py export --sheet-id "xxx" --output "data.csv"
+    python google_sheets.py export --sheet-id "xxx" --output "data.xlsx" --type xlsx
 """
 
 import argparse
@@ -213,6 +217,68 @@ def append_spreadsheet(token_path: str, sheet_id: str, range_str: str, values: l
     }
 
 
+@handle_api_error
+def export_spreadsheet(
+    token_path: str,
+    sheet_id: str,
+    output_path: str,
+    mime_type: str = "text/csv",
+    sheet_gid: int = None,
+) -> dict:
+    """スプレッドシートをエクスポートする
+
+    Args:
+        token_path: トークンファイルのパス
+        sheet_id: スプレッドシートID
+        output_path: 出力ファイルパス
+        mime_type: 出力形式のMIMEタイプ
+            - text/csv: CSV
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet: Excel
+            - application/pdf: PDF
+            - application/vnd.oasis.opendocument.spreadsheet: ODS
+            - text/tab-separated-values: TSV
+        sheet_gid: エクスポートするシートのGID（CSVの場合のみ有効、省略時は最初のシート）
+
+    Returns:
+        エクスポート結果
+    """
+    creds = load_credentials(token_path, SCOPES)
+    drive_service = build("drive", "v3", credentials=creds)
+    sheets_service = build("sheets", "v4", credentials=creds)
+
+    # スプレッドシート名を取得
+    spreadsheet = sheets_service.spreadsheets().get(spreadsheetId=sheet_id).execute()
+    title = spreadsheet.get("properties", {}).get("title", "spreadsheet")
+
+    # エクスポート実行
+    content = drive_service.files().export(
+        fileId=sheet_id,
+        mimeType=mime_type
+    ).execute()
+
+    # ファイルに保存
+    output_path = os.path.expanduser(output_path)
+    with open(output_path, "wb") as f:
+        f.write(content)
+
+    # MIMEタイプからフォーマット名を判定
+    format_name = {
+        "text/csv": "CSV",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "Excel",
+        "application/pdf": "PDF",
+        "application/vnd.oasis.opendocument.spreadsheet": "ODS",
+        "text/tab-separated-values": "TSV",
+    }.get(mime_type, mime_type)
+
+    return {
+        "id": sheet_id,
+        "title": title,
+        "format": format_name,
+        "outputPath": output_path,
+        "fileSize": os.path.getsize(output_path),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Google Sheets 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
@@ -241,6 +307,17 @@ def main():
     append_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
     append_parser.add_argument("--range", default="Sheet1", help="追加先シート（デフォルト: Sheet1）")
     append_parser.add_argument("--values", required=True, help="追加するデータ（JSON配列）")
+
+    # export コマンド
+    export_parser = subparsers.add_parser("export", help="スプレッドシートをエクスポート")
+    export_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
+    export_parser.add_argument("--output", required=True, help="出力ファイルパス")
+    export_parser.add_argument(
+        "--type",
+        choices=["csv", "xlsx", "pdf", "ods", "tsv"],
+        default="csv",
+        help="出力形式（デフォルト: csv）"
+    )
 
     args = parser.parse_args()
 
@@ -315,6 +392,27 @@ def main():
             print(f"  追加行数: {result['updatedRows']}")
             print(f"  追加セル数: {result['updatedCells']}")
             print(f"  URL: {result['url']}")
+
+    elif args.command == "export":
+        # MIMEタイプのマッピング
+        mime_types = {
+            "csv": "text/csv",
+            "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "pdf": "application/pdf",
+            "ods": "application/vnd.oasis.opendocument.spreadsheet",
+            "tsv": "text/tab-separated-values",
+        }
+        mime_type = mime_types.get(args.type, "text/csv")
+
+        result = export_spreadsheet(token_path, args.sheet_id, args.output, mime_type)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"スプレッドシートをエクスポートしました:")
+            print(f"  タイトル: {result['title']}")
+            print(f"  形式: {result['format']}")
+            print(f"  出力先: {result['outputPath']}")
+            print(f"  ファイルサイズ: {result['fileSize']} bytes")
 
 
 if __name__ == "__main__":

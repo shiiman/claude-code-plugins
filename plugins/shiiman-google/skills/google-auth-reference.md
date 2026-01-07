@@ -19,5 +19,3 @@
 - Slides: `https://www.googleapis.com/auth/presentations`
 - Forms: `https://www.googleapis.com/auth/forms`
 - Apps Script: `https://www.googleapis.com/auth/script.projects`
-- Colab: `https://www.googleapis.com/auth/colab`
-

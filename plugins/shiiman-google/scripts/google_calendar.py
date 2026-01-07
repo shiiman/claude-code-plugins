@@ -132,6 +132,38 @@ def list_events(
     return results
 
 
+def list_all_events(
+    token_path: str,
+    period: str = "today",
+    max_results: int = 50,
+) -> List[dict]:
+    """全カレンダーから指定期間のイベント一覧を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        period: 期間 ("today", "week", "month")
+        max_results: 最大取得件数（カレンダーごと）
+
+    Returns:
+        イベントのリスト（開始時間順にソート）
+    """
+    calendars = list_calendars(token_path)
+    all_events = []
+
+    for cal in calendars:
+        # owner または writer 権限のカレンダーのみ取得
+        if cal["accessRole"] in ["owner", "writer"]:
+            events = list_events(token_path, period, cal["id"], max_results)
+            for event in events:
+                event["calendar"] = cal["summary"]
+                all_events.append(event)
+
+    # 開始時間でソート
+    all_events.sort(key=lambda x: x["start"])
+
+    return all_events
+
+
 def list_calendars(token_path: str) -> List[dict]:
     """利用可能なカレンダー一覧を取得する。
 
@@ -159,6 +191,41 @@ def list_calendars(token_path: str) -> List[dict]:
         )
 
     return results
+
+
+def get_event(
+    token_path: str,
+    event_id: str,
+    calendar_id: str = "primary",
+) -> dict:
+    """イベントの詳細を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        event_id: イベントID
+        calendar_id: カレンダーID（デフォルト: primary）
+
+    Returns:
+        イベント情報
+    """
+    service = _get_service(token_path)
+
+    event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+
+    start = event.get("start", {})
+    end = event.get("end", {})
+    start_str = start.get("dateTime", start.get("date", ""))
+    end_str = end.get("dateTime", end.get("date", ""))
+
+    return {
+        "id": event.get("id", ""),
+        "summary": event.get("summary", ""),
+        "start": start_str,
+        "end": end_str,
+        "location": event.get("location", ""),
+        "description": event.get("description", ""),
+        "url": event.get("htmlLink", ""),
+    }
 
 
 def create_event(
@@ -229,6 +296,121 @@ def create_event(
     }
 
 
+def update_event(
+    token_path: str,
+    event_id: str,
+    calendar_id: str = "primary",
+    summary: str = None,
+    start: str = None,
+    end: str = None,
+    location: str = None,
+    description: str = None,
+    color_id: int = None,
+) -> dict:
+    """イベントを更新する。
+
+    Args:
+        token_path: トークンファイルパス
+        event_id: イベントID
+        calendar_id: カレンダーID（デフォルト: primary）
+        summary: 新しいタイトル（省略時は変更なし）
+        start: 新しい開始日時（省略時は変更なし）
+        end: 新しい終了日時（省略時は変更なし）
+        location: 新しい場所（省略時は変更なし）
+        description: 新しい説明（省略時は変更なし）
+        color_id: 新しい色ID（省略時は変更なし）
+
+    Returns:
+        更新されたイベント情報
+    """
+    service = _get_service(token_path)
+
+    # 現在のイベント情報を取得
+    event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+
+    # 更新する項目だけ変更
+    if summary is not None:
+        event["summary"] = summary
+
+    if location is not None:
+        event["location"] = location
+
+    if description is not None:
+        event["description"] = description
+
+    if color_id is not None and 1 <= color_id <= 11:
+        event["colorId"] = str(color_id)
+
+    # 日時の更新
+    if start is not None:
+        # 終日イベントかどうか判定
+        if "T" not in start:
+            event["start"] = {"date": start.split("T")[0]}
+        else:
+            local_tz = dt.datetime.now().astimezone().tzinfo
+            tz_name = str(local_tz)
+            event["start"] = {"dateTime": start, "timeZone": tz_name}
+
+    if end is not None:
+        if "T" not in end:
+            event["end"] = {"date": end.split("T")[0]}
+        else:
+            local_tz = dt.datetime.now().astimezone().tzinfo
+            tz_name = str(local_tz)
+            event["end"] = {"dateTime": end, "timeZone": tz_name}
+
+    # 更新を実行
+    updated_event = (
+        service.events()
+        .update(calendarId=calendar_id, eventId=event_id, body=event)
+        .execute()
+    )
+
+    return {
+        "id": updated_event.get("id", ""),
+        "summary": updated_event.get("summary", ""),
+        "start": updated_event.get("start", {}).get("dateTime", updated_event.get("start", {}).get("date", "")),
+        "end": updated_event.get("end", {}).get("dateTime", updated_event.get("end", {}).get("date", "")),
+        "location": updated_event.get("location", ""),
+        "url": updated_event.get("htmlLink", ""),
+        "status": "updated",
+    }
+
+
+def delete_event(
+    token_path: str,
+    event_id: str,
+    calendar_id: str = "primary",
+) -> dict:
+    """イベントを削除する。
+
+    Args:
+        token_path: トークンファイルパス
+        event_id: イベントID
+        calendar_id: カレンダーID（デフォルト: primary）
+
+    Returns:
+        削除結果
+    """
+    service = _get_service(token_path)
+
+    # まずイベント情報を取得（削除前に情報を保存）
+    try:
+        event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+        event_summary = event.get("summary", "")
+    except Exception:
+        event_summary = ""
+
+    # 削除を実行
+    service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+
+    return {
+        "id": event_id,
+        "summary": event_summary,
+        "status": "deleted",
+    }
+
+
 @handle_api_error
 def main() -> None:
     parser = argparse.ArgumentParser(description="Google Calendar 操作ツール")
@@ -252,8 +434,8 @@ def main() -> None:
     )
     events_parser.add_argument(
         "--calendar",
-        default="primary",
-        help="カレンダーID (デフォルト: primary)",
+        default="all",
+        help="カレンダーID (デフォルト: all=全カレンダー, primary=メインのみ)",
     )
     events_parser.add_argument(
         "--max",
@@ -279,6 +461,27 @@ def main() -> None:
     # colors サブコマンド
     colors_parser = subparsers.add_parser("colors", help="使用可能な色一覧を表示")
 
+    # update サブコマンド
+    update_parser = subparsers.add_parser("update", help="予定を更新")
+    update_parser.add_argument("--event-id", required=True, help="イベントID")
+    update_parser.add_argument("--calendar", default="primary", help="カレンダーID")
+    update_parser.add_argument("--summary", help="新しいタイトル")
+    update_parser.add_argument("--start", help="新しい開始日時 (ISO 8601形式)")
+    update_parser.add_argument("--end", help="新しい終了日時 (ISO 8601形式)")
+    update_parser.add_argument("--location", help="新しい場所")
+    update_parser.add_argument("--description", help="新しい説明")
+    update_parser.add_argument("--color", type=int, choices=range(1, 12), help="新しい色ID (1-11)")
+
+    # delete サブコマンド
+    delete_parser = subparsers.add_parser("delete", help="予定を削除")
+    delete_parser.add_argument("--event-id", required=True, help="イベントID")
+    delete_parser.add_argument("--calendar", default="primary", help="カレンダーID")
+
+    # get サブコマンド
+    get_parser = subparsers.add_parser("get", help="予定の詳細を取得")
+    get_parser.add_argument("--event-id", required=True, help="イベントID")
+    get_parser.add_argument("--calendar", default="primary", help="カレンダーID")
+
     # 後方互換性のための引数（サブコマンドなしの場合）
     parser.add_argument(
         "--range",
@@ -288,8 +491,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--calendar",
-        default="primary",
-        help="カレンダーID (デフォルト: primary)",
+        default="all",
+        help="カレンダーID (デフォルト: all=全カレンダー, primary=メインのみ)",
     )
     parser.add_argument(
         "--max",
@@ -352,15 +555,66 @@ def main() -> None:
             for color_id, color_name in COLOR_MAP.items():
                 print(f"  {color_id}: {color_name}")
 
+    elif args.command == "update":
+        result = update_event(
+            token_path,
+            args.event_id,
+            args.calendar,
+            args.summary,
+            args.start,
+            args.end,
+            args.location,
+            args.description,
+            args.color,
+        )
+        if args.format == "json":
+            print_json([result])
+        else:
+            print("予定を更新しました:")
+            print(f"  タイトル: {result['summary']}")
+            print(f"  開始: {result['start']}")
+            print(f"  終了: {result['end']}")
+            if result['location']:
+                print(f"  場所: {result['location']}")
+            print(f"  URL: {result['url']}")
+
+    elif args.command == "delete":
+        result = delete_event(token_path, args.event_id, args.calendar)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print("予定を削除しました:")
+            print(f"  イベントID: {result['id']}")
+            if result['summary']:
+                print(f"  タイトル: {result['summary']}")
+
+    elif args.command == "get":
+        result = get_event(token_path, args.event_id, args.calendar)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"タイトル: {result['summary']}")
+            print(f"開始: {result['start']}")
+            print(f"終了: {result['end']}")
+            if result['location']:
+                print(f"場所: {result['location']}")
+            if result['description']:
+                print(f"説明: {result['description']}")
+            print(f"URL: {result['url']}")
+
     else:
         # サブコマンドなし or events サブコマンド
         period = args.range
         calendar_id = args.calendar
         max_results = args.max
 
-        events = list_events(token_path, period, calendar_id, max_results)
+        if calendar_id == "all":
+            events = list_all_events(token_path, period, max_results)
+            headers = ["start", "end", "summary", "calendar", "location"]
+        else:
+            events = list_events(token_path, period, calendar_id, max_results)
+            headers = ["start", "end", "summary", "location", "url"]
 
-        headers = ["start", "end", "summary", "location", "url"]
         format_output(events, headers, args.format)
 
 

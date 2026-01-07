@@ -1,9 +1,11 @@
 """共通ユーティリティモジュール for shiiman-google."""
 
+import functools
 import json
 import os
 import sys
-from typing import Any, Dict, List, Optional
+import time
+from typing import Any, Callable, Dict, List, Optional
 
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
@@ -171,13 +173,96 @@ def format_output(
             print_json(items)
 
 
-def handle_api_error(func):
-    """API 呼び出しのエラーハンドリングデコレータ。"""
-    from functools import wraps
+def retry_with_backoff(
+    max_retries: int = 3,
+    base_delay: float = 1.0,
+    max_delay: float = 60.0,
+    retry_on_status: tuple = (429, 500, 502, 503, 504),
+) -> Callable:
+    """API呼び出しを指数バックオフでリトライするデコレータ。
 
+    Args:
+        max_retries: 最大リトライ回数（デフォルト: 3）
+        base_delay: 初回リトライまでの待機秒数（デフォルト: 1秒）
+        max_delay: 最大待機秒数（デフォルト: 60秒）
+        retry_on_status: リトライ対象のHTTPステータスコード
+
+    Returns:
+        デコレータ関数
+
+    使用例:
+        @retry_with_backoff(max_retries=3)
+        def call_api():
+            ...
+    """
     from googleapiclient.errors import HttpError
 
-    @wraps(func)
+    def decorator(func: Callable) -> Callable:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except HttpError as e:
+                    last_exception = e
+                    status = e.resp.status
+
+                    # リトライ対象外のステータスはすぐに例外を再送出
+                    if status not in retry_on_status:
+                        raise
+
+                    # 最後の試行の場合は例外を再送出
+                    if attempt >= max_retries:
+                        raise
+
+                    # 指数バックオフで待機（1s → 2s → 4s ...）
+                    delay = min(base_delay * (2 ** attempt), max_delay)
+                    print(
+                        f"API呼び出しがステータス {status} で失敗しました。"
+                        f"{delay:.1f}秒後にリトライします... (試行 {attempt + 1}/{max_retries})",
+                        file=sys.stderr,
+                    )
+                    time.sleep(delay)
+
+                except (ConnectionError, TimeoutError) as e:
+                    last_exception = e
+                    # 最後の試行の場合は例外を再送出
+                    if attempt >= max_retries:
+                        raise
+
+                    # ネットワークエラーもリトライ
+                    delay = min(base_delay * (2 ** attempt), max_delay)
+                    print(
+                        f"ネットワークエラーが発生しました。"
+                        f"{delay:.1f}秒後にリトライします... (試行 {attempt + 1}/{max_retries})",
+                        file=sys.stderr,
+                    )
+                    time.sleep(delay)
+
+            # ここには通常到達しないが、念のため
+            if last_exception:
+                raise last_exception
+
+        return wrapper
+    return decorator
+
+
+def handle_api_error(func):
+    """API 呼び出しのエラーハンドリングデコレータ。
+
+    retry_with_backoff と組み合わせて使用する場合は、
+    handle_api_error を外側に配置してください。
+
+    使用例:
+        @handle_api_error
+        @retry_with_backoff()
+        def call_api():
+            ...
+    """
+    from googleapiclient.errors import HttpError
+
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -201,10 +286,17 @@ def handle_api_error(func):
                 print_error(f"リソースが見つかりません。\n詳細: {e}")
             elif e.resp.status == 429:
                 print_error(
-                    "API レート制限に達しました。しばらく待ってから再試行してください。"
+                    "API レート制限に達しました。リトライ後も失敗しました。"
+                    "しばらく待ってから再試行してください。"
                 )
             else:
                 print_error(f"API エラー: {e}")
+            sys.exit(1)
+        except (ConnectionError, TimeoutError) as e:
+            print_error(
+                f"ネットワークエラー: 接続に失敗しました。\n"
+                f"インターネット接続を確認してください。\n詳細: {e}"
+            )
             sys.exit(1)
         except Exception as e:
             print_error(f"予期しないエラーが発生しました: {e}")
