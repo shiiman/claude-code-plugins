@@ -1,30 +1,30 @@
-## Summary
+## 概要
 
-<!-- Brief description of the changes -->
+<!-- 変更内容の簡潔な説明 -->
 
-## Changes
+## 変更点
 
-<!-- List specific changes -->
+<!-- 具体的な変更内容をリスト化 -->
 
 -
 
-## Related Issues
+## 関連 Issue
 
-<!-- Link related issues: Closes #123, Fixes #456 -->
+<!-- 関連する Issue をリンク: Closes #123, Fixes #456 -->
 
 Closes #
 
-## Type of Change
+## 変更の種類
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Refactoring (no functional changes)
+- [ ] バグ修正（既存の機能を壊さない修正）
+- [ ] 新機能（既存の機能を壊さない機能追加）
+- [ ] 破壊的変更（既存の機能が動作しなくなる可能性のある変更）
+- [ ] ドキュメント更新
+- [ ] リファクタリング（機能変更なし）
 
-## Checklist
+## チェックリスト
 
-- [ ] I have tested my changes locally
-- [ ] I have updated the documentation if needed
-- [ ] My code follows the project's style guidelines
-- [ ] I have added tests that prove my fix/feature works
+- [ ] ローカルで変更をテスト済み
+- [ ] 必要に応じてドキュメントを更新済み
+- [ ] プロジェクトのスタイルガイドラインに準拠
+- [ ] 修正・機能が動作することを確認するテストを追加済み

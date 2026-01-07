@@ -5,5 +5,19 @@
       "Bash(gh api:*)",
       "Skill(*)"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "shiiman-claude-code-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "shiiman-plugin@shiiman-claude-code-plugins": true,
+    "shiiman-claude@shiiman-claude-code-plugins": true,
+    "shiiman-git@shiiman-claude-code-plugins": true,
+    "shiiman-google@shiiman-claude-code-plugins": true
   }
 }

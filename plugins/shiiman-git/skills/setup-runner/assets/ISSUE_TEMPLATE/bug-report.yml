@@ -1,47 +1,47 @@
-name: Bug Report
-description: Report a bug or unexpected behavior
+name: バグ報告
+description: バグや予期しない動作を報告する
 title: "[Bug] "
 labels: ["bug"]
 body:
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: A clear description of the bug
+      label: 概要
+      description: バグの内容を明確に記述してください
       placeholder: |
-        What happened?
-        What did you expect to happen?
+        何が起きましたか？
+        期待していた動作は何でしたか？
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: Steps to Reproduce
-      description: Steps to reproduce the behavior
+      label: 再現手順
+      description: バグを再現するための手順
       placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. See error
+        1. 「...」に移動
+        2. 「...」をクリック
+        3. エラーが発生
     validations:
       required: true
 
   - type: textarea
     id: environment
     attributes:
-      label: Environment
-      description: Your environment details
+      label: 環境
+      description: ご利用の環境の詳細
       placeholder: |
-        - OS: [e.g., macOS 14.0]
-        - Node.js: [e.g., 20.10.0]
-        - Browser: [e.g., Chrome 120]
+        - OS: [例: macOS 14.0]
+        - Node.js: [例: 20.10.0]
+        - ブラウザ: [例: Chrome 120]
     validations:
       required: false
 
   - type: textarea
     id: additional
     attributes:
-      label: Additional Context
-      description: Any other context, logs, or screenshots
+      label: 補足情報
+      description: その他の情報、ログ、スクリーンショットなど
     validations:
       required: false
