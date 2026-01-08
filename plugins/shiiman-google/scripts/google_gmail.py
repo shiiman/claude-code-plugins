@@ -80,11 +80,13 @@ def _fetch_all_message_ids(
 
         page_token = response.get("nextPageToken")
         if not page_token:
+            # 次のページがない場合は終了（has_more は False のまま）
             break
 
         if max_results is not None and len(message_ids) >= max_results:
-            # max_results に達した時点で nextPageToken があれば、まだ続きがある
-            has_more = page_token is not None
+            # max_results に達した時点で、次のページトークンがあれば続きがある
+            # page_token は直前の response.get("nextPageToken") で取得済み
+            has_more = True
             break
 
     if return_has_more:
