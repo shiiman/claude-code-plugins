@@ -5,9 +5,32 @@
   },
   "permissions": {
     "allow": [
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh label:*)",
+      "Bash(gh run:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
       "Skill(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git rebase:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(chmod 777:*)",
+      "Bash(sudo:*)"
     ]
   },
   "extraKnownMarketplaces": {
