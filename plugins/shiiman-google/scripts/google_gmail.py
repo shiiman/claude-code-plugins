@@ -37,6 +37,7 @@ def _fetch_all_message_ids(
     service,
     query: str,
     max_results: Optional[int] = None,
+    return_has_more: bool = False,
 ) -> List[str]:
     """クエリに一致する全メッセージIDを取得する（ページネーション対応）。
 
@@ -44,12 +45,14 @@ def _fetch_all_message_ids(
         service: Gmail サービス
         query: 検索クエリ
         max_results: 最大取得件数（None の場合は全件）
+        return_has_more: True の場合、(message_ids, has_more) のタプルを返す
 
     Returns:
-        メッセージIDのリスト
+        メッセージIDのリスト。return_has_more=True の場合は (list, bool) タプル
     """
     message_ids = []
     page_token = None
+    has_more = False
 
     while True:
         # 1回の API 呼び出しで取得する件数
@@ -80,8 +83,12 @@ def _fetch_all_message_ids(
             break
 
         if max_results is not None and len(message_ids) >= max_results:
+            # max_results に達した時点で nextPageToken があれば、まだ続きがある
+            has_more = page_token is not None
             break
 
+    if return_has_more:
+        return message_ids, has_more
     return message_ids
 
 
@@ -110,11 +117,27 @@ def _get_message_metadata(service, message_ids: List[str]) -> List[dict]:
     return results
 
 
-def list_unread(token_path: str, max_results: int = 20) -> List[dict]:
-    """未読メッセージ一覧を取得する。"""
+def list_unread(
+    token_path: str, max_results: int = 100, return_has_more: bool = False
+) -> List[dict]:
+    """未読メッセージ一覧を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        max_results: 最大取得件数
+        return_has_more: True の場合、(items, has_more) のタプルを返す
+
+    Returns:
+        メッセージリスト。return_has_more=True の場合は (list, bool) タプル
+    """
     service = _get_service(token_path)
-    message_ids = _fetch_all_message_ids(service, "is:unread", max_results)
-    return _get_message_metadata(service, message_ids)
+    result = _fetch_all_message_ids(
+        service, "is:unread", max_results, return_has_more=return_has_more
+    )
+    if return_has_more:
+        message_ids, has_more = result
+        return _get_message_metadata(service, message_ids), has_more
+    return _get_message_metadata(service, result)
 
 
 def list_starred(token_path: str, max_results: int = 20) -> List[dict]:
@@ -349,11 +372,18 @@ def create_draft(
     }
 
 
-def list_unread_all_profiles(max_results: int = 20) -> dict:
+def list_unread_all_profiles(
+    max_results: int = 100, return_has_more: bool = False
+) -> dict:
     """全プロファイルの未読メッセージを取得する。
+
+    Args:
+        max_results: 各プロファイルの最大取得件数
+        return_has_more: True の場合、各プロファイルの結果に has_more を含める
 
     Returns:
         プロファイル名をキー、未読メッセージリストを値とする辞書
+        return_has_more=True の場合: {"items": [...], "has_more": bool}
     """
     profiles = list_profiles()
     if not profiles:
@@ -363,8 +393,14 @@ def list_unread_all_profiles(max_results: int = 20) -> dict:
     for profile in profiles:
         token_path = get_token_path(profile)
         try:
-            items = list_unread(token_path, max_results)
-            results[profile] = items
+            if return_has_more:
+                items, has_more = list_unread(
+                    token_path, max_results, return_has_more=True
+                )
+                results[profile] = {"items": items, "has_more": has_more}
+            else:
+                items = list_unread(token_path, max_results)
+                results[profile] = items
         except Exception as e:
             results[profile] = {"error": str(e)}
 
@@ -411,7 +447,7 @@ def main() -> None:
 
     # unread サブコマンド
     unread_parser = subparsers.add_parser("unread", help="未読メッセージ一覧")
-    unread_parser.add_argument("--max", type=int, default=20, help="最大取得件数")
+    unread_parser.add_argument("--max", type=int, default=100, help="最大取得件数")
 
     # starred サブコマンド
     starred_parser = subparsers.add_parser("starred", help="スター付きメッセージ一覧")
@@ -435,7 +471,12 @@ def main() -> None:
     unread_all_parser = subparsers.add_parser(
         "unread-all", help="全プロファイルの未読メッセージ一覧"
     )
-    unread_all_parser.add_argument("--max", type=int, default=20, help="各プロファイルの最大取得件数")
+    unread_all_parser.add_argument("--max", type=int, default=100, help="各プロファイルの最大取得件数")
+    unread_all_parser.add_argument(
+        "--show-has-more",
+        action="store_true",
+        help="取得件数を超える未読があるか表示",
+    )
 
     # mark-read-all サブコマンド（全プロファイル）
     subparsers.add_parser("mark-read-all", help="全プロファイルの未読を既読化")
@@ -509,16 +550,26 @@ def main() -> None:
             print(f"{count} 件のメッセージにスターを付けました。")
 
     elif args.command == "unread-all":
-        results = list_unread_all_profiles(args.max)
+        show_has_more = getattr(args, "show_has_more", False)
+        results = list_unread_all_profiles(args.max, return_has_more=show_has_more)
         if args.format == "json":
             format_output(results, output_format="json")
         else:
-            for profile, items in results.items():
+            for profile, data in results.items():
                 print(f"\n=== {profile} ===")
-                if isinstance(items, dict) and "error" in items:
-                    print(f"エラー: {items['error']}")
-                elif items:
-                    format_output(items, headers, "table")
+                if isinstance(data, dict) and "error" in data:
+                    print(f"エラー: {data['error']}")
+                elif show_has_more:
+                    items = data.get("items", [])
+                    has_more = data.get("has_more", False)
+                    if items:
+                        format_output(items, headers, "table")
+                        if has_more:
+                            print(f"※ まだ未読があります（--max {args.max} を超過）")
+                    else:
+                        print("未読メッセージはありません。")
+                elif data:
+                    format_output(data, headers, "table")
                 else:
                     print("未読メッセージはありません。")
 
