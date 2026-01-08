@@ -98,6 +98,46 @@ def list_sheets(token_path: str, sheet_id: str) -> dict:
     }
 
 
+def _find_sheet_by_spec(sheets: list, sheet_spec: str) -> dict:
+    """シート指定からシートを検索する共通ヘルパー関数
+
+    Args:
+        sheets: シート情報のリスト
+        sheet_spec: シート指定（名前、インデックス番号）
+
+    Returns:
+        見つかったシート情報
+
+    Raises:
+        ValueError: シートが見つからない場合
+    """
+    if not sheets:
+        raise ValueError("スプレッドシートにシートがありません。")
+
+    # 数値の場合はインデックスとして扱う
+    if sheet_spec.isdigit():
+        index = int(sheet_spec)
+        for sheet in sheets:
+            if sheet["index"] == index:
+                return sheet
+        raise ValueError(f"インデックス {index} のシートが見つかりません。")
+
+    # 名前で検索（完全一致）
+    for sheet in sheets:
+        if sheet["title"] == sheet_spec:
+            return sheet
+
+    # 名前で検索（部分一致、大文字小文字無視）
+    sheet_spec_lower = sheet_spec.lower()
+    for sheet in sheets:
+        if sheet_spec_lower in sheet["title"].lower():
+            return sheet
+
+    # 見つからない場合
+    sheet_names = [s["title"] for s in sheets]
+    raise ValueError(f"シート '{sheet_spec}' が見つかりません。利用可能なシート: {', '.join(sheet_names)}")
+
+
 def resolve_sheet_name(token_path: str, sheet_id: str, sheet_spec: str) -> str:
     """シート指定をシート名に解決する
 
@@ -114,32 +154,8 @@ def resolve_sheet_name(token_path: str, sheet_id: str, sheet_spec: str) -> str:
     """
     sheets_info = list_sheets(token_path, sheet_id)
     sheets = sheets_info.get("sheets", [])
-
-    if not sheets:
-        raise ValueError("スプレッドシートにシートがありません。")
-
-    # 数値の場合はインデックスとして扱う
-    if sheet_spec.isdigit():
-        index = int(sheet_spec)
-        for sheet in sheets:
-            if sheet["index"] == index:
-                return sheet["title"]
-        raise ValueError(f"インデックス {index} のシートが見つかりません。")
-
-    # 名前で検索（完全一致）
-    for sheet in sheets:
-        if sheet["title"] == sheet_spec:
-            return sheet["title"]
-
-    # 名前で検索（部分一致、大文字小文字無視）
-    sheet_spec_lower = sheet_spec.lower()
-    for sheet in sheets:
-        if sheet_spec_lower in sheet["title"].lower():
-            return sheet["title"]
-
-    # 見つからない場合
-    sheet_names = [s["title"] for s in sheets]
-    raise ValueError(f"シート '{sheet_spec}' が見つかりません。利用可能なシート: {', '.join(sheet_names)}")
+    sheet = _find_sheet_by_spec(sheets, sheet_spec)
+    return sheet["title"]
 
 
 def get_sheet_gid(token_path: str, sheet_id: str, sheet_spec: str) -> int:
@@ -158,32 +174,8 @@ def get_sheet_gid(token_path: str, sheet_id: str, sheet_spec: str) -> int:
     """
     sheets_info = list_sheets(token_path, sheet_id)
     sheets = sheets_info.get("sheets", [])
-
-    if not sheets:
-        raise ValueError("スプレッドシートにシートがありません。")
-
-    # 数値の場合はインデックスとして扱う
-    if sheet_spec.isdigit():
-        index = int(sheet_spec)
-        for sheet in sheets:
-            if sheet["index"] == index:
-                return sheet["sheetId"]
-        raise ValueError(f"インデックス {index} のシートが見つかりません。")
-
-    # 名前で検索（完全一致）
-    for sheet in sheets:
-        if sheet["title"] == sheet_spec:
-            return sheet["sheetId"]
-
-    # 名前で検索（部分一致、大文字小文字無視）
-    sheet_spec_lower = sheet_spec.lower()
-    for sheet in sheets:
-        if sheet_spec_lower in sheet["title"].lower():
-            return sheet["sheetId"]
-
-    # 見つからない場合
-    sheet_names = [s["title"] for s in sheets]
-    raise ValueError(f"シート '{sheet_spec}' が見つかりません。利用可能なシート: {', '.join(sheet_names)}")
+    sheet = _find_sheet_by_spec(sheets, sheet_spec)
+    return sheet["sheetId"]
 
 
 @handle_api_error

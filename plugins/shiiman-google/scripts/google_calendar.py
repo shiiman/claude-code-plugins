@@ -5,7 +5,7 @@ import datetime as dt
 import json
 import re
 import sys
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from googleapiclient.discovery import build
 
@@ -377,7 +377,7 @@ def list_calendars(token_path: str) -> List[dict]:
     return results
 
 
-def find_calendar(token_path: str, query: str) -> dict:
+def find_calendar(token_path: str, query: str) -> Optional[dict]:
     """カレンダー名またはIDでカレンダーを検索する。
 
     Args:
