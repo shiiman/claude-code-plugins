@@ -54,6 +54,7 @@
     "shiiman-plugin@shiiman-claude-code-plugins": true,
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
-    "shiiman-google@shiiman-claude-code-plugins": true
+    "shiiman-google@shiiman-claude-code-plugins": true,
+    "shiiman-go@shiiman-claude-code-plugins": true
   }
 }
