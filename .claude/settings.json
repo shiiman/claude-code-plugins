@@ -9,6 +9,7 @@
       "Bash(git checkout:*)",
       "Bash(git pull:*)",
       "Bash(git branch:*)",
+      "Bash(git push -u origin feature/:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(gh repo view:*)",
