@@ -11,6 +11,7 @@ from google_utils import (
     handle_api_error,
     load_credentials,
     print_json,
+    print_profile_header,
     retry_with_backoff,
 )
 
@@ -23,34 +24,127 @@ def _get_service(token_path: str):
     return build("drive", "v3", credentials=creds)
 
 
-def list_files(token_path: str, page_size: int = 50) -> List[dict]:
-    """ファイル一覧を取得する。"""
+def list_shared_drives(token_path: str, page_size: int = 100) -> List[dict]:
+    """共有ドライブ一覧を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        page_size: 取得件数
+
+    Returns:
+        共有ドライブ情報のリスト
+    """
     service = _get_service(token_path)
     results = (
-        service.files()
+        service.drives()
         .list(
             pageSize=page_size,
-            fields="files(id,name,mimeType,modifiedTime,webViewLink)",
-            orderBy="modifiedTime desc",
+            fields="drives(id,name,createdTime)",
         )
         .execute()
     )
+    return results.get("drives", [])
+
+
+def list_files(
+    token_path: str,
+    page_size: int = 50,
+    drive: str = "my",
+    drive_id: Optional[str] = None,
+) -> List[dict]:
+    """ファイル一覧を取得する。
+
+    Args:
+        token_path: トークンファイルパス
+        page_size: 取得件数
+        drive: ドライブ種別（my=マイドライブ, shared=共有ドライブ, all=両方）
+        drive_id: 特定の共有ドライブID（drive="shared"の場合に使用）
+
+    Returns:
+        ファイル情報のリスト
+    """
+    service = _get_service(token_path)
+
+    params = {
+        "pageSize": page_size,
+        "fields": "files(id,name,mimeType,modifiedTime,webViewLink,driveId)",
+        "orderBy": "modifiedTime desc",
+    }
+
+    if drive == "all":
+        # マイドライブと共有ドライブ両方
+        params["corpora"] = "allDrives"
+        params["includeItemsFromAllDrives"] = True
+        params["supportsAllDrives"] = True
+    elif drive == "shared":
+        if drive_id:
+            # 特定の共有ドライブ
+            params["corpora"] = "drive"
+            params["driveId"] = drive_id
+            params["includeItemsFromAllDrives"] = True
+            params["supportsAllDrives"] = True
+        else:
+            # すべての共有ドライブ
+            params["corpora"] = "allDrives"
+            params["includeItemsFromAllDrives"] = True
+            params["supportsAllDrives"] = True
+            params["q"] = "not 'me' in owners"
+    # drive == "my" はデフォルト動作（パラメータ追加なし）
+
+    results = service.files().list(**params).execute()
     return results.get("files", [])
 
 
-def search_files(token_path: str, query: str, page_size: int = 50) -> List[dict]:
-    """ファイルを検索する。"""
+def search_files(
+    token_path: str,
+    query: str,
+    page_size: int = 50,
+    drive: str = "my",
+    drive_id: Optional[str] = None,
+) -> List[dict]:
+    """ファイルを検索する。
+
+    Args:
+        token_path: トークンファイルパス
+        query: 検索クエリ
+        page_size: 取得件数
+        drive: ドライブ種別（my=マイドライブ, shared=共有ドライブ, all=両方）
+        drive_id: 特定の共有ドライブID（drive="shared"の場合に使用）
+
+    Returns:
+        ファイル情報のリスト
+    """
     service = _get_service(token_path)
-    results = (
-        service.files()
-        .list(
-            q=query,
-            pageSize=page_size,
-            fields="files(id,name,mimeType,modifiedTime,webViewLink)",
-            orderBy="modifiedTime desc",
-        )
-        .execute()
-    )
+
+    params = {
+        "q": query,
+        "pageSize": page_size,
+        "fields": "files(id,name,mimeType,modifiedTime,webViewLink,driveId)",
+        "orderBy": "modifiedTime desc",
+    }
+
+    if drive == "all":
+        # マイドライブと共有ドライブ両方
+        params["corpora"] = "allDrives"
+        params["includeItemsFromAllDrives"] = True
+        params["supportsAllDrives"] = True
+    elif drive == "shared":
+        if drive_id:
+            # 特定の共有ドライブ
+            params["corpora"] = "drive"
+            params["driveId"] = drive_id
+            params["includeItemsFromAllDrives"] = True
+            params["supportsAllDrives"] = True
+        else:
+            # すべての共有ドライブ
+            params["corpora"] = "allDrives"
+            params["includeItemsFromAllDrives"] = True
+            params["supportsAllDrives"] = True
+            # クエリに追加条件を付ける
+            params["q"] = f"({query}) and not 'me' in owners"
+    # drive == "my" はデフォルト動作（パラメータ追加なし）
+
+    results = service.files().list(**params).execute()
     return results.get("files", [])
 
 
@@ -312,6 +406,9 @@ def get_permissions(
 
 @handle_api_error
 def main() -> None:
+    # プロファイルヘッダーを表示
+    print_profile_header()
+
     parser = argparse.ArgumentParser(description="Google Drive 操作ツール")
     parser.add_argument("--token", help="トークンファイルパス")
     parser.add_argument(
@@ -323,14 +420,31 @@ def main() -> None:
 
     subparsers = parser.add_subparsers(dest="command")
 
+    # shared-drives サブコマンド
+    shared_drives_parser = subparsers.add_parser("shared-drives", help="共有ドライブ一覧")
+
     # list サブコマンド
     list_parser = subparsers.add_parser("list", help="ファイル一覧")
     list_parser.add_argument("--page-size", type=int, default=50, help="取得件数")
+    list_parser.add_argument(
+        "--drive",
+        choices=["my", "shared", "all"],
+        default="my",
+        help="ドライブ種別（my=マイドライブ, shared=共有ドライブ, all=両方）",
+    )
+    list_parser.add_argument("--drive-id", help="特定の共有ドライブID")
 
     # search サブコマンド
     search_parser = subparsers.add_parser("search", help="ファイル検索")
     search_parser.add_argument("--query", required=True, help="検索クエリ")
     search_parser.add_argument("--page-size", type=int, default=50, help="取得件数")
+    search_parser.add_argument(
+        "--drive",
+        choices=["my", "shared", "all"],
+        default="my",
+        help="ドライブ種別（my=マイドライブ, shared=共有ドライブ, all=両方）",
+    )
+    search_parser.add_argument("--drive-id", help="特定の共有ドライブID")
 
     # move サブコマンド
     move_parser = subparsers.add_parser("move", help="ファイル移動")
@@ -409,12 +523,32 @@ def main() -> None:
         format_output(items, headers, legacy_args.format)
         return
 
-    if args.command == "list":
-        items = list_files(token_path, args.page_size)
+    if args.command == "shared-drives":
+        drives = list_shared_drives(token_path)
+        if args.format == "json":
+            print_json(drives)
+        else:
+            if not drives:
+                print("共有ドライブがありません")
+            else:
+                print(f"共有ドライブ一覧 ({len(drives)}件):")
+                print("-" * 60)
+                for drive in drives:
+                    print(f"  ID: {drive.get('id')}")
+                    print(f"  名前: {drive.get('name')}")
+                    print(f"  作成日: {drive.get('createdTime', '')}")
+                    print()
+
+    elif args.command == "list":
+        drive_type = getattr(args, 'drive', 'my')
+        drive_id = getattr(args, 'drive_id', None)
+        items = list_files(token_path, args.page_size, drive_type, drive_id)
         format_output(items, headers, args.format)
 
     elif args.command == "search":
-        items = search_files(token_path, args.query, args.page_size)
+        drive_type = getattr(args, 'drive', 'my')
+        drive_id = getattr(args, 'drive_id', None)
+        items = search_files(token_path, args.query, args.page_size, drive_type, drive_id)
         format_output(items, headers, args.format)
 
     elif args.command == "move":

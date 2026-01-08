@@ -32,6 +32,23 @@ def get_active_profile() -> str:
     return "default"
 
 
+def print_profile_header(show_all: bool = False) -> None:
+    """現在のプロファイル情報をヘッダーとして表示する。
+
+    Args:
+        show_all: True の場合、利用可能な全プロファイルも表示
+    """
+    active = get_active_profile()
+    print(f"[プロファイル: {active}]")
+
+    if show_all:
+        profiles = list_profiles()
+        if len(profiles) > 1:
+            others = [p for p in profiles if p != active]
+            print(f"  切り替え可能: {', '.join(others)}")
+    print()
+
+
 def get_token_path(profile: Optional[str] = None) -> str:
     """トークンファイルのパスを取得する。"""
     if profile is None:
