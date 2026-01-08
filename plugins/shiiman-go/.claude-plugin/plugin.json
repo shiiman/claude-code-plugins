@@ -1,0 +1,9 @@
+{
+  "name": "shiiman-go",
+  "version": "1.0.0",
+  "description": "Go 言語開発を支援するプラグイン（フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン）",
+  "author": {
+    "name": "shiiman"
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
+}
