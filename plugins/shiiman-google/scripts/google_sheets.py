@@ -8,9 +8,13 @@
     python google_sheets.py create --name "新規シート"
     python google_sheets.py create --name "テスト" --folder-id "xxx"
 
+    # シート（タブ）一覧取得
+    python google_sheets.py sheets --sheet-id "xxx"
+
     # データ取得
     python google_sheets.py get --sheet-id "xxx"
     python google_sheets.py get --sheet-id "xxx" --range "A1:C10"
+    python google_sheets.py get --sheet-id "xxx" --sheet "売上データ"
 
     # データ更新
     python google_sheets.py update --sheet-id "xxx" --range "A1" --values '["Hello", "World"]'
@@ -19,6 +23,7 @@
     # CSVエクスポート
     python google_sheets.py export --sheet-id "xxx" --output "data.csv"
     python google_sheets.py export --sheet-id "xxx" --output "data.xlsx" --type xlsx
+    python google_sheets.py export --sheet-id "xxx" --output "data.csv" --sheet "売上データ"
 """
 
 import argparse
@@ -36,6 +41,7 @@ from google_utils import (
     load_credentials,
     print_error,
     print_json,
+    print_profile_header,
     print_table,
     handle_api_error,
     get_token_path,
@@ -52,6 +58,124 @@ SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
+
+
+@handle_api_error
+def list_sheets(token_path: str, sheet_id: str) -> dict:
+    """スプレッドシートのシート（タブ）一覧を取得する
+
+    Args:
+        token_path: トークンファイルのパス
+        sheet_id: スプレッドシートID
+
+    Returns:
+        シート一覧情報
+    """
+    creds = load_credentials(token_path, SCOPES)
+    service = build("sheets", "v4", credentials=creds)
+
+    spreadsheet = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
+    title = spreadsheet.get("properties", {}).get("title", "")
+
+    sheets = []
+    for sheet in spreadsheet.get("sheets", []):
+        props = sheet.get("properties", {})
+        grid_props = props.get("gridProperties", {})
+        sheets.append({
+            "index": props.get("index", 0),
+            "title": props.get("title", ""),
+            "sheetId": props.get("sheetId", 0),
+            "rowCount": grid_props.get("rowCount", 0),
+            "columnCount": grid_props.get("columnCount", 0),
+        })
+
+    return {
+        "id": sheet_id,
+        "title": title,
+        "sheetCount": len(sheets),
+        "sheets": sheets,
+        "url": f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit"
+    }
+
+
+def _find_sheet_by_spec(sheets: list, sheet_spec: str) -> dict:
+    """シート指定からシートを検索する共通ヘルパー関数
+
+    Args:
+        sheets: シート情報のリスト
+        sheet_spec: シート指定（名前、インデックス番号）
+
+    Returns:
+        見つかったシート情報
+
+    Raises:
+        ValueError: シートが見つからない場合
+    """
+    if not sheets:
+        raise ValueError("スプレッドシートにシートがありません。")
+
+    # 数値の場合はインデックスとして扱う
+    if sheet_spec.isdigit():
+        index = int(sheet_spec)
+        for sheet in sheets:
+            if sheet["index"] == index:
+                return sheet
+        raise ValueError(f"インデックス {index} のシートが見つかりません。")
+
+    # 名前で検索（完全一致）
+    for sheet in sheets:
+        if sheet["title"] == sheet_spec:
+            return sheet
+
+    # 名前で検索（部分一致、大文字小文字無視）
+    sheet_spec_lower = sheet_spec.lower()
+    for sheet in sheets:
+        if sheet_spec_lower in sheet["title"].lower():
+            return sheet
+
+    # 見つからない場合
+    sheet_names = [s["title"] for s in sheets]
+    raise ValueError(f"シート '{sheet_spec}' が見つかりません。利用可能なシート: {', '.join(sheet_names)}")
+
+
+def resolve_sheet_name(token_path: str, sheet_id: str, sheet_spec: str) -> str:
+    """シート指定をシート名に解決する
+
+    Args:
+        token_path: トークンファイルのパス
+        sheet_id: スプレッドシートID
+        sheet_spec: シート指定（名前、インデックス番号、またはGID）
+
+    Returns:
+        シート名
+
+    Raises:
+        ValueError: シートが見つからない場合
+    """
+    sheets_info = list_sheets(token_path, sheet_id)
+    sheets = sheets_info.get("sheets", [])
+    sheet = _find_sheet_by_spec(sheets, sheet_spec)
+    return sheet["title"]
+
+
+def get_sheet_gid(token_path: str, sheet_id: str, sheet_spec: str) -> int:
+    """シート指定からGIDを取得する
+
+    Args:
+        token_path: トークンファイルのパス
+        sheet_id: スプレッドシートID
+        sheet_spec: シート指定（名前、インデックス番号）
+
+    Returns:
+        シートのGID
+
+    Raises:
+        ValueError: シートが見つからない場合
+    """
+    sheets_info = list_sheets(token_path, sheet_id)
+    sheets = sheets_info.get("sheets", [])
+    sheet = _find_sheet_by_spec(sheets, sheet_spec)
+    return sheet["sheetId"]
 
 
 @handle_api_error
@@ -239,11 +363,13 @@ def export_spreadsheet(
             - application/pdf: PDF
             - application/vnd.oasis.opendocument.spreadsheet: ODS
             - text/tab-separated-values: TSV
-        sheet_gid: エクスポートするシートのGID（CSVの場合のみ有効、省略時は最初のシート）
+        sheet_gid: エクスポートするシートのGID（CSV/TSVの場合のみ有効、省略時は最初のシート）
 
     Returns:
         エクスポート結果
     """
+    import requests
+
     creds = load_credentials(token_path, SCOPES)
     drive_service = build("drive", "v3", credentials=creds)
     sheets_service = build("sheets", "v4", credentials=creds)
@@ -252,11 +378,21 @@ def export_spreadsheet(
     spreadsheet = sheets_service.spreadsheets().get(spreadsheetId=sheet_id).execute()
     title = spreadsheet.get("properties", {}).get("title", "spreadsheet")
 
-    # エクスポート実行
-    content = drive_service.files().export(
-        fileId=sheet_id,
-        mimeType=mime_type
-    ).execute()
+    # CSV/TSV で GID 指定がある場合は URL ベースでエクスポート
+    if sheet_gid is not None and mime_type in ["text/csv", "text/tab-separated-values"]:
+        # フォーマットを決定
+        export_format = "csv" if mime_type == "text/csv" else "tsv"
+        export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format={export_format}&gid={sheet_gid}"
+        headers = {"Authorization": f"Bearer {creds.token}"}
+        response = requests.get(export_url, headers=headers)
+        response.raise_for_status()
+        content = response.content
+    else:
+        # 通常の Drive API エクスポート
+        content = drive_service.files().export(
+            fileId=sheet_id,
+            mimeType=mime_type
+        ).execute()
 
     # ファイルに保存
     output_path = os.path.expanduser(output_path)
@@ -282,6 +418,9 @@ def export_spreadsheet(
 
 
 def main():
+    # プロファイルヘッダーを表示
+    print_profile_header()
+
     parser = argparse.ArgumentParser(description="Google Sheets 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
     parser.add_argument("--token", help="トークンファイルパス（省略時はアクティブプロファイル）")
@@ -293,22 +432,29 @@ def main():
     create_parser.add_argument("--name", required=True, help="スプレッドシート名")
     create_parser.add_argument("--folder-id", help="親フォルダID")
 
+    # sheets コマンド（シート一覧取得）
+    sheets_parser = subparsers.add_parser("sheets", help="シート（タブ）一覧取得")
+    sheets_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
+
     # get コマンド
     get_parser = subparsers.add_parser("get", help="データ取得")
     get_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
     get_parser.add_argument("--range", help="取得範囲（例: A1:C10）")
+    get_parser.add_argument("--sheet", help="シート名またはインデックス（例: '売上データ' または '0'）")
 
     # update コマンド
     update_parser = subparsers.add_parser("update", help="データ更新")
     update_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
     update_parser.add_argument("--range", required=True, help="更新範囲（例: A1:B2）")
     update_parser.add_argument("--values", required=True, help="書き込むデータ（JSON配列）")
+    update_parser.add_argument("--sheet", help="シート名またはインデックス（例: '売上データ' または '0'）")
 
     # append コマンド
     append_parser = subparsers.add_parser("append", help="行を末尾に追加")
     append_parser.add_argument("--sheet-id", required=True, help="スプレッドシートID")
     append_parser.add_argument("--range", default="Sheet1", help="追加先シート（デフォルト: Sheet1）")
     append_parser.add_argument("--values", required=True, help="追加するデータ（JSON配列）")
+    append_parser.add_argument("--sheet", help="シート名またはインデックス（例: '売上データ' または '0'）")
 
     # export コマンド
     export_parser = subparsers.add_parser("export", help="スプレッドシートをエクスポート")
@@ -320,6 +466,7 @@ def main():
         default="csv",
         help="出力形式（デフォルト: csv）"
     )
+    export_parser.add_argument("--sheet", help="エクスポートするシート名またはインデックス（CSV/TSVのみ有効）")
 
     args = parser.parse_args()
 
@@ -344,8 +491,36 @@ def main():
             print(f"  名前: {result['name']}")
             print(f"  URL: {result['url']}")
 
+    elif args.command == "sheets":
+        result = list_sheets(token_path, args.sheet_id)
+        if args.format == "json":
+            print_json([result])
+        else:
+            print(f"タイトル: {result['title']}")
+            print(f"シート数: {result['sheetCount']}")
+            print(f"URL: {result['url']}")
+            print("-" * 40)
+            for sheet in result['sheets']:
+                print(f"  [{sheet['index']}] {sheet['title']} (GID: {sheet['sheetId']}, {sheet['rowCount']}行 x {sheet['columnCount']}列)")
+
     elif args.command == "get":
-        result = get_spreadsheet(token_path, args.sheet_id, args.range)
+        # --sheet オプションがある場合、シート名を解決して範囲に追加
+        range_str = args.range
+        if hasattr(args, 'sheet') and args.sheet:
+            try:
+                sheet_name = resolve_sheet_name(token_path, args.sheet_id, args.sheet)
+                if range_str:
+                    # 範囲が指定されている場合、シート名を前に付ける
+                    if '!' not in range_str:
+                        range_str = f"'{sheet_name}'!{range_str}"
+                else:
+                    # 範囲が指定されていない場合、シート全体を取得
+                    range_str = f"'{sheet_name}'"
+            except ValueError as e:
+                print_error(str(e))
+                sys.exit(1)
+
+        result = get_spreadsheet(token_path, args.sheet_id, range_str)
         if args.format == "json":
             print_json([result])
         else:
@@ -367,7 +542,18 @@ def main():
             print_error("--values はJSON形式で指定してください（例: '[\"A\",\"B\"]' または '[[\"A1\",\"B1\"],[\"A2\",\"B2\"]]'）")
             sys.exit(1)
 
-        result = update_spreadsheet(token_path, args.sheet_id, args.range, values)
+        # --sheet オプションがある場合、シート名を解決して範囲に追加
+        range_str = args.range
+        if hasattr(args, 'sheet') and args.sheet:
+            try:
+                sheet_name = resolve_sheet_name(token_path, args.sheet_id, args.sheet)
+                if '!' not in range_str:
+                    range_str = f"'{sheet_name}'!{range_str}"
+            except ValueError as e:
+                print_error(str(e))
+                sys.exit(1)
+
+        result = update_spreadsheet(token_path, args.sheet_id, range_str, values)
         if args.format == "json":
             print_json([result])
         else:
@@ -385,7 +571,17 @@ def main():
             print_error("--values はJSON形式で指定してください（例: '[\"A\",\"B\"]' または '[[\"A1\",\"B1\"],[\"A2\",\"B2\"]]'）")
             sys.exit(1)
 
-        result = append_spreadsheet(token_path, args.sheet_id, args.range, values)
+        # --sheet オプションがある場合、シート名を解決して範囲に追加
+        range_str = args.range
+        if hasattr(args, 'sheet') and args.sheet:
+            try:
+                sheet_name = resolve_sheet_name(token_path, args.sheet_id, args.sheet)
+                range_str = f"'{sheet_name}'"
+            except ValueError as e:
+                print_error(str(e))
+                sys.exit(1)
+
+        result = append_spreadsheet(token_path, args.sheet_id, range_str, values)
         if args.format == "json":
             print_json([result])
         else:
@@ -406,7 +602,16 @@ def main():
         }
         mime_type = mime_types.get(args.type, "text/csv")
 
-        result = export_spreadsheet(token_path, args.sheet_id, args.output, mime_type)
+        # --sheet オプションがある場合、GIDを取得してURLに追加（CSV/TSVのみ）
+        sheet_gid = None
+        if hasattr(args, 'sheet') and args.sheet and args.type in ["csv", "tsv"]:
+            try:
+                sheet_gid = get_sheet_gid(token_path, args.sheet_id, args.sheet)
+            except ValueError as e:
+                print_error(str(e))
+                sys.exit(1)
+
+        result = export_spreadsheet(token_path, args.sheet_id, args.output, mime_type, sheet_gid)
         if args.format == "json":
             print_json([result])
         else:

@@ -17,6 +17,7 @@ from google_utils import (
     list_profiles,
     load_credentials,
     print_error,
+    print_profile_header,
     retry_with_backoff,
 )
 
@@ -436,6 +437,9 @@ def mark_read_all_profiles() -> dict:
 
 @handle_api_error
 def main() -> None:
+    # プロファイルヘッダーを表示
+    print_profile_header()
+
     parser = argparse.ArgumentParser(description="Gmail 操作ツール")
     parser.add_argument("--token", help="トークンファイルパス")
     parser.add_argument(

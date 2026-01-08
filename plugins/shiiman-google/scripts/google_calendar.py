@@ -4,7 +4,8 @@ import argparse
 import datetime as dt
 import json
 import re
-from typing import List, Tuple
+import sys
+from typing import List, Optional, Tuple
 
 from googleapiclient.discovery import build
 
@@ -14,6 +15,7 @@ from google_utils import (
     handle_api_error,
     load_credentials,
     print_json,
+    print_profile_header,
     retry_with_backoff,
 )
 
@@ -375,6 +377,75 @@ def list_calendars(token_path: str) -> List[dict]:
     return results
 
 
+def find_calendar(token_path: str, query: str) -> Optional[dict]:
+    """カレンダー名またはIDでカレンダーを検索する。
+
+    Args:
+        token_path: トークンファイルパス
+        query: 検索クエリ（カレンダー名の部分一致、またはカレンダーID）
+
+    Returns:
+        見つかったカレンダー情報。見つからない場合は None
+
+    Note:
+        - 大文字小文字を区別しない
+        - 複数マッチした場合は最初の1件を返す
+        - 完全一致を優先し、次に部分一致を検索
+    """
+    calendars = list_calendars(token_path)
+    query_lower = query.lower()
+
+    # 1. ID完全一致
+    for cal in calendars:
+        if cal["id"] == query:
+            return cal
+
+    # 2. 名前完全一致（大文字小文字無視）
+    for cal in calendars:
+        if cal["summary"].lower() == query_lower:
+            return cal
+
+    # 3. 名前部分一致（大文字小文字無視）
+    for cal in calendars:
+        if query_lower in cal["summary"].lower():
+            return cal
+
+    return None
+
+
+def resolve_calendar_id(token_path: str, calendar_spec: str) -> str:
+    """カレンダー指定をIDに解決する。
+
+    Args:
+        token_path: トークンファイルパス
+        calendar_spec: カレンダー指定（"primary", "all", カレンダーID、または検索クエリ）
+
+    Returns:
+        カレンダーID。"all" の場合はそのまま "all" を返す
+
+    Raises:
+        ValueError: カレンダーが見つからない場合
+    """
+    # 特殊キーワード
+    if calendar_spec in ("primary", "all"):
+        return calendar_spec
+
+    # ID形式（@を含む）の場合はそのまま返す
+    if "@" in calendar_spec:
+        return calendar_spec
+
+    # 名前検索を試みる
+    cal = find_calendar(token_path, calendar_spec)
+    if cal:
+        return cal["id"]
+
+    # 見つからない場合はエラー
+    raise ValueError(
+        f"カレンダー '{calendar_spec}' が見つかりませんでした。\n"
+        "カレンダー一覧を確認するには: google_calendar.py calendars"
+    )
+
+
 @retry_with_backoff()
 @handle_api_error
 def get_event(
@@ -601,6 +672,9 @@ def delete_event(
 
 @handle_api_error
 def main() -> None:
+    # プロファイルヘッダーを表示
+    print_profile_header()
+
     parser = argparse.ArgumentParser(description="Google Calendar 操作ツール")
     parser.add_argument("--token", help="トークンファイルパス")
     parser.add_argument(
@@ -799,8 +873,23 @@ def main() -> None:
     else:
         # サブコマンドなし or events サブコマンド
         period = args.range
-        calendar_id = args.calendar
+        calendar_spec = args.calendar
         max_results = args.max
+
+        # カレンダー指定を解決（名前検索をサポート）
+        try:
+            calendar_id = resolve_calendar_id(token_path, calendar_spec)
+        except ValueError as e:
+            print(f"エラー: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        # 解決されたカレンダーIDを表示（名前検索の場合）
+        if calendar_spec != calendar_id and calendar_id != "all":
+            cal = find_calendar(token_path, calendar_spec)
+            if cal:
+                print(f"カレンダー: {cal['summary']}")
+                print(f"  ID: {cal['id']}")
+                print()
 
         if calendar_id == "all":
             events = list_all_events(token_path, period, max_results)

@@ -34,6 +34,7 @@ from google_utils import (
     load_credentials,
     print_error,
     print_json,
+    print_profile_header,
     handle_api_error,
     get_token_path,
     retry_with_backoff,
@@ -270,6 +271,9 @@ def export_presentation(
 
 
 def main():
+    # プロファイルヘッダーを表示
+    print_profile_header()
+
     parser = argparse.ArgumentParser(description="Google Slides 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
     parser.add_argument("--token", help="トークンファイルパス（省略時はアクティブプロファイル）")
