@@ -28,6 +28,12 @@ python plugins/shiiman-google/scripts/google_gmail.py unread --max 50
 python plugins/shiiman-google/scripts/google_gmail.py unread-all
 ```
 
+### 未読が100件を超えるか確認
+
+```bash
+python plugins/shiiman-google/scripts/google_gmail.py unread-all --show-has-more
+```
+
 ### JSON 形式で出力
 
 ```bash
@@ -40,6 +46,19 @@ python plugins/shiiman-google/scripts/google_gmail.py --format json unread
 - subject: 件名
 - from: 送信者
 - date: 受信日時
+
+## 追加取得について
+
+デフォルトでは最大100件を取得します。
+
+### 追加取得の確認方法
+
+`--show-has-more` オプションを使用すると、指定した件数（デフォルト100件）を超える未読があるかどうかが表示されます。
+出力に「※ まだ未読があります」と表示された場合は、ユーザーに追加取得するか確認してください。
+
+### 追加取得の実行方法
+
+続きを取得する場合は `--max 200` のように件数を増やして再実行します。
 
 ## 関連操作
 
