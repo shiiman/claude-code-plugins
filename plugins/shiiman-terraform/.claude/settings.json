@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(terraform version:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform init:*)",
+      "Bash(terraform plan:*)",
+      "Bash(terraform show:*)",
+      "Bash(terraform state list:*)",
+      "Bash(terraform state show:*)",
+      "Bash(terraform state pull:*)",
+      "Bash(terraform providers:*)",
+      "Bash(terraform output:*)",
+      "Bash(terraform graph:*)",
+      "Bash(terraform workspace list:*)",
+      "Bash(terraform workspace show:*)",
+      "Bash(terragrunt --version:*)",
+      "Bash(terragrunt plan:*)",
+      "Bash(terragrunt plan-all:*)",
+      "Bash(terragrunt show:*)",
+      "Bash(terragrunt output:*)",
+      "Bash(terragrunt graph-dependencies:*)",
+      "Bash(terragrunt run-all plan:*)",
+      "Bash(tfenv list:*)",
+      "Bash(tfenv list-remote:*)",
+      "Bash(tfenv version-name:*)",
+      "Bash(tgswitch --version:*)",
+      "Bash(tgswitch --list-all:*)"
+    ],
+    "deny": [
+      "Bash(terraform destroy:*)",
+      "Bash(terraform apply -auto-approve:*)",
+      "Bash(terraform state rm:*)",
+      "Bash(terraform state mv:*)",
+      "Bash(terraform force-unlock:*)",
+      "Bash(terraform taint:*)",
+      "Bash(terraform untaint:*)",
+      "Bash(terragrunt destroy:*)",
+      "Bash(terragrunt destroy-all:*)",
+      "Bash(terragrunt apply -auto-approve:*)",
+      "Bash(terragrunt run-all destroy:*)",
+      "Bash(terragrunt run-all apply -auto-approve:*)"
+    ]
+  }
+}
