@@ -1,0 +1,9 @@
+{
+  "name": "shiiman-terraform",
+  "version": "1.0.0",
+  "description": "Terraform/Terragrunt 管理プラグイン - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査",
+  "author": {
+    "name": "shiiman"
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
+}

@@ -46,6 +46,13 @@
       "version": "1.0.0",
       "source": "./plugins/shiiman-docker",
       "category": "developer-tools"
+    },
+    {
+      "name": "shiiman-terraform",
+      "description": "Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査",
+      "version": "1.0.0",
+      "source": "./plugins/shiiman-terraform",
+      "category": "developer-tools"
     }
   ]
 }
