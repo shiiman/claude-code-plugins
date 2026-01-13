@@ -19,7 +19,7 @@ Google Sheets スプレッドシートを新規作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_sheets.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"}
+python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"}
 ```
 
 ## 使用例

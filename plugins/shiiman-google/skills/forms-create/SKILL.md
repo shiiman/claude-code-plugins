@@ -13,13 +13,13 @@ Google Forms フォームを新規作成します。
 ### 基本的な作成
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py create --name "フォーム名"
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py create --name "フォーム名"
 ```
 
 ### 説明付きで作成
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py create --name "フォーム名" --description "フォームの説明"
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py create --name "フォーム名" --description "フォームの説明"
 ```
 
 ## ユーザー入力の解釈

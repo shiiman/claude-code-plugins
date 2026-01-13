@@ -13,19 +13,19 @@ Google Docs の一覧を取得します。
 ### 基本的な一覧取得
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document'"
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document'"
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document'" --max 50
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document'" --max 50
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py --format json search --query "mimeType='application/vnd.google-apps.document'"
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py --format json search --query "mimeType='application/vnd.google-apps.document'"
 ```
 
 ## 出力項目

@@ -19,7 +19,7 @@ Google Forms の回答を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py responses --form-id "$ARGUMENTS" ${MAX:+--max "$MAX"}
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py responses --form-id "$ARGUMENTS" ${MAX:+--max "$MAX"}
 ```
 
 ## 使用例

@@ -20,7 +20,7 @@ Google Docs をファイルにエクスポートします。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py export --doc-id "$ARGUMENTS" --output "$OUTPUT" ${TYPE:+--type "$TYPE"}
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py export --doc-id "$ARGUMENTS" --output "$OUTPUT" ${TYPE:+--type "$TYPE"}
 ```
 
 ## 使用例

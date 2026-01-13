@@ -25,7 +25,7 @@ Google Calendar に予定を追加します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py add --summary "$ARGUMENTS" --start "$START" --end "$END" ${CALENDAR:+--calendar "$CALENDAR"} ${COLOR:+--color "$COLOR"} ${LOCATION:+--location "$LOCATION"} ${DESCRIPTION:+--description "$DESCRIPTION"} ${ALL_DAY:+--all-day}
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py add --summary "$ARGUMENTS" --start "$START" --end "$END" ${CALENDAR:+--calendar "$CALENDAR"} ${COLOR:+--color "$COLOR"} ${LOCATION:+--location "$LOCATION"} ${DESCRIPTION:+--description "$DESCRIPTION"} ${ALL_DAY:+--all-day}
 ```
 
 ## 使用例

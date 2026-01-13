@@ -13,19 +13,19 @@ Gmail のスター付きメッセージ一覧を取得します。
 ### アクティブプロファイルのスター付き一覧
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py starred
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py starred
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py starred --max 50
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py starred --max 50
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py --format json starred
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py --format json starred
 ```
 
 ## 出力項目

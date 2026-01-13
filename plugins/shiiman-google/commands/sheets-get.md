@@ -19,7 +19,7 @@ Google Sheets スプレッドシートのデータを取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_sheets.py get --sheet-id "$ARGUMENTS" ${RANGE:+--range "$RANGE"}
+python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py get --sheet-id "$ARGUMENTS" ${RANGE:+--range "$RANGE"}
 ```
 
 ## 使用例

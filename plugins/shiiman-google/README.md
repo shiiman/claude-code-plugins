@@ -162,19 +162,44 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 plugins/shiiman-google/
 ├── .claude-plugin/plugin.json   # プラグインメタデータ
-├── scripts/                     # Python スクリプト
-│   ├── google_utils.py          # 共通ユーティリティ
-│   ├── google_auth.py           # 認証
-│   ├── google_drive.py          # Drive API
-│   ├── google_gmail.py          # Gmail API
-│   ├── google_calendar.py       # Calendar API
-│   ├── google_docs.py           # Docs API
-│   ├── google_sheets.py         # Sheets API
-│   ├── google_slides.py         # Slides API
-│   ├── google_forms.py          # Forms API
-│   └── google_apps_script.py    # Apps Script API
 ├── commands/                    # スラッシュコマンド
 └── skills/                      # 自然言語トリガースキル
+    ├── auth-login/
+    │   └── scripts/             # 認証関連スクリプト
+    │       ├── google_utils.py  # 共通ユーティリティ
+    │       └── google_auth.py   # 認証
+    ├── calendar-events/
+    │   └── scripts/             # カレンダー関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_calendar.py
+    ├── docs-list/
+    │   └── scripts/              # ドキュメント関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_docs.py
+    ├── drive-list/
+    │   └── scripts/              # ドライブ関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_drive.py
+    ├── forms-list/
+    │   └── scripts/              # フォーム関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_forms.py
+    ├── gmail-unread/
+    │   └── scripts/              # Gmail関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_gmail.py
+    ├── sheets-list/
+    │   └── scripts/              # スプレッドシート関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_sheets.py
+    ├── slides-list/
+    │   └── scripts/              # スライド関連スクリプト
+    │       ├── google_utils.py
+    │       └── google_slides.py
+    └── apps-script-list/
+        └── scripts/              # Apps Script関連スクリプト
+            ├── google_utils.py
+            └── google_apps_script.py
 ```
 
 ## ライセンス

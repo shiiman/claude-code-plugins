@@ -30,7 +30,7 @@ Google Forms を検索します。
 ### 実行例
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py \
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py \
   --token ~/.config/shiiman-google/tokens/{profile}.json \
   --query "mimeType='application/vnd.google-apps.form' and name contains 'spec'"
 ```

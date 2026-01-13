@@ -13,19 +13,19 @@ Google Slides プレゼンテーションにスライドを追加します。
 ### タイトルと本文付きスライド追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --body "本文"
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --body "本文"
 ```
 
 ### 空白スライド追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py add-slide --presentation-id "ID" --layout BLANK
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py add-slide --presentation-id "ID" --layout BLANK
 ```
 
 ### タイトルのみのスライド
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --layout TITLE
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --layout TITLE
 ```
 
 ## レイアウト種別

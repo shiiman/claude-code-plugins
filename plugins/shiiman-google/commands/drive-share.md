@@ -22,7 +22,7 @@ Google Drive のファイルを共有します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py share --file-id "$ARGUMENTS" ${EMAIL:+--email "$EMAIL"} ${ROLE:+--role "$ROLE"} ${TYPE:+--type "$TYPE"} ${NO_NOTIFY:+--no-notify}
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id "$ARGUMENTS" ${EMAIL:+--email "$EMAIL"} ${ROLE:+--role "$ROLE"} ${TYPE:+--type "$TYPE"} ${NO_NOTIFY:+--no-notify}
 ```
 
 ## 使用例

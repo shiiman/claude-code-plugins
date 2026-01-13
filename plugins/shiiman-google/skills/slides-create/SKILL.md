@@ -13,13 +13,13 @@ Google Slides プレゼンテーションを新規作成します。
 ### 基本的な作成
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py create --name "プレゼンテーション名"
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py create --name "プレゼンテーション名"
 ```
 
 ### フォルダを指定
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py create --name "プレゼンテーション名" --folder-id "フォルダID"
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py create --name "プレゼンテーション名" --folder-id "フォルダID"
 ```
 
 ## ユーザー入力の解釈

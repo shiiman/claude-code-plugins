@@ -15,7 +15,7 @@ Google Drive のファイルの共有設定を確認します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py permissions --file-id "$ARGUMENTS"
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py permissions --file-id "$ARGUMENTS"
 ```
 
 ## 使用例

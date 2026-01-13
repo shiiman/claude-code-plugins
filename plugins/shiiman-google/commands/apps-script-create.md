@@ -19,7 +19,7 @@ Google Apps Script プロジェクトを新規作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_apps_script.py create --name "$ARGUMENTS" ${PARENT_ID:+--parent-id "$PARENT_ID"}
+python plugins/shiiman-google/skills/apps-script-list/scripts/google_apps_script.py create --name "$ARGUMENTS" ${PARENT_ID:+--parent-id "$PARENT_ID"}
 ```
 
 ## 使用例

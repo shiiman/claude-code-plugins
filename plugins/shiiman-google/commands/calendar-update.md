@@ -25,7 +25,7 @@ Google Calendar の予定を更新します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py update --event-id "$ARGUMENTS" ${CALENDAR:+--calendar "$CALENDAR"} ${SUMMARY:+--summary "$SUMMARY"} ${START:+--start "$START"} ${END:+--end "$END"} ${LOCATION:+--location "$LOCATION"} ${DESCRIPTION:+--description "$DESCRIPTION"} ${COLOR:+--color "$COLOR"}
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py update --event-id "$ARGUMENTS" ${CALENDAR:+--calendar "$CALENDAR"} ${SUMMARY:+--summary "$SUMMARY"} ${START:+--start "$START"} ${END:+--end "$END"} ${LOCATION:+--location "$LOCATION"} ${DESCRIPTION:+--description "$DESCRIPTION"} ${COLOR:+--color "$COLOR"}
 ```
 
 ## 使用例

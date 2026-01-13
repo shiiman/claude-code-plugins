@@ -21,7 +21,7 @@ Google Slides プレゼンテーションにスライドを追加します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py add-slide --presentation-id "$ARGUMENTS" ${TITLE:+--title "$TITLE"} ${BODY:+--body "$BODY"} ${LAYOUT:+--layout "$LAYOUT"}
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py add-slide --presentation-id "$ARGUMENTS" ${TITLE:+--title "$TITLE"} ${BODY:+--body "$BODY"} ${LAYOUT:+--layout "$LAYOUT"}
 ```
 
 ## 使用例

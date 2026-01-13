@@ -20,7 +20,7 @@ Google Sheets をファイルにエクスポートします。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_sheets.py export --sheet-id "$ARGUMENTS" --output "$OUTPUT" ${TYPE:+--type "$TYPE"}
+python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py export --sheet-id "$ARGUMENTS" --output "$OUTPUT" ${TYPE:+--type "$TYPE"}
 ```
 
 ## 使用例

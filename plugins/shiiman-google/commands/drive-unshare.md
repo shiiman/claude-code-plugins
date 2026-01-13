@@ -20,7 +20,7 @@ Google Drive のファイルの共有を解除します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py unshare --file-id "$ARGUMENTS" ${EMAIL:+--email "$EMAIL"} ${PERMISSION_ID:+--permission-id "$PERMISSION_ID"}
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py unshare --file-id "$ARGUMENTS" ${EMAIL:+--email "$EMAIL"} ${PERMISSION_ID:+--permission-id "$PERMISSION_ID"}
 ```
 
 ## 使用例

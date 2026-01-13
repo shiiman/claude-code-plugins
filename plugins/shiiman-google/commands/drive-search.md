@@ -24,13 +24,13 @@ Google Drive 内を検索します。
 1. `query` を受け取る（例: `name contains 'spec'`）
 2. `~/.config/shiiman-google/active-profile` を読み取り、使用プロファイルを特定
 3. トークン未作成なら `/shiiman-google:auth-login` を案内
-4. `plugins/shiiman-google/scripts/google_drive.py` を実行して検索
+4. `plugins/shiiman-google/skills/drive-list/scripts/google_drive.py` を実行して検索
 5. 表形式で出力
 
 ### 実行例
 
 ```bash
-python plugins/shiiman-google/scripts/google_drive.py \
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py \
   --token ~/.config/shiiman-google/tokens/{profile}.json \
   --query "name contains 'spec'"
 ```

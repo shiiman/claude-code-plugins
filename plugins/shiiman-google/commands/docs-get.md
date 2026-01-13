@@ -15,7 +15,7 @@ Google Docs ドキュメントの内容を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py get --doc-id "$ARGUMENTS"
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py get --doc-id "$ARGUMENTS"
 ```
 
 ## 使用例

@@ -20,7 +20,7 @@ Google Docs ドキュメントを新規作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"} ${CONTENT:+--content "$CONTENT"}
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"} ${CONTENT:+--content "$CONTENT"}
 ```
 
 ## 使用例

@@ -26,13 +26,13 @@ Gmail のメッセージをスター化/解除します。
 1. `message-id` と `--remove` を判定
 2. `~/.config/shiiman-google/active-profile` を読み取り、使用プロファイルを特定
 3. トークン未作成なら `/shiiman-google:auth-login` を案内
-4. `plugins/shiiman-google/scripts/google_gmail.py` を実行してスター化/解除
+4. `plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py` を実行してスター化/解除
 5. 完了メッセージを出力
 
 ### 実行例
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py \
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py \
   --token ~/.config/shiiman-google/tokens/{profile}.json \
   star --ids <message-id>
 ```

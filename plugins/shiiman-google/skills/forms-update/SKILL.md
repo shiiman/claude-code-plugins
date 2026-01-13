@@ -13,19 +13,19 @@ Google Forms フォームに質問を追加します。
 ### テキスト質問追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py add-question --form-id "ID" --question "お名前は？" --type TEXT
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py add-question --form-id "ID" --question "お名前は？" --type TEXT
 ```
 
 ### 選択式質問追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py add-question --form-id "ID" --question "好きな色は？" --type RADIO --options "赤,青,緑"
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py add-question --form-id "ID" --question "好きな色は？" --type RADIO --options "赤,青,緑"
 ```
 
 ### 必須質問
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py add-question --form-id "ID" --question "メールアドレス" --type TEXT --required
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py add-question --form-id "ID" --question "メールアドレス" --type TEXT --required
 ```
 
 ## 質問タイプ

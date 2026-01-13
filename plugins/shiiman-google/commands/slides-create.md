@@ -19,7 +19,7 @@ Google Slides プレゼンテーションを新規作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"}
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py create --name "$ARGUMENTS" ${FOLDER_ID:+--folder-id "$FOLDER_ID"}
 ```
 
 ## 使用例

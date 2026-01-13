@@ -15,7 +15,7 @@ Google Forms フォームの内容を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py get --form-id "$ARGUMENTS"
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py get --form-id "$ARGUMENTS"
 ```
 
 ## 使用例

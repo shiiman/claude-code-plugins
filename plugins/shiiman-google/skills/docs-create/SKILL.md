@@ -13,19 +13,19 @@ Google Docs ドキュメントを新規作成します。
 ### 基本的な作成
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py create --name "ドキュメント名"
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py create --name "ドキュメント名"
 ```
 
 ### フォルダを指定
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py create --name "ドキュメント名" --folder-id "フォルダID"
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py create --name "ドキュメント名" --folder-id "フォルダID"
 ```
 
 ### 初期内容を指定
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py create --name "ドキュメント名" --content "初期テキスト"
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py create --name "ドキュメント名" --content "初期テキスト"
 ```
 
 ## ユーザー入力の解釈
