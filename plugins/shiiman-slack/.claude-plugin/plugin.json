@@ -1,0 +1,9 @@
+{
+    "name": "shiiman-slack",
+    "version": "1.0.0",
+    "description": "Slack ワークスペース管理 - MCP サーバーによるチャンネル操作、メッセージ管理、要約機能を提供",
+    "author": {
+        "name": "shiiman"
+    },
+    "homepage": "https://github.com/shiiman/claude-code-plugins"
+}
