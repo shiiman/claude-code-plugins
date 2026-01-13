@@ -23,8 +23,8 @@ Terraform 設定とstateのセキュリティチェックを行います。
 ### 1. コード内のシークレット検出
 
 ```bash
-# AWS キーのパターン検出
-grep -rn "AKIA[0-9A-Z]\{16\}" *.tf **/*.tf 2>/dev/null
+# AWS キーのパターン検出（AKIA, ASIA, AIDA, AROA 等に対応）
+grep -rnE "A(KIA|SIA|IDA|ROA|IPA|GPA|3T)[0-9A-Z]{16}" *.tf **/*.tf 2>/dev/null
 
 # シークレットキーのパターン検出
 grep -rn "aws_secret_access_key\s*=" *.tf **/*.tf 2>/dev/null

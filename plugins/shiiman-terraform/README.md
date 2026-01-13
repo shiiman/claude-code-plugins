@@ -10,7 +10,7 @@ Terraform/Terragrunt の主要操作をシンプルなコマンドと自然言�
 ## インストール
 
 ```bash
-claude plugin install shiiman-terraform@shiiman-claude-code-plugins
+claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 ```
 
 ## 機能
@@ -57,7 +57,7 @@ claude plugin install shiiman-terraform@shiiman-claude-code-plugins
 
 - 破壊系: terraform destroy, destroy-all
 - 自動承認: apply -auto-approve
-- state 変更: state rm, state mv（確認付きで実行可能）
+- state 変更: state rm, state mv（手動実行を案内）
 - 強制操作: force-unlock, taint
 
 ## 必要条件

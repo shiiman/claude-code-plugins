@@ -69,48 +69,42 @@ terraform state pull
 
 リモートバックエンドから state をダウンロードして表示。
 
-### 5. state mv（要確認）
+### 5. state mv（手動実行を案内）
 
-**重要**: state mv はリソースのアドレスを変更する操作です。
+**重要**: state mv はリソースのアドレスを変更する危険な操作のため、自動実行は禁止されています。
+
+ユーザーに手動実行を案内:
 
 ```
-## State 移動確認
+## State 移動
 
-以下の操作を実行します:
-- 移動元: {source}
-- 移動先: {destination}
+以下のコマンドを手動で実行してください:
 
-この操作を実行してよろしいですか？
-```
-
-ユーザー確認後:
-
-```bash
 terraform state mv {source} {destination}
+
+⚠️ 注意:
+- この操作は state を変更します
+- 実行前に terraform state list で現在の状態を確認してください
+- 間違った移動は terraform state mv で戻せます
 ```
 
-### 6. state rm（要確認）
+### 6. state rm（手動実行を案内）
 
-**重要**: state rm はリソースを state から削除する操作です（実際のリソースは削除されない）。
+**重要**: state rm はリソースを state から削除する危険な操作のため、自動実行は禁止されています。
+
+ユーザーに手動実行を案内:
 
 ```
-## State 削除確認
+## State 削除
 
-以下のリソースを state から削除します:
-- {resource_address}
+以下のコマンドを手動で実行してください:
+
+terraform state rm {resource_address}
 
 ⚠️ 注意:
 - 実際のインフラリソースは削除されません
 - state から削除すると Terraform の管理外になります
 - 再度管理するには import が必要です
-
-この操作を実行してよろしいですか？
-```
-
-ユーザー確認後:
-
-```bash
-terraform state rm {resource_address}
 ```
 
 ### 7. 出力フォーマット

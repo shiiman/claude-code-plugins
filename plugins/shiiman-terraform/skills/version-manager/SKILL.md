@@ -101,6 +101,26 @@ tfenv use {version}
 tgswitch {version}
 ```
 
+**tenv（統合ツール）**:
+
+```bash
+# Terraform バージョン切り替え
+tenv tf use {version}
+# 例: tenv tf use 1.5.0
+
+# Terragrunt バージョン切り替え
+tenv tg use {version}
+# 例: tenv tg use 0.50.0
+
+# インストール
+tenv tf install {version}
+tenv tg install {version}
+
+# 一覧表示
+tenv tf list
+tenv tg list
+```
+
 ### 7. 出力フォーマット
 
 ```
