@@ -20,7 +20,7 @@ Google Apps Script プロジェクトのコードを更新します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_apps_script.py update --script-id "$ARGUMENTS" --filename "$FILENAME" --code "$CODE"
+python plugins/shiiman-google/skills/apps-script-list/scripts/google_apps_script.py update --script-id "$ARGUMENTS" --filename "$FILENAME" --code "$CODE"
 ```
 
 ## 使用例

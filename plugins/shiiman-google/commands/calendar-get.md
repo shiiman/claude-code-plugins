@@ -19,7 +19,7 @@ Google Calendar のイベント詳細を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py get --event-id "$ARGUMENTS" ${CALENDAR:+--calendar "$CALENDAR"}
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py get --event-id "$ARGUMENTS" ${CALENDAR:+--calendar "$CALENDAR"}
 ```
 
 ## 使用例

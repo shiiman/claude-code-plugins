@@ -13,31 +13,31 @@ Google Calendar に新しい予定を追加します。
 ### 予定を追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py add --summary "会議" --start "2025-01-08T14:00:00" --end "2025-01-08T15:00:00"
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py add --summary "会議" --start "2025-01-08T14:00:00" --end "2025-01-08T15:00:00"
 ```
 
 ### カレンダーと色を指定して追加
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py add --summary "ランチ" --start "2025-01-08T12:00:00" --end "2025-01-08T13:00:00" --calendar "primary" --color 6 --location "レストラン"
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py add --summary "ランチ" --start "2025-01-08T12:00:00" --end "2025-01-08T13:00:00" --calendar "primary" --color 6 --location "レストラン"
 ```
 
 ### 終日イベント
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py add --summary "休暇" --start "2025-01-10" --end "2025-01-11" --all-day
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py add --summary "休暇" --start "2025-01-10" --end "2025-01-11" --all-day
 ```
 
 ### カレンダー一覧取得
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py calendars
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py calendars
 ```
 
 ### 色一覧表示
 
 ```bash
-python plugins/shiiman-google/scripts/google_calendar.py colors
+python plugins/shiiman-google/skills/calendar-events/scripts/google_calendar.py colors
 ```
 
 ## 色ID対応表

@@ -22,7 +22,7 @@ Google Forms フォームに質問を追加します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py add-question --form-id "$ARGUMENTS" --question "$QUESTION" --type "$TYPE" ${OPTIONS:+--options "$OPTIONS"} ${REQUIRED:+--required}
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py add-question --form-id "$ARGUMENTS" --question "$QUESTION" --type "$TYPE" ${OPTIONS:+--options "$OPTIONS"} ${REQUIRED:+--required}
 ```
 
 ## 使用例

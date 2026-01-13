@@ -32,7 +32,7 @@ Gmail でメールを検索します。Gmail の検索クエリ構文を使用�
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py search --query "$ARGUMENTS" ${MAX:+--max "$MAX"} ${INCLUDE_BODY:+--include-body}
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py search --query "$ARGUMENTS" ${MAX:+--max "$MAX"} ${INCLUDE_BODY:+--include-body}
 ```
 
 ## 使用例

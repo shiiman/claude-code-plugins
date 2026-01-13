@@ -15,7 +15,7 @@ Google Apps Script プロジェクトの内容を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_apps_script.py get --script-id "$ARGUMENTS"
+python plugins/shiiman-google/skills/apps-script-list/scripts/google_apps_script.py get --script-id "$ARGUMENTS"
 ```
 
 ## 使用例

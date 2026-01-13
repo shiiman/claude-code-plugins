@@ -23,7 +23,7 @@ Gmail で下書きを作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py draft --to "$ARGUMENTS" --subject "$SUBJECT" --body "$BODY" ${CC:+--cc "$CC"} ${BCC:+--bcc "$BCC"} ${HTML:+--html}
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py draft --to "$ARGUMENTS" --subject "$SUBJECT" --body "$BODY" ${CC:+--cc "$CC"} ${BCC:+--bcc "$BCC"} ${HTML:+--html}
 ```
 
 ## 使用例

@@ -20,7 +20,7 @@ Google Docs ドキュメントにテキストを追加します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_docs.py update --doc-id "$ARGUMENTS" --content "$CONTENT" ${APPEND:+--append}
+python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py update --doc-id "$ARGUMENTS" --content "$CONTENT" ${APPEND:+--append}
 ```
 
 ## 使用例

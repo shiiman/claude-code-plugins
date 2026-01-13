@@ -20,7 +20,7 @@ Google Sheets スプレッドシートのセルを更新します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_sheets.py update --sheet-id "$ARGUMENTS" --range "$RANGE" --values "$VALUES"
+python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py update --sheet-id "$ARGUMENTS" --range "$RANGE" --values "$VALUES"
 ```
 
 ## 使用例

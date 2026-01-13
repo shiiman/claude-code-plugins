@@ -15,7 +15,7 @@ Google Slides プレゼンテーションの内容を取得します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_slides.py get --presentation-id "$ARGUMENTS"
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py get --presentation-id "$ARGUMENTS"
 ```
 
 ## 使用例

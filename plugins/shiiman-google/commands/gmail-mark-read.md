@@ -26,13 +26,13 @@ Gmail の未読メッセージを既読化します（単体/一括）。
 1. `message-id` か `--all` を判定
 2. `~/.config/shiiman-google/active-profile` を読み取り、使用プロファイルを特定
 3. トークン未作成なら `/shiiman-google:auth-login` を案内
-4. `plugins/shiiman-google/scripts/google_gmail.py` を実行して既読化
+4. `plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py` を実行して既読化
 5. 完了メッセージを出力
 
 ### 実行例
 
 ```bash
-python plugins/shiiman-google/scripts/google_gmail.py \
+python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py \
   --token ~/.config/shiiman-google/tokens/{profile}.json \
   mark-read --all
 ```

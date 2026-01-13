@@ -19,7 +19,7 @@ Google Forms フォームを新規作成します。
 ## 実行
 
 ```bash
-python plugins/shiiman-google/scripts/google_forms.py create --name "$ARGUMENTS" ${DESCRIPTION:+--description "$DESCRIPTION"}
+python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py create --name "$ARGUMENTS" ${DESCRIPTION:+--description "$DESCRIPTION"}
 ```
 
 ## 使用例
