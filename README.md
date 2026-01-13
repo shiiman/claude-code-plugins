@@ -25,7 +25,8 @@
     "shiiman-google@shiiman-claude-code-plugins": true,
     "shiiman-go@shiiman-claude-code-plugins": true,
     "shiiman-docker@shiiman-claude-code-plugins": true,
-    "shiiman-terraform@shiiman-claude-code-plugins": true
+    "shiiman-terraform@shiiman-claude-code-plugins": true,
+    "shiiman-slack@shiiman-claude-code-plugins": true
   }
 }
 ```
@@ -55,6 +56,7 @@
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
 | [`shiiman-docker`](plugins/shiiman-docker/) | Docker/Docker Compose 管理 - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援 | `/plugin install shiiman-docker@shiiman-claude-code-plugins` |
 | [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
+| [`shiiman-slack`](plugins/shiiman-slack/) | Slack ワークスペース管理 - MCP サーバーによるチャンネル操作、メッセージ管理、要約機能を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
 
 **インストール例**:
 
@@ -67,6 +69,7 @@
 /plugin install shiiman-go@shiiman-claude-code-plugins
 /plugin install shiiman-docker@shiiman-claude-code-plugins
 /plugin install shiiman-terraform@shiiman-claude-code-plugins
+/plugin install shiiman-slack@shiiman-claude-code-plugins
 ```
 
 ## 構造
