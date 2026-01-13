@@ -13,13 +13,13 @@ Google Docs ドキュメントにテキストを追加します。
 ### 先頭に挿入
 
 ```bash
-python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py update --doc-id "ドキュメントID" --content "追加テキスト"
+python plugins/shiiman-google/skills/docs-update/scripts/google_docs.py update --doc-id "ドキュメントID" --content "追加テキスト"
 ```
 
 ### 末尾に追加
 
 ```bash
-python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py update --doc-id "ドキュメントID" --content "追加テキスト" --append
+python plugins/shiiman-google/skills/docs-update/scripts/google_docs.py update --doc-id "ドキュメントID" --content "追加テキスト" --append
 ```
 
 ## ユーザー入力の解釈
