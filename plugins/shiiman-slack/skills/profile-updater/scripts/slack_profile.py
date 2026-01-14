@@ -2,16 +2,14 @@
 """Slack プロフィール管理スクリプト。
 
 プロフィールの表示・更新を行います。
-User Token（SLACK_USER_TOKEN）が必要です。
 """
 
 import argparse
 import sys
 
 from slack_utils import (
-    get_slack_user_client,
+    get_slack_client,
     handle_api_error,
-    has_user_token,
     print_error,
     print_json,
 )
@@ -20,25 +18,7 @@ from slack_utils import (
 @handle_api_error
 def show_profile() -> None:
     """現在のプロフィールを表示する。"""
-    if not has_user_token():
-        print_error(
-            "User Token（SLACK_USER_TOKEN）が設定されていません。\n"
-            "\n"
-            "プロフィールを表示・更新するには User Token が必要です。\n"
-            "Claude Code の MCP 設定で SLACK_USER_TOKEN を設定してください。\n"
-            "\n"
-            "設定例（.claude/settings.local.json）:\n"
-            '  "mcpServers": {\n'
-            '    "slack": {\n'
-            '      "env": {\n'
-            '        "SLACK_USER_TOKEN": "xoxp-your-user-token"\n'
-            '      }\n'
-            '    }\n'
-            '  }'
-        )
-        sys.exit(1)
-
-    client = get_slack_user_client()
+    client = get_slack_client()
     result = client.users_profile_get()
     profile = result["profile"]
 
@@ -82,24 +62,6 @@ def update_profile(
         first_name: 名
         last_name: 姓
     """
-    if not has_user_token():
-        print_error(
-            "User Token（SLACK_USER_TOKEN）が設定されていません。\n"
-            "\n"
-            "プロフィールを更新するには User Token が必要です。\n"
-            "Claude Code の MCP 設定で SLACK_USER_TOKEN を設定してください。\n"
-            "\n"
-            "設定例（.claude/settings.local.json）:\n"
-            '  "mcpServers": {\n'
-            '    "slack": {\n'
-            '      "env": {\n'
-            '        "SLACK_USER_TOKEN": "xoxp-your-user-token"\n'
-            '      }\n'
-            '    }\n'
-            '  }'
-        )
-        sys.exit(1)
-
     # 更新するフィールドを収集
     profile = {}
     if display_name is not None:
@@ -124,7 +86,7 @@ def update_profile(
         print("  --status-text '会議中' --status-emoji ':calendar:'")
         sys.exit(1)
 
-    client = get_slack_user_client()
+    client = get_slack_client()
     result = client.users_profile_set(profile=profile)
     updated_profile = result["profile"]
 
@@ -148,16 +110,7 @@ def update_profile(
 @handle_api_error
 def clear_status() -> None:
     """ステータスをクリアする。"""
-    if not has_user_token():
-        print_error(
-            "User Token（SLACK_USER_TOKEN）が設定されていません。\n"
-            "\n"
-            "ステータスをクリアするには User Token が必要です。\n"
-            "Claude Code の MCP 設定で SLACK_USER_TOKEN を設定してください。"
-        )
-        sys.exit(1)
-
-    client = get_slack_user_client()
+    client = get_slack_client()
     client.users_profile_set(profile={
         "status_text": "",
         "status_emoji": "",
@@ -169,7 +122,7 @@ def clear_status() -> None:
 def main() -> None:
     """メイン関数。"""
     parser = argparse.ArgumentParser(
-        description="Slack プロフィールを管理します（User Token 必須）"
+        description="Slack プロフィールを管理します"
     )
     subparsers = parser.add_subparsers(dest="command", help="コマンド")
 
@@ -230,10 +183,7 @@ def main() -> None:
     elif args.command == "clear-status":
         clear_status()
     elif args.command == "json":
-        if not has_user_token():
-            print_error("User Token が必要です。")
-            sys.exit(1)
-        client = get_slack_user_client()
+        client = get_slack_client()
         result = client.users_profile_get()
         print_json(result["profile"])
     else:
