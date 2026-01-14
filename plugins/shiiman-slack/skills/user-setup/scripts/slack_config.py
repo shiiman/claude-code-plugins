@@ -20,6 +20,13 @@ from slack_utils import (
 )
 
 
+# 定数: 共通メッセージ
+MSG_USER_SETUP_HINT = (
+    "ユーザーを設定するには:\n"
+    "  「自分を設定して U01234567」と指示してください。"
+)
+
+
 def validate_user_id(user_id: str) -> bool:
     """ユーザーID の形式を検証する。
 
@@ -105,16 +112,14 @@ def show_config() -> None:
     if not config:
         print("設定が見つかりません。")
         print("")
-        print("ユーザーを設定するには:")
-        print("  「自分を設定して U01234567」と指示してください。")
+        print(MSG_USER_SETUP_HINT)
         return
 
     user_id = config.get("default_user_id")
     if not user_id:
         print("デフォルトユーザーが設定されていません。")
         print("")
-        print("ユーザーを設定するには:")
-        print("  「自分を設定して U01234567」と指示してください。")
+        print(MSG_USER_SETUP_HINT)
         return
 
     # ユーザー名を取得

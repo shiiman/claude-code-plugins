@@ -4,7 +4,7 @@ import functools
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
@@ -185,7 +185,7 @@ def save_config(config: Dict[str, Any]) -> None:
     os.makedirs(CONFIG_DIR, mode=0o700, exist_ok=True)
 
     # タイムスタンプを更新
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat() + "Z"
     if "created_at" not in config:
         config["created_at"] = now
     config["updated_at"] = now
