@@ -1,3 +1,10 @@
+---
+name: linter
+description: Go コードの静的解析を実行する。「lint して」「静的解析」「golangci-lint」「コードチェック」「lint 実行」「警告を確認」「lint エラー確認」などで起動。
+allowed-tools: [Read, Bash, Glob, Grep]
+context: fork
+---
+
 # Linter
 
 Go コードの静的解析を実行するスキル。

@@ -2,6 +2,8 @@
 name: module-generator
 description: Terraform モジュールを生成・管理する。「モジュール作成」「モジュール生成」「新しいモジュール」「module 作って」「モジュール構造」「tf モジュール」「terraform モジュール追加」「モジュールのテンプレート」「モジュール scaffold」などで起動。
 allowed-tools: [Bash, Read, Write, Edit]
+context: fork
+agent: shiiman-terraform:module-designer
 ---
 
 # Module Generator

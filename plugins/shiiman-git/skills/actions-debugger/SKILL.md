@@ -2,6 +2,8 @@
 name: actions-debugger
 description: GitHub Actions のワークフロー実行エラーを調査し、原因を特定して解決策を提案する。「Actions エラー」「ワークフロー失敗」「CI が落ちた」「ビルド失敗」「テスト失敗」「Actions を調べて」「CI のエラーを見て」などで起動。失敗したジョブのログを分析し、具体的な修正方法を提示。
 allowed-tools: [Read, Bash, Grep, Glob]
+context: fork
+agent: debugger
 ---
 
 # Actions Debugger

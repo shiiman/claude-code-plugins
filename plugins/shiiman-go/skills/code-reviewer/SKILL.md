@@ -1,3 +1,11 @@
+---
+name: code-reviewer
+description: Go コードをレビューする。「コードレビューして」「Go のレビュー」「レビューお願い」「コード確認」「品質チェック」「ベストプラクティス確認」「改善点を教えて」などで起動。
+allowed-tools: [Read, Bash, Glob, Grep]
+context: fork
+agent: shiiman-go:code-reviewer
+---
+
 # Code Reviewer
 
 Go コードをレビューするスキル。

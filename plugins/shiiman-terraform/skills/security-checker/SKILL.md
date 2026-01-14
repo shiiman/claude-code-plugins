@@ -2,6 +2,8 @@
 name: security-checker
 description: Terraform のセキュリティをチェックする。「セキュリティチェック」「シークレット検出」「セキュリティ監査」「tf セキュリティ」「state のシークレット」「機密情報確認」「セキュリティスキャン」「脆弱性チェック」「ハードコード検出」などで起動。
 allowed-tools: [Bash, Read, Grep, Glob]
+context: fork
+agent: shiiman-terraform:security-checker
 ---
 
 # Security Checker

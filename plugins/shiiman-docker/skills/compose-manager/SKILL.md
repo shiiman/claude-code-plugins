@@ -2,6 +2,7 @@
 name: compose-manager
 description: Docker Compose を管理する。「compose 起動」「docker-compose up」「サービス起動」「compose 停止」「サービス止めて」「down」「compose ログ」「サービスのログ」「compose ps」「サービス状態」「compose build」「サービスビルド」などで起動。
 allowed-tools: [Bash, Read, Glob]
+context: fork
 ---
 
 # Compose Manager
