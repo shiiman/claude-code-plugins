@@ -5,6 +5,8 @@ import argparse
 import sys
 from typing import List, Dict, Optional
 
+from slack_sdk.errors import SlackApiError
+
 from slack_utils import (
     get_slack_client,
     handle_api_error,
@@ -168,12 +170,15 @@ def _get_unread_mentions_accurate(
             # チャンネル情報を取得（last_read を含む）
             try:
                 info = client.conversations_info(channel=channel["id"])
-            except Exception:
+            except SlackApiError:
+                # アクセス権限がないチャンネルなどはスキップ
                 continue
 
             channel_data = info.get("channel", {})
             last_read = channel_data.get("last_read")
-            unread_count = channel_data.get("unread_count_display", channel_data.get("unread_count", 0))
+            # unread_count_display が優先、なければ unread_count を使用
+            unread_count_display = channel_data.get("unread_count_display")
+            unread_count = unread_count_display if unread_count_display is not None else channel_data.get("unread_count", 0)
 
             # 未読がないチャンネルはスキップ
             if not unread_count or unread_count == 0:
@@ -186,7 +191,8 @@ def _get_unread_mentions_accurate(
                     oldest=last_read,
                     limit=100,
                 )
-            except Exception:
+            except SlackApiError:
+                # 履歴取得に失敗したチャンネルはスキップ
                 continue
 
             for msg in history.get("messages", []):
@@ -457,7 +463,7 @@ def main() -> None:
         mark_as_read(args.channel)
     
     elif args.command == "mentions":
-        get_mentions(args.max, args.format, getattr(args, 'all', False))
+        get_mentions(args.max, args.format, args.all)
     
     elif args.command == "thread-users":
         get_thread_users(args.channel, args.ts, args.format)
