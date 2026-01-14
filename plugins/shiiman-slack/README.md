@@ -41,13 +41,11 @@ Slack User Token を使用してワークスペースを操作します。
 
 ### 2. トークンの設定
 
-Claude Code で以下のコマンドを実行:
+> **セキュリティ注意**: トークンを Claude Code の会話内で入力すると、会話履歴に残り Anthropic API に送信されます。以下のいずれかの方法でターミナルから直接設定してください。
 
-```
-/shiiman-slack:user-setup --token xoxp-your-user-token
-```
+#### 方法1: Python スクリプトで設定（推奨）
 
-または、Python スクリプトを直接実行:
+ターミナルで以下を実行:
 
 ```bash
 python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py token-set --token xoxp-your-token
@@ -57,6 +55,20 @@ python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py token-set
 
 ```bash
 python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py show
+```
+
+#### 方法2: 設定ファイルを直接作成
+
+```bash
+mkdir -p ~/.config/shiiman-slack
+```
+
+`~/.config/shiiman-slack/config.json` を作成:
+
+```json
+{
+  "slack_token": "xoxp-your-user-token"
+}
 ```
 
 ### 3. Python依存関係のインストール
