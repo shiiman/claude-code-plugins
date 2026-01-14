@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Slack ユーザー設定管理スクリプト。
 
-デフォルトユーザーIDの設定・表示・削除を行います。
+トークン設定とデフォルトユーザーIDの設定・表示・削除を行います。
 """
 
 import argparse
@@ -11,12 +11,14 @@ from slack_utils import (
     CONFIG_FILE,
     get_default_user_id,
     get_slack_client,
+    get_slack_token,
     get_user_name,
     handle_api_error,
     load_config,
     print_error,
     print_json,
     save_config,
+    set_slack_token,
 )
 
 
@@ -44,6 +46,82 @@ def validate_user_id(user_id: str) -> bool:
     if len(user_id) < 9 or len(user_id) > 15:
         return False
     return True
+
+
+@handle_api_error
+def set_token(token: str) -> None:
+    """Slack トークンを設定する。
+
+    Args:
+        token: 設定する User Token (xoxp-...)
+    """
+    # トークン形式の検証
+    if not token.startswith("xoxp-"):
+        print_error(
+            "無効なトークン形式です。\n"
+            "User Token (xoxp-...) を指定してください。"
+        )
+        sys.exit(1)
+
+    # トークンを保存
+    set_slack_token(token)
+
+    # トークンの検証（auth.test で確認）
+    try:
+        from slack_sdk import WebClient
+        client = WebClient(token=token)
+        auth_result = client.auth_test()
+
+        user_id = auth_result["user_id"]
+        user_name = auth_result["user"]
+        team_id = auth_result["team_id"]
+        team_name = auth_result["team"]
+
+        # ワークスペース情報も保存
+        config = load_config()
+        config["team_id"] = team_id
+        config["workspace"] = {
+            "team_id": team_id,
+            "team_name": team_name,
+        }
+        save_config(config)
+
+        print("トークンを設定しました。")
+        print("")
+        print(f"  ユーザーID: {user_id}")
+        print(f"  ユーザー名: {user_name}")
+        print(f"  ワークスペース: {team_name}")
+        print("")
+        print(f"設定ファイル: {CONFIG_FILE}")
+
+    except Exception as e:
+        print_error(f"トークンの検証に失敗しました: {e}")
+        sys.exit(1)
+
+
+def show_token() -> None:
+    """トークンの設定状況を表示する（マスク表示）。"""
+    token = get_slack_token()
+
+    if not token:
+        print("トークンが設定されていません。")
+        print("")
+        print("トークンを設定するには:")
+        print("  /shiiman-slack:user-setup --token xoxp-your-token")
+        return
+
+    # トークンをマスク表示（最初と最後の4文字のみ表示）
+    if len(token) > 12:
+        masked = token[:8] + "..." + token[-4:]
+    else:
+        masked = token[:4] + "..."
+
+    print("トークン設定状況:")
+    print("")
+    print(f"  トークン: {masked}")
+    print(f"  形式: {'User Token' if token.startswith('xoxp-') else '不明'}")
+    print("")
+    print(f"設定ファイル: {CONFIG_FILE}")
 
 
 @handle_api_error
@@ -112,31 +190,42 @@ def show_config() -> None:
     if not config:
         print("設定が見つかりません。")
         print("")
-        print(MSG_USER_SETUP_HINT)
+        print("トークンを設定するには:")
+        print("  /shiiman-slack:user-setup --token xoxp-your-token")
         return
 
+    # トークン状況
+    token = config.get("slack_token")
+    if token:
+        if len(token) > 12:
+            masked = token[:8] + "..." + token[-4:]
+        else:
+            masked = token[:4] + "..."
+        print(f"トークン: {masked}")
+    else:
+        print("トークン: (未設定)")
+
+    # ユーザー情報
     user_id = config.get("default_user_id")
-    if not user_id:
-        print("デフォルトユーザーが設定されていません。")
-        print("")
-        print(MSG_USER_SETUP_HINT)
-        return
+    if user_id:
+        # ユーザー名を取得
+        try:
+            client = get_slack_client()
+            user_name = get_user_name(client, user_id)
+        except Exception:
+            user_name = "(取得失敗)"
+        print(f"デフォルトユーザー: {user_id} ({user_name})")
+    else:
+        print("デフォルトユーザー: (未設定)")
 
-    # ユーザー名を取得
-    client = get_slack_client()
-    user_name = get_user_name(client, user_id)
-
+    # ワークスペース情報
     workspace = config.get("workspace", {})
-
-    print("現在の設定:")
-    print("")
-    print(f"  デフォルトユーザーID: {user_id}")
-    print(f"  ユーザー名: {user_name}")
     if workspace.get("team_name"):
-        print(f"  ワークスペース: {workspace['team_name']}")
+        print(f"ワークスペース: {workspace['team_name']}")
+
     print("")
-    print(f"  作成日時: {config.get('created_at', '不明')}")
-    print(f"  更新日時: {config.get('updated_at', '不明')}")
+    print(f"作成日時: {config.get('created_at', '不明')}")
+    print(f"更新日時: {config.get('updated_at', '不明')}")
     print("")
     print(f"設定ファイル: {CONFIG_FILE}")
 
@@ -161,12 +250,99 @@ def clear_config() -> None:
     print(f"設定ファイル: {CONFIG_FILE}")
 
 
+def clear_token() -> None:
+    """トークンをクリアする。"""
+    config = load_config()
+
+    if not config or "slack_token" not in config:
+        print("クリアするトークンがありません。")
+        return
+
+    del config["slack_token"]
+    save_config(config)
+
+    print("トークンをクリアしました。")
+    print(f"設定ファイル: {CONFIG_FILE}")
+
+
+@handle_api_error
+def auto_detect() -> None:
+    """トークンからユーザーを自動検出して設定する。
+
+    設定済みのトークンを使って auth.test API を呼び出し、
+    トークンの所有者情報を取得してデフォルトユーザーとして設定します。
+    """
+    token = get_slack_token()
+    if not token:
+        print_error(
+            "トークンが設定されていません。\n"
+            "\n"
+            "先にトークンを設定してください:\n"
+            "  /shiiman-slack:user-setup --token xoxp-your-token\n"
+            "\n"
+            "または、手動でユーザーIDを指定:\n"
+            "  python slack_config.py set-user --user-id U01234567"
+        )
+        sys.exit(1)
+
+    # トークンで認証テスト（トークンの所有者情報を取得）
+    client = get_slack_client()
+    auth_result = client.auth_test()
+
+    user_id = auth_result["user_id"]
+    user_name = auth_result["user"]
+    team_id = auth_result["team_id"]
+    team_name = auth_result["team"]
+
+    # ユーザーの詳細情報を取得（表示名など）
+    try:
+        user_result = client.users_info(user=user_id)
+        user = user_result["user"]
+        display_name = user.get("real_name") or user.get("name") or user_name
+    except Exception:
+        display_name = user_name
+
+    # 設定を保存
+    config = load_config()
+    config["default_user_id"] = user_id
+    config["team_id"] = team_id
+    config["workspace"] = {
+        "team_id": team_id,
+        "team_name": team_name,
+    }
+    save_config(config)
+
+    print("トークンからユーザーを自動検出しました。")
+    print("")
+    print(f"  ユーザーID: {user_id}")
+    print(f"  ユーザー名: {display_name}")
+    print(f"  ワークスペース: {team_name}")
+    print("")
+    print(f"設定ファイル: {CONFIG_FILE}")
+
+
 def main() -> None:
     """メイン関数。"""
     parser = argparse.ArgumentParser(
         description="Slack ユーザー設定を管理します"
     )
     subparsers = parser.add_subparsers(dest="command", help="コマンド")
+
+    # token-set コマンド
+    token_set_parser = subparsers.add_parser(
+        "token-set", help="トークンを設定"
+    )
+    token_set_parser.add_argument(
+        "--token",
+        required=True,
+        help="User Token (xoxp-...)",
+    )
+
+    # token-show コマンド
+    subparsers.add_parser("token-show", help="トークン設定状況を表示")
+
+    # token-clear コマンド
+    subparsers.add_parser("token-clear", help="トークンをクリア")
 
     # set-user コマンド
     set_parser = subparsers.add_parser(
@@ -182,19 +358,33 @@ def main() -> None:
     subparsers.add_parser("show", help="現在の設定を表示")
 
     # clear コマンド
-    subparsers.add_parser("clear", help="設定をクリア")
+    subparsers.add_parser("clear", help="ユーザー設定をクリア")
+
+    # auto-detect コマンド
+    subparsers.add_parser(
+        "auto-detect",
+        help="トークンからユーザーを自動検出して設定"
+    )
 
     # json コマンド（デバッグ用）
     subparsers.add_parser("json", help="設定を JSON 形式で表示")
 
     args = parser.parse_args()
 
-    if args.command == "set-user":
+    if args.command == "token-set":
+        set_token(args.token)
+    elif args.command == "token-show":
+        show_token()
+    elif args.command == "token-clear":
+        clear_token()
+    elif args.command == "set-user":
         set_user(args.user_id)
     elif args.command == "show":
         show_config()
     elif args.command == "clear":
         clear_config()
+    elif args.command == "auto-detect":
+        auto_detect()
     elif args.command == "json":
         config = load_config()
         print_json(config)

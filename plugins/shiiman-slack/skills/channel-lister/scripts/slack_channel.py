@@ -17,20 +17,34 @@ def search_channels(
     output_format: str = "table",
 ) -> None:
     """チャンネルを名前で検索する。
-    
+
+    プライベートチャンネルも検索対象にする。
+
     Args:
         query: 検索クエリ（チャンネル名の一部）
         output_format: 出力形式 ("table" or "json")
     """
     client = get_slack_client()
-    
-    # パブリックチャンネルとプライベートチャンネルを取得
-    result = client.conversations_list(
-        types="public_channel,private_channel",
-        limit=1000,
-    )
-    
-    channels = result.get("channels", [])
+
+    # ページネーションを使用して全チャンネルを取得
+    channels: List[Dict] = []
+    cursor = None
+
+    while True:
+        kwargs = {
+            "types": "public_channel,private_channel",
+            "limit": 1000,
+        }
+        if cursor:
+            kwargs["cursor"] = cursor
+
+        result = client.conversations_list(**kwargs)
+        channels.extend(result.get("channels", []))
+
+        # 次のページがあるか確認
+        cursor = result.get("response_metadata", {}).get("next_cursor", "")
+        if not cursor:
+            break
     
     # クエリでフィルタ
     query_lower = query.lower()
