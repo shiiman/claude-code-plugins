@@ -193,13 +193,24 @@ def get_thread_users(
     """
     client = get_slack_client()
 
-    # スレッドの返信を取得
-    result = client.conversations_replies(
-        channel=channel,
-        ts=thread_ts,
-    )
+    # スレッドの返信を取得（ページング対応）
+    messages = []
+    cursor = None
+    while True:
+        kwargs = {
+            "channel": channel,
+            "ts": thread_ts,
+            "limit": 200,
+        }
+        if cursor:
+            kwargs["cursor"] = cursor
 
-    messages = result.get("messages", [])
+        result = client.conversations_replies(**kwargs)
+        messages.extend(result.get("messages", []))
+
+        cursor = result.get("response_metadata", {}).get("next_cursor")
+        if not cursor:
+            break
 
     # ユーザーIDを収集
     user_ids = set()

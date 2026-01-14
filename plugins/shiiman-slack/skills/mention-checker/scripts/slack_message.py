@@ -5,6 +5,8 @@ import argparse
 import sys
 from typing import List, Dict, Optional
 
+from slack_sdk.errors import SlackApiError
+
 from slack_utils import (
     get_slack_client,
     handle_api_error,
@@ -134,46 +136,150 @@ def mark_as_read(channel: str) -> None:
     print(f"  チャンネル: {channel}")
 
 
+def _get_unread_mentions_accurate(
+    client,
+    user_id: str,
+    max_results: int,
+) -> List[Dict]:
+    """conversations.info の last_read を使用して正確な未読メンションを取得する。
+
+    Args:
+        client: Slack WebClient
+        user_id: 自分のユーザーID
+        max_results: 最大取得件数
+
+    Returns:
+        未読メンションのリスト
+    """
+    mentions = []
+    mention_pattern = f"<@{user_id}>"
+
+    # 全チャンネル（パブリック・プライベート）を取得（ページング対応）
+    cursor = None
+    while True:
+        channels_result = client.conversations_list(
+            types="public_channel,private_channel",
+            limit=200,
+            cursor=cursor,
+        )
+
+        for channel in channels_result.get("channels", []):
+            if not channel.get("is_member"):
+                continue
+
+            # チャンネル情報を取得（last_read を含む）
+            try:
+                info = client.conversations_info(channel=channel["id"])
+            except SlackApiError:
+                # アクセス権限がないチャンネルなどはスキップ
+                continue
+
+            channel_data = info.get("channel", {})
+            last_read = channel_data.get("last_read")
+            # unread_count_display が優先、なければ unread_count を使用
+            unread_count_display = channel_data.get("unread_count_display")
+            unread_count = unread_count_display if unread_count_display is not None else channel_data.get("unread_count", 0)
+
+            # 未読がないチャンネルはスキップ
+            if not unread_count or unread_count == 0:
+                continue
+
+            # last_read 以降のメッセージを取得
+            try:
+                history = client.conversations_history(
+                    channel=channel["id"],
+                    oldest=last_read,
+                    limit=100,
+                )
+            except SlackApiError:
+                # 履歴取得に失敗したチャンネルはスキップ
+                continue
+
+            for msg in history.get("messages", []):
+                # 自分が送信したメッセージはスキップ
+                if msg.get("user") == user_id:
+                    continue
+
+                # メンションを含まないメッセージはスキップ
+                text = msg.get("text", "")
+                if mention_pattern not in text:
+                    continue
+
+                # メンションを追加
+                user_name = get_user_name(client, msg.get("user", ""))
+                mentions.append({
+                    "channel": channel.get("name", ""),
+                    "user": user_name,
+                    "text": text,
+                    "ts": msg.get("ts", ""),
+                    "permalink": f"https://slack.com/archives/{channel['id']}/p{msg['ts'].replace('.', '')}",
+                })
+
+                if len(mentions) >= max_results:
+                    return mentions
+
+        # 次のページがあるか確認
+        cursor = channels_result.get("response_metadata", {}).get("next_cursor")
+        if not cursor:
+            break
+
+    return mentions
+
+
 @handle_api_error
 def get_mentions(
     max_results: int = 20,
     output_format: str = "table",
+    include_read: bool = False,
 ) -> None:
     """自分へのメンションを取得する。
-    
+
     Args:
         max_results: 最大取得件数
         output_format: 出力形式 ("table" or "json")
+        include_read: 既読メンションも含める（デフォルト: False = 未読のみ）
     """
     client = get_slack_client()
-    
+
     # 自分のユーザーIDを取得
     auth_result = client.auth_test()
     user_id = auth_result["user_id"]
-    
-    # メンションを検索
-    result = client.search_messages(
-        query=f"<@{user_id}>",
-        count=max_results,
-    )
-    
-    matches = result.get("messages", {}).get("matches", [])
-    
-    if not matches:
-        print("メンションはありません。")
-        return
-    
-    mentions = []
-    for match in matches:
-        mentions.append({
-            "channel": match.get("channel", {}).get("name", ""),
-            "user": match.get("username", ""),
-            "text": match.get("text", ""),
-            "ts": match.get("ts", ""),
-            "permalink": match.get("permalink", ""),
-        })
-    
-    print(f"メンション数: {len(mentions)}")
+
+    if include_read:
+        # 全メンション: search.messages を使用
+        query = f"<@{user_id}> -from:me"
+        result = client.search_messages(
+            query=query,
+            count=max_results,
+        )
+
+        matches = result.get("messages", {}).get("matches", [])
+
+        if not matches:
+            print("メンションはありません。")
+            return
+
+        mentions = []
+        for match in matches:
+            mentions.append({
+                "channel": match.get("channel", {}).get("name", ""),
+                "user": match.get("username", ""),
+                "text": match.get("text", ""),
+                "ts": match.get("ts", ""),
+                "permalink": match.get("permalink", ""),
+            })
+
+        print(f"メンション数: {len(mentions)}")
+    else:
+        # 未読メンション: conversations.info の last_read を使用（正確）
+        mentions = _get_unread_mentions_accurate(client, user_id, max_results)
+
+        if not mentions:
+            print("未読メンションはありません。")
+            return
+
+        print(f"未読メンション数: {len(mentions)}")
+
     headers = ["channel", "user", "text", "permalink"]
     format_output(mentions, headers, output_format)
 
@@ -185,21 +291,32 @@ def get_thread_users(
     output_format: str = "table",
 ) -> None:
     """スレッドの参加者一覧を取得する。
-    
+
     Args:
         channel: チャンネルID
         thread_ts: スレッドのタイムスタンプ
         output_format: 出力形式 ("table" or "json")
     """
     client = get_slack_client()
-    
-    # スレッドの返信を取得
-    result = client.conversations_replies(
-        channel=channel,
-        ts=thread_ts,
-    )
-    
-    messages = result.get("messages", [])
+
+    # スレッドの返信を取得（ページング対応）
+    messages = []
+    cursor = None
+    while True:
+        kwargs = {
+            "channel": channel,
+            "ts": thread_ts,
+            "limit": 200,
+        }
+        if cursor:
+            kwargs["cursor"] = cursor
+
+        result = client.conversations_replies(**kwargs)
+        messages.extend(result.get("messages", []))
+
+        cursor = result.get("response_metadata", {}).get("next_cursor")
+        if not cursor:
+            break
     
     # ユーザーIDを収集
     user_ids = set()
@@ -316,8 +433,9 @@ def main() -> None:
     mark_parser.add_argument("--channel", required=True, help="チャンネルID")
     
     # mentions サブコマンド
-    mentions_parser = subparsers.add_parser("mentions", help="メンション一覧")
+    mentions_parser = subparsers.add_parser("mentions", help="メンション一覧（デフォルト: 未読のみ）")
     mentions_parser.add_argument("--max", type=int, default=20, help="最大取得件数")
+    mentions_parser.add_argument("--all", action="store_true", help="既読も含めて全て取得")
     
     # thread-users サブコマンド
     thread_users_parser = subparsers.add_parser("thread-users", help="スレッド参加者一覧")
@@ -345,7 +463,7 @@ def main() -> None:
         mark_as_read(args.channel)
     
     elif args.command == "mentions":
-        get_mentions(args.max, args.format)
+        get_mentions(args.max, args.format, args.all)
     
     elif args.command == "thread-users":
         get_thread_users(args.channel, args.ts, args.format)
