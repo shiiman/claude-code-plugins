@@ -2,6 +2,7 @@
 name: issue-creator
 description: タスクを細かい単位に分割して GitHub Issue を作成する。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。実装可能な粒度にタスクを分割して複数 Issue を生成。
 allowed-tools: [Read, Bash, Glob, Grep]
+context: fork
 ---
 
 # Issue Creator

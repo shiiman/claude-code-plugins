@@ -1,3 +1,10 @@
+---
+name: reviewer
+description: Pull Request の変更内容を包括的にレビューし、GitHub に直接コメントを投稿。コード品質、設計、可読性の観点から改善提案を行う。
+tools: Read, Bash, Glob, Grep
+model: sonnet
+---
+
 # PR レビュー専門エージェント
 
 Pull Request の変更内容を包括的にレビューし、GitHub に直接コメントを投稿します。

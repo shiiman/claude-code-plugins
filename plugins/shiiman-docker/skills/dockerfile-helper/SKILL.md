@@ -2,6 +2,8 @@
 name: dockerfile-helper
 description: Dockerfile の作成・改善を支援する。「Dockerfile を作って」「Dockerfile 作成」「Dockerfile をレビュー」「Dockerfile 改善」「Dockerfile 最適化」「マルチステージビルド」「alpine 化」「イメージサイズ削減」「Dockerfile のベストプラクティス」などで起動。
 allowed-tools: [Read, Write, Edit, Glob, Bash]
+context: fork
+agent: shiiman-docker:dockerfile-reviewer
 ---
 
 # Dockerfile Helper

@@ -1,3 +1,10 @@
+---
+name: channel-manager
+description: Slack チャンネルの一覧取得、検索、情報取得などチャンネルに関する操作を包括的にサポート。チャンネル管理のベストプラクティスに基づいた提案も行う。
+tools: Read, Bash, Grep, Glob
+model: sonnet
+---
+
 # チャンネル管理専門エージェント
 
 Slack チャンネルの一覧取得、検索、情報取得などチャンネルに関する操作を包括的にサポートします。

@@ -2,6 +2,8 @@
 name: state-analyzer
 description: Terraform state を分析・操作する。「state 確認」「state list」「state show」「リソース一覧」「state の移動」「state mv」「state rm」「terraform state」「state 操作」「リソースの状態」「state pull」などで起動。
 allowed-tools: [Bash, Read]
+context: fork
+agent: shiiman-terraform:state-troubleshooter
 ---
 
 # State Analyzer

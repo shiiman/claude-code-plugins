@@ -2,6 +2,8 @@
 name: pr-reviewer
 description: 他者の PR をレビューして GitHub にコメントを投稿する（レビュアー向け）。「PR レビュー」「PR をレビュー」「コードレビュー」「レビューして」「セキュリティレビュー」「パフォーマンスレビュー」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
+context: fork
+agent: shiiman-git:reviewer
 ---
 
 # PR Reviewer

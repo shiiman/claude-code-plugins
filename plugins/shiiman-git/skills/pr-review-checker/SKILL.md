@@ -2,6 +2,8 @@
 name: pr-review-checker
 description: 自分の PR に付いたレビューコメントを確認し、修正対応を実行する（PR作成者向け）。「レビュー対応」「レビューコメント確認」「指摘を修正」「PRコメント確認」などで起動。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
+context: fork
+agent: shiiman-git:reviewer
 ---
 
 # PR Review Checker

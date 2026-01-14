@@ -2,6 +2,7 @@
 name: pr-creator
 description: 現在のブランチから PR を作成し関連 Issue を参照する。「PR 作成」「PR を作って」「プルリク作成」「pull request」「PR 出して」「プルリクエスト」「レビュー依頼したい」などで起動。変更内容を分析し適切な PR を生成。
 allowed-tools: [Read, Bash, Glob, Grep]
+context: fork
 ---
 
 # PR Creator
