@@ -7,6 +7,8 @@ from typing import List, Dict, Optional
 
 from slack_utils import (
     get_slack_client,
+    get_effective_client,
+    has_user_token,
     handle_api_error,
     format_output,
     print_error,
@@ -16,39 +18,53 @@ from slack_utils import (
 
 
 @handle_api_error
-def edit_message(channel: str, ts: str, text: str) -> None:
+def edit_message(channel: str, ts: str, text: str, as_user: bool = True) -> None:
     """メッセージを編集する。
-    
+
+    User Token が設定されている場合は自分の投稿を編集可能。
+    Bot Token のみの場合は Bot 投稿のみ編集可能。
+
     Args:
         channel: チャンネルID
         ts: メッセージのタイムスタンプ
         text: 新しいメッセージテキスト
+        as_user: ユーザーとして編集するか（User Token がある場合のみ有効）
     """
-    client = get_slack_client()
+    client, is_user = get_effective_client(prefer_user=as_user)
     result = client.chat_update(
         channel=channel,
         ts=ts,
         text=text,
     )
-    print(f"メッセージを編集しました。")
+    if is_user:
+        print("ユーザーとしてメッセージを編集しました。")
+    else:
+        print("Bot としてメッセージを編集しました。")
     print(f"  チャンネル: {channel}")
     print(f"  タイムスタンプ: {result['ts']}")
 
 
 @handle_api_error
-def delete_message(channel: str, ts: str) -> None:
+def delete_message(channel: str, ts: str, as_user: bool = True) -> None:
     """メッセージを削除する。
-    
+
+    User Token が設定されている場合は自分の投稿を削除可能。
+    Bot Token のみの場合は Bot 投稿のみ削除可能。
+
     Args:
         channel: チャンネルID
         ts: メッセージのタイムスタンプ
+        as_user: ユーザーとして削除するか（User Token がある場合のみ有効）
     """
-    client = get_slack_client()
+    client, is_user = get_effective_client(prefer_user=as_user)
     client.chat_delete(
         channel=channel,
         ts=ts,
     )
-    print(f"メッセージを削除しました。")
+    if is_user:
+        print("ユーザーとしてメッセージを削除しました。")
+    else:
+        print("Bot としてメッセージを削除しました。")
     print(f"  チャンネル: {channel}")
     print(f"  タイムスタンプ: {ts}")
 
@@ -283,6 +299,30 @@ def summarize_messages(
         format_output(summary_data, headers, output_format)
 
 
+def check_token_status() -> None:
+    """トークンの状態を確認して表示する。"""
+    if has_user_token():
+        print("User Token が設定されています。")
+        print("デフォルトではユーザーとしてメッセージを編集/削除します。")
+        print("")
+        print("オプション:")
+        print("  --as-bot    Bot として編集/削除する")
+    else:
+        print("User Token が設定されていません。")
+        print("Bot 投稿のみ編集/削除可能です。")
+        print("")
+        print("自分の投稿を編集/削除するには SLACK_USER_TOKEN を設定してください。")
+        print("")
+        print("設定例（.claude/settings.local.json）:")
+        print('  "mcpServers": {')
+        print('    "slack": {')
+        print('      "env": {')
+        print('        "SLACK_USER_TOKEN": "xoxp-your-user-token"')
+        print('      }')
+        print('    }')
+        print('  }')
+
+
 @handle_api_error
 def main() -> None:
     parser = argparse.ArgumentParser(description="Slack メッセージ操作ツール")
@@ -300,11 +340,16 @@ def main() -> None:
     edit_parser.add_argument("--channel", required=True, help="チャンネルID")
     edit_parser.add_argument("--ts", required=True, help="メッセージのタイムスタンプ")
     edit_parser.add_argument("--text", required=True, help="新しいメッセージテキスト")
-    
+    edit_parser.add_argument("--as-bot", action="store_true", help="Bot として編集（User Token があっても）")
+
     # delete サブコマンド
     delete_parser = subparsers.add_parser("delete", help="メッセージ削除")
     delete_parser.add_argument("--channel", required=True, help="チャンネルID")
     delete_parser.add_argument("--ts", required=True, help="メッセージのタイムスタンプ")
+    delete_parser.add_argument("--as-bot", action="store_true", help="Bot として削除（User Token があっても）")
+
+    # status サブコマンド
+    subparsers.add_parser("status", help="トークン状態を確認")
     
     # unread サブコマンド
     unread_parser = subparsers.add_parser("unread", help="未読メッセージ一覧")
@@ -333,10 +378,13 @@ def main() -> None:
     args = parser.parse_args()
     
     if args.command == "edit":
-        edit_message(args.channel, args.ts, args.text)
-    
+        edit_message(args.channel, args.ts, args.text, as_user=not args.as_bot)
+
     elif args.command == "delete":
-        delete_message(args.channel, args.ts)
+        delete_message(args.channel, args.ts, as_user=not args.as_bot)
+
+    elif args.command == "status":
+        check_token_status()
     
     elif args.command == "unread":
         get_unread_messages(args.channel, args.max, args.format)

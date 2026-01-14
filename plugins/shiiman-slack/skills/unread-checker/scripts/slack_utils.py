@@ -4,11 +4,17 @@ import functools
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+
+
+# 設定ディレクトリ
+CONFIG_DIR = os.path.expanduser("~/.config/shiiman-slack")
+CONFIG_FILE = os.path.join(CONFIG_DIR, "config.json")
 
 
 def _load_mcp_env_from_settings() -> Dict[str, str]:
@@ -131,15 +137,127 @@ def get_slack_client() -> WebClient:
 
 def get_slack_team_id() -> Optional[str]:
     """Slack Team ID を取得する。
-    
+
     環境変数 SLACK_TEAM_ID から取得します。
     この環境変数は、Claude Code の MCP 設定（.claude/settings.local.json など）
     で設定した値と同じものを使用します。
-    
+
     Returns:
         Team ID（未設定の場合はNone）
     """
     return get_env_var("SLACK_TEAM_ID", required=False)
+
+
+# ======================================
+# 設定管理関数
+# ======================================
+
+
+def load_config() -> Dict[str, Any]:
+    """設定ファイルを読み込む。
+
+    設定ファイル（~/.config/shiiman-slack/config.json）から設定を読み込みます。
+    ファイルが存在しない場合は空の辞書を返します。
+
+    Returns:
+        設定データの辞書
+    """
+    if not os.path.exists(CONFIG_FILE):
+        return {}
+
+    try:
+        with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {}
+
+
+def save_config(config: Dict[str, Any]) -> None:
+    """設定ファイルに保存する。
+
+    設定データを ~/.config/shiiman-slack/config.json に保存します。
+    ディレクトリが存在しない場合は自動的に作成されます。
+
+    Args:
+        config: 保存する設定データ
+    """
+    # ディレクトリがなければ作成（権限 700: 所有者のみアクセス可能）
+    os.makedirs(CONFIG_DIR, mode=0o700, exist_ok=True)
+
+    # タイムスタンプを更新
+    now = datetime.now(timezone.utc).isoformat() + "Z"
+    if "created_at" not in config:
+        config["created_at"] = now
+    config["updated_at"] = now
+
+    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+        json.dump(config, f, ensure_ascii=False, indent=2)
+
+    # ファイル権限を 600 に設定（所有者のみ読み書き可能）
+    os.chmod(CONFIG_FILE, 0o600)
+
+
+def get_default_user_id() -> Optional[str]:
+    """デフォルトユーザーIDを取得する。
+
+    設定ファイルから default_user_id を取得します。
+    設定されていない場合は None を返します。
+
+    Returns:
+        デフォルトユーザーID（未設定の場合はNone）
+    """
+    config = load_config()
+    return config.get("default_user_id")
+
+
+# ======================================
+# ユーザートークン関連関数
+# ======================================
+
+
+def has_user_token() -> bool:
+    """ユーザートークン（SLACK_USER_TOKEN）が設定されているか確認する。
+
+    Returns:
+        ユーザートークンが設定されている場合は True
+    """
+    token = get_env_var("SLACK_USER_TOKEN", required=False)
+    return token is not None and token.startswith("xoxp-")
+
+
+def get_slack_user_client() -> WebClient:
+    """ユーザートークン用の Slack Web API クライアントを取得する。
+
+    環境変数 SLACK_USER_TOKEN から認証トークンを取得します。
+    ユーザートークンを使用すると、Bot ではなくユーザーとして操作が実行されます。
+
+    Returns:
+        WebClient インスタンス（ユーザートークン使用）
+
+    Raises:
+        ValueError: SLACK_USER_TOKEN が設定されていない場合
+    """
+    token = get_env_var("SLACK_USER_TOKEN", required=True)
+    return WebClient(token=token)
+
+
+def get_effective_client(prefer_user: bool = True) -> tuple[WebClient, bool]:
+    """状況に応じた Slack クライアントを取得する。
+
+    ユーザートークンが設定されていて prefer_user が True の場合は
+    ユーザートークンのクライアントを返し、それ以外は Bot クライアントを返します。
+
+    Args:
+        prefer_user: ユーザートークンを優先するか（デフォルト: True）
+
+    Returns:
+        (WebClient, is_user_client) のタプル
+        - WebClient: Slack クライアント
+        - is_user_client: ユーザートークンを使用している場合は True
+    """
+    if prefer_user and has_user_token():
+        return get_slack_user_client(), True
+    return get_slack_client(), False
 
 
 def print_error(message: str) -> None:
