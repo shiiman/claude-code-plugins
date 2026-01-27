@@ -10,7 +10,7 @@ allowed-tools: [Read, Write, AskUserQuestion]
 
 ## 実行手順
 
-1. まず `hook-lister` スキルと同様にフック一覧を表示
+1. まず `list-hooks` スキルと同様にフック一覧を表示
 2. ユーザーに削除対象を確認:
    - イベント名（例: PreToolUse）
    - フック番号（例: 1）
