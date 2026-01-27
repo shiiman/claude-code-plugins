@@ -4,7 +4,7 @@ Terraform/Terragrunt の操作を支援するプラグインです。
 
 ## 概要
 
-Terraform/Terragrunt の主要操作をシンプルなコマンドと自然言語で実現します。
+Terraform/Terragrunt の主要操作をシンプルなスキルと自然言語で実現します。
 危険な操作（destroy、auto-approve）は自動的にブロックされ、安全にインフラを管理できます。
 
 ## インストール
@@ -15,26 +15,18 @@ claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 
 ## 機能
 
-### Commands（3）
-
-| コマンド | 説明 |
-|----------|------|
-| `/shiiman-terraform:plan` | terraform plan の実行・解析 |
-| `/shiiman-terraform:apply` | terraform apply の実行（確認付き） |
-| `/shiiman-terraform:validate` | terraform validate/fmt の実行 |
-
 ### Skills（8）
 
 | スキル | トリガー例 | 説明 |
 |--------|-----------|------|
-| tf-executor | 「terraform plan」「tf apply」 | Terraform コマンド実行 |
-| tg-executor | 「terragrunt run-all」「tg plan」 | Terragrunt コマンド実行 |
-| init-runner | 「init して」「terraform init」 | 初期化処理 |
-| import-helper | 「import して」「リソース import」 | import 支援 |
-| state-analyzer | 「state list」「state show」 | state 分析・操作 |
-| version-manager | 「tfenv」「バージョン切り替え」 | バージョン管理 |
-| module-generator | 「モジュール作成」「モジュール生成」 | モジュール構造生成 |
-| security-checker | 「セキュリティチェック」「シークレット検出」 | セキュリティ監査 |
+| exec-tf | 「terraform plan」「tf apply」「validate」 | Terraform コマンド実行（plan/apply/validate 統合） |
+| exec-tg | 「terragrunt run-all」「tg plan」 | Terragrunt コマンド実行 |
+| init | 「init して」「terraform init」 | 初期化処理 |
+| import | 「import して」「リソース import」 | import 支援 |
+| analyze-state | 「state list」「state show」 | state 分析・操作 |
+| manage-version | 「tfenv」「バージョン切り替え」 | バージョン管理 |
+| generate-module | 「モジュール作成」「モジュール生成」 | モジュール構造生成 |
+| check-security | 「セキュリティチェック」「シークレット検出」 | セキュリティ監査 |
 
 ### Agents（4）
 
@@ -69,9 +61,25 @@ claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 
 ## バージョン履歴
 
+### 1.2.0
+
+- コマンドをスキルに統合
+- スキル名を CLI 命名規則に変更
+  - tf-executor → exec-tf（plan/apply/validate 統合）
+  - tg-executor → exec-tg
+  - init-runner → init
+  - import-helper → import
+  - state-analyzer → analyze-state
+  - version-manager → manage-version
+  - module-generator → generate-module
+  - security-checker → check-security
+
+### 1.1.0
+
+- Agents 追加: plan-reviewer, state-troubleshooter, module-designer, drift-detector
+
 ### 1.0.0
 
 - 初回リリース
 - Commands: plan, apply, validate
 - Skills: tf-executor, tg-executor, init-runner, import-helper, state-analyzer, version-manager, module-generator, security-checker
-- Agents: plan-reviewer, state-troubleshooter, module-designer, drift-detector

@@ -1,5 +1,5 @@
 ---
-name: init-runner
+name: init
 description: Terraform/Terragrunt の初期化を実行する。「init して」「terraform init」「terragrunt init」「初期化して」「tf init」「tg init」「プロジェクト初期化」「モジュール初期化」などで起動。
 allowed-tools: [Bash, Read]
 ---
