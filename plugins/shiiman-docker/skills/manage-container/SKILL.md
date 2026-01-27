@@ -1,10 +1,10 @@
 ---
-name: container-manager
-description: Docker コンテナを管理する。「コンテナ一覧」「docker ps」「コンテナ確認」「コンテナ止めて」「コンテナ起動」「コンテナ再起動」「コンテナに入って」「コンテナの状態」「実行中のコンテナ」「コンテナのリソース」「docker stats」「docker inspect」などで起動。
+name: manage-container
+description: Docker コンテナを管理する。「コンテナ一覧」「docker ps」「コンテナ確認」「コンテナ止めて」「コンテナ起動」「コンテナ再起動」「コンテナに入って」「コンテナの状態」「実行中のコンテナ」「コンテナのリソース」「docker stats」「docker inspect」「コンテナのログ」「docker logs」などで起動。
 allowed-tools: [Bash, Read]
 ---
 
-# Container Manager
+# Manage Container
 
 Docker コンテナの管理を行います。
 
@@ -19,6 +19,7 @@ Docker コンテナの管理を行います。
 | 実行 | 「コンテナに入って」「exec」 | `docker exec` |
 | リソース | 「リソース確認」「stats」 | `docker stats` |
 | 詳細 | 「詳細情報」「inspect」 | `docker inspect` |
+| ログ | 「ログ確認」「logs」 | `docker logs` |
 
 ## 実行手順
 
@@ -33,6 +34,7 @@ Docker コンテナの管理を行います。
 - **実行系**: 「入って」「exec」「シェル」→ `docker exec`
 - **リソース系**: 「リソース」「stats」「CPU」「メモリ」→ `docker stats`
 - **詳細系**: 「詳細」「inspect」「設定」→ `docker inspect`
+- **ログ系**: 「ログ」「logs」→ `docker logs`
 
 ### 2. コンテナ一覧表示
 
@@ -87,6 +89,22 @@ docker inspect <container> --format '{{json .}}' | jq '.'
 # または特定の情報
 docker inspect <container> --format '{{.State.Status}}'
 docker inspect <container> --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+```
+
+**ログ表示**:
+
+```bash
+# 最新100行
+docker logs --tail 100 <container>
+
+# リアルタイム追跡
+docker logs -f <container>
+
+# 時刻指定
+docker logs --since 1h <container>
+
+# タイムスタンプ付き
+docker logs -t --tail 100 <container>
 ```
 
 ### 4. 出力フォーマット

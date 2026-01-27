@@ -43,7 +43,7 @@
     {
       "name": "shiiman-docker",
       "description": "Docker/Docker Compose 管理 - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "source": "./plugins/shiiman-docker",
       "category": "developer-tools"
     },
