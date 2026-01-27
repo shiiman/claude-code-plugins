@@ -1,5 +1,5 @@
 ---
-name: issue-creator
+name: create-issue
 description: 計画から GitHub Issue を作成する。「Issue 作成」「Issue を作って」「Issue 作成して」「計画から Issue」「Issue 追加」「Issue を追加したい」「Issue 作りたい」などで起動。1つの計画を1つの Issue にまとめて作成。
 allowed-tools: [Read, Bash, Glob, Grep]
 ---

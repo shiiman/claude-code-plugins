@@ -1,5 +1,5 @@
 ---
-name: plugin-full-creator
+name: create-plugin-full
 description: プラグインを機能一覧から一括で作成する。「プラグイン一括作成」「プラグインをまとめて作って」「フル作成」「プラグイン全部作成」「一括でプラグイン」「プラグインと機能をまとめて」「新しいプラグインを全部」などで起動。プラグイン、コマンド、スキル、サブエージェント、フックを一括生成。
 allowed-tools: [Read, Write, Bash, Glob]
 ---
