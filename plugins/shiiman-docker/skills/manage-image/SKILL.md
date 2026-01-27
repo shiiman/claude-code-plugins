@@ -1,10 +1,10 @@
 ---
-name: image-manager
+name: manage-image
 description: Docker イメージを管理する。「イメージ一覧」「docker images」「イメージ確認」「ビルドして」「docker build」「イメージ作成」「イメージ取得」「docker pull」「イメージダウンロード」「イメージの履歴」「docker history」などで起動。
 allowed-tools: [Bash, Read, Glob]
 ---
 
-# Image Manager
+# Manage Image
 
 Docker イメージの管理を行います。
 

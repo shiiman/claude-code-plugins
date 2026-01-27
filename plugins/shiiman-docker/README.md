@@ -14,23 +14,15 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 
 ## 機能
 
-### Commands
-
-| コマンド | 説明 |
-|----------|------|
-| `/shiiman-docker:logs` | コンテナ/サービスのログを表示 |
-| `/shiiman-docker:cleanup` | 未使用リソースを安全にクリーンアップ |
-| `/shiiman-docker:lint` | Dockerfile の静的解析 |
-
 ### Skills
 
 | スキル | トリガー例 | 説明 |
 |--------|-----------|------|
-| container-manager | 「コンテナ一覧」「docker ps」「コンテナ止めて」 | コンテナ管理（ps, start, stop, exec, stats, inspect） |
-| image-manager | 「イメージ一覧」「ビルドして」「イメージ取得」 | イメージ管理（images, build, pull） |
-| compose-manager | 「compose 起動」「サービス停止」「compose ログ」 | Compose 管理（up, down, ps, logs） |
-| resource-manager | 「ネットワーク確認」「ボリューム一覧」「ディスク確認」 | リソース管理（network, volume, disk） |
-| dockerfile-helper | 「Dockerfile 作成」「Dockerfile 改善」 | Dockerfile 作成・改善支援 |
+| manage-container | 「コンテナ一覧」「docker ps」「ログ確認」 | コンテナ管理（ps, start, stop, exec, stats, inspect, logs） |
+| manage-image | 「イメージ一覧」「ビルドして」「イメージ取得」 | イメージ管理（images, build, pull） |
+| manage-compose | 「compose 起動」「サービス停止」「compose ログ」 | Compose 管理（up, down, ps, logs） |
+| manage-resource | 「ネットワーク確認」「ボリューム一覧」「クリーンアップ」 | リソース管理（network, volume, disk, cleanup） |
+| help-dockerfile | 「Dockerfile 作成」「Dockerfile lint」 | Dockerfile 作成・改善・Lint 支援 |
 
 ### Agents
 
@@ -48,7 +40,7 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 「コンテナ一覧」
 
 # ログ確認
-/shiiman-docker:logs my-container --tail 100
+「app のログを見せて」
 
 # コンテナに入る
 「app コンテナに入って」
@@ -64,7 +56,7 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 「compose 停止」
 
 # リアルタイムログ
-/shiiman-docker:logs --compose --follow
+「compose ログを見せて」
 ```
 
 ### イメージ管理
@@ -87,7 +79,7 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 「Dockerfile を作って」
 
 # Dockerfile レビュー
-/shiiman-docker:lint
+「Dockerfile をレビューして」
 
 # 最適化
 「Dockerfile を alpine 化して」
@@ -96,11 +88,8 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 ### クリーンアップ
 
 ```bash
-# 削除対象を確認
-/shiiman-docker:cleanup --dry-run
-
-# クリーンアップ実行
-/shiiman-docker:cleanup
+# クリーンアップ
+「Docker をクリーンアップして」
 ```
 
 ### トラブルシューティング
@@ -140,9 +129,13 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 
 ## バージョン履歴
 
+### v1.2.0
+
+- コマンドをスキルに統合
+- スキル名を CLI 命名規則に統一
+
 ### v1.0.0
 
 - 初回リリース
-- 3 コマンド（logs, cleanup, lint）
-- 5 スキル（container-manager, image-manager, compose-manager, resource-manager, dockerfile-helper）
+- 5 スキル（manage-container, manage-image, manage-compose, manage-resource, help-dockerfile）
 - 2 エージェント（troubleshooter, dockerfile-reviewer）

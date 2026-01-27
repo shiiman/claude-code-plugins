@@ -1,6 +1,6 @@
 {
   "name": "shiiman-docker",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Docker/Docker Compose 管理プラグイン - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援",
   "author": {
     "name": "shiiman"
