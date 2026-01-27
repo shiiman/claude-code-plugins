@@ -1,19 +1,22 @@
-# Install
+---
+name: install
+description: 指定したプラグインをインストールする。「プラグインをインストール」「〇〇を追加して」「プラグインを入れて」「〇〇をインストールして」「プラグインを導入」「〇〇を使えるようにして」「新しいプラグインを追加」などで起動。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
+# Plugin Install
 
 指定したプラグインをインストールします。
 
-## 使い方
+## 引数
 
-```bash
-/shiiman-plugin:install [plugin-name]
-/shiiman-plugin:install --help
-```
+- `$ARGUMENTS`: プラグイン名（省略時は一覧表示）
 
 ## オプション
 
 | オプション | 説明                       |
 |------------|----------------------------|
-| `--help`   | このコマンドのヘルプを表示 |
+| `--help`   | このスキルのヘルプを表示 |
 
 ## Claude への指示
 

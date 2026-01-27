@@ -1,19 +1,18 @@
-# Report
+---
+name: report
+description: プラグインに関する要望、改善提案、バグ報告を作成する。「バグを報告」「要望を送りたい」「改善提案」「Issue を報告」「フィードバック」「機能リクエスト」「不具合報告」「プラグインの要望」「改善してほしい」「バグがある」「問題を報告」などで起動。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
+# Plugin Report
 
 プラグインに関する要望、改善提案、バグ報告を shiiman/claude-code-plugins リポジトリに Issue として投稿します。
 
-## 使い方
-
-```bash
-/shiiman-plugin:report
-/shiiman-plugin:report --help
-```
-
 ## オプション
 
-| オプション | 説明                       |
-|------------|----------------------------|
-| `--help`   | このコマンドのヘルプを表示 |
+| オプション | 説明                     |
+|------------|--------------------------|
+| `--help`   | このスキルのヘルプを表示 |
 
 ## Claude への指示
 
@@ -25,11 +24,11 @@
 
 ユーザーに Issue の種類を選択してもらう:
 
-| 種類 | ラベル | 説明 |
-|------|--------|------|
+| 種類                   | ラベル        | 説明                       |
+|------------------------|---------------|----------------------------|
 | 要望 (Feature Request) | `enhancement` | 新しい機能の追加リクエスト |
-| 改善 (Improvement) | `improvement` | 既存機能の改善提案 |
-| バグ (Bug) | `bug` | 不具合の報告 |
+| 改善 (Improvement)     | `improvement` | 既存機能の改善提案         |
+| バグ (Bug)             | `bug`         | 不具合の報告               |
 
 質問例:
 「どの種類の Issue を作成しますか？
@@ -98,7 +97,7 @@ URL: https://github.com/shiiman/claude-code-plugins/issues/{number}
 {期待動作}
 
 ---
-📝 この Issue は `shiiman-plugin:report` コマンドで作成されました
+📝 この Issue は `shiiman-plugin:report` スキルで作成されました
 ```
 
 #### 改善 (Improvement)
@@ -117,7 +116,7 @@ URL: https://github.com/shiiman/claude-code-plugins/issues/{number}
 {期待動作/改善案}
 
 ---
-📝 この Issue は `shiiman-plugin:report` コマンドで作成されました
+📝 この Issue は `shiiman-plugin:report` スキルで作成されました
 ```
 
 #### バグ (Bug)
@@ -147,7 +146,7 @@ URL: https://github.com/shiiman/claude-code-plugins/issues/{number}
 - Claude Code バージョン: {バージョン}
 
 ---
-📝 この Issue は `shiiman-plugin:report` コマンドで作成されました
+📝 この Issue は `shiiman-plugin:report` スキルで作成されました
 ```
 
 ### 重要な注意事項

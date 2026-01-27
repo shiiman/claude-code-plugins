@@ -1,19 +1,22 @@
-# Uninstall
+---
+name: uninstall
+description: 指定したプラグインをアンインストールする。「プラグインを削除」「〇〇をアンインストール」「プラグインを消して」「〇〇を削除して」「プラグインを外して」「〇〇を取り除いて」「プラグインをアンインストール」などで起動。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
+# Plugin Uninstall
 
 指定したプラグインをアンインストールします。
 
-## 使い方
+## 引数
 
-```bash
-/shiiman-plugin:uninstall [plugin-name]
-/shiiman-plugin:uninstall --help
-```
+- `$ARGUMENTS`: プラグイン名（省略時は一覧表示）
 
 ## オプション
 
 | オプション | 説明                       |
 |------------|----------------------------|
-| `--help`   | このコマンドのヘルプを表示 |
+| `--help`   | このスキルのヘルプを表示 |
 
 ## Claude への指示
 
