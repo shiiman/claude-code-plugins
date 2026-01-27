@@ -1,32 +1,23 @@
+---
+name: build
+description: Go プロジェクトをビルドする。「ビルドして」「go build」「コンパイル」「バイナリ作成」「クロスコンパイル」「Linux 向けビルド」「ビルド実行」などで起動。クロスコンパイル、再現可能ビルド、リンカーフラグによるバージョン埋め込みに対応。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
 # Build
 
 Go プロジェクトをビルドします。クロスコンパイル、再現可能ビルド、リンカーフラグによるバージョン埋め込みに対応。
 
-## 使い方
+## 引数
 
-```bash
-/shiiman-go:build
-/shiiman-go:build --os linux --arch amd64
-/shiiman-go:build --trimpath
-/shiiman-go:build --help
-```
+- `--os <os>`: ターゲット OS を指定 (linux, darwin, windows)
+- `--arch <arch>`: ターゲットアーキテクチャを指定 (amd64, arm64)
+- `--trimpath`: 再現可能ビルドのため絶対パスを削除
+- `--help`: ヘルプを表示
 
-## オプション
+## 実行手順
 
-| オプション | 説明 |
-|------------|------|
-| `--os <os>` | ターゲット OS を指定 (linux, darwin, windows) |
-| `--arch <arch>` | ターゲットアーキテクチャを指定 (amd64, arm64) |
-| `--trimpath` | 再現可能ビルドのため絶対パスを削除 |
-| `--help` | このコマンドのヘルプを表示 |
-
-## Claude への指示
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
-
-### 実行手順
-
-#### 1. タスクランナー検出
+### 1. タスクランナー検出
 
 ```bash
 ls -la Taskfile.yml Makefile 2>/dev/null
@@ -36,7 +27,7 @@ ls -la Taskfile.yml Makefile 2>/dev/null
 - `build`, `compile`, `go-build`
 - `build:linux`, `build:windows`
 
-#### 2. ビルド実行
+### 2. ビルド実行
 
 ```bash
 # タスクランナーがある場合
@@ -61,7 +52,7 @@ go build -trimpath -o bin/app ./cmd/app
 go build -ldflags "-X main.version=1.0.0 -X main.commit=$(git rev-parse HEAD)" -o bin/app ./cmd/app
 ```
 
-#### 3. 結果レポート
+### 3. 結果レポート
 
 ```
 ✅ ビルド完了
@@ -75,7 +66,7 @@ go build -ldflags "-X main.version=1.0.0 -X main.commit=$(git rev-parse HEAD)" -
 - ldflags: {フラグ内容}
 ```
 
-### クロスコンパイル対応表
+## クロスコンパイル対応表
 
 | OS | GOOS | サポートアーキテクチャ |
 |----|------|---------------------|
@@ -83,7 +74,7 @@ go build -ldflags "-X main.version=1.0.0 -X main.commit=$(git rev-parse HEAD)" -
 | macOS | darwin | amd64, arm64 |
 | Windows | windows | amd64, arm64 |
 
-### リンカーフラグ (-ldflags)
+## リンカーフラグ (-ldflags)
 
 | フラグ | 説明 |
 |--------|------|
@@ -92,19 +83,10 @@ go build -ldflags "-X main.version=1.0.0 -X main.commit=$(git rev-parse HEAD)" -
 | `-s` | シンボルテーブルを削除（バイナリサイズ削減） |
 | `-w` | DWARF デバッグ情報を削除（バイナリサイズ削減） |
 
-### ビルドタグ
+## 重要な注意事項
 
-```bash
-# 特定のビルドタグを有効化
-go build -tags "production" ./...
-
-# 複数のタグを指定
-go build -tags "production,netgo" ./...
-```
-
-### 注意事項
-
-- **CGO**: クロスコンパイル時は `CGO_ENABLED=0` を設定する必要がある場合がある
-- **再現可能ビルド**: リリースビルドでは `-trimpath` を使用して絶対パスを削除
-- **バイナリサイズ**: `-ldflags "-s -w"` でデバッグ情報を削除してサイズ削減可能
-- **PGO**: Profile-Guided Optimization で 2-14% の性能向上が期待できる（Go 1.22+）
+- ✅ プロジェクトの既存設定を優先
+- ✅ クロスコンパイル時は GOOS/GOARCH を明示
+- ✅ 再現可能ビルドには -trimpath を使用
+- ✅ クロスコンパイル時は CGO_ENABLED=0 を設定
+- ✅ リリースビルドでは -ldflags "-s -w" でサイズ削減

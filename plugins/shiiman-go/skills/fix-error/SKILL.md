@@ -1,12 +1,12 @@
 ---
-name: error-fixer
+name: fix-error
 description: Go のエラーを診断し修正する。「エラーを直して」「ビルドエラー修正」「コンパイルエラー」「Go のエラー修正」「ビルドが通らない」「テストが失敗」「lint エラー修正」などで起動。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
 context: fork
 agent: shiiman-go:error-analyzer
 ---
 
-# Error Fixer
+# Fix Error
 
 Go のエラーを診断し修正するスキル。
 

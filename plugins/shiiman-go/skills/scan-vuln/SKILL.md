@@ -1,35 +1,27 @@
-# Vuln
+---
+name: scan-vuln
+description: Go プロジェクトの脆弱性スキャンを実行する。「脆弱性スキャン」「govulncheck」「セキュリティチェック」「脆弱性確認」「vuln」「CVE チェック」「セキュリティスキャン」などで起動。govulncheck を使用して既知の脆弱性を検出。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
+# Scan Vuln
 
 Go プロジェクトの脆弱性スキャンを実行します。govulncheck を使用して既知の脆弱性を検出。
 
-## 使い方
+## 引数
 
-```bash
-/shiiman-go:vuln
-/shiiman-go:vuln --json
-/shiiman-go:vuln --help
-```
+- `--json`: JSON 形式で出力
+- `--help`: ヘルプを表示
 
-## オプション
+## 実行手順
 
-| オプション | 説明 |
-|------------|------|
-| `--json` | JSON 形式で出力 |
-| `--help` | このコマンドのヘルプを表示 |
-
-## Claude への指示
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
-
-### 実行手順
-
-#### 1. govulncheck のインストール確認
+### 1. govulncheck のインストール確認
 
 ```bash
 which govulncheck || go install golang.org/x/vuln/cmd/govulncheck@latest
 ```
 
-#### 2. 脆弱性スキャン実行
+### 2. 脆弱性スキャン実行
 
 ```bash
 # 基本的なスキャン
@@ -42,7 +34,7 @@ govulncheck -json ./...
 govulncheck -mode=binary ./bin/app
 ```
 
-#### 3. 結果レポート
+### 3. 結果レポート
 
 ```
 ## 脆弱性スキャン結果
@@ -69,7 +61,7 @@ govulncheck -mode=binary ./bin/app
 4. `go test ./...` で動作確認
 ```
 
-### 脆弱性の深刻度
+## 脆弱性の深刻度
 
 | レベル | 説明 |
 |--------|------|
@@ -78,7 +70,7 @@ govulncheck -mode=binary ./bin/app
 | Medium | 計画的に対応、DoS など |
 | Low | 時間があるときに対応 |
 
-### 脆弱性対応フロー
+## 脆弱性対応フロー
 
 1. **検出**: `govulncheck ./...` で脆弱性を検出
 2. **評価**: 実際にコードで使用されているか確認
@@ -86,7 +78,7 @@ govulncheck -mode=binary ./bin/app
 4. **テスト**: 更新後の動作確認
 5. **デプロイ**: 本番環境へ反映
 
-### CI/CD への統合
+## CI/CD への統合
 
 ```yaml
 # GitHub Actions の例
@@ -96,9 +88,9 @@ govulncheck -mode=binary ./bin/app
     govulncheck ./...
 ```
 
-### 注意事項
+## 重要な注意事項
 
-- **定期実行**: 定期的に govulncheck を実行して新しい脆弱性を検出
-- **誤検知**: govulncheck は実際に呼び出されるコードパスのみを報告するため、誤検知が少ない
-- **間接依存**: 直接依存だけでなく、間接依存の脆弱性も検出される
-- **更新後のテスト**: 脆弱性修正のための更新後は、必ずテストを実行
+- ✅ 定期的に govulncheck を実行して新しい脆弱性を検出
+- ✅ 脆弱性修正のための更新後は、必ずテストを実行
+- ✅ govulncheck は実際に呼び出されるコードパスのみを報告するため、誤検知が少ない
+- ✅ 間接依存の脆弱性も検出される

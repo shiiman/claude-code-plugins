@@ -1,12 +1,12 @@
 ---
-name: test-creator
+name: create-test
 description: Go のテストコードを自動生成する。「テストを作って」「テスト追加」「〇〇のテストを書いて」「テストケース追加」「単体テスト作成」「テストコード生成」「テストを生成」などで起動。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
 context: fork
 agent: shiiman-go:test-writer
 ---
 
-# Test Creator
+# Create Test
 
 Go のテストコードを自動生成するスキル。
 
