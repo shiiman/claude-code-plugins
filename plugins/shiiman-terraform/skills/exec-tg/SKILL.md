@@ -1,5 +1,5 @@
 ---
-name: tg-executor
+name: exec-tg
 description: Terragrunt コマンドを実行する。「terragrunt run-all」「tg plan-all」「tg apply-all」「terragrunt init」「tg init」「terragrunt して」「tg plan」「run-all apply」「モジュール一括適用」「terragrunt 実行」などで起動。
 allowed-tools: [Bash, Read]
 ---

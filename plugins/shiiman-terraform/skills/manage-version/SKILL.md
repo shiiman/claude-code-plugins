@@ -1,5 +1,5 @@
 ---
-name: version-manager
+name: manage-version
 description: Terraform/Terragrunt のバージョンを管理する。「terraform バージョン」「tfenv」「tgswitch」「tf バージョン切り替え」「terraform インストール」「バージョン確認」「tf version」「terraform 1.5 にして」「tg バージョン」などで起動。
 allowed-tools: [Bash, Read]
 ---

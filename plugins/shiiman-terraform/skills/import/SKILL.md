@@ -1,5 +1,5 @@
 ---
-name: import-helper
+name: import
 description: 既存リソースを Terraform に import する。「import して」「リソース import」「既存リソース取り込み」「terraform import」「インポート」「既存インフラを管理」「import ガイド」「リソースを terraform で管理」などで起動。
 allowed-tools: [Bash, Read, Write, Edit]
 ---
