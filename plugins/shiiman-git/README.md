@@ -14,34 +14,25 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 
 ## 機能
 
-### コマンド
-
-| コマンド | 説明 |
-|----------|------|
-| `/shiiman-git:dev-flow` | **Issue → 実装 → PR を自動実行** |
-| `/shiiman-git:setup` | GitHub 設定ファイルを一括生成 |
-| `/shiiman-git:commit-message` | コミットメッセージ命名規則の設定・表示 |
-| `/shiiman-git:issue-list` | オープン Issue 一覧を優先順位付きで表示 |
-| `/shiiman-git:pr-list` | オープン PR 一覧を優先順位付きで表示 |
-
 ### スキル
 
 | スキル | トリガー例 | 説明 |
 |--------|------------|------|
-| setup-runner | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
-| commit-messenger | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
-| committer | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
-| branch-creator | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
-| gitignore-checker | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
-| issue-creator | 「Issue 作成」 | タスクを分割して Issue を作成 |
-| issue-updater | 「Issue 更新」 | Issue の状態を更新 |
-| issue-lister | 「Issue 一覧」 | オープン Issue を表示 |
-| pr-creator | 「PR 作成」 | PR を作成し関連 Issue を参照 |
-| pr-reviewer | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
-| pr-review-checker | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
-| pr-lister | 「PR 一覧」 | オープン PR を表示 |
-| pr-approver | 「PR 承認」 | PR を approve |
-| actions-debugger | 「Actions エラー」 | GitHub Actions のエラーを調査 |
+| run-dev-flow | 「開発フロー」「dev-flow」 | **Issue → 実装 → PR を自動実行** |
+| setup-github | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
+| setup-commit-message | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
+| commit | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
+| create-branch | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
+| check-gitignore | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
+| create-issue | 「Issue 作成」 | タスクを分割して Issue を作成 |
+| update-issue | 「Issue 更新」 | Issue の状態を更新 |
+| list-issues | 「Issue 一覧」 | オープン Issue を表示 |
+| create-pr | 「PR 作成」 | PR を作成し関連 Issue を参照 |
+| review-pr | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
+| check-pr-review | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
+| list-prs | 「PR 一覧」 | オープン PR を表示 |
+| approve-pr | 「PR 承認」 | PR を approve |
+| debug-actions | 「Actions エラー」 | GitHub Actions のエラーを調査 |
 
 ### エージェント
 
@@ -96,7 +87,7 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 
 ### 自動開発フロー（推奨）
 
-`/shiiman-git:dev-flow` を使うと、以下のフローを自動実行します:
+`run-dev-flow` スキルを使うと、以下のフローを自動実行します:
 
 ```
 Issue作成 → ブランチ作成 → 実装 → 自己レビュー → [確認] → Issue更新 → コミット → プッシュ → PR作成
@@ -109,33 +100,33 @@ Issue作成 → ブランチ作成 → 実装 → 自己レビュー → [確認
 
 **3つの実行モード:**
 
-| モード | コマンド | 説明 |
+| モード | 起動方法 | 説明 |
 |--------|----------|------|
-| 計画書実行 | `/shiiman-git:dev-flow` | 最新の計画書から直接実行（デフォルト） |
-| 計画書作成 | `/shiiman-git:dev-flow --plan` | plan mode で計画書を新規作成してから実行 |
-| 直接実行 | `/shiiman-git:dev-flow タスク説明` | 計画書なしで直接実行（簡単なタスク用） |
+| 計画書実行 | 「開発フロー」 | 最新の計画書から直接実行（デフォルト） |
+| 計画書作成 | 「開発フロー --plan」 | plan mode で計画書を新規作成してから実行 |
+| 直接実行 | 「開発フロー タスク説明」 | 計画書なしで直接実行（簡単なタスク用） |
 
 ### 手動フロー
 
 個別のスキルを使う場合:
 
 1. **作業開始時**
-   - `issue-creator` → タスクを Issue 化
-   - `branch-creator` → Issue 番号でブランチ作成
+   - `create-issue` → タスクを Issue 化
+   - `create-branch` → Issue 番号でブランチ作成
 
 2. **コミット時**
-   - `gitignore-checker` → 機密ファイルチェック
-   - `committer` → コミット＆プッシュ
+   - `check-gitignore` → 機密ファイルチェック
+   - `commit` → コミット＆プッシュ
 
 3. **PR 作成時**
-   - `pr-creator` → PR 作成
+   - `create-pr` → PR 作成
 
 4. **レビュー時**
-   - `pr-reviewer` → **他者の PR** をレビュー（レビュアーとして）
-   - `pr-review-checker` → **自分の PR** のレビューコメントに対応（作成者として）
+   - `review-pr` → **他者の PR** をレビュー（レビュアーとして）
+   - `check-pr-review` → **自分の PR** のレビューコメントに対応（作成者として）
 
 5. **完了時**
-   - `pr-approver` → PR 承認
+   - `approve-pr` → PR 承認
 
 ## トラブルシューティング
 
