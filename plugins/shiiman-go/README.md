@@ -16,30 +16,20 @@ Go 言語のベストプラクティスに基づいた開発支援を提供し�
 
 ## 提供機能
 
-### Commands
-
-| コマンド | 説明 |
-|----------|------|
-| `/shiiman-go:format` | コードのフォーマット（gofmt/goimports/gofumpt） |
-| `/shiiman-go:lint` | 静的解析を実行し、自動修正可能な問題を修正 |
-| `/shiiman-go:test` | ユニットテストの実行（カバレッジ計測対応） |
-| `/shiiman-go:mod-update` | go.mod の依存関係を更新 |
-| `/shiiman-go:mod-version` | go.mod の Go バージョンを管理 |
-| `/shiiman-go:build` | プロジェクトのビルド（クロスコンパイル対応） |
-| `/shiiman-go:perf` | パフォーマンス計測・最適化 |
-| `/shiiman-go:vuln` | govulncheck で脆弱性スキャン |
-
 ### Skills
 
 | スキル | トリガー例 | 説明 |
 |--------|-----------|------|
-| test-creator | 「テストを作って」「テスト追加」 | テストコード自動生成 |
-| error-fixer | 「エラーを直して」「ビルドエラー修正」 | エラー診断・修正 |
-| code-reviewer | 「コードレビューして」「Go のレビュー」 | コードレビュー |
-| formatter | 「フォーマットして」「gofmt して」 | フォーマット実行 |
-| linter | 「lint して」「静的解析」 | lint 実行 |
-| mod-manager | 「依存関係を更新」「go mod」 | モジュール管理 |
-| builder | 「ビルドして」「go build」 | ビルド実行 |
+| build | 「ビルドして」「go build」 | ビルド実行（クロスコンパイル対応） |
+| format | 「フォーマットして」「gofmt して」 | フォーマット実行 |
+| lint | 「lint して」「静的解析」 | lint 実行・自動修正 |
+| test | 「テスト実行」「go test」 | テスト実行（カバレッジ対応） |
+| manage-mod | 「依存関係を更新」「go mod」 | モジュール・バージョン管理 |
+| analyze-perf | 「パフォーマンス計測」「ベンチマーク」 | パフォーマンス分析・最適化 |
+| scan-vuln | 「脆弱性スキャン」「govulncheck」 | 脆弱性検出 |
+| create-test | 「テストを作って」「テスト追加」 | テストコード自動生成 |
+| fix-error | 「エラーを直して」「ビルドエラー修正」 | エラー診断・修正 |
+| review-code | 「コードレビューして」「Go のレビュー」 | コードレビュー |
 
 ### Agents
 
@@ -49,6 +39,7 @@ Go 言語のベストプラクティスに基づいた開発支援を提供し�
 | performance-optimizer | パフォーマンス最適化専門家（ベンチマーク、pprof、PGO） |
 | command-runner | Go コマンド実行専門家（タスクランナー連携） |
 | error-analyzer | エラー分析・修正専門家（コンパイル/lint/ランタイムエラー） |
+| code-reviewer | コードレビュー専門家（Effective Go、Go Code Review Comments 準拠）|
 
 ## インストール
 
@@ -60,19 +51,19 @@ claude plugin install shiiman-go@shiiman-claude-code-plugins
 
 ```bash
 # コードのフォーマット
-/shiiman-go:format
+「フォーマットして」
 
 # 静的解析の実行
-/shiiman-go:lint
+「lint して」
 
 # テストの実行
-/shiiman-go:test
+「テスト実行」
 
 # 依存関係の更新
-/shiiman-go:mod-update
+「依存関係を更新」
 
 # 脆弱性スキャン
-/shiiman-go:vuln
+「脆弱性スキャン」
 ```
 
 ## 特化機能

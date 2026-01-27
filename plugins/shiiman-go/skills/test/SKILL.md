@@ -1,42 +1,34 @@
+---
+name: test
+description: Go プロジェクトのユニットテストを実行する。「テスト実行」「go test」「テストを走らせて」「ユニットテスト」「テストして」「テスト確認」などで起動。カバレッジ計測、特定パッケージ/ファイルのテスト、レースコンディション検出に対応。
+allowed-tools: [Read, Bash, Glob, Grep]
+---
+
 # Test
 
 Go プロジェクトのユニットテストを実行します。カバレッジ計測、特定パッケージ/ファイルのテスト、レースコンディション検出に対応。
 
-## 使い方
+## 引数
 
-```bash
-/shiiman-go:test
-/shiiman-go:test ./internal/handler
-/shiiman-go:test --cover
-/shiiman-go:test --race
-/shiiman-go:test --help
-```
+- `[パッケージパス]`: テスト対象のパッケージ（例: ./internal/handler）
+- `--cover`: カバレッジ計測を有効化
+- `--race`: データレース検出を有効化
+- `--help`: ヘルプを表示
 
-## オプション
+## 実行手順
 
-| オプション | 説明 |
-|------------|------|
-| `--cover` | カバレッジ計測を有効化 |
-| `--race` | データレース検出を有効化 |
-| `--help` | このコマンドのヘルプを表示 |
-
-## Claude への指示
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
-
-### 実行手順
-
-#### 1. タスクランナー検出
+### 1. タスクランナー検出
 
 ```bash
 ls -la Taskfile.yml Makefile 2>/dev/null
 ```
 
 **検出されるタスク名の例**:
+
 - `test`, `test-unit`, `go-test`
 - `test:unit`, `unit-test`
 
-#### 2. テスト実行
+### 2. テスト実行
 
 ```bash
 # タスクランナーがある場合
@@ -63,7 +55,7 @@ go test -v ./internal/handler
 go test -v -run TestCreateUser ./internal/handler
 ```
 
-#### 3. 結果レポート
+### 3. 結果レポート
 
 ```
 ✅ テスト完了
@@ -82,16 +74,7 @@ go test -v -run TestCreateUser ./internal/handler
   エラー: {エラーメッセージ}
 ```
 
-### テスト作成支援
-
-テストコードの作成が必要な場合は、test-writer エージェントが以下をサポート:
-
-- テーブル駆動テストの作成
-- t.Parallel() による並行テスト
-- モック実装（testify/mock, gomock）
-- テストデータ管理（testdata ディレクトリ）
-
-### 段階的テスト実行戦略
+## 段階的テスト実行戦略
 
 効率的なデバッグのため、以下の順序でテストを実行:
 
@@ -100,8 +83,9 @@ go test -v -run TestCreateUser ./internal/handler
 3. **特定パッケージ** - `go test -v ./internal/handler`
 4. **プロジェクト全体** - `go test ./...`
 
-### 注意事項
+## 重要な注意事項
 
-- **`-race` フラグ**: 実行速度が遅くなるため、開発時のみ使用推奨
-- **テストキャッシュ**: キャッシュを無効化するには `-count=1` を使用
-- **並行テスト**: `t.Parallel()` を使用して独立したテストを並行実行可能
+- ✅ タスクランナーがあれば使用
+- ✅ `-race` フラグで並行処理の問題を検出
+- ✅ キャッシュを無効化するには `-count=1` を使用
+- ❌ `-race` フラグは実行速度が遅くなるため、開発時のみ使用推奨

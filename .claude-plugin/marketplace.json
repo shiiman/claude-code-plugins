@@ -36,7 +36,7 @@
     {
       "name": "shiiman-go",
       "description": "Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "source": "./plugins/shiiman-go",
       "category": "developer-tools"
     },
