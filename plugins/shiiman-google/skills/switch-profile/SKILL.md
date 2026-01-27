@@ -1,5 +1,5 @@
 ---
-name: profile-switch
+name: switch-profile
 description: 保存済みの Google 認証プロファイルを切り替える。「アカウント切替」「プロファイル変更」「別アカウントで使いたい」「Google アカウントを変える」「認証を切り替え」などで起動。
 allowed-tools: [Read, Bash]
 ---

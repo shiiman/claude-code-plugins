@@ -1,6 +1,6 @@
 ---
 name: drive-list
-description: Google Drive のファイル一覧を取得する。「Drive 一覧」「ドライブのファイルを見たい」「最近のファイル」「Drive の一覧を出して」「ファイルリスト」「Google Drive 一覧」「ドライブを表示」などで起動。`/shiiman-google:drive-list` を実行して一覧を取得する。
+description: Google Drive のファイル一覧を取得する。「Drive 一覧」「ドライブのファイルを見たい」「最近のファイル」「Drive の一覧を出して」「ファイルリスト」「Google Drive 一覧」「ドライブを表示」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,46 @@ allowed-tools: [Read, Bash]
 
 Google Drive のファイル一覧を取得します。
 
-## ワークフロー
+## 実行方法
 
-### 1. コマンド実行
+### アクティブプロファイルで一覧を取得
 
-`/shiiman-google:drive-list` を SlashCommand ツールで実行（実装は Commands に委譲）。
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list
+```
 
-## コマンド連携
+### プロファイル指定で一覧を取得
 
-実際の処理は `/shiiman-google:drive-list` に委譲します（SSOT として扱う）。
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list --profile <profile-name>
+```
+
+### 最大件数を指定
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list --max 50
+```
+
+### JSON 形式で出力
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py --format json list
+```
+
+## 出力項目
+
+- id: ファイルID
+- name: ファイル名
+- mimeType: ファイル種類
+- modifiedTime: 更新日時
+- webViewLink: URL
+
+## 関連操作
+
+- 検索する: `drive-search` を実行
+- 共有設定を確認: `drive-get-permissions` を実行
+- 共有する: `drive-share` を実行
+
+## 注意事項
+
+- トークン未作成の場合は「Google ログイン」と言って認証を行ってください

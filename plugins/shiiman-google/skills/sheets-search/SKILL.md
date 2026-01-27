@@ -1,6 +1,6 @@
 ---
 name: sheets-search
-description: Google Sheets を検索する。「Sheets 検索」「スプレッドシート検索」「Google Sheets 検索」「シートを探して」「スプレッドシートを検索」「Sheets を見つけたい」「Google スプレッドシート検索」などで起動。`/shiiman-google:sheets-search` を実行して検索する。
+description: Google Sheets を検索する。「Sheets 検索」「スプレッドシート検索」「Google Sheets 検索」「シートを探して」「スプレッドシートを検索」「Sheets を見つけたい」「Google スプレッドシート検索」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,37 @@ allowed-tools: [Read, Bash]
 
 Google Sheets を検索します。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- 検索クエリ (必須): 名前の部分一致など（例: `spec`）
 
-`/shiiman-google:sheets-search` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## 実行方法
 
-## コマンド連携
+### アクティブプロファイルで検索
 
-実際の処理は `/shiiman-google:sheets-search` に委譲します（SSOT として扱う）。
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.spreadsheet' and name contains '<検索キーワード>'"
+```
+
+### プロファイル指定で検索
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --profile <profile-name> --query "mimeType='application/vnd.google-apps.spreadsheet' and name contains '<検索キーワード>'"
+```
+
+## 検索クエリ例
+
+```bash
+# 名前に "spec" を含む
+--query "mimeType='application/vnd.google-apps.spreadsheet' and name contains 'spec'"
+
+# 名前に "予算" を含む
+--query "mimeType='application/vnd.google-apps.spreadsheet' and name contains '予算'"
+
+# 最近更新された
+--query "mimeType='application/vnd.google-apps.spreadsheet' and modifiedTime > '2024-01-01'"
+```
+
+## 注意事項
+
+- トークン未作成の場合は「Google ログイン」と言って認証を行ってください

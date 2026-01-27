@@ -1,19 +1,49 @@
 ---
 name: gmail-mark-read
-description: Gmail の未読を既読化する。「既読にする」「未読を既読」「メールを既読化」「Gmail 既読化」「未読を消す」「メールを開封扱い」「一括既読」などで起動。`/shiiman-google:gmail-mark-read` を実行して既読化する。
+description: Gmail の未読を既読化する。「既読にする」「未読を既読」「メールを既読化」「Gmail 既読化」「未読を消す」「メールを開封扱い」「一括既読」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
 # Gmail Mark Read
 
-Gmail の未読を既読化します。
+Gmail の未読メッセージを既読化します（単体/一括）。
 
-## ワークフロー
+## 実行方法
 
-### 1. コマンド実行
+### 特定メッセージを既読化
 
-`/shiiman-google:gmail-mark-read` を SlashCommand ツールで実行（実装は Commands に委譲）。
+```bash
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py mark-read --ids <message-id>
+```
 
-## コマンド連携
+### 複数メッセージを一括で既読化
 
-実際の処理は `/shiiman-google:gmail-mark-read` に委譲します（SSOT として扱う）。
+```bash
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py mark-read --ids <id1>,<id2>,<id3>
+```
+
+### 未読メッセージを一括で既読化
+
+```bash
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py mark-read --all
+```
+
+### プロファイル指定
+
+```bash
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py mark-read --profile <profile-name> --all
+```
+
+## オプション
+
+- `--ids <id1,id2,...>`: 既読化するメッセージIDのリスト
+- `--all`: 全ての未読メッセージを既読化
+
+## 関連操作
+
+- 未読一覧を確認: `gmail-list-unread` を実行
+
+## 注意事項
+
+- トークン未作成の場合は「Google ログイン」と言って認証を行ってください
+- `--all` オプションは全ての未読を既読化するため、慎重に使用してください

@@ -30,92 +30,83 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 ### Google Drive
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | `/shiiman-google:drive-list` | 「Drive 一覧」 | ファイル一覧を取得 |
-| 検索 | `/shiiman-google:drive-search` | 「Drive 検索」 | ファイルを検索 |
-| 移動 | `/shiiman-google:drive-move` | - | ファイルをフォルダに移動 |
-| フォルダ作成 | `/shiiman-google:drive-create-folder` | - | フォルダを新規作成 |
-| **共有** | `/shiiman-google:drive-share` | 「ファイルを共有」 | ファイル共有設定（v1.2.0） |
-| **共有解除** | `/shiiman-google:drive-unshare` | - | 共有を解除（v1.2.0） |
-| **共有確認** | `/shiiman-google:drive-permissions` | 「共有状況確認」 | 共有設定一覧を取得（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「Drive 一覧」 | ファイル一覧を取得 |
+| 検索 | 「Drive 検索」 | ファイルを検索 |
+| 共有 | 「ファイルを共有」 | ファイル共有設定 |
+| 共有確認 | 「共有状況確認」 | 共有設定一覧を取得 |
 
 ### Google Calendar
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 予定取得 | - | 「今日の予定」「今週の予定」「今月の予定」 | 期間を指定して予定を取得 |
-| 予定追加 | `/shiiman-google:calendar-add` | 「予定追加」「カレンダーに追加」 | 予定を追加（色・カレンダー指定可） |
-| **予定詳細** | `/shiiman-google:calendar-get` | - | イベント詳細を取得（v1.2.0） |
-| **予定更新** | `/shiiman-google:calendar-update` | 「予定を変更」 | 予定を編集（v1.2.0） |
-| **予定削除** | `/shiiman-google:calendar-delete` | 「予定を削除」 | 予定を削除（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 予定取得 | 「今日の予定」「今週の予定」「今月の予定」 | 期間を指定して予定を取得 |
+| 予定追加 | 「予定追加」「カレンダーに追加」 | 予定を追加（色・カレンダー指定可） |
+| 予定更新 | 「予定を変更」 | 予定を編集 |
+| 予定削除 | 「予定を削除」 | 予定を削除 |
 
 ### Gmail
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 未読一覧 | `/shiiman-google:gmail-read` | 「未読メール」「全アカウント未読」 | 未読メッセージ一覧を取得 |
-| 本文表示 | `/shiiman-google:gmail-read` | 「メールを読んで」 | メッセージ本文を表示 |
-| 既読化 | `/shiiman-google:gmail-mark-read` | 「既読にして」「全部既読」 | 未読を既読に変更 |
-| スター付け | `/shiiman-google:gmail-star` | 「スターを付けて」 | メッセージにスター付け |
-| スター付き一覧 | - | 「スター付きメール」 | スター付きメッセージ一覧 |
-| 送信 | `/shiiman-google:gmail-send` | 「メール送信」「メールを送って」 | メールを送信 |
-| 下書き | `/shiiman-google:gmail-draft` | 「下書き作成」「下書きを保存」 | 下書きを作成 |
-| **検索** | `/shiiman-google:gmail-search` | 「メール検索」 | Gmail検索クエリで検索（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 未読一覧 | 「未読メール」「全アカウント未読」 | 未読メッセージ一覧を取得 |
+| 本文表示 | 「メールを読んで」 | メッセージ本文を表示 |
+| 検索 | 「メール検索」 | Gmail検索クエリで検索 |
+| 既読化 | 「既読にして」「全部既読」 | 未読を既読に変更 |
+| スター付け | 「スターを付けて」 | メッセージにスター付け |
+| スター付き一覧 | 「スター付きメール」 | スター付きメッセージ一覧 |
+| 送信 | 「メール送信」「メールを送って」 | メールを送信 |
+| 下書き | 「下書き作成」「下書きを保存」 | 下書きを作成 |
 
 ### Google Docs
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | - | 「Docs 一覧」 | ドキュメント一覧を取得 |
-| 検索 | `/shiiman-google:docs-search` | 「Docs 検索」 | ドキュメントを検索 |
-| 作成 | `/shiiman-google:docs-create` | 「ドキュメント作成」 | 新規ドキュメントを作成 |
-| 取得 | `/shiiman-google:docs-get` | - | ドキュメント内容を取得 |
-| 更新 | `/shiiman-google:docs-update` | 「ドキュメント更新」 | テキストを追加 |
-| **エクスポート** | `/shiiman-google:docs-export` | 「DocsをPDFで」 | PDF/Word等でエクスポート（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「Docs 一覧」 | ドキュメント一覧を取得 |
+| 検索 | 「Docs 検索」 | ドキュメントを検索 |
+| 作成 | 「ドキュメント作成」 | 新規ドキュメントを作成 |
+| 更新 | 「ドキュメント更新」 | テキストを追加 |
+| エクスポート | 「DocsをPDFで」 | PDF/Word等でエクスポート |
 
 ### Google Sheets
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | - | 「Sheets 一覧」 | スプレッドシート一覧を取得 |
-| 検索 | `/shiiman-google:sheets-search` | 「Sheets 検索」 | スプレッドシートを検索 |
-| 作成 | `/shiiman-google:sheets-create` | 「スプレッドシート作成」 | 新規スプレッドシートを作成 |
-| 取得 | `/shiiman-google:sheets-get` | - | セルデータを取得 |
-| 更新 | `/shiiman-google:sheets-update` | 「スプレッドシート更新」 | セルを更新 |
-| **エクスポート** | `/shiiman-google:sheets-export` | 「SheetsをCSVで」 | CSV/Excel等でエクスポート（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「Sheets 一覧」 | スプレッドシート一覧を取得 |
+| 検索 | 「Sheets 検索」 | スプレッドシートを検索 |
+| 作成 | 「スプレッドシート作成」 | 新規スプレッドシートを作成 |
+| 更新 | 「スプレッドシート更新」 | セルを更新 |
+| エクスポート | 「SheetsをCSVで」 | CSV/Excel等でエクスポート |
 
 ### Google Slides
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | - | 「Slides 一覧」 | プレゼンテーション一覧を取得 |
-| 検索 | `/shiiman-google:slides-search` | 「Slides 検索」 | プレゼンテーションを検索 |
-| 作成 | `/shiiman-google:slides-create` | 「プレゼン作成」 | 新規プレゼンテーションを作成 |
-| 取得 | `/shiiman-google:slides-get` | - | スライド情報を取得 |
-| スライド追加 | `/shiiman-google:slides-add-slide` | 「スライド追加」 | スライドを追加 |
-| **エクスポート** | `/shiiman-google:slides-export` | 「SlidesをPDFで」 | PDF/PowerPoint等でエクスポート（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「Slides 一覧」 | プレゼンテーション一覧を取得 |
+| 検索 | 「Slides 検索」 | プレゼンテーションを検索 |
+| 作成 | 「プレゼン作成」 | 新規プレゼンテーションを作成 |
+| スライド追加 | 「スライド追加」 | スライドを追加 |
+| エクスポート | 「SlidesをPDFで」 | PDF/PowerPoint等でエクスポート |
 
 ### Google Forms
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | - | 「Forms 一覧」 | フォーム一覧を取得 |
-| 検索 | `/shiiman-google:forms-search` | 「Forms 検索」 | フォームを検索 |
-| 作成 | `/shiiman-google:forms-create` | 「フォーム作成」 | 新規フォームを作成 |
-| 取得 | `/shiiman-google:forms-get` | - | フォーム情報を取得 |
-| 質問追加 | `/shiiman-google:forms-add-question` | 「質問追加」 | 質問を追加 |
-| **回答取得** | `/shiiman-google:forms-responses` | 「フォームの回答」 | 回答一覧を取得（v1.2.0） |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「Forms 一覧」 | フォーム一覧を取得 |
+| 検索 | 「Forms 検索」 | フォームを検索 |
+| 作成 | 「フォーム作成」 | 新規フォームを作成 |
+| 質問追加 | 「質問追加」 | 質問を追加 |
+| 回答取得 | 「フォームの回答」 | 回答一覧を取得 |
 
 ### Google Apps Script
 
-| 機能 | コマンド | スキルトリガー | 説明 |
-|------|----------|---------------|------|
-| 一覧 | - | 「GAS 一覧」 | スクリプト一覧を取得 |
-| 検索 | `/shiiman-google:apps-script-search` | 「GAS 検索」 | スクリプトを検索 |
-| 作成 | `/shiiman-google:apps-script-create` | 「GAS 作成」 | 新規スクリプトを作成 |
-| 取得 | `/shiiman-google:apps-script-get` | - | スクリプト内容を取得 |
-| 更新 | `/shiiman-google:apps-script-update` | 「GAS 更新」 | コードを更新 |
+| 機能 | スキルトリガー | 説明 |
+|------|---------------|------|
+| 一覧 | 「GAS 一覧」 | スクリプト一覧を取得 |
+| 検索 | 「GAS 検索」 | スクリプトを検索 |
+| 作成 | 「GAS 作成」 | 新規スクリプトを作成 |
+| 更新 | 「GAS 更新」 | コードを更新 |
 
 ## 使い方
 
@@ -162,13 +153,12 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 plugins/shiiman-google/
 ├── .claude-plugin/plugin.json   # プラグインメタデータ
-├── commands/                    # スラッシュコマンド
 └── skills/                      # 自然言語トリガースキル
     ├── auth-login/
     │   └── scripts/             # 認証関連スクリプト
     │       ├── google_utils.py  # 共通ユーティリティ
     │       └── google_auth.py   # 認証
-    ├── calendar-events/
+    ├── calendar-list-events/
     │   └── scripts/             # カレンダー関連スクリプト
     │       ├── google_utils.py
     │       └── google_calendar.py
@@ -184,7 +174,7 @@ plugins/shiiman-google/
     │   └── scripts/              # フォーム関連スクリプト
     │       ├── google_utils.py
     │       └── google_forms.py
-    ├── gmail-unread/
+    ├── gmail-list-unread/
     │   └── scripts/              # Gmail関連スクリプト
     │       ├── google_utils.py
     │       └── google_gmail.py

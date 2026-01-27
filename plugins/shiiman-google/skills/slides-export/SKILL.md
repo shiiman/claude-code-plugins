@@ -1,6 +1,6 @@
 ---
 name: slides-export
-description: Google Slides をエクスポートする。「Slides を PDF で」「プレゼンをエクスポート」「Slides をダウンロード」「PowerPoint で保存」「プレゼンを PDF に」などで起動。`/shiiman-google:slides-export` を実行してエクスポートする。
+description: Google Slides をエクスポートする。「Slides を PDF で」「プレゼンをエクスポート」「Slides をダウンロード」「PowerPoint で保存」「プレゼンを PDF に」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,23 @@ allowed-tools: [Read, Bash]
 
 Google Slides をファイルにエクスポートします。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- プレゼンテーションID (必須): エクスポートするプレゼンテーションのID
 
-`/shiiman-google:slides-export` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## オプション
 
-## コマンド連携
+- `--output <path>` (必須): 出力ファイルパス
+- `--type <format>`: 出力形式（pdf, pptx, odp, txt）デフォルト: pdf
 
-実際の処理は `/shiiman-google:slides-export` に委譲します（SSOT として扱う）。
+## 実行方法
+
+```bash
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pdf
+```
+
+### PowerPoint形式でエクスポート
+
+```bash
+python plugins/shiiman-google/skills/slides-list/scripts/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pptx --type pptx
+```

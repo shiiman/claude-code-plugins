@@ -1,6 +1,6 @@
 ---
 name: calendar-delete
-description: Google Calendar の予定を削除する。「予定を削除」「イベント削除」「予定をキャンセル」「予定を消して」「イベントを消して」などで起動。`/shiiman-google:calendar-delete` を実行して予定を削除する。
+description: Google Calendar の予定を削除する。「予定を削除」「イベント削除」「予定をキャンセル」「予定を消して」「イベントを消して」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,22 @@ allowed-tools: [Read, Bash]
 
 Google Calendar の予定を削除します。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- イベントID (必須): 削除する予定のID
 
-`/shiiman-google:calendar-delete` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## オプション
 
-## コマンド連携
+- `--calendar <id>`: カレンダーID（デフォルト: primary）
 
-実際の処理は `/shiiman-google:calendar-delete` に委譲します（SSOT として扱う）。
+## 実行方法
+
+```bash
+python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py delete --event-id <event-id>
+```
+
+### 特定のカレンダーから削除
+
+```bash
+python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py delete --event-id <event-id> --calendar work@group.calendar.google.com
+```
