@@ -48,13 +48,13 @@ Slack User Token を使用してワークスペースを操作します。
 ターミナルで以下を実行:
 
 ```bash
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py token-set --token xoxp-your-token
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py token-set --token xoxp-your-token
 ```
 
 設定を確認:
 
 ```bash
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py show
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py show
 ```
 
 #### 方法2: 設定ファイルを直接作成
@@ -95,40 +95,27 @@ pip install slack-sdk
 
 ## 機能
 
-### コマンド（8個）
-
-| コマンド | 説明 |
-|----------|------|
-| `/shiiman-slack:channel-list` | チャンネル一覧を取得 |
-| `/shiiman-slack:channel-search` | チャンネルを検索 |
-| `/shiiman-slack:message-history` | メッセージ履歴を取得 |
-| `/shiiman-slack:message-unread` | 未読メッセージ一覧 |
-| `/shiiman-slack:message-mentions` | メンション一覧を取得 |
-| `/shiiman-slack:user-profile` | ユーザープロファイル取得 |
-| `/shiiman-slack:user-setup` | トークン設定・ユーザー設定 |
-| `/shiiman-slack:profile-update` | 自分のプロフィールを更新 |
-
 ### スキル（17個）
 
 | スキル | トリガー例 | 説明 |
 |--------|------------|------|
-| channel-lister | 「Slackチャンネル一覧」 | チャンネル一覧を取得 |
-| channel-searcher | 「チャンネル検索」 | チャンネルを検索 |
-| message-reader | 「メッセージ確認」 | メッセージ履歴を取得 |
-| message-sender | 「Slackに送信」 | メッセージを送信 |
-| thread-replier | 「スレッドに返信」 | スレッドに返信 |
-| thread-reader | 「スレッドを読む」 | スレッド返信を取得 |
-| reaction-adder | 「リアクション追加」 | リアクションを追加 |
-| message-editor | 「メッセージ編集」 | メッセージを編集 |
-| message-deleter | 「メッセージ削除」 | メッセージを削除 |
-| unread-checker | 「Slack未読確認」 | 未読メッセージを確認 |
-| mark-reader | 「既読にして」 | チャンネルを既読化 |
-| mention-checker | 「メンション確認」 | 自分へのメンションを確認 |
-| message-summarizer | 「Slack要約」 | メッセージを要約 |
-| thread-user-lister | 「スレッド参加者」 | スレッド参加者一覧 |
-| user-profiler | 「ユーザー情報」 | ユーザープロファイル取得 |
-| user-setup | 「ユーザー設定」 | トークン・ユーザー設定 |
-| profile-updater | 「プロフィール更新」 | 自分のプロフィールを更新 |
+| list-channels | 「Slackチャンネル一覧」 | チャンネル一覧を取得 |
+| search-channels | 「チャンネル検索」 | チャンネルを検索 |
+| read-messages | 「メッセージ確認」 | メッセージ履歴を取得 |
+| send-message | 「Slackに送信」 | メッセージを送信 |
+| reply-thread | 「スレッドに返信」 | スレッドに返信 |
+| read-thread | 「スレッドを読む」 | スレッド返信を取得 |
+| add-reaction | 「リアクション追加」 | リアクションを追加 |
+| edit-message | 「メッセージ編集」 | メッセージを編集 |
+| delete-message | 「メッセージ削除」 | メッセージを削除 |
+| check-unread | 「Slack未読確認」 | 未読メッセージを確認 |
+| mark-read | 「既読にして」 | チャンネルを既読化 |
+| check-mentions | 「メンション確認」 | 自分へのメンションを確認 |
+| summarize-messages | 「Slack要約」 | メッセージを要約 |
+| list-thread-users | 「スレッド参加者」 | スレッド参加者一覧 |
+| get-user-profile | 「ユーザー情報」 | ユーザープロファイル取得 |
+| setup-user | 「ユーザー設定」 | トークン・ユーザー設定 |
+| update-profile | 「プロフィール更新」 | 自分のプロフィールを更新 |
 
 ### エージェント
 
@@ -142,8 +129,8 @@ pip install slack-sdk
 
 ### 初期設定
 
-```
-/shiiman-slack:user-setup --token xoxp-your-user-token
+```bash
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py token-set --token xoxp-your-user-token
 ```
 
 ### チャンネル一覧を取得
@@ -232,8 +219,8 @@ Slackのチャンネル一覧を見せて
 
 **対処法:**
 
-```
-/shiiman-slack:user-setup --token xoxp-your-token
+```bash
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py token-set --token xoxp-your-token
 ```
 
 ### チャンネルが見つからない
@@ -268,23 +255,23 @@ Slackのチャンネル一覧を見せて
 
 ```
 Pythonスクリプト (各スキルの scripts/ ディレクトリ)
-  ├─ skills/message-sender/scripts/
+  ├─ skills/send-message/scripts/
   │   └─ slack_post.py (post)
-  ├─ skills/thread-replier/scripts/
+  ├─ skills/reply-thread/scripts/
   │   └─ slack_thread.py (reply)
-  ├─ skills/reaction-adder/scripts/
+  ├─ skills/add-reaction/scripts/
   │   └─ slack_reaction.py (add)
-  ├─ skills/message-summarizer/scripts/
+  ├─ skills/summarize-messages/scripts/
   │   └─ slack_message.py (summarize)
-  ├─ skills/unread-checker/scripts/
+  ├─ skills/check-unread/scripts/
   │   └─ slack_message.py (unread, mark-read, edit, delete)
-  ├─ skills/mention-checker/scripts/
+  ├─ skills/check-mentions/scripts/
   │   └─ slack_message.py (mentions, thread-users)
-  ├─ skills/channel-lister/scripts/
+  ├─ skills/list-channels/scripts/
   │   └─ slack_channel.py (search)
-  ├─ skills/user-setup/scripts/
+  ├─ skills/setup-user/scripts/
   │   └─ slack_config.py (token-set, auto-detect, set-user, show, clear)
-  └─ skills/profile-updater/scripts/
+  └─ skills/update-profile/scripts/
       └─ slack_profile.py (show, update, clear-status)
 ```
 
@@ -296,60 +283,60 @@ Pythonスクリプト (各スキルの scripts/ ディレクトリ)
 
 ```bash
 # トークン設定
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py token-set \
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py token-set \
   --token xoxp-your-token
 
 # 設定確認
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py show
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py show
 
 # メッセージ送信
-python plugins/shiiman-slack/skills/message-sender/scripts/slack_post.py post \
+python plugins/shiiman-slack/skills/send-message/scripts/slack_post.py post \
   --channel C01234567 \
   --text "お疲れ様です"
 
 # スレッド返信
-python plugins/shiiman-slack/skills/thread-replier/scripts/slack_thread.py reply \
+python plugins/shiiman-slack/skills/reply-thread/scripts/slack_thread.py reply \
   --channel C01234567 \
   --thread-ts 1234567890.123456 \
   --text "了解しました"
 
 # リアクション追加
-python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py add \
+python plugins/shiiman-slack/skills/add-reaction/scripts/slack_reaction.py add \
   --channel C01234567 \
   --timestamp 1234567890.123456 \
   --emoji thumbsup
 
 # メッセージ編集
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit \
+python plugins/shiiman-slack/skills/check-unread/scripts/slack_message.py edit \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --text "新しいテキスト"
 
 # 未読確認
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py unread \
+python plugins/shiiman-slack/skills/check-unread/scripts/slack_message.py unread \
   --channel C01234567 \
   --max 20 \
   --format json
 
 # メンション確認
-python plugins/shiiman-slack/skills/mention-checker/scripts/slack_message.py mentions \
+python plugins/shiiman-slack/skills/check-mentions/scripts/slack_message.py mentions \
   --max 20 \
   --format table
 
 # チャンネル検索
-python plugins/shiiman-slack/skills/channel-lister/scripts/slack_channel.py search \
+python plugins/shiiman-slack/skills/list-channels/scripts/slack_channel.py search \
   --query "project" \
   --format table
 
 # ユーザー設定（トークンから自動検出）
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py auto-detect
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py auto-detect
 
 # ユーザー設定（手動）
-python plugins/shiiman-slack/skills/user-setup/scripts/slack_config.py set-user \
+python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py set-user \
   --user-id U01234567
 
 # プロフィール更新
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py update \
+python plugins/shiiman-slack/skills/update-profile/scripts/slack_profile.py update \
   --status-text "会議中" \
   --status-emoji ":calendar:"
 ```
