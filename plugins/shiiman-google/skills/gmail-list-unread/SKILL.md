@@ -1,5 +1,5 @@
 ---
-name: gmail-unread
+name: gmail-list-unread
 description: Gmail の未読メッセージ一覧を取得する。「未読メール」「Gmail 未読」「未読一覧」「未読メールを見たい」「未読メッセージ」「メールの未読」「全アカウントの未読」などで起動。
 allowed-tools: [Read, Bash]
 ---
@@ -13,31 +13,31 @@ Gmail の未読メッセージ一覧を取得します。
 ### アクティブプロファイルの未読一覧
 
 ```bash
-python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py unread
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py unread
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py unread --max 50
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py unread --max 50
 ```
 
 ### 全プロファイルの未読一覧
 
 ```bash
-python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py unread-all
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py unread-all
 ```
 
 ### 未読が100件を超えるか確認
 
 ```bash
-python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py unread-all --show-has-more
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py unread-all --show-has-more
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python plugins/shiiman-google/skills/gmail-unread/scripts/google_gmail.py --format json unread
+python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py --format json unread
 ```
 
 ## 出力項目

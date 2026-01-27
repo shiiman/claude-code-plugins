@@ -1,6 +1,6 @@
 ---
 name: calendar-update
-description: Google Calendar の予定を更新する。「予定を変更」「イベント編集」「予定を修正」「日程変更」「時間を変える」「場所を変更」などで起動。`/shiiman-google:calendar-update` を実行して予定を更新する。
+description: Google Calendar の予定を更新する。「予定を変更」「イベント編集」「予定を修正」「日程変更」「時間を変える」「場所を変更」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,28 @@ allowed-tools: [Read, Bash]
 
 Google Calendar の予定を更新します。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- イベントID (必須): 更新する予定のID
 
-`/shiiman-google:calendar-update` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## オプション
 
-## コマンド連携
+- `--calendar <id>`: カレンダーID（デフォルト: primary）
+- `--summary <title>`: 新しいタイトル
+- `--start <datetime>`: 新しい開始日時 (ISO 8601形式)
+- `--end <datetime>`: 新しい終了日時 (ISO 8601形式)
+- `--location <place>`: 新しい場所
+- `--description <text>`: 新しい説明
+- `--color <1-11>`: 新しい色ID
 
-実際の処理は `/shiiman-google:calendar-update` に委譲します（SSOT として扱う）。
+## 実行方法
+
+```bash
+python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py update --event-id <event-id> --summary "新しいタイトル"
+```
+
+### 日時を変更
+
+```bash
+python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py update --event-id <event-id> --start 2025-01-08T15:00:00 --end 2025-01-08T16:00:00
+```

@@ -1,5 +1,5 @@
 ---
-name: gmail-starred
+name: gmail-list-starred
 description: Gmail のスター付きメッセージ一覧を取得する。「スター付きメール」「スター一覧」「Gmail スター付き」「星付きメール」「スターを見たい」などで起動。
 allowed-tools: [Read, Bash]
 ---
@@ -13,19 +13,19 @@ Gmail のスター付きメッセージ一覧を取得します。
 ### アクティブプロファイルのスター付き一覧
 
 ```bash
-python plugins/shiiman-google/skills/gmail-starred/scripts/google_gmail.py starred
+python plugins/shiiman-google/skills/gmail-list-starred/scripts/google_gmail.py starred
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/skills/gmail-starred/scripts/google_gmail.py starred --max 50
+python plugins/shiiman-google/skills/gmail-list-starred/scripts/google_gmail.py starred --max 50
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python plugins/shiiman-google/skills/gmail-starred/scripts/google_gmail.py --format json starred
+python plugins/shiiman-google/skills/gmail-list-starred/scripts/google_gmail.py --format json starred
 ```
 
 ## 出力項目

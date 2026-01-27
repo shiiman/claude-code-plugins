@@ -1,6 +1,6 @@
 ---
 name: drive-share
-description: Google Drive のファイルを共有する。「ファイルを共有」「共有設定」「共有して」「リンク共有」「アクセス権を追加」「閲覧権限を付与」などで起動。`/shiiman-google:drive-share` を実行して共有設定を変更する。
+description: Google Drive のファイルを共有する。「ファイルを共有」「共有設定」「共有して」「リンク共有」「アクセス権を追加」「閲覧権限を付与」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,54 @@ allowed-tools: [Read, Bash]
 
 Google Drive のファイルを共有します。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- ファイルID (必須): 共有するファイルのID
 
-`/shiiman-google:drive-share` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## 実行方法
 
-## コマンド連携
+### 特定ユーザーに共有（閲覧権限）
 
-実際の処理は `/shiiman-google:drive-share` に委譲します（SSOT として扱う）。
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role reader --type user
+```
+
+### 特定ユーザーに共有（編集権限）
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role writer --type user
+```
+
+### リンクを知っている全員に共有
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --type anyone --role reader
+```
+
+### 共有通知メールを送信しない
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --no-notify
+```
+
+## オプション
+
+- `--file-id <id>`: ファイルID（必須）
+- `--email <address>`: 共有先メールアドレス（user/group タイプの場合必須）
+- `--role <role>`: 権限
+  - `reader`: 閲覧のみ
+  - `writer`: 編集可能
+  - `commenter`: コメント可能
+- `--type <type>`: 共有タイプ
+  - `user`: 個人
+  - `group`: グループ
+  - `anyone`: リンクを知っている全員
+- `--no-notify`: 共有通知メールを送信しない
+
+## 関連操作
+
+- 現在の共有設定を確認: `drive-get-permissions` を実行
+
+## 注意事項
+
+- トークン未作成の場合は「Google ログイン」と言って認証を行ってください

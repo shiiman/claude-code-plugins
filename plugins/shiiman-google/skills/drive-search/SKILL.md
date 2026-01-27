@@ -1,6 +1,6 @@
 ---
 name: drive-search
-description: Google Drive を検索する。「Drive を検索」「ドライブ検索」「ファイルを探して」「Drive で検索」「Google Drive 検索」「ファイル名で検索」「条件で検索」などで起動。`/shiiman-google:drive-search` を実行して検索結果を取得する。
+description: Google Drive を検索する。「Drive を検索」「ドライブ検索」「ファイルを探して」「Drive で検索」「Google Drive 検索」「ファイル名で検索」「条件で検索」などで起動。
 allowed-tools: [Read, Bash]
 ---
 
@@ -8,12 +8,43 @@ allowed-tools: [Read, Bash]
 
 Google Drive を検索します。
 
-## ワークフロー
+## 引数
 
-### 1. コマンド実行
+- 検索クエリ (必須): 名前の部分一致など（例: `spec`）
 
-`/shiiman-google:drive-search` を SlashCommand ツールで実行（実装は Commands に委譲）。
+## 実行方法
 
-## コマンド連携
+### アクティブプロファイルで検索
 
-実際の処理は `/shiiman-google:drive-search` に委譲します（SSOT として扱う）。
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --query "name contains '<検索キーワード>'"
+```
+
+### プロファイル指定で検索
+
+```bash
+python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --profile <profile-name> --query "name contains '<検索キーワード>'"
+```
+
+## 検索クエリ例
+
+```bash
+# 名前に "spec" を含む
+--query "name contains 'spec'"
+
+# 名前に "レポート" を含む
+--query "name contains 'レポート'"
+
+# 特定の種類のファイル
+--query "mimeType='application/pdf' and name contains 'spec'"
+
+# 最近更新された
+--query "modifiedTime > '2024-01-01'"
+
+# フォルダ内を検索
+--query "'<folder-id>' in parents and name contains 'spec'"
+```
+
+## 注意事項
+
+- トークン未作成の場合は「Google ログイン」と言って認証を行ってください

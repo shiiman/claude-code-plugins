@@ -29,7 +29,7 @@
     {
       "name": "shiiman-google",
       "description": "Google Workspace 操作（認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail）",
-      "version": "1.4.1",
+      "version": "1.5.0",
       "source": "./plugins/shiiman-google",
       "category": "productivity"
     },
