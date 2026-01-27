@@ -4,7 +4,7 @@ description: Go モジュールを管理する。「依存関係を更新」「g
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
-# Manage Mod
+# Manage-Mod
 
 Go モジュールを管理します。依存関係の更新、危険度評価、Go バージョン管理をサポート。
 

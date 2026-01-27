@@ -4,7 +4,7 @@ description: Go プロジェクトの脆弱性スキャンを実行する。「�
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
-# Scan Vuln
+# Scan-Vuln
 
 Go プロジェクトの脆弱性スキャンを実行します。govulncheck を使用して既知の脆弱性を検出。
 

@@ -6,7 +6,7 @@ context: fork
 agent: shiiman-go:performance-optimizer
 ---
 
-# Analyze Perf
+# Analyze-Perf
 
 Go プロジェクトのパフォーマンスを計測・分析し、改善案を提示します。
 
