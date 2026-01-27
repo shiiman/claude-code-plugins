@@ -1,12 +1,12 @@
 ---
-name: pr-review-check
-description: PRのレビューコメントを確認し、指摘事項に対応する
+name: check-pr-review
+description: PRに付いたレビューコメントを確認し、修正対応を実行する。「レビューコメント確認」「レビュー対応」「PRコメント確認」「レビュー修正」「PR レビュー確認」「指摘対応」「レビューを見せて」などで起動。
 allowed-tools: [Read, Edit, Write, Bash, Glob, Grep]
 ---
 
-# PR Review Check
+# Check PR Review
 
-PRに付いたレビューコメントを確認し、指摘事項に対して修正を実行します。
+PRに付いたレビューコメントを確認し、指摘事項に対して修正を実行するスキル。
 
 ## 引数
 
@@ -21,15 +21,15 @@ PRに付いたレビューコメントを確認し、指摘事項に対して修
 ## 使い方
 
 ```
-/pr-review-check --help
-/pr-review-check                    # 現在のブランチのPRのコメントを確認
-/pr-review-check 25                 # PR #25 のコメントを確認
-/pr-review-check --fix              # 現在のブランチのPRの指摘を修正
-/pr-review-check 25 --fix           # PR #25 の指摘を修正
-/pr-review-check --fix --reply      # 修正して返信も投稿
+/check-pr-review --help
+/check-pr-review                    # 現在のブランチのPRのコメントを確認
+/check-pr-review 25                 # PR #25 のコメントを確認
+/check-pr-review --fix              # 現在のブランチのPRの指摘を修正
+/check-pr-review 25 --fix           # PR #25 の指摘を修正
+/check-pr-review --fix --reply      # 修正して返信も投稿
 ```
 
-## 実行手順
+## ワークフロー
 
 ### 1. PR番号の特定
 
@@ -93,8 +93,10 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{comment_id}/replies \
 --fix オプションで修正を実行できます。
 ```
 
-## 注意事項
+## 重要な注意事項
 
-- `--fix` なしの場合は確認のみで修正は実行しない
-- 修正できない指摘がある場合はその旨を報告
-- 質問（q.）には返信で回答する（--reply 必要）
+- ✅ PR番号が指定されていない場合は現在のブランチのPRを自動検出
+- ✅ `--fix` がない場合は確認のみで修正は実行しない
+- ✅ `--reply` を使用する場合は `--fix` も推奨（修正後に返信するため）
+- ✅ `gh` コマンドを使用してPR情報とレビューコメントを取得・投稿
+- ❌ 修正できない指摘事項がある場合は、その旨を報告

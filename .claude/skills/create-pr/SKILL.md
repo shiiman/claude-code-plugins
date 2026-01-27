@@ -1,5 +1,5 @@
 ---
-name: pr-creator
+name: create-pr
 description: 実装完了後に PR を作成し関連 Issue をクローズする。「PR 作成」「PR を作って」「プルリク作成」「pull request」「PR 出して」「プルリクエスト」「PR を出したい」などで起動。変更内容を分析し適切な PR を生成。
 allowed-tools: [Read, Bash, Glob, Grep]
 ---

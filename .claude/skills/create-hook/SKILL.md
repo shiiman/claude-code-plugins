@@ -1,39 +1,16 @@
+---
+name: create-hook
+description: プラグインに新しいフックを作成する。「フック作成」「新しいフック」「フックを作って」「フック追加」「hook 作成」「フックを追加したい」「新規フック」などで起動。ツール実行前後やセッションイベントで実行されるフックを生成。
+allowed-tools: [Read, Write, Bash, Glob]
+---
+
 # Create Hook
 
 プラグインに新しいフックを作成します。
 
-## 使い方
+## ワークフロー
 
-```bash
-/create-hook
-/create-hook --help
-```
-
-## オプション
-
-| オプション | 説明                       |
-|------------|----------------------------|
-| `--help`   | このコマンドのヘルプを表示 |
-
-## 実行例
-
-```bash
-# 基本的な使用
-/create-hook
-→ 対象プラグイン: shiiman-common
-→ イベント: PreToolUse
-→ マッチャー: Bash
-→ フックタイプ: command
-→ コマンド: echo "Bash コマンドを実行します"
-
-# 結果: plugins/shiiman-common/.claude/settings.json の hooks セクションが更新される
-```
-
-## Claude への指示
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
-
-### ステップ 1: 情報収集
+### 1. 情報収集
 
 ユーザーに以下を聞く:
 
@@ -61,7 +38,7 @@
 5. **実行するコマンド**（type: command の場合）
    - 例: `npm run lint`, `echo "完了"`
 
-### ステップ 2: 検証
+### 2. 検証
 
 - プラグインが存在するか確認
 - イベントが有効か確認
@@ -81,7 +58,7 @@
 | `SessionStart`     | 不要    | セッション開始時               |
 | `SessionEnd`       | 不要    | セッション終了時               |
 
-### ステップ 3: settings.json の hooks セクションを更新
+### 3. settings.json の hooks セクションを更新
 
 `plugins/{plugin-name}/.claude/settings.json` の hooks セクションを更新（ファイルがなければ作成）:
 
@@ -126,11 +103,11 @@
 
 既存の hooks セクションがある場合は、適切なイベントに追加する。
 
-### ステップ 4: プラグイン README を更新
+### 4. プラグイン README を更新
 
 `plugins/{plugin-name}/README.md` のフックセクションにフックを追加。
 
-### ステップ 5: 報告
+### 5. 報告
 
 作成されたファイルと次のステップを表示:
 
@@ -147,3 +124,9 @@
 - /create-skill でスキルを追加
 - /create-subagent でサブエージェントを追加
 ```
+
+## 重要な注意事項
+
+- ✅ PreToolUse / PostToolUse には必ず matcher を指定
+- ✅ settings.json の hooks セクションに設定
+- ❌ matcher が必要なイベントで matcher を省略しない
