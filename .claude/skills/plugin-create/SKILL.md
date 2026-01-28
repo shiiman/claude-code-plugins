@@ -1,5 +1,5 @@
 ---
-name: create-plugin
+name: plugin-create
 description: 新しい Claude Code プラグインを作成する。「プラグイン作成」「新しいプラグイン」「プラグインを作って」「プラグイン追加」「plugin 作成」「プラグインを追加したい」「新規プラグイン」などで起動。必要なディレクトリ構造とファイルを持つプラグインを生成。
 allowed-tools: [Read, Write, Bash, Glob]
 ---

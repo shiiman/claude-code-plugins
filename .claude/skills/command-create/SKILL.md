@@ -1,5 +1,5 @@
 ---
-name: create-command
+name: command-create
 description: プラグインに新しいスラッシュコマンドを作成する。「コマンド作成」「新しいコマンド」「コマンドを作って」「コマンド追加」「command 作成」「コマンドを追加したい」「新規コマンド」などで起動。プラグインにコマンドファイルを生成。
 allowed-tools: [Read, Write, Bash, Glob]
 ---

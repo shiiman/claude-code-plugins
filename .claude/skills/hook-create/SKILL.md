@@ -1,5 +1,5 @@
 ---
-name: create-hook
+name: hook-create
 description: プラグインに新しいフックを作成する。「フック作成」「新しいフック」「フックを作って」「フック追加」「hook 作成」「フックを追加したい」「新規フック」などで起動。ツール実行前後やセッションイベントで実行されるフックを生成。
 allowed-tools: [Read, Write, Bash, Glob]
 ---

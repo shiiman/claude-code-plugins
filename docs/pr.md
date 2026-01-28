@@ -7,7 +7,7 @@
 ## コマンド
 
 ```bash
-/create-pr
+/pr-create
 ```
 
 ## PR タイトルの命名規則
@@ -64,11 +64,11 @@ Closes #1, #2, #3
 ## ワークフロー
 
 ```text
-1. /create-issues で Issue を作成
+1. /issue-create で Issue を作成
    ↓
-2. 実装（/create-plugin, /create-command 等）
+2. 実装（/plugin-create, /command-create 等）
    ↓
-3. /create-pr で PR 作成
+3. /pr-create で PR 作成
    ↓
 4. レビュー & マージ
    ↓
@@ -77,4 +77,4 @@ Closes #1, #2, #3
 
 ## 関連コマンド
 
-- `/create-issues` - 計画から Issue をまとめて作成
+- `/issue-create` - 計画から Issue をまとめて作成

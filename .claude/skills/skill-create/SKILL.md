@@ -1,5 +1,5 @@
 ---
-name: create-skill
+name: skill-create
 description: プラグインに新しいスキルを作成する。「スキル作成」「新しいスキル」「スキルを作って」「スキル追加」「skill 作成」「スキルを追加したい」「新規スキル」などで起動。自然言語トリガーで起動するスキルを生成。
 allowed-tools: [Read, Write, Bash, Glob]
 ---
@@ -57,7 +57,7 @@ allowed-tools: [Read, Write, Bash, Glob]
 
 ```markdown
 ---
-name: {skill-name}
+name: skill-create
 description: {トリガーフレーズを7つ含む説明}
 allowed-tools: [{ツール}]
 ---
