@@ -57,7 +57,7 @@ allowed-tools: [Read, Write, Bash, Glob]
 
 ```markdown
 ---
-name: skill-create
+name: {skill-name}
 description: {トリガーフレーズを7つ含む説明}
 allowed-tools: [{ツール}]
 ---
