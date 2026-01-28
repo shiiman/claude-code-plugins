@@ -22,16 +22,16 @@ plugins/{plugin-name}/
 
 ## Available Commands
 
-- `/create-plugin` - Create a new plugin
-- `/create-command` - Add a command to a plugin
-- `/create-skill` - Add a skill to a plugin
-- `/create-subagent` - Add a subagent to a plugin
-- `/create-hook` - Add a hook to a plugin
+- `/plugin-create` - Create a new plugin
+- `/command-create` - Add a command to a plugin
+- `/skill-create` - Add a skill to a plugin
+- `/subagent-create` - Add a subagent to a plugin
+- `/hook-create` - Add a hook to a plugin
 
 ## Available Skills
 
-- `issue-creator` - Create multiple issues from a plan (trigger: "Issue 作成", "Issue を作って")
-- `pr-creator` - Create a PR and close related issues (trigger: "PR 作成", "PR を作って")
+- `issue-create` - Create multiple issues from a plan (trigger: "Issue 作成", "Issue を作って")
+- `pr-create` - Create a PR and close related issues (trigger: "PR 作成", "PR を作って")
 
 ## Documentation
 

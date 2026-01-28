@@ -1,5 +1,5 @@
 ---
-name: check-pr-review
+name: pr-review-check
 description: PRに付いたレビューコメントを確認し、修正対応を実行する。「レビューコメント確認」「レビュー対応」「PRコメント確認」「レビュー修正」「PR レビュー確認」「指摘対応」「レビューを見せて」などで起動。
 allowed-tools: [Read, Edit, Write, Bash, Glob, Grep]
 ---

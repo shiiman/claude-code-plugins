@@ -7,7 +7,7 @@
 ## コマンド
 
 ```bash
-/create-issues
+/issue-create
 ```
 
 ## Issue タイプ
@@ -97,13 +97,13 @@ Bash コマンド実行前にセキュリティチェックを行う。" \
 ```text
 1. 計画を立てる（plan mode）
    ↓
-2. /create-issues で Issue をまとめて作成
+2. /issue-create で Issue をまとめて作成
    ↓
 3. 各 Issue の実装
    ↓
-4. /create-pr で PR 作成（Issue をクローズ）
+4. /pr-create で PR 作成（Issue をクローズ）
 ```
 
 ## 関連コマンド
 
-- `/create-pr` - PR を作成して Issue をクローズ
+- `/pr-create` - PR を作成して Issue をクローズ
