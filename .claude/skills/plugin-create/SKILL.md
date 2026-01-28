@@ -52,8 +52,6 @@ allowed-tools: [Read, Write, Bash, Glob]
 plugins/{plugin-name}/
 ├── .claude-plugin/
 │   └── plugin.json
-├── commands/
-│   └── .gitkeep
 ├── skills/
 │   └── .gitkeep
 ├── agents/
@@ -95,10 +93,6 @@ plugins/{plugin-name}/
 /plugin install {plugin-name}@shiiman-claude-code-plugins
 ```
 
-## コマンド
-
-（まだありません）
-
 ## スキル
 
 （まだありません）
@@ -133,7 +127,6 @@ MIT
 ファイル:
 - plugins/{plugin-name}/.claude-plugin/plugin.json
 - plugins/{plugin-name}/README.md
-- plugins/{plugin-name}/commands/.gitkeep
 - plugins/{plugin-name}/skills/.gitkeep
 - plugins/{plugin-name}/agents/.gitkeep
 - plugins/{plugin-name}/hooks/.gitkeep
@@ -142,7 +135,6 @@ MIT
 - .claude-plugin/marketplace.json
 
 次のステップ:
-- /create-command でコマンドを追加
 - /create-skill でスキルを追加
 - /create-subagent でサブエージェントを追加
 - /create-hook でフックを追加

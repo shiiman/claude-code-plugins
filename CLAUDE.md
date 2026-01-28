@@ -13,7 +13,6 @@ GitHub: https://github.com/shiiman/claude-code-plugins
 ```text
 plugins/{plugin-name}/
 ├── .claude-plugin/plugin.json  # Plugin metadata
-├── commands/                   # Slash commands (.md)
 ├── skills/                     # Skill definitions
 ├── agents/                     # Agent/Subagent definitions
 ├── hooks/                      # Hook configurations
@@ -23,7 +22,6 @@ plugins/{plugin-name}/
 ## Available Commands
 
 - `/plugin-create` - Create a new plugin
-- `/command-create` - Add a command to a plugin
 - `/skill-create` - Add a skill to a plugin
 - `/subagent-create` - Add a subagent to a plugin
 - `/hook-create` - Add a hook to a plugin
@@ -36,7 +34,6 @@ plugins/{plugin-name}/
 ## Documentation
 
 - docs/plugin.md - Plugin creation guide
-- docs/command.md - Command creation guide
 - docs/skill.md - Skill creation guide
 - docs/subagent.md - Subagent creation guide
 - docs/hook.md - Hook creation guide
@@ -79,7 +76,7 @@ Follow [Semantic Versioning](https://semver.org/) (SemVer) for plugin versions:
 
 - Update `plugin.json` version when adding/modifying plugin features
 - Update `marketplace.json` version to match `plugin.json` version
-- New command, skill, subagent, or hook → MINOR bump
+- New skill, subagent, or hook → MINOR bump
 - Bug fix or documentation update → PATCH bump
 - Breaking API/behavior change → MAJOR bump
 

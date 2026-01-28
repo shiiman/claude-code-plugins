@@ -66,7 +66,7 @@ Closes #1, #2, #3
 ```text
 1. /issue-create で Issue を作成
    ↓
-2. 実装（/plugin-create, /command-create 等）
+2. 実装（/plugin-create, /skill-create 等）
    ↓
 3. /pr-create で PR 作成
    ↓

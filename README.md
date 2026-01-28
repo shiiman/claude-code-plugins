@@ -50,7 +50,7 @@
 | プラグイン | 説明 | インストールコマンド |
 | ---------- | ---- | -------------------- |
 | [`shiiman-plugin`](plugins/shiiman-plugin/) | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供 | `/plugin install shiiman-plugin@shiiman-claude-code-plugins` |
-| [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - コマンド/スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
+| [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
 | [`shiiman-git`](plugins/shiiman-git/) | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
 | [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail 機能を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
@@ -79,7 +79,6 @@
 ├── .claude-plugin/
 │   └── marketplace.json    # マーケットプレイス定義
 ├── .claude/
-│   ├── commands/           # リポジトリ用コマンド
 │   └── skills/             # リポジトリ用スキル
 ├── plugins/                # プラグインディレクトリ
 ├── docs/                   # ドキュメント
@@ -91,7 +90,6 @@
 | コマンド | 説明 |
 |----------|------|
 | `/plugin-create` | 新しいプラグインを作成 |
-| `/command-create` | プラグインにコマンドを追加 |
 | `/skill-create` | プラグインにスキルを追加 |
 | `/subagent-create` | プラグインにサブエージェントを追加 |
 | `/hook-create` | プラグインにフックを追加 |
@@ -103,7 +101,6 @@
 | スキル             | トリガー例                                   | 説明                               |
 |--------------------|----------------------------------------------|------------------------------------|
 | plugin-create      | 「プラグイン作成」「新しいプラグイン」       | 新しいプラグインを作成             |
-| command-create     | 「コマンド作成」「新しいコマンド」           | プラグインにコマンドを追加         |
 | skill-create       | 「スキル作成」「新しいスキル」               | プラグインにスキルを追加           |
 | subagent-create    | 「サブエージェント作成」「エージェント作成」 | プラグインにサブエージェントを追加 |
 | hook-create        | 「フック作成」「新しいフック」               | プラグインにフックを追加           |
@@ -113,7 +110,6 @@
 ## ドキュメント
 
 - [docs/plugin.md](docs/plugin.md) - プラグイン作成ガイド
-- [docs/command.md](docs/command.md) - コマンド作成ガイド
 - [docs/skill.md](docs/skill.md) - スキル作成ガイド
 - [docs/subagent.md](docs/subagent.md) - サブエージェント作成ガイド
 - [docs/hook.md](docs/hook.md) - フック作成ガイド
@@ -126,7 +122,6 @@
 plugins/my-plugin/
 ├── .claude-plugin/
 │   └── plugin.json         # プラグインメタデータ
-├── commands/               # スラッシュコマンド
 ├── skills/                 # スキル定義
 ├── agents/                 # サブエージェント定義
 ├── hooks/                  # フック設定

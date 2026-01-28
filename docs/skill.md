@@ -249,35 +249,7 @@ Skills はコンテキストを効率的に管理するために 3 段階のロ�
 
 Skills には主に 2 つの実装パターンがあります。
 
-### パターン 1: SSOT（Single Source of Truth）パターン
-
-**特徴**: 既存の Slash Commands に処理を委譲し、Skill は自然言語トリガーの役割のみを担う。
-
-**構造**:
-
-```markdown
-## 実行内容
-
-1. `commands/xxx.md` を Read ツールで参照（SSOT として扱う）
-2. `/xxx` を SlashCommand ツールで実行（実装は Commands に委譲）
-
-## ドキュメント参照
-
-- `commands/xxx.md` - 機能の詳細
-- `/xxx` - 機能の実装
-
-## コマンド連携
-
-実際の処理は `/xxx` に委譲します（SSOT として扱う）
-```
-
-**利点**:
-
-- 実装の重複を排除
-- Commands の更新が自動的に Skills に反映
-- Progressive Disclosure により最小限のコンテキスト使用
-
-### パターン 2: 独自実装パターン
+### 独自実装パターン
 
 **特徴**: Skill が独自のロジックを持ち、独立して動作する。
 
@@ -316,24 +288,6 @@ my-skill/
 - Commands に依存しない完全な独立性
 - 複雑なワークフローを内包可能
 - カスタムスクリプトやテンプレートを使用可能
-
-### パターン選択のガイドライン
-
-| 条件                           | 推奨パターン     |
-| ------------------------------ | ---------------- |
-| 既存の Commands がある         | SSOT パターン    |
-| Commands に依存したくない      | 独自実装パターン |
-| シンプルな処理委譲             | SSOT パターン    |
-| 複雑な独自ロジック             | 独自実装パターン |
-| テンプレートやスクリプトが必要 | 独自実装パターン |
-| 実装の重複を避けたい           | SSOT パターン    |
-
-### スキルのみで実装する場合
-
-以下のような機能は、コマンドを作成せずスキルのみで実装することを検討してください：
-
-- **シンプルな CLI ラッパー**: 既存 CLI コマンドを呼ぶだけの機能
-- **自然言語トリガーのみが必要**: 明示的なコマンド呼び出しが不要な機能
 
 ## ベストプラクティス
 
@@ -551,33 +505,6 @@ Claude が必要と判断できるよう、分かりやすいファイル名を�
 - **ディレクトリ名**: kebab-case、name フィールドと一致させる
 - **プラグイン名をプレフィックスに含めない**: `lister` ✅ / `plugin-lister` ❌
 
-### コマンドとスキルの名前の対応
-
-SSOT パターンでコマンドとスキルを連携させる場合、名前に一貫性を持たせます：
-
-```bash
-# ✅ 良い例: コマンドとスキルの名前が対応
-commands/list.md     → skills/lister/SKILL.md
-commands/show.md     → skills/shower/SKILL.md
-commands/install.md  → skills/installer/SKILL.md
-
-# ❌ 悪い例: 名前が不一致で分かりづらい
-commands/show.md     → skills/viewer/SKILL.md    # show と viewer が不一致
-commands/list.md     → skills/display/SKILL.md   # list と display が不一致
-```
-
-**命名パターン**:
-
-| コマンド | スキル（名詞形） |
-|----------|------------------|
-| list | lister |
-| show | shower |
-| install | installer |
-| uninstall | uninstaller |
-| enable | enabler |
-| disable | disabler |
-| update | updater |
-
 ### 命名パターン
 
 ```bash
@@ -622,7 +549,6 @@ plugins/{plugin-name}/
 ├── skills/
 │   └── {skill-name}/
 │       └── SKILL.md
-├── commands/
 └── agents/
 ```
 

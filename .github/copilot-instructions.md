@@ -31,7 +31,6 @@ GitHub Copilot が PR レビュー時に参照するガイドラインです。
 各プラグインは以下の構造を厳守：
 
 - `.claude-plugin/plugin.json` - メタデータ（name, version, description, author, homepage）
-- `commands/` - スラッシュコマンド（空ディレクトリ可）
 - `skills/` - スキル定義（空ディレクトリ可）
 - `agents/` - エージェント定義（空ディレクトリ可）
 - `hooks/` - Claude Code Hooks（空ディレクトリ可）
