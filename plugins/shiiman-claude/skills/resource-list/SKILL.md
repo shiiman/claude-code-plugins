@@ -1,6 +1,6 @@
 ---
 name: resource-list
-description: プロジェクトの Claude Code リソース一覧を表示する。「リソース一覧」「コマンド一覧」「スキル一覧」「エージェント一覧」「何があるか確認」「作成したもの一覧」「Claude リソース」などで起動。
+description: プロジェクトの Claude Code リソース一覧を表示する。「リソース一覧」「スキル一覧」「エージェント一覧」「何があるか確認」「作成したもの一覧」「Claude リソース」などで起動。
 allowed-tools: [Read, Glob]
 ---
 
@@ -11,7 +11,6 @@ allowed-tools: [Read, Glob]
 ## 引数
 
 - `$ARGUMENTS`:
-  - `--commands`: コマンドのみ表示
   - `--skills`: スキルのみ表示
   - `--agents`: エージェントのみ表示
   - `--hooks`: フックのみ表示
@@ -25,7 +24,6 @@ allowed-tools: [Read, Glob]
 ### 1. オプションに応じて表示対象を決定
 
 ユーザーの発話から適切なオプションを判断:
-- 「コマンド一覧」→ `--commands`
 - 「スキル一覧」→ `--skills`
 - 「エージェント一覧」→ `--agents`
 - 「フック一覧」→ `--hooks`
@@ -33,14 +31,13 @@ allowed-tools: [Read, Glob]
 
 ### 2. 以下のリソースを収集
 
-- **コマンド**: `.claude/commands/` 配下の `.md` ファイル
 - **スキル**: `.claude/skills/` 配下のディレクトリ（`SKILL.md` を含む）
 - **エージェント**: `.claude/agents/` 配下の `.md` ファイル
 - **フック**: `.claude/settings.json` と `.claude/settings.local.json` の `hooks` セクション
 
 ### 3. 各リソースの説明を取得
 
-- **コマンド/エージェント**: ファイル冒頭の `# タイトル` の次の段落
+- **エージェント**: ファイル冒頭の `# タイトル` の次の段落
 - **スキル**: `SKILL.md` の `description` フィールドまたは冒頭の説明
 
 ### 4. 整形して表示
@@ -49,13 +46,6 @@ allowed-tools: [Read, Glob]
 
 ```markdown
 ## プロジェクトリソース一覧
-
-### コマンド (2)
-
-| コマンド | 説明 |
-|----------|------|
-| /my-command | カスタムコマンドの説明 |
-| /deploy | デプロイコマンドの説明 |
 
 ### スキル (1)
 

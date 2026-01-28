@@ -6,7 +6,6 @@
 plugins/{plugin-name}/
 ├── .claude-plugin/
 │   └── plugin.json       # 必須: プラグインメタデータ
-├── commands/             # スラッシュコマンド (.md)
 ├── skills/               # スキル定義
 ├── agents/               # エージェント定義
 ├── hooks/                # フック設定

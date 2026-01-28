@@ -1,6 +1,6 @@
 ---
 name: show
-description: 指定したプラグインの詳細情報を表示する。「プラグインの詳細」「〇〇プラグインについて教えて」「プラグインの情報」「〇〇の機能は？」「プラグインの中身を見せて」「〇〇プラグインの説明」「プラグインのコマンド一覧」などで起動。
+description: 指定したプラグインの詳細情報を表示する。「プラグインの詳細」「〇〇プラグインについて教えて」「プラグインの情報」「〇〇の機能は？」「プラグインの中身を見せて」「〇〇プラグインの説明」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
@@ -28,7 +28,6 @@ allowed-tools: [Read, Bash, Glob, Grep]
 2. 指定されたプラグインの情報を収集:
    - `.claude-plugin/marketplace.json` から最新バージョンを取得
    - `plugins/{plugin-name}/.claude-plugin/plugin.json` から現在バージョンを取得
-   - `plugins/{plugin-name}/commands/` 配下のコマンド一覧を取得
    - `plugins/{plugin-name}/skills/` 配下のスキル一覧を取得
    - `plugins/{plugin-name}/agents/` 配下のエージェント一覧を取得
    - `plugins/{plugin-name}/hooks/` 配下のフック一覧を取得
@@ -50,13 +49,6 @@ allowed-tools: [Read, Bash, Glob, Grep]
 | 最新バージョン | 1.0.0                |
 | 現在バージョン | 1.0.0                |
 | 状態           | ✅ インストール済み  |
-
-### コマンド
-
-| コマンド               | 説明            |
-|------------------------|-----------------|
-| `/shiiman-xxx:command1` | コマンド1の説明 |
-| `/shiiman-xxx:command2` | コマンド2の説明 |
 
 ### スキル
 
@@ -80,6 +72,6 @@ allowed-tools: [Read, Bash, Glob, Grep]
 ### 重要な注意事項
 
 - ✅ marketplace.json から最新バージョンを取得
-- ✅ 各ディレクトリを走査してコマンド/スキル/エージェント/フックを列挙
+- ✅ 各ディレクトリを走査してスキル/エージェント/フックを列挙
 - ✅ README.md が存在する場合は内容を表示
 - ❌ 存在しないプラグインを指定された場合はエラーメッセージを表示
