@@ -129,13 +129,12 @@ git push -u origin feature/{issue番号}
 ### ステップ 3: MCP ワークスペース初期化
 
 ```
-mcp__multi-agent-mcp__init_workspace を呼び出し
+mcp__multi-agent__init_workspace を呼び出し
 ```
 
 **パラメータ**:
 
-- `project_path`: 現在のプロジェクトパス
-- `template`: "development"
+- `workspace_path`: プロジェクト名（例: "my-project"）
 
 ### ステップ 4: タスク分割
 
@@ -154,31 +153,31 @@ mcp__multi-agent-mcp__init_workspace を呼び出し
 ### ステップ 5: Admin エージェント作成
 
 ```
-mcp__multi-agent-mcp__create_agent を呼び出し
+mcp__multi-agent__create_agent を呼び出し
 ```
 
 **パラメータ**:
 
 - `role`: "admin"
-- `name`: "admin"
+- `working_dir`: プロジェクトのルートパス
 
 ### ステップ 6: Worker エージェント作成・タスク配布
 
 各 Worker に対して:
 
 ```
-mcp__multi-agent-mcp__create_agent を呼び出し
+mcp__multi-agent__create_agent を呼び出し
 ```
 
 **パラメータ**:
 
 - `role`: "worker"
-- `name`: "worker-{番号}"
+- `working_dir`: Worker 用の worktree パス
 
 **タスク送信**:
 
 ```
-mcp__multi-agent-mcp__send_command を呼び出し
+mcp__multi-agent__send_command を呼び出し
 ```
 
 **Worker への指示内容**:
@@ -204,7 +203,7 @@ feature/{issue番号} から feature/{issue番号}-{task番号} を作成
 定期的にステータスを確認:
 
 ```
-mcp__multi-agent-mcp__get_dashboard を呼び出し
+mcp__multi-agent__get_dashboard を呼び出し
 ```
 
 **監視項目**:
@@ -234,7 +233,7 @@ git pull origin feature/{issue番号}
 ### ステップ 9: クリーンアップ
 
 ```
-mcp__multi-agent-mcp__cleanup_workspace を呼び出し
+mcp__multi-agent__cleanup_workspace を呼び出し
 ```
 
 ### ステップ 10: セキュリティチェック＆自己レビュー
@@ -361,7 +360,7 @@ PR がマージされると Issue #{issue番号} は自動的にクローズさ�
 
 ## 重要な注意事項
 
-- ✅ MCP ツールは `mcp__multi-agent-mcp__*` 形式で呼び出し
+- ✅ MCP ツールは `mcp__multi-agent__*` 形式で呼び出し
 - ✅ Worker 数は最大 5
 - ✅ 各 Worker は git worktree で独立したディレクトリで作業
 - ✅ 統合後に必ず自己レビュー
