@@ -17,7 +17,9 @@
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
       "Bash(gh workflow:*)",
-      "Bash(gh run:*)"
+      "Bash(gh run:*)",
+      "Bash(git gtr:*)",
+      "Bash(git worktree:*)"
     ],
     "deny": [
       "Bash(git push --force:*)",
