@@ -150,6 +150,14 @@ mcp__multi-agent__init_workspace を呼び出し
 - 1つのタスクは 1 Worker が担当
 - タスク間の依存関係を最小化
 
+**具体的な分割例**:
+
+- 機能実装: `src/feature-a.ts` の新規実装
+- テスト追加: `tests/feature-b.test.ts` にユニットテストを追加
+- リファクタリング: 既存モジュールの関数分割・責務の整理
+- ドキュメント: `README.md` や `docs/` 配下の更新
+- API 実装と API テストを別タスクに分けて別 Worker に割り当て
+
 ### ステップ 5: Admin エージェント作成
 
 ```
