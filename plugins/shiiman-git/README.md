@@ -34,6 +34,8 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 | list-prs | 「PR 一覧」 | オープン PR を表示 |
 | approve-pr | 「PR 承認」 | PR を approve |
 | debug-actions | 「Actions エラー」 | GitHub Actions のエラーを調査 |
+| worktree | 「worktree 作成」「gtr list」 | gtr で worktree を管理 |
+| gtrconfig-setup | 「gtrconfig 設定」 | .gtrconfig を生成 |
 
 ### エージェント
 
@@ -65,6 +67,12 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 - GitHub CLI (`gh`) がインストール済み
 - `gh auth login` で認証済み
 
+### worktree スキル
+
+- gtr (git-worktree-runner) がインストール済み
+  - インストール: https://github.com/coderabbitai/git-worktree-runner
+  - worktree スキルは gtr 固有の機能（`--editor`, `--ai`, `.gtrconfig` など）を利用するため、`git worktree` 単体では完全に代替できません
+
 ## 権限設定
 
 このプラグインは以下のコマンドを許可・拒否します：
@@ -74,6 +82,7 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 - `git status`, `git log`, `git diff`, `git branch`, `git show`
 - `git fetch`, `git pull`, `git add`, `git commit`
 - `git checkout`, `git switch`
+- `git gtr`, `git worktree` (worktree 管理)
 - `gh issue`, `gh pr`, `gh repo view`, `gh api`
 - `gh workflow`, `gh run`
 
