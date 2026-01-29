@@ -21,9 +21,16 @@
     },
     {
       "name": "shiiman-git",
-      "description": "Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
-      "version": "1.7.0",
+      "description": "Git/GitHub 管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
+      "version": "1.8.0",
       "source": "./plugins/shiiman-git",
+      "category": "developer-tools"
+    },
+    {
+      "name": "shiiman-workflow",
+      "description": "開発ワークフロー自動化 - シングル/マルチエージェントでの Issue 管理付き・なしのフローを提供",
+      "version": "1.0.0",
+      "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },
     {

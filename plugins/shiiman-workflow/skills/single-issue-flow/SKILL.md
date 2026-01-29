@@ -1,13 +1,13 @@
 ---
-name: dev-flow
-description: Issue 作成から PR 作成まで自動実行する統合開発ワークフロー。「開発フロー」「dev-flow」「Issue から PR まで」「自動開発」「ワークフロー実行」「開発を自動化」「フロー実行」などで起動。計画書に基づいた自動実装を実行。
+name: single-issue-flow
+description: Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。「シングル Issue フロー」「single-issue-flow」「Issue から PR まで」「Issue ベース開発」「シングルフロー Issue」「1人で Issue 開発」「Issue 付きフロー」などで起動。計画書に基づいた自動実装を実行。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 ---
 
-# Run Dev Flow
+# Single Issue Flow
 
-Issue 作成から PR 作成まで自動実行する統合開発ワークフロー。
+Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。
 
 ## 引数
 
@@ -77,8 +77,8 @@ ls -t ~/.claude/plans/*.md | head -1
 計画書が見つかりませんでした。
 
 ### 代替手段
-- `run-dev-flow --plan` で新しい計画を作成
-- `run-dev-flow タスク説明` で直接実行
+- `single-issue-flow --plan` で新しい計画を作成
+- `single-issue-flow タスク説明` で直接実行
 ```
 
 計画書が見つかったら、ステップ 1 から実行。
@@ -90,7 +90,7 @@ ls -t ~/.claude/plans/*.md | head -1
 1. ユーザーに実装したい内容を確認
 2. `EnterPlanMode` を実行して plan mode に入る
 3. 計画書を作成（`.claude/plans/` に保存される）
-4. ユーザーが計画を承認したら、自動的に dev-flow の実行フェーズに進む
+4. ユーザーが計画を承認したら、自動的に single-issue-flow の実行フェーズに進む
 
 ## モード 3: 直接実行モード（タスク説明あり）
 

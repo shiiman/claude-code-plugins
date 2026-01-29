@@ -1,0 +1,9 @@
+{
+  "name": "shiiman-workflow",
+  "version": "1.0.0",
+  "description": "開発ワークフロー自動化 - シングル/マルチエージェントでの Issue 管理付き・なしのフローを提供",
+  "author": {
+    "name": "shiiman"
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
+}

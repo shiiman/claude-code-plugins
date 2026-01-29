@@ -22,6 +22,7 @@
     "shiiman-plugin@shiiman-claude-code-plugins": true,
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
+    "shiiman-workflow@shiiman-claude-code-plugins": true,
     "shiiman-google@shiiman-claude-code-plugins": true,
     "shiiman-go@shiiman-claude-code-plugins": true,
     "shiiman-docker@shiiman-claude-code-plugins": true,
@@ -52,6 +53,7 @@
 | [`shiiman-plugin`](plugins/shiiman-plugin/) | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供 | `/plugin install shiiman-plugin@shiiman-claude-code-plugins` |
 | [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
 | [`shiiman-git`](plugins/shiiman-git/) | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
+| [`shiiman-workflow`](plugins/shiiman-workflow/) | 開発ワークフロー自動化 - シングル/マルチエージェントでの Issue 管理付き・なしのフローを提供 | `/plugin install shiiman-workflow@shiiman-claude-code-plugins` |
 | [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail 機能を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
 | [`shiiman-docker`](plugins/shiiman-docker/) | Docker/Docker Compose 管理 - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援 | `/plugin install shiiman-docker@shiiman-claude-code-plugins` |
@@ -65,6 +67,7 @@
 /plugin install shiiman-plugin@shiiman-claude-code-plugins
 /plugin install shiiman-claude@shiiman-claude-code-plugins
 /plugin install shiiman-git@shiiman-claude-code-plugins
+/plugin install shiiman-workflow@shiiman-claude-code-plugins
 /plugin install shiiman-google@shiiman-claude-code-plugins
 /plugin install shiiman-go@shiiman-claude-code-plugins
 /plugin install shiiman-docker@shiiman-claude-code-plugins
