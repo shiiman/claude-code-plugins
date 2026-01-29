@@ -1,6 +1,6 @@
 ---
 name: worktree
-description: git worktree を gtr で管理する。「worktree 作成」「ワークツリー一覧」「worktree 削除」「worktree を開く」「gtr new」「gtr list」「gtr rm」などで起動。並列開発のための worktree 操作を効率化。
+description: gtr で worktree を管理。「worktree 作成」「gtr list」「gtr rm」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
@@ -20,7 +20,7 @@ gtr (git-worktree-runner) を使用して git worktree を管理するスキル�
 最初に gtr がインストールされているか確認します。
 
 ```bash
-which git-gtr || git gtr --version
+git gtr --version
 ```
 
 **未インストール時の対応**:

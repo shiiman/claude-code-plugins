@@ -1,6 +1,6 @@
 ---
 name: gtrconfig-setup
-description: .gtrconfig ファイルを生成してプロジェクトの worktree 設定を構成する。「gtrconfig 設定」「gtr 設定」「worktree 設定」「gtrconfig セットアップ」「gtr をセットアップ」「.gtrconfig 作成」「コピールール設定」などで起動。プロジェクトに最適化された worktree 設定を自動生成。
+description: .gtrconfig を生成。「gtrconfig 設定」「gtr 設定」「.gtrconfig 作成」などで起動。
 allowed-tools: [Read, Write, Bash, Glob, AskUserQuestion]
 ---
 

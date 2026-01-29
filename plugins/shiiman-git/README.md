@@ -67,11 +67,11 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 - GitHub CLI (`gh`) がインストール済み
 - `gh auth login` で認証済み
 
-### worktree スキル（オプション）
+### worktree スキル
 
-- gtr (git-worktree-runner) がインストール済み（推奨）
+- gtr (git-worktree-runner) がインストール済み
   - インストール: https://github.com/coderabbitai/git-worktree-runner
-  - 未インストールでも `git worktree` コマンドで代替可能
+  - worktree スキルは gtr 固有の機能（`--editor`, `--ai`, `.gtrconfig` など）を利用するため、`git worktree` 単体では完全に代替できません
 
 ## 権限設定
 
