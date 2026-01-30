@@ -28,25 +28,42 @@ claude mcp list | grep multi-agent-mcp
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
-- `--workers N`: Worker 数を指定（デフォルト: 3、最大: 5）
+- `--workers N`: Worker 数を指定（デフォルト: 3、最大: 6）
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
 ## アーキテクチャ
 
 ```
-Owner（このセッション）
-    ↓ 全体統括・タスク分解
-Admin（1）─ タスク分配・進捗監視・ダッシュボード更新
-    ↓
-┌───┬───┬───┬───┬───┐
-W1  W2  W3  W4  W5   ← Worker（並列実行）
-└───┴───┴───┴───┴───┘
-    ↓ 各Workerが実装完了後、feature/{slug}へマージ
-         feature/{slug}（統合ブランチ）
-              ↓ 全Task完了後
-         コミットメッセージ出力
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        tmux セッション (main)                            │
+├────────────┬────────────┬────────┬────────┬────────┬────────┬────────┤
+│   pane 0   │   pane 1   │ pane 2 │ pane 3 │ pane 4 │ pane 5 │ pane 6 │
+│   Owner    │   Admin    │   W1   │   W2   │   W3   │   W4   │   W5   │
+│            │            │        │        │        │        │   ...  │
+│ (VSCode    │ (タスク    │ (実装) │ (実装) │ (実装) │ (実装) │ (実装) │
+│  との橋渡し)│  分割・管理)│        │        │        │        │        │
+└────────────┴────────────┴────────┴────────┴────────┴────────┴────────┘
+      ↑                ↑                  ↑
+      │                │                  │
+このセッション ────→ 計画書送信 ────→ タスク送信
+      │                │                  │
+      └────────────────┼──────────────────┘
+                       │
+                  report_task_completion
+                  (Worker → Admin 報告)
 ```
+
+**階層構造**:
+
+- **Owner** (1体): 全体指揮、VSCode 拡張との橋渡し
+- **Admin** (1体): タスク分割、Worker 管理、進捗管理、ダッシュボード更新
+- **Worker** (最大6体): 割り当てられたタスクの実行、worktree で作業
+
+**ロールベースアクセス制御**:
+
+- `update_task_status`, `assign_task_to_agent` → Admin 限定
+- `report_task_completion` → Worker 限定（Admin に報告）
 
 ## 3つの実行モード
 
@@ -55,7 +72,7 @@ W1  W2  W3  W4  W5   ← Worker（並列実行）
 引数なしで実行。既存の承認済み計画書から直接実行。
 
 ```
-[既存計画書] → ブランチ作成 → MCP初期化 → 並列実行 → 統合 → コミットメッセージ出力
+[既存計画書] → ブランチ作成 → MCP初期化 → ターミナル起動 → エージェント作成 → 並列実行 → 統合 → コミットメッセージ出力
 ```
 
 ### モード 2: 計画書作成モード（--plan）
@@ -71,13 +88,23 @@ plan mode を使って計画書を作成・承認してから実行。
 計画書を作らず、タスク説明から直接実行。
 
 ```
-[タスク説明] → ブランチ作成 → MCP初期化 → 並列実行 → 統合 → コミットメッセージ出力
+[タスク説明] → ブランチ作成 → MCP初期化 → ターミナル起動 → エージェント作成 → 並列実行 → 統合 → コミットメッセージ出力
 ```
 
 ## 実行フロー
 
 ```
-ブランチ作成 → MCP初期化 → タスク分割・登録 → Worktree作成 → Worker並列実行 → 監視 → 統合 → 自己レビュー → [確認] → コミットメッセージ出力
+【Phase 1: セットアップ】
+ブランチ作成 → MCP初期化 → ターミナル起動+tmux作成 → Owner作成 → Admin作成
+
+【Phase 2: タスク分割】
+Admin に計画書送信 → Admin がタスク分割・Dashboard 登録
+
+【Phase 3: Worker 起動・実行】
+Worktree作成 → Worker作成 → タスク送信 → Worker実行 → Admin に報告
+
+【Phase 4: 統合・完了】
+統合 → クリーンアップ → 自己レビュー → [確認] → コミットメッセージ出力
 ```
 
 ## モード判定
@@ -86,7 +113,9 @@ plan mode を使って計画書を作成・承認してから実行。
 2. **引数が1つ以上あり、`--plan` / `--help` / `--workers` 以外の文字列の場合** → モード 3（直接実行モード）
 3. **引数なしの場合** → モード 1（計画書実行モード）
 
-## 共通ステップ（全モード共通）
+---
+
+## Phase 1: セットアップ
 
 ### ステップ 1: ブランチ作成
 
@@ -123,31 +152,87 @@ mcp__multi-agent-mcp__init_workspace を呼び出し
 
 - `workspace_path`: プロジェクト名（例: "my-project"）
 
-### ステップ 3: タスク分割
+### ステップ 3: ターミナル起動 + tmux セッション作成
 
-計画書/タスク説明から並列実行可能なサブタスクを抽出:
+```
+mcp__multi-agent-mcp__init_tmux_workspace を呼び出し
+```
 
+**パラメータ**:
+
+- `working_dir`: プロジェクトのルートパス
+- `open_terminal`: true（デフォルト）
+
+**結果**: ターミナルアプリ（Ghostty/iTerm2/Terminal.app）が開き、tmux セッション + ペインレイアウトが構築される。
+
+### ステップ 4: Owner エージェント作成
+
+```
+mcp__multi-agent-mcp__create_agent を呼び出し
+```
+
+**パラメータ**:
+
+- `role`: "owner"
+- `working_dir`: プロジェクトのルートパス
+
+**注意**: init_tmux_workspace で作成済みのセッション内の pane 0 に配置される。
+
+### ステップ 5: Admin エージェント作成
+
+```
+mcp__multi-agent-mcp__create_agent を呼び出し
+```
+
+**パラメータ**:
+
+- `role`: "admin"
+- `working_dir`: プロジェクトのルートパス
+
+**注意**: 同じセッション内の pane 1 に配置される。
+
+---
+
+## Phase 2: タスク分割（Admin の仕事）
+
+### ステップ 6: Admin に計画書を送信
+
+```
+mcp__multi-agent-mcp__send_task を呼び出し
+```
+
+**パラメータ**:
+
+- `agent_id`: Admin の ID
+- `task_content`: 計画書の内容（タスク分割を依頼）
+- `session_id`: ブランチの slug（例: "multi-file-refactor"）
+
+**Admin への指示内容（task_content の例）**:
+
+```markdown
+以下の計画書に基づいてタスクを分割し、Worker に割り当ててください。
+
+## 計画書
+{計画書の内容}
+
+## 実行手順
+1. 計画書から並列実行可能なサブタスクを抽出
+2. 各サブタスクを Dashboard に登録（create_task）
+3. Worker 数に合わせてタスクを分割（1 Worker = 1 タスク）
+4. 各 Worker にタスクを割り当て（assign_task_to_agent）
+5. 進捗を監視し、完了を待つ
+
+## 分割の指針
 - 各サブタスクは独立して実行可能
 - ファイル単位または機能単位で分割
 - 依存関係があるタスクは順次実行として記録
+```
 
-**分割の目安**:
+### ステップ 7: Admin がタスク分割・Dashboard 登録
 
-- Worker 数に合わせてタスクを分割
-- 1つのタスクは 1 Worker が担当
-- タスク間の依存関係を最小化
+Admin は以下を実行:
 
-**具体的な分割例**:
-
-- 機能実装: `src/feature-a.ts` の新規実装
-- テスト追加: `tests/feature-b.test.ts` にユニットテストを追加
-- リファクタリング: 既存モジュールの関数分割・責務の整理
-- ドキュメント: `README.md` や `docs/` 配下の更新
-- API 実装と API テストを別タスクに分けて別 Worker に割り当て
-
-### ステップ 3.5: Dashboard にタスク登録
-
-各サブタスクを Dashboard に登録して進捗管理:
+**7.1 Dashboard にタスク登録**:
 
 ```
 mcp__multi-agent-mcp__create_task を呼び出し
@@ -159,22 +244,13 @@ mcp__multi-agent-mcp__create_task を呼び出し
 - `description`: タスクの詳細説明
 - `branch`: 作業ブランチ名（例: `feature/{slug}-1`）
 
-### ステップ 4: Admin エージェント作成
+---
 
-```
-mcp__multi-agent-mcp__create_agent を呼び出し
-```
+## Phase 3: Worker 起動・実行
 
-**パラメータ**:
-
-- `role`: "admin"
-- `working_dir`: プロジェクトのルートパス
-
-### ステップ 5: Worker エージェント作成・Worktree 割り当て・タスク配布
+### ステップ 8: Worker 用 Worktree 作成
 
 各 Worker に対して:
-
-**5.1 Worker 用 Worktree を作成**:
 
 ```
 mcp__multi-agent-mcp__create_worktree を呼び出し
@@ -188,7 +264,7 @@ mcp__multi-agent-mcp__create_worktree を呼び出し
 - `create_branch`: true
 - `base_branch`: `feature/{slug}`
 
-**5.2 Worker エージェントを作成**:
+### ステップ 9: Worker エージェント作成
 
 ```
 mcp__multi-agent-mcp__create_agent を呼び出し
@@ -199,7 +275,9 @@ mcp__multi-agent-mcp__create_agent を呼び出し
 - `role`: "worker"
 - `working_dir`: 作成した worktree パス
 
-**5.3 Worker に Worktree を割り当て**:
+**注意**: pane 2〜7 に順次配置される。
+
+### ステップ 10: Worker に Worktree を割り当て
 
 ```
 mcp__multi-agent-mcp__assign_worktree を呼び出し
@@ -211,7 +289,7 @@ mcp__multi-agent-mcp__assign_worktree を呼び出し
 - `worktree_path`: 作成した worktree パス
 - `branch`: `feature/{slug}-{task番号}`
 
-**5.4 Dashboard タスクをエージェントに割り当て**:
+### ステップ 11: Dashboard タスクをエージェントに割り当て
 
 ```
 mcp__multi-agent-mcp__assign_task_to_agent を呼び出し
@@ -219,12 +297,14 @@ mcp__multi-agent-mcp__assign_task_to_agent を呼び出し
 
 **パラメータ**:
 
-- `task_id`: ステップ 3.5 で作成したタスク ID
+- `task_id`: ステップ 7.1 で作成したタスク ID
 - `agent_id`: Worker の ID
 - `branch`: `feature/{slug}-{task番号}`
 - `worktree_path`: Worker の worktree パス
 
-**5.5 タスクを送信**:
+**注意**: このツールは Admin 限定です。
+
+### ステップ 12: Worker にタスクを送信
 
 ```
 mcp__multi-agent-mcp__send_task を呼び出し
@@ -251,9 +331,16 @@ feature/{slug}-{task番号}（既に作成済み）
 1. 実装完了後、自己レビュー
 2. コミット・プッシュ
 3. feature/{slug} へマージ
+4. **mcp__multi-agent-mcp__report_task_completion で Admin に報告**
+
+## 報告時のパラメータ
+- task_id: {タスクID}
+- status: "completed" または "failed"
+- message: 作業内容の要約
+- caller_agent_id: あなたの Worker ID
 ```
 
-### ステップ 6: 並列実行監視
+### ステップ 13: 並列実行監視
 
 定期的にステータスを確認:
 
@@ -293,7 +380,28 @@ mcp__multi-agent-mcp__attempt_recovery を呼び出し
 
 復旧不可能な場合はユーザーに報告し、タスクを別の Worker に再割り当て。
 
-### ステップ 7: 結果統合
+### ステップ 14: Worker の完了報告（Worker が実行）
+
+Worker は作業完了後、Admin に報告:
+
+```
+mcp__multi-agent-mcp__report_task_completion を呼び出し
+```
+
+**パラメータ**:
+
+- `task_id`: 完了したタスクのID
+- `status`: "completed" または "failed"
+- `message`: 作業内容の要約
+- `caller_agent_id`: Worker の ID
+
+**注意**: このツールは Worker 限定です。Admin が受け取って Dashboard を更新します。
+
+---
+
+## Phase 4: 統合・完了
+
+### ステップ 15: 結果統合
 
 全 Worker の完了後:
 
@@ -306,9 +414,9 @@ git checkout feature/{slug}
 git pull origin feature/{slug}
 ```
 
-### ステップ 8: クリーンアップ
+### ステップ 16: クリーンアップ
 
-**8.1 Worktree の削除**:
+**16.1 Worktree の削除**:
 
 各 Worker の worktree を削除:
 
@@ -322,13 +430,13 @@ mcp__multi-agent-mcp__remove_worktree を呼び出し
 - `worktree_path`: Worker の worktree パス
 - `force`: true（必要に応じて）
 
-**8.2 ワークスペースのクリーンアップ**:
+**16.2 ワークスペースのクリーンアップ**:
 
 ```
 mcp__multi-agent-mcp__cleanup_workspace を呼び出し
 ```
 
-### ステップ 9: セキュリティチェック＆自己レビュー
+### ステップ 17: セキュリティチェック＆自己レビュー
 
 **セキュリティチェック**:
 
@@ -348,7 +456,7 @@ git status
 git diff main...feature/{slug}
 ```
 
-### ステップ 10: ユーザー確認
+### ステップ 18: ユーザー確認
 
 **重要**: ここでユーザーに確認を求める。
 
@@ -372,7 +480,7 @@ git diff main...feature/{slug}
 この内容でよろしいですか？
 ```
 
-### ステップ 11: コミットメッセージ出力
+### ステップ 19: コミットメッセージ出力
 
 **重要: このフローではコミット・プッシュ・PR作成を行いません。**
 
@@ -425,11 +533,12 @@ git diff main...feature/{slug}
 ## 重要な注意事項
 
 - ✅ MCP ツールは `mcp__multi-agent-mcp__*` 形式で呼び出し
-- ✅ Worker 数は最大 5
+- ✅ Worker 数は最大 6
 - ✅ 各 Worker は git worktree で独立したディレクトリで作業
 - ✅ ブランチを作成する（feature/{slug} 形式）
 - ✅ Dashboard でタスク進捗を管理
 - ✅ `send_task` でファイル経由のタスク送信（長い指示に対応）
+- ✅ `report_task_completion` で Worker が Admin に報告
 - ✅ 統合後に必ず自己レビュー
 - ✅ コミットメッセージを出力する
 - ❌ Issue を作成しない
