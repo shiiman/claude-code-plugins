@@ -430,11 +430,27 @@ mcp__multi-agent-mcp__remove_worktree を呼び出し
 - `worktree_path`: Worker の worktree パス
 - `force`: true（必要に応じて）
 
-**16.2 ワークスペースのクリーンアップ**:
+**16.2 全タスク完了チェック**:
 
 ```
-mcp__multi-agent-mcp__cleanup_workspace を呼び出し
+mcp__multi-agent-mcp__check_all_tasks_completed を呼び出し
 ```
+
+**確認項目**:
+
+- 全タスクが completed 状態であることを確認
+- 未完了タスクがある場合は警告を表示
+
+**16.3 ワークスペースのクリーンアップ（ターミナル自動終了）**:
+
+```
+mcp__multi-agent-mcp__cleanup_on_completion を呼び出し
+```
+
+**動作**:
+
+- 全タスク完了時にワークスペースをクリーンアップ
+- ターミナルウィンドウを自動的に閉じる
 
 ### ステップ 17: セキュリティチェック＆自己レビュー
 
