@@ -3,6 +3,7 @@ name: single-issue-flow
 description: Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。「シングル Issue フロー」「single-issue-flow」「Issue から PR まで」「Issue ベース開発」「シングルフロー Issue」「1人で Issue 開発」「Issue 付きフロー」などで起動。計画書に基づいた自動実装を実行。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
+user-invocable: true
 ---
 
 # Single Issue Flow

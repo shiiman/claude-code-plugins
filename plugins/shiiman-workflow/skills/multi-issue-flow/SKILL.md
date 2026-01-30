@@ -3,6 +3,7 @@ name: multi-issue-flow
 description: MCP マルチエージェントで Issue から PR まで並列実行する開発フロー。「マルチ Issue フロー」「multi-issue-flow」「並列 Issue 開発」「マルチエージェント Issue」「複数人で Issue」「並列 Issue フロー」「マルチフロー Issue」などで起動。複数 Worker でタスクを並列実行。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
+user-invocable: true
 ---
 
 # Multi Issue Flow
@@ -11,14 +12,17 @@ MCP マルチエージェントで Issue から PR まで並列実行する開�
 
 ## 前提条件
 
-- multi-agent-mcp がインストール済み
-- tmux がインストール済み
+- multi-agent-mcp がインストール済み（**必須**）
+- tmux がインストール済み（**必須**）
 
 **確認方法**:
 
 ```bash
-# MCP が利用可能か確認
+# tmux が利用可能か確認
 which tmux
+
+# multi-agent-mcp がインストール済みか確認
+claude mcp list | grep multi-agent-mcp
 ```
 
 ## 引数
@@ -75,7 +79,7 @@ plan mode を使って計画書を作成・承認してから実行。
 ## 実行フロー
 
 ```
-Issue作成 → ブランチ作成 → MCP初期化 → タスク分割 → Worker並列実行 → 統合 → 自己レビュー → [確認] → Issue更新 → コミット → プッシュ → PR作成
+Issue作成 → ブランチ作成 → MCP初期化 → タスク分割・登録 → Worktree作成 → Worker並列実行 → 監視 → 統合 → 自己レビュー → [確認] → Issue更新 → コミット → プッシュ → PR作成
 ```
 
 ## モード判定
@@ -129,7 +133,7 @@ git push -u origin feature/{issue番号}
 ### ステップ 3: MCP ワークスペース初期化
 
 ```
-mcp__multi-agent__init_workspace を呼び出し
+mcp__multi-agent-mcp__init_workspace を呼び出し
 ```
 
 **パラメータ**:
@@ -158,10 +162,24 @@ mcp__multi-agent__init_workspace を呼び出し
 - ドキュメント: `README.md` や `docs/` 配下の更新
 - API 実装と API テストを別タスクに分けて別 Worker に割り当て
 
+### ステップ 4.5: Dashboard にタスク登録
+
+各サブタスクを Dashboard に登録して進捗管理:
+
+```
+mcp__multi-agent-mcp__create_task を呼び出し
+```
+
+**パラメータ**:
+
+- `title`: タスクタイトル
+- `description`: タスクの詳細説明
+- `branch`: 作業ブランチ名（例: `feature/{issue番号}-1`）
+
 ### ステップ 5: Admin エージェント作成
 
 ```
-mcp__multi-agent__create_agent を呼び出し
+mcp__multi-agent-mcp__create_agent を呼び出し
 ```
 
 **パラメータ**:
@@ -169,37 +187,87 @@ mcp__multi-agent__create_agent を呼び出し
 - `role`: "admin"
 - `working_dir`: プロジェクトのルートパス
 
-### ステップ 6: Worker エージェント作成・タスク配布
+### ステップ 6: Worker エージェント作成・Worktree 割り当て・タスク配布
 
 各 Worker に対して:
 
+**6.1 Worker 用 Worktree を作成**:
+
 ```
-mcp__multi-agent__create_agent を呼び出し
+mcp__multi-agent-mcp__create_worktree を呼び出し
+```
+
+**パラメータ**:
+
+- `repo_path`: プロジェクトのルートパス
+- `worktree_path`: Worker 用の worktree パス（例: `/tmp/worktrees/worker-1`）
+- `branch`: `feature/{issue番号}-{task番号}`
+- `create_branch`: true
+- `base_branch`: `feature/{issue番号}`
+
+**6.2 Worker エージェントを作成**:
+
+```
+mcp__multi-agent-mcp__create_agent を呼び出し
 ```
 
 **パラメータ**:
 
 - `role`: "worker"
-- `working_dir`: Worker 用の worktree パス
+- `working_dir`: 作成した worktree パス
 
-**タスク送信**:
-
-```
-mcp__multi-agent__send_command を呼び出し
-```
-
-**Worker への指示内容**:
+**6.3 Worker に Worktree を割り当て**:
 
 ```
+mcp__multi-agent-mcp__assign_worktree を呼び出し
+```
+
+**パラメータ**:
+
+- `agent_id`: 作成した Worker の ID
+- `worktree_path`: 作成した worktree パス
+- `branch`: `feature/{issue番号}-{task番号}`
+
+**6.4 Dashboard タスクをエージェントに割り当て**:
+
+```
+mcp__multi-agent-mcp__assign_task_to_agent を呼び出し
+```
+
+**パラメータ**:
+
+- `task_id`: ステップ 4.5 で作成したタスク ID
+- `agent_id`: Worker の ID
+- `branch`: `feature/{issue番号}-{task番号}`
+- `worktree_path`: Worker の worktree パス
+
+**6.5 タスクを送信**:
+
+```
+mcp__multi-agent-mcp__send_task を呼び出し
+```
+
+**パラメータ**:
+
+- `agent_id`: Worker の ID
+- `task_content`: タスク内容（Markdown 形式）
+- `session_id`: Issue 番号（例: "123"）
+
+**Worker への指示内容（task_content の例）**:
+
+```markdown
 Issue #{issue番号} の Task {task番号} を実装してください。
 
 ## タスク内容
+
 {サブタスクの説明}
 
 ## 作業ブランチ
-feature/{issue番号} から feature/{issue番号}-{task番号} を作成
+
+feature/{issue番号}-{task番号}（既に作成済み）
 
 ## 完了後の手順
+
 1. 実装完了後、自己レビュー
 2. コミット・プッシュ
 3. feature/{issue番号} へマージ
@@ -211,7 +279,13 @@ feature/{issue番号} から feature/{issue番号}-{task番号} を作成
 定期的にステータスを確認:
 
 ```
-mcp__multi-agent__get_dashboard を呼び出し
+mcp__multi-agent-mcp__get_dashboard_summary を呼び出し（軽量）
+```
+
+詳細が必要な場合:
+
+```
+mcp__multi-agent-mcp__get_dashboard を呼び出し
 ```
 
 **監視項目**:
@@ -220,10 +294,25 @@ mcp__multi-agent__get_dashboard を呼び出し
 - 完了したタスク数
 - エラーの有無
 
+**ヘルスチェック**:
+
+```
+mcp__multi-agent-mcp__healthcheck_all を呼び出し
+```
+
 **エラー時の対応**:
 
-- Worker がエラーで停止した場合は、タスクを別の Worker に再割り当て
-- 復旧不可能な場合はユーザーに報告
+Worker がエラーで停止した場合:
+
+```
+mcp__multi-agent-mcp__attempt_recovery を呼び出し
+```
+
+**パラメータ**:
+
+- `agent_id`: 異常な Worker の ID
+
+復旧不可能な場合はユーザーに報告し、タスクを別の Worker に再割り当て。
 
 ### ステップ 8: 結果統合
 
@@ -240,8 +329,24 @@ git pull origin feature/{issue番号}
 
 ### ステップ 9: クリーンアップ
 
+**9.1 Worktree の削除**:
+
+各 Worker の worktree を削除:
+
 ```
-mcp__multi-agent__cleanup_workspace を呼び出し
+mcp__multi-agent-mcp__remove_worktree を呼び出し
+```
+
+**パラメータ**:
+
+- `repo_path`: プロジェクトのルートパス
+- `worktree_path`: Worker の worktree パス
+- `force`: true（必要に応じて）
+
+**9.2 ワークスペースのクリーンアップ**:
+
+```
+mcp__multi-agent-mcp__cleanup_workspace を呼び出し
 ```
 
 ### ステップ 10: セキュリティチェック＆自己レビュー
@@ -272,17 +377,21 @@ git diff main...feature/{issue番号}
 ## 変更内容の確認
 
 ### 並列実行結果
+
 - Worker 1: {Task 1} ✅ 完了
 - Worker 2: {Task 2} ✅ 完了
 - Worker 3: {Task 3} ✅ 完了
 
 ### 変更サマリー
+
 {git diff --stat main...feature/{issue番号} の出力}
 
 ### 自己レビュー結果
+
 {レビューで確認した内容のサマリー}
 
 ### コミットメッセージ
+
 {自動生成されたメッセージ}
 
 この内容でコミット・プッシュ・PR作成を実行してよろしいですか？
@@ -348,18 +457,22 @@ Closes #{issue番号}
 ## 開発フロー完了
 
 ### 作成された Issue
+
 - #{issue番号}: {タイトル}
 
 ### 作成されたブランチ
+
 - ベース: feature/{issue番号}
 - 作業: feature/{issue番号}-1, feature/{issue番号}-2, ...
 
 ### 並列実行結果
+
 - 総Worker数: {N}
 - 完了タスク: {M}
 - 実行時間: {概算}
 
 ### 作成された PR
+
 - PR #{pr番号}: {タイトル}
 - URL: {pr_url}
 
@@ -368,9 +481,11 @@ PR がマージされると Issue #{issue番号} は自動的にクローズさ�
 
 ## 重要な注意事項
 
-- ✅ MCP ツールは `mcp__multi-agent__*` 形式で呼び出し
+- ✅ MCP ツールは `mcp__multi-agent-mcp__*` 形式で呼び出し
 - ✅ Worker 数は最大 5
 - ✅ 各 Worker は git worktree で独立したディレクトリで作業
+- ✅ Dashboard でタスク進捗を管理
+- ✅ `send_task` でファイル経由のタスク送信（長い指示に対応）
 - ✅ 統合後に必ず自己レビュー
 - ✅ コミット前に必ずユーザー確認を行う
 - ✅ PR で `Closes #N` を使用して Issue を参照

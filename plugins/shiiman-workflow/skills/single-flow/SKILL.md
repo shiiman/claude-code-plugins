@@ -3,6 +3,7 @@ name: single-flow
 description: Issue/PR なしで計画書からタスクを実行しコミットメッセージを出力する軽量フロー。「シングルフロー」「single-flow」「軽量フロー」「Issue なしフロー」「シンプル実行」「計画書実行」「コミットのみフロー」などで起動。PR を作らない軽量な開発フロー。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
+user-invocable: true
 ---
 
 # Single Flow
