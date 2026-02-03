@@ -67,7 +67,8 @@ claude mcp list | grep multi-agent-mcp
 Phase 1: Owner  → ブランチ作成 → MCP 初期化 → Admin 起動 → 計画書送信
 Phase 2: Admin  → タスク分割 → Worker 作成・管理（自律実行）
 Phase 3: Worker → タスク実行 → Admin に報告（自律実行）
-Phase 4: Owner  → 結果確認 → クリーンアップ → コミットメッセージ出力
+Phase 4: Admin  → 品質チェック → 問題あれば修正タスク作成 → Phase 2 に戻る（ループ）
+Phase 5: Owner  → 結果確認 → クリーンアップ → コミットメッセージ出力
 ```
 
 ---
@@ -173,7 +174,10 @@ mcp__multi-agent-mcp__read_messages          # Admin からのメッセージ確
 2. スクリーンショット確認（UI タスクの場合、`read_latest_screenshot` で視覚的問題を分析）
 3. Worker 用 Worktree を作成
 4. Worker エージェントを作成・タスク送信
-5. 進捗を監視し、結果確認後 Owner に報告
+5. 進捗を監視
+6. **品質チェック**: Worker 完了後に動作確認（アプリ実行、テスト実行）
+7. **イテレーション**: 問題があれば修正タスクを作成し Worker に再割り当て
+8. 品質チェックをパスしたら Owner に報告
 
 ### Worker の役割
 
@@ -187,7 +191,85 @@ mcp__multi-agent-mcp__read_messages          # Admin からのメッセージ確
 
 ---
 
-## Phase 4: 結果確認 + コミットメッセージ出力（Owner が実行）
+## Phase 4: 品質チェック・イテレーション（Admin が自律実行）
+
+### 品質チェックの流れ
+
+1. **動作確認**: Worker 完了後、アプリを実行してテスト
+
+   ```bash
+   git pull origin {branch_name}
+   npm start  # または python main.py など
+   ```
+
+2. **UI 確認**（UI タスクの場合）:
+   - `read_latest_screenshot` で視覚的確認
+   - 期待通りの表示か確認
+
+3. **問題発見時**: 修正タスクを作成してイテレーション
+
+   ```
+   while (品質に問題あり):
+       1. 問題を分析・リスト化
+       2. create_task で修正タスク登録
+       3. Worker に send_task で修正依頼
+       4. Worker 完了を待機
+       5. 再度品質チェック
+   ```
+
+### イテレーションのルール
+
+- 1回のイテレーションで1-2個の問題に絞る
+- 同じ問題が3回以上繰り返される場合は Owner に相談
+- 修正内容は `save_to_memory` で記録（学習用）
+- 最大イテレーション回数: 3回（超えたら Owner に報告）
+
+### 品質チェックの合格条件
+
+- アプリが正常に起動・動作する
+- 明らかなバグがない
+- UI が期待通りに表示される（UI タスクの場合）
+- テストがパスする（テストがある場合）
+
+### Owner への完了報告（Admin が実行）
+
+品質チェックをパスしたら、Admin は Owner に完了を報告する。
+
+```
+mcp__multi-agent-mcp__send_message
+```
+
+- `to_agent_id`: Owner の ID
+- `content`: 完了報告（実行結果サマリー、各 Worker の状態、品質チェック結果）
+
+**報告内容の例**:
+
+```
+全タスク完了しました。
+
+## 実行結果
+- Worker 1: Task 1 ✅ 完了
+- Worker 2: Task 2 ✅ 完了
+
+## 品質チェック
+- アプリ起動: ✅ OK
+- テスト実行: ✅ パス
+- イテレーション回数: 1回
+
+Phase 5 に進んでください。
+```
+
+---
+
+## Phase 5: 結果確認 + コミットメッセージ出力（Owner が実行）
+
+### ステップ 0: Admin からの完了報告を確認
+
+```
+mcp__multi-agent-mcp__read_messages
+```
+
+Admin から完了報告を受け取ったら Phase 5 を開始する。
 
 ### ステップ 1: 結果統合確認
 
