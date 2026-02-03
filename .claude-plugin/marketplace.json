@@ -29,7 +29,7 @@
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェントでの Issue 管理付き・なしのフローを提供",
-      "version": "1.5.0",
+      "version": "1.4.0",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },
