@@ -74,13 +74,7 @@ git checkout -b feature/{issue番号}
 git push -u origin feature/{issue番号}
 ```
 
-### ステップ 3: MCP ワークスペース初期化
-
-```
-mcp__multi-agent-mcp__init_workspace(workspace_path="プロジェクト名")
-```
-
-### ステップ 4: tmux ワークスペース作成
+### ステップ 3: tmux ワークスペース初期化
 
 ```
 mcp__multi-agent-mcp__init_tmux_workspace(
@@ -90,20 +84,20 @@ mcp__multi-agent-mcp__init_tmux_workspace(
 )
 ```
 
-### ステップ 4.5: モデルプロファイル設定（`--profile` 指定時のみ）
+### ステップ 3.5: モデルプロファイル設定（`--profile` 指定時のみ）
 
 ```
 mcp__multi-agent-mcp__switch_model_profile(profile="standard" or "performance")
 ```
 
-### ステップ 5: エージェント作成
+### ステップ 4: エージェント作成
 
 ```
 mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
 mcp__multi-agent-mcp__create_agent(role="admin", working_dir="パス")
 ```
 
-### ステップ 6: Admin に計画書を送信
+### ステップ 5: Admin に計画書を送信
 
 ```
 mcp__multi-agent-mcp__send_task(
@@ -115,7 +109,7 @@ mcp__multi-agent-mcp__send_task(
 )
 ```
 
-### ステップ 7: Admin の完了を待機
+### ステップ 6: Admin の完了を待機
 
 ```
 mcp__multi-agent-mcp__get_dashboard_summary()

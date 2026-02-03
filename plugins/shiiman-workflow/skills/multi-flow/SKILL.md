@@ -53,13 +53,7 @@ git push -u origin feature/{slug}
 
 **slug の生成ルール**: タスク内容から簡潔な英語キーワードに変換
 
-### ステップ 2: MCP ワークスペース初期化
-
-```
-mcp__multi-agent-mcp__init_workspace(workspace_path="プロジェクト名")
-```
-
-### ステップ 3: tmux ワークスペース作成
+### ステップ 2: tmux ワークスペース初期化
 
 ```
 mcp__multi-agent-mcp__init_tmux_workspace(
@@ -69,20 +63,20 @@ mcp__multi-agent-mcp__init_tmux_workspace(
 )
 ```
 
-### ステップ 3.5: モデルプロファイル設定（`--profile` 指定時のみ）
+### ステップ 2.5: モデルプロファイル設定（`--profile` 指定時のみ）
 
 ```
 mcp__multi-agent-mcp__switch_model_profile(profile="standard" or "performance")
 ```
 
-### ステップ 4: エージェント作成
+### ステップ 3: エージェント作成
 
 ```
 mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
 mcp__multi-agent-mcp__create_agent(role="admin", working_dir="パス")
 ```
 
-### ステップ 5: Admin に計画書を送信
+### ステップ 4: Admin に計画書を送信
 
 ```
 mcp__multi-agent-mcp__send_task(
@@ -94,7 +88,7 @@ mcp__multi-agent-mcp__send_task(
 )
 ```
 
-### ステップ 6: Admin の完了を待機
+### ステップ 5: Admin の完了を待機
 
 ```
 mcp__multi-agent-mcp__get_dashboard_summary()
