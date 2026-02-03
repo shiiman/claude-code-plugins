@@ -25,7 +25,10 @@ claude mcp list | grep multi-agent-mcp
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
-- `--workers N`: Worker 数を指定（デフォルト: 6、最大: 16）
+- `--workers N`: Worker 数を指定（省略時はプロファイル設定に従う）
+- `--profile standard|performance`: モデルプロファイル選択
+  - `standard`（デフォルト）: Sonnet、Worker 上限 6
+  - `performance`: Opus、Worker 上限 16（複雑なタスク向け）
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
@@ -101,6 +104,18 @@ mcp__multi-agent-mcp__init_tmux_workspace
 - `open_terminal`: true
 - `auto_setup_gtr`: true（gtr 自動設定）
 
+**自動作成**: `memory/`, `screenshot/` ディレクトリと `.env` テンプレートが自動生成されます。
+
+### ステップ 3.5: モデルプロファイル設定（`--profile` 指定時）
+
+```
+mcp__multi-agent-mcp__switch_model_profile
+```
+
+- `profile`: "standard" または "performance"
+
+**注意**: `--profile performance` 指定時のみ実行。Worker 上限 16、Opus モデルに切替。
+
 ### ステップ 4: Owner エージェント登録
 
 ```
@@ -132,7 +147,7 @@ mcp__multi-agent-mcp__send_task
 - `agent_id`: Admin の ID
 - `task_content`: 計画書またはタスク説明
 - `session_id`: ブランチの slug
-- `worker_count`: Worker 数（デフォルト: 6）
+- `worker_count`: Worker 数（省略時はプロファイル設定、`--workers` 指定時はその値）
 - `branch_name`: 作業ブランチ名
 
 **自動処理**: MCP が Admin 用の指示テンプレートを自動生成（Worker 管理手順、メモリ検索結果を含む）
@@ -155,9 +170,10 @@ mcp__multi-agent-mcp__read_messages          # Admin からのメッセージ確
 ### Admin の役割
 
 1. 計画書からサブタスクを抽出し Dashboard に登録
-2. Worker 用 Worktree を作成
-3. Worker エージェントを作成・タスク送信
-4. 進捗を監視し、完了後 Owner に報告
+2. スクリーンショット確認（UI タスクの場合、`read_latest_screenshot` で視覚的問題を分析）
+3. Worker 用 Worktree を作成
+4. Worker エージェントを作成・タスク送信
+5. 進捗を監視し、結果確認後 Owner に報告
 
 ### Worker の役割
 
