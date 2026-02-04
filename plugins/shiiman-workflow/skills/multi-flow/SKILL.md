@@ -31,10 +31,17 @@ Phase 2-4: Admin/Worker が自律実行（MCP が自動制御）
 Phase 5: Owner  → 結果確認 → クリーンアップ → コミットメッセージ出力
 ```
 
+## ⚠️ caller_agent_id について（重要）
+
+**全ての MCP ツールには `caller_agent_id` パラメータが必須です。**
+
+- `create_agent()` の戻り値から自分の ID を取得
+- 以降の全ツール呼び出しで `caller_agent_id="{owner_id}"` を指定
+
 ## Owner の役割（MCP から取得）
 
 ```
-mcp__multi-agent-mcp__get_role_guide(role="owner")
+mcp__multi-agent-mcp__get_role_guide(role="owner", caller_agent_id="{owner_id}")
 ```
 
 ---
@@ -60,7 +67,8 @@ mcp__multi-agent-mcp__init_tmux_workspace(
     working_dir="プロジェクトのルートパス",
     open_terminal=true,
     auto_setup_gtr=true,
-    session_id="{slug}"
+    session_id="{slug}",
+    caller_agent_id="{owner_id}"
 )
 ```
 
@@ -69,33 +77,44 @@ mcp__multi-agent-mcp__init_tmux_workspace(
 ### ステップ 2.5: モデルプロファイル設定（`--profile` 指定時のみ）
 
 ```
-mcp__multi-agent-mcp__switch_model_profile(profile="standard" or "performance")
+mcp__multi-agent-mcp__switch_model_profile(
+    profile="standard" or "performance",
+    caller_agent_id="{owner_id}"
+)
 ```
 
 ### ステップ 3: エージェント作成
 
 ```
-mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
-mcp__multi-agent-mcp__create_agent(role="admin", working_dir="パス")
+owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
+# owner_result["agent_id"] を {owner_id} として保存
+
+admin_result = mcp__multi-agent-mcp__create_agent(
+    role="admin",
+    working_dir="パス",
+    caller_agent_id="{owner_id}"
+)
+# admin_result["agent_id"] を {admin_id} として保存
 ```
 
 ### ステップ 4: Admin に計画書を送信
 
 ```
 mcp__multi-agent-mcp__send_task(
-    agent_id="Admin の ID",
+    agent_id="{admin_id}",
     task_content="計画書またはタスク説明",
     session_id="ブランチの slug",
     worker_count=N,
-    branch_name="feature/{slug}"
+    branch_name="feature/{slug}",
+    caller_agent_id="{owner_id}"
 )
 ```
 
 ### ステップ 5: Admin の完了を待機
 
 ```
-mcp__multi-agent-mcp__get_dashboard_summary()
-mcp__multi-agent-mcp__read_messages()
+mcp__multi-agent-mcp__get_dashboard_summary(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
 ```
 
 ---
@@ -111,7 +130,7 @@ mcp__multi-agent-mcp__read_messages()
 ### ステップ 0: Admin からの完了報告を確認
 
 ```
-mcp__multi-agent-mcp__read_messages()
+mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
 ```
 
 ### ステップ 1: 結果統合確認
@@ -124,8 +143,8 @@ git pull origin feature/{slug}
 ### ステップ 2: クリーンアップ
 
 ```
-mcp__multi-agent-mcp__check_all_tasks_completed()
-mcp__multi-agent-mcp__cleanup_on_completion()
+mcp__multi-agent-mcp__check_all_tasks_completed(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 ```
 
 ### ステップ 3: セキュリティチェック
