@@ -53,15 +53,18 @@ git push -u origin feature/{slug}
 
 **slug の生成ルール**: タスク内容から簡潔な英語キーワードに変換
 
-### ステップ 2: tmux ワークスペース初期化
+### ステップ 2: MCP ワークスペース初期化
 
 ```
 mcp__multi-agent-mcp__init_tmux_workspace(
     working_dir="プロジェクトのルートパス",
     open_terminal=true,
-    auto_setup_gtr=true
+    auto_setup_gtr=true,
+    session_id="{slug}"
 )
 ```
+
+**重要**: `session_id` には Step 1 で作成したブランチの slug を指定。これにより MCP ディレクトリ（デフォルト: `.multi-agent-mcp`）の `{slug}/` 配下に全てのセッションデータが配置される。
 
 ### ステップ 2.5: モデルプロファイル設定（`--profile` 指定時のみ）
 

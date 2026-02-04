@@ -80,9 +80,12 @@ git push -u origin feature/{issue番号}
 mcp__multi-agent-mcp__init_tmux_workspace(
     working_dir="プロジェクトのルートパス",
     open_terminal=true,
-    auto_setup_gtr=true
+    auto_setup_gtr=true,
+    session_id="{issue番号}"
 )
 ```
+
+**重要**: `session_id` には Issue 番号を指定。これにより MCP ディレクトリ（デフォルト: `.multi-agent-mcp`）の `{issue番号}/` 配下に全てのセッションデータが配置される。
 
 ### ステップ 3.5: モデルプロファイル設定（`--profile` 指定時のみ）
 
