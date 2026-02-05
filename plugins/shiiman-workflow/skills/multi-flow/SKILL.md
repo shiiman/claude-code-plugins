@@ -19,9 +19,16 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 
 - `--plan`: plan mode で計画書を新規作成してから実行
 - `--workers N`: Worker 数を指定（省略時はプロファイル設定に従う）
-- `--profile standard|performance`: モデルプロファイル選択
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
+
+## 環境変数
+
+モデルプロファイルは環境変数で設定（`.env` または `export`）:
+
+```bash
+MCP_MODEL_PROFILE_ACTIVE=performance  # standard または performance
+```
 
 ## 実行フロー
 
@@ -37,12 +44,6 @@ Phase 5: Owner  → 結果確認 → クリーンアップ → コミットメ�
 
 - `create_agent()` の戻り値から自分の ID を取得
 - 以降の全ツール呼び出しで `caller_agent_id="{owner_id}"` を指定
-
-## Owner の役割（MCP から取得）
-
-```
-mcp__multi-agent-mcp__get_role_guide(role="owner", caller_agent_id="{owner_id}")
-```
 
 ---
 
@@ -60,7 +61,24 @@ git push -u origin feature/{slug}
 
 **slug の生成ルール**: タスク内容から簡潔な英語キーワードに変換
 
-### ステップ 2: MCP ワークスペース初期化
+### ステップ 2: Owner エージェント作成
+
+```
+owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
+# owner_result["agent"]["id"] を {owner_id} として保存
+```
+
+### ステップ 3: Owner の役割を取得（🔴 必須）
+
+**Owner として行動する前に、必ずロールガイドを取得してください。**
+
+```
+mcp__multi-agent-mcp__get_role_guide(role="owner", caller_agent_id="{owner_id}")
+```
+
+このガイドには Owner の責務、禁止事項、ワークフローが記載されています。
+
+### ステップ 4: MCP ワークスペース初期化
 
 ```
 mcp__multi-agent-mcp__init_tmux_workspace(
@@ -74,30 +92,18 @@ mcp__multi-agent-mcp__init_tmux_workspace(
 
 **重要**: `session_id` には Step 1 で作成したブランチの slug を指定。これにより MCP ディレクトリ（デフォルト: `.multi-agent-mcp`）の `{slug}/` 配下に全てのセッションデータが配置される。
 
-### ステップ 2.5: モデルプロファイル設定（`--profile` 指定時のみ）
+### ステップ 5: Admin エージェント作成
 
 ```
-mcp__multi-agent-mcp__switch_model_profile(
-    profile="standard" or "performance",
-    caller_agent_id="{owner_id}"
-)
-```
-
-### ステップ 3: エージェント作成
-
-```
-owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
-# owner_result["agent_id"] を {owner_id} として保存
-
 admin_result = mcp__multi-agent-mcp__create_agent(
     role="admin",
     working_dir="パス",
     caller_agent_id="{owner_id}"
 )
-# admin_result["agent_id"] を {admin_id} として保存
+# admin_result["agent"]["id"] を {admin_id} として保存
 ```
 
-### ステップ 4: Admin に計画書を送信
+### ステップ 6: Admin に計画書を送信
 
 ```
 mcp__multi-agent-mcp__send_task(
@@ -110,11 +116,13 @@ mcp__multi-agent-mcp__send_task(
 )
 ```
 
-### ステップ 5: Admin の完了を待機
+### ステップ 7: Admin の完了を待機
+
+**待機中**: macOS 通知で Admin からの完了報告が届きます。ユーザーから「Admin から完了通知来てるか確認して」と指示されたら Phase 5 へ進みます。
 
 ```
 mcp__multi-agent-mcp__get_dashboard_summary(caller_agent_id="{owner_id}")
-mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__read_messages(agent_id="{owner_id}", caller_agent_id="{owner_id}")
 ```
 
 ---
