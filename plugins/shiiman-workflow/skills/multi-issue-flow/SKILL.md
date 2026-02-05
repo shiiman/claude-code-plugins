@@ -28,7 +28,7 @@ MCP マルチエージェントで Issue から PR まで並列実行する開�
 ```
 Phase 1: Owner  → Issue 作成 → ブランチ作成 → MCP 初期化 → Admin 起動 → 計画書送信
 Phase 2-4: Admin/Worker が自律実行（MCP が自動制御）
-Phase 5: Owner  → 結果確認 → クリーンアップ → PR 作成 → Issue クローズ
+Phase 5: Owner  → 結果確認 → ユーザー承認 → クリーンアップ → コミット → PR 作成
 ```
 
 ## ⚠️ caller_agent_id について（重要）
@@ -133,9 +133,11 @@ mcp__multi-agent-mcp__send_task(
 
 ### ステップ 6: Admin の完了を待機
 
+**待機中**: macOS 通知で Admin からの完了報告が届きます。ユーザーから「Admin から完了通知来てるか確認して」と指示されたら Phase 5 へ進みます。
+
 ```
 mcp__multi-agent-mcp__get_dashboard_summary(caller_agent_id="{owner_id}")
-mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__read_messages(agent_id="{owner_id}", caller_agent_id="{owner_id}")
 ```
 
 ---
@@ -146,12 +148,17 @@ mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
 
 ---
 
-## Phase 5: 結果確認 + PR 作成
+## Phase 5: 結果確認 + ユーザー承認 + PR 作成
 
 ### ステップ 0: Admin からの完了報告を確認
 
+macOS 通知が届いたら、ユーザーから「Admin から完了通知来てるか確認して」と指示されます。
+
 ```
-mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__read_messages(
+    agent_id="{owner_id}",
+    caller_agent_id="{owner_id}"
+)
 ```
 
 ### ステップ 1: 結果統合確認
@@ -161,29 +168,88 @@ git checkout feature/{issue番号}
 git pull origin feature/{issue番号}
 ```
 
-### ステップ 2: クリーンアップ
+### ステップ 2: 変更内容をユーザーに表示
+
+```bash
+git diff main...feature/{issue番号} --stat
+git log main..feature/{issue番号} --oneline
+```
+
+変更内容、品質チェック結果（Admin からの報告）をユーザーに表示。
+
+### ステップ 3: ユーザー確認（🔴 必須）
+
+**⚠️ クリーンアップの前に必ずユーザー確認を行う**
+
+`AskUserQuestion` でユーザーに確認を求める：
+
+```
+AskUserQuestion:
+  question: "実装内容を確認しました。承認しますか？"
+  options:
+    - label: "OK（承認）"
+      description: "クリーンアップして PR 作成へ進む"
+    - label: "NG（修正依頼）"
+      description: "修正内容を指定して Admin に再指示"
+    - label: "保留"
+      description: "手動で確認してから判断"
+```
+
+---
+
+### OK（承認）の場合
+
+#### ステップ 4: Admin に承認通知を送信
+
+```
+mcp__multi-agent-mcp__send_message(
+    sender_id="{owner_id}",
+    receiver_id="{admin_id}",
+    message_type="task_approved",
+    content="ユーザー確認完了。実装を承認します。",
+    caller_agent_id="{owner_id}"
+)
+```
+
+---
+
+### NG（修正依頼）の場合
+
+1. 修正内容をユーザーに確認
+2. Admin に再指示を送信
+
+```
+mcp__multi-agent-mcp__send_message(
+    sender_id="{owner_id}",
+    receiver_id="{admin_id}",
+    message_type="request",
+    content="修正依頼: {ユーザーからの修正内容}",
+    caller_agent_id="{owner_id}"
+)
+```
+
+3. Phase 2-4 に戻り、Admin が修正タスクを実行
+
+---
+
+#### ステップ 5: クリーンアップ
 
 ```
 mcp__multi-agent-mcp__check_all_tasks_completed(caller_agent_id="{owner_id}")
 mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 ```
 
-### ステップ 3: セキュリティチェック
+#### ステップ 6: セキュリティチェック
 
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
-git diff main...feature/{issue番号}
 ```
 
-### ステップ 4: ユーザー確認
+#### ステップ 7: Issue チェックボックス更新
 
-変更内容、並列実行結果、コミットメッセージを表示してユーザーに確認。
+Issue の全てのチェックボックスを完了状態に更新。
 
-### ステップ 5: Issue チェックボックス更新
-
-ユーザー確認後、Issue の全てのチェックボックスを完了状態に更新。
-
-### ステップ 6: コミット・プッシュ
+#### ステップ 8: コミット・プッシュ
 
 ```bash
 git add .
@@ -191,7 +257,7 @@ git commit -m "{コミットメッセージ}"
 git push origin feature/{issue番号}
 ```
 
-### ステップ 7: PR 作成
+#### ステップ 9: PR 作成
 
 ```bash
 gh pr create --title "{PRタイトル}" --body "{PR本文}"
@@ -216,7 +282,7 @@ Closes #{issue番号}
 - [ ] {テスト項目}
 ```
 
-### ステップ 8: 完了報告
+#### ステップ 10: 完了報告
 
 ```
 ## 開発フロー完了

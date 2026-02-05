@@ -125,12 +125,17 @@ mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
 
 ---
 
-## Phase 5: 結果確認 + コミットメッセージ出力
+## Phase 5: 結果確認 + ユーザー承認 + クリーンアップ
 
 ### ステップ 0: Admin からの完了報告を確認
 
+macOS 通知が届いたら、ユーザーから「Admin から完了通知来てるか確認して」と指示されます。
+
 ```
-mcp__multi-agent-mcp__read_messages(caller_agent_id="{owner_id}")
+mcp__multi-agent-mcp__read_messages(
+    agent_id="{owner_id}",
+    caller_agent_id="{owner_id}"
+)
 ```
 
 ### ステップ 1: 結果統合確認
@@ -140,25 +145,84 @@ git checkout feature/{slug}
 git pull origin feature/{slug}
 ```
 
-### ステップ 2: クリーンアップ
+### ステップ 2: 変更内容をユーザーに表示
+
+```bash
+git diff main...feature/{slug} --stat
+git log main..feature/{slug} --oneline
+```
+
+変更内容、品質チェック結果（Admin からの報告）をユーザーに表示。
+
+### ステップ 3: ユーザー確認（🔴 必須）
+
+**⚠️ クリーンアップの前に必ずユーザー確認を行う**
+
+`AskUserQuestion` でユーザーに確認を求める：
+
+```
+AskUserQuestion:
+  question: "実装内容を確認しました。承認しますか？"
+  options:
+    - label: "OK（承認）"
+      description: "クリーンアップして完了"
+    - label: "NG（修正依頼）"
+      description: "修正内容を指定して Admin に再指示"
+    - label: "保留"
+      description: "手動で確認してから判断"
+```
+
+---
+
+### OK（承認）の場合
+
+#### ステップ 4: Admin に承認通知を送信
+
+```
+mcp__multi-agent-mcp__send_message(
+    sender_id="{owner_id}",
+    receiver_id="{admin_id}",
+    message_type="task_approved",
+    content="ユーザー確認完了。実装を承認します。",
+    caller_agent_id="{owner_id}"
+)
+```
+
+---
+
+### NG（修正依頼）の場合
+
+1. 修正内容をユーザーに確認
+2. Admin に再指示を送信
+
+```
+mcp__multi-agent-mcp__send_message(
+    sender_id="{owner_id}",
+    receiver_id="{admin_id}",
+    message_type="request",
+    content="修正依頼: {ユーザーからの修正内容}",
+    caller_agent_id="{owner_id}"
+)
+```
+
+3. Phase 2-4 に戻り、Admin が修正タスクを実行
+
+---
+
+#### ステップ 5: クリーンアップ
 
 ```
 mcp__multi-agent-mcp__check_all_tasks_completed(caller_agent_id="{owner_id}")
 mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 ```
 
-### ステップ 3: セキュリティチェック
+#### ステップ 6: セキュリティチェック
 
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
-git diff main...feature/{slug}
 ```
 
-### ステップ 4: ユーザー確認
-
-変更内容、並列実行結果、推奨コミットメッセージを表示してユーザーに確認。
-
-### ステップ 5: コミットメッセージ出力
+#### ステップ 7: コミットメッセージ出力
 
 **重要: このフローではコミット・プッシュ・PR作成を行いません。**
 
