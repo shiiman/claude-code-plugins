@@ -18,7 +18,6 @@ MCP マルチエージェントで Issue から PR まで並列実行する開�
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
-- `--workers N`: Worker 数を指定（省略時はプロファイル設定に従う）
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
@@ -131,7 +130,6 @@ mcp__multi-agent-mcp__send_task(
     agent_id="{admin_id}",
     task_content="計画書またはタスク説明",
     session_id="Issue 番号",
-    worker_count=N,
     branch_name="feature/{issue番号}",
     caller_agent_id="{owner_id}"
 )
