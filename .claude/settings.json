@@ -60,18 +60,5 @@
     "shiiman-docker@shiiman-claude-code-plugins": true,
     "shiiman-terraform@shiiman-claude-code-plugins": true,
     "shiiman-slack@shiiman-claude-code-plugins": true
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "新しいファイルが作成されました。テストスイートが存在する場合はテストを実行し、失敗があれば即座に修正してください。"
-          }
-        ]
-      }
-    ]
   }
 }
