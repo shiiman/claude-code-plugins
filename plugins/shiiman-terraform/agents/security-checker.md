@@ -1,7 +1,7 @@
 ---
 name: security-checker
 description: Terraform のセキュリティ監査専門家。IAM 過剰権限、ハードコード認証情報、セキュリティグループ設定、暗号化設定の観点からセキュリティリスクを検出し改善提案を行う。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

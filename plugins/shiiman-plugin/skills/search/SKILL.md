@@ -1,6 +1,7 @@
 ---
 name: search
 description: キーワードでプラグインを検索する。「プラグインを検索」「〇〇ができるプラグイン」「〇〇関連のプラグイン」「〇〇を探して」「プラグイン探して」「〇〇のプラグインある？」などで起動。
+allowed-tools: [Read, Bash, Grep, Glob]
 ---
 
 # Plugin Search

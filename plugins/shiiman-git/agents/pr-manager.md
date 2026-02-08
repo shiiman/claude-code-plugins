@@ -1,7 +1,7 @@
 ---
 name: pr-manager
 description: GitHub Pull Request の作成、レビュー依頼、マージなど PR に関する操作を包括的にサポート。
-tools: Read, Bash, Glob, Grep
+allowed-tools: Read, Bash, Glob, Grep
 model: sonnet
 ---
 

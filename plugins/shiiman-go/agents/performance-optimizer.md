@@ -1,7 +1,7 @@
 ---
 name: performance-optimizer
 description: Go アプリケーションのパフォーマンス最適化専門家。ベンチマーク分析、pprof によるプロファイリング、PGO 適用、メモリ最適化を実施。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 

@@ -34,7 +34,6 @@ plugins/{plugin-name}/
   "name": "plugin-name",
   "description": "プラグインの説明",
   "version": "1.0.0",
-  "author": { "name": "shiiman" },
   "source": "./plugins/plugin-name",
   "category": "development"
 }
@@ -90,7 +89,6 @@ plugins/{plugin-name}/
   "name": "plugin-name",
   "description": "プラグインの説明",
   "version": "1.1.0",  // 1.0.0 から更新（plugin.json と一致させる）
-  "author": { "name": "shiiman" },
   "source": "./plugins/plugin-name",
   "category": "development"
 }

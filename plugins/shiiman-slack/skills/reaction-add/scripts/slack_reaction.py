@@ -4,8 +4,12 @@
 メッセージにリアクション（絵文字）を追加します。
 """
 
-import argparse
+import os
 import sys
+import argparse
+# lib/ ディレクトリをパスに追加
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+sys.path.insert(0, lib_dir)
 
 from slack_utils import (
     get_slack_client,

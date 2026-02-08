@@ -20,14 +20,14 @@
     python google_forms.py responses --form-id "xxx" --max 100
 """
 
-import argparse
-import json
 import os
 import sys
+import argparse
+import json
 
-# 共通モジュールのインポート
-script_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, script_dir)
+# lib/ ディレクトリをパスに追加
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+sys.path.insert(0, lib_dir)
 
 from google_utils import (
     CONFIG_DIR,

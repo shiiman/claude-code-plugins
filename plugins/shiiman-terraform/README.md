@@ -19,16 +19,16 @@ claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 
 | スキル | トリガー例 | 説明 |
 |--------|-----------|------|
-| exec-tf | 「terraform plan」「tf apply」「validate」 | Terraform コマンド実行（plan/apply/validate 統合） |
-| exec-tg | 「terragrunt run-all」「tg plan」 | Terragrunt コマンド実行 |
-| init | 「init して」「terraform init」 | 初期化処理 |
-| import | 「import して」「リソース import」 | import 支援 |
-| analyze-state | 「state list」「state show」 | state 分析・操作 |
-| manage-version | 「tfenv」「バージョン切り替え」 | バージョン管理 |
-| generate-module | 「モジュール作成」「モジュール生成」 | モジュール構造生成 |
-| check-security | 「セキュリティチェック」「シークレット検出」 | セキュリティ監査 |
+| tf | 「terraform plan」「tf apply」「validate」 | Terraform コマンド実行（plan/apply/validate 統合） |
+| tg | 「terragrunt run-all」「tg plan」 | Terragrunt コマンド実行 |
+| tf-init | 「init して」「terraform init」 | 初期化処理 |
+| resource-import | 「import して」「リソース import」 | import 支援 |
+| state-analyze | 「state list」「state show」 | state 分析・操作 |
+| version-manage | 「tfenv」「バージョン切り替え」 | バージョン管理 |
+| module-generate | 「モジュール作成」「モジュール生成」 | モジュール構造生成 |
+| security-check | 「セキュリティチェック」「シークレット検出」 | セキュリティ監査 |
 
-### Agents（4）
+### Agents（5）
 
 | エージェント | 説明 |
 |-------------|------|
@@ -36,6 +36,7 @@ claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 | state-troubleshooter | state 関連問題の診断・解決 |
 | module-designer | モジュール設計・構造提案 |
 | drift-detector | ドリフト検出・修正提案 |
+| security-checker | セキュリティ監査・リスク検出 |
 
 ## セキュリティ
 
@@ -65,14 +66,14 @@ claude plugin install shiiman-terraform@shiiman/claude-code-plugins
 
 - コマンドをスキルに統合
 - スキル名を CLI 命名規則に変更
-  - tf-executor → exec-tf（plan/apply/validate 統合）
-  - tg-executor → exec-tg
-  - init-runner → init
-  - import-helper → import
-  - state-analyzer → analyze-state
-  - version-manager → manage-version
-  - module-generator → generate-module
-  - security-checker → check-security
+  - tf-executor → tf（plan/apply/validate 統合）
+  - tg-executor → tg
+  - init-runner → tf-init
+  - import-helper → resource-import
+  - state-analyzer → state-analyze
+  - version-manager → version-manage
+  - module-generator → module-generate
+  - security-checker → security-check
 
 ### 1.1.0
 

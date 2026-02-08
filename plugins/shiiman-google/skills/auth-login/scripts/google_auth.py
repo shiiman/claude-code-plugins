@@ -1,11 +1,15 @@
 """OAuth login and token storage for shiiman-google."""
 
+import os
+import sys
 import argparse
 import json
-import os
 import pathlib
-import sys
 from typing import Iterable, List
+
+# lib/ ディレクトリをパスに追加
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+sys.path.insert(0, lib_dir)
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 

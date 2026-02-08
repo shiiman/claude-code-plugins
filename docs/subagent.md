@@ -286,7 +286,7 @@ react-state-specialist
 
 ## 実装例
 
-ファイル: `plugins/shiiman-common/agents/code-reviewer.md`
+ファイル: `plugins/shiiman-plugin/agents/code-reviewer.md`
 
 ```markdown
 # コードレビュー専門エージェント
@@ -346,10 +346,10 @@ src/services/ 配下のコードをレビューしてください
 ### サブエージェント名が既に存在する
 
 ```bash
-# エラー: Agent 'code-reviewer' already exists in plugin 'shiiman-common'
+# エラー: Agent 'code-reviewer' already exists in plugin 'shiiman-plugin'
 
 # 解決策
-ls plugins/shiiman-common/agents/  # 既存エージェントを確認
+ls plugins/shiiman-plugin/agents/  # 既存エージェントを確認
 # 別の名前を検討（例: advanced-code-reviewer, senior-code-reviewer）
 ```
 

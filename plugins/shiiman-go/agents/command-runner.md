@@ -1,7 +1,7 @@
 ---
 name: command-runner
 description: go build, test, mod などの各種コマンドを適切なオプションで実行。タスクランナー優先、公式ドキュメント準拠。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: state-troubleshooter
 description: Terraform state 関連問題を診断・解決する専門家。state ロック、state 破損、リソース不整合などの問題を特定し解決策を提示。「state エラー」「state ロック」「リソースが見つからない」「state 問題」「state 破損」などで起動。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

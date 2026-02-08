@@ -1,7 +1,7 @@
 ---
 name: issue-manager
 description: GitHub Issue の作成、更新、クローズ、ラベル管理など Issue に関する操作を包括的にサポート。
-tools: Read, Bash, Glob, Grep
+allowed-tools: Read, Bash, Glob, Grep
 model: sonnet
 ---
 

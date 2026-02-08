@@ -1,7 +1,7 @@
 ---
 name: module-designer
 description: Terraform モジュールを設計・構造化する専門家。再利用可能なモジュール設計、変数・出力の最適化、ベストプラクティス準拠を支援。「モジュール設計」「モジュールをリファクタ」「再利用可能にして」「モジュール構造を改善」「モジュールの分割」などで起動。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 

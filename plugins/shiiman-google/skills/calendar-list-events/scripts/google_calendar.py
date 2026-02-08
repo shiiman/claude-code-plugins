@@ -1,11 +1,16 @@
 """Calendar helpers for shiiman-google."""
 
+import os
+import sys
 import argparse
 import datetime as dt
 import json
 import re
-import sys
 from typing import List, Optional, Tuple
+
+# lib/ ディレクトリをパスに追加
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+sys.path.insert(0, lib_dir)
 
 from googleapiclient.discovery import build
 

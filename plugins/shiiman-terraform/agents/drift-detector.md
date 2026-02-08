@@ -1,7 +1,7 @@
 ---
 name: drift-detector
 description: インフラのドリフトを検出・修正する専門家。実環境と Terraform state/コードの差分を検出し、修正方法を提案。「ドリフト検出」「実環境との差分」「drift 確認」「状態の不整合」「手動変更を検出」「設定が変わっている」などで起動。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

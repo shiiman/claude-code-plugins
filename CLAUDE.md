@@ -19,17 +19,32 @@ plugins/{plugin-name}/
 └── README.md                   # Plugin documentation
 ```
 
-## Available Commands
+## Available Skills
 
-- `/plugin-create` - Create a new plugin
+### Plugin Management
+
+- `/plugin-create` - Create a new plugin with directory structure and metadata
+- `/plugin-create-full` - Create a plugin with all features (skills, subagents, hooks) at once
 - `/skill-create` - Add a skill to a plugin
 - `/subagent-create` - Add a subagent to a plugin
 - `/hook-create` - Add a hook to a plugin
 
-## Available Skills
+### GitHub Integration
 
-- `issue-create` - Create multiple issues from a plan (trigger: "Issue 作成", "Issue を作って")
-- `pr-create` - Create a PR and close related issues (trigger: "PR 作成", "PR を作って")
+- `/issue-create` - Create GitHub Issues from a plan (trigger: "Issue 作成", "Issue を作って")
+- `/pr-create` - Create a PR and close related issues (trigger: "PR 作成", "PR を作って")
+- `/pr-review-check` - Check PR review comments and apply fixes (trigger: "レビューコメント確認", "レビュー対応")
+
+### Workflow
+
+- `/shiiman-workflow:single-issue-flow` - Single-agent flow: Issue creation → implementation → PR (trigger: "シングル Issue フロー")
+- `/shiiman-workflow:multi-issue-flow` - Multi-agent flow: parallel Issue-based development with MCP (trigger: "マルチ Issue フロー")
+- `/shiiman-workflow:single-flow` - Lightweight single-agent flow without Issue/PR (trigger: "シングルフロー")
+- `/shiiman-workflow:multi-flow` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
+
+### Development Support
+
+- `/multi-agent-test` - Verify MCP multi-agent environment and spawn Admin (trigger: "マルチエージェントテスト")
 
 ## Documentation
 

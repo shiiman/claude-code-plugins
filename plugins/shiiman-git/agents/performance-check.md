@@ -1,7 +1,7 @@
 ---
 name: performance-check
 description: Pull Request のコード変更をパフォーマンスの観点から分析し、潜在的な問題を検出して GitHub にコメント。
-tools: Read, Bash, Glob, Grep
+allowed-tools: Read, Bash, Glob, Grep
 model: sonnet
 ---
 

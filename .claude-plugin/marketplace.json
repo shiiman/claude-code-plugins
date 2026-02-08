@@ -42,21 +42,21 @@
     },
     {
       "name": "shiiman-go",
-      "description": "Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン",
+      "description": "Go 言語開発を支援するプラグイン（フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン）",
       "version": "1.3.0",
       "source": "./plugins/shiiman-go",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-docker",
-      "description": "Docker/Docker Compose 管理 - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援",
+      "description": "Docker/Docker Compose 管理プラグイン - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援",
       "version": "1.3.0",
       "source": "./plugins/shiiman-docker",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-terraform",
-      "description": "Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査",
+      "description": "Terraform/Terragrunt 管理プラグイン - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査",
       "version": "1.3.0",
       "source": "./plugins/shiiman-terraform",
       "category": "developer-tools"
