@@ -18,11 +18,11 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 
 | スキル | トリガー例 | 説明 |
 |--------|-----------|------|
-| manage-container | 「コンテナ一覧」「docker ps」「ログ確認」 | コンテナ管理（ps, start, stop, exec, stats, inspect, logs） |
-| manage-image | 「イメージ一覧」「ビルドして」「イメージ取得」 | イメージ管理（images, build, pull） |
-| manage-compose | 「compose 起動」「サービス停止」「compose ログ」 | Compose 管理（up, down, ps, logs） |
-| manage-resource | 「ネットワーク確認」「ボリューム一覧」「クリーンアップ」 | リソース管理（network, volume, disk, cleanup） |
-| help-dockerfile | 「Dockerfile 作成」「Dockerfile lint」 | Dockerfile 作成・改善・Lint 支援 |
+| container | 「コンテナ一覧」「docker ps」「ログ確認」 | コンテナ管理（ps, start, stop, exec, stats, inspect, logs） |
+| image | 「イメージ一覧」「ビルドして」「イメージ取得」 | イメージ管理（images, build, pull） |
+| compose | 「compose 起動」「サービス停止」「compose ログ」 | Compose 管理（up, down, ps, logs） |
+| resource | 「ネットワーク確認」「ボリューム一覧」「クリーンアップ」 | リソース管理（network, volume, disk, cleanup） |
+| dockerfile | 「Dockerfile 作成」「Dockerfile lint」 | Dockerfile 作成・改善・Lint 支援 |
 
 ### Agents
 
@@ -137,5 +137,5 @@ claude plugin install shiiman-docker@shiiman-claude-code-plugins
 ### v1.0.0
 
 - 初回リリース
-- 5 スキル（manage-container, manage-image, manage-compose, manage-resource, help-dockerfile）
+- 5 スキル（container, image, compose, resource, dockerfile）
 - 2 エージェント（troubleshooter, dockerfile-reviewer）

@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """Slack チャンネル操作スクリプト for shiiman-slack."""
 
+import os
+import sys
 import argparse
 from typing import List, Dict
+
+# lib/ ディレクトリをパスに追加
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+sys.path.insert(0, lib_dir)
 
 from slack_utils import (
     get_slack_client,

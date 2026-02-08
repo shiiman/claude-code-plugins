@@ -1,7 +1,7 @@
 ---
 name: dockerfile-reviewer
 description: Dockerfile のセキュリティ、パフォーマンス、ベストプラクティスをレビュー。改善提案と修正を実施。「Dockerfile をレビューして」「Dockerfile を最適化」「イメージサイズを減らして」「セキュリティチェック」などで起動。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

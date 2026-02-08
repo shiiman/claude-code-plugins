@@ -99,23 +99,23 @@ pip install slack-sdk
 
 | スキル | トリガー例 | 説明 |
 |--------|------------|------|
-| list-channels | 「Slackチャンネル一覧」 | チャンネル一覧を取得 |
-| search-channels | 「チャンネル検索」 | チャンネルを検索 |
-| read-messages | 「メッセージ確認」 | メッセージ履歴を取得 |
-| send-message | 「Slackに送信」 | メッセージを送信 |
-| reply-thread | 「スレッドに返信」 | スレッドに返信 |
-| read-thread | 「スレッドを読む」 | スレッド返信を取得 |
-| add-reaction | 「リアクション追加」 | リアクションを追加 |
-| edit-message | 「メッセージ編集」 | メッセージを編集 |
-| delete-message | 「メッセージ削除」 | メッセージを削除 |
-| check-unread | 「Slack未読確認」 | 未読メッセージを確認 |
-| mark-read | 「既読にして」 | チャンネルを既読化 |
-| check-mentions | 「メンション確認」 | 自分へのメンションを確認 |
-| summarize-messages | 「Slack要約」 | メッセージを要約 |
-| list-thread-users | 「スレッド参加者」 | スレッド参加者一覧 |
-| get-user-profile | 「ユーザー情報」 | ユーザープロファイル取得 |
-| setup-user | 「ユーザー設定」 | トークン・ユーザー設定 |
-| update-profile | 「プロフィール更新」 | 自分のプロフィールを更新 |
+| channel-list | 「Slackチャンネル一覧」 | チャンネル一覧を取得 |
+| channel-search | 「チャンネル検索」 | チャンネルを検索 |
+| message-read | 「メッセージ確認」 | メッセージ履歴を取得 |
+| message-send | 「Slackに送信」 | メッセージを送信 |
+| thread-reply | 「スレッドに返信」 | スレッドに返信 |
+| thread-read | 「スレッドを読む」 | スレッド返信を取得 |
+| reaction-add | 「リアクション追加」 | リアクションを追加 |
+| message-edit | 「メッセージ編集」 | メッセージを編集 |
+| message-delete | 「メッセージ削除」 | メッセージを削除 |
+| unread-check | 「Slack未読確認」 | 未読メッセージを確認 |
+| channel-mark-read | 「既読にして」 | チャンネルを既読化 |
+| mention-check | 「メンション確認」 | 自分へのメンションを確認 |
+| message-summarize | 「Slack要約」 | メッセージを要約 |
+| thread-list-users | 「スレッド参加者」 | スレッド参加者一覧 |
+| user-get-profile | 「ユーザー情報」 | ユーザープロファイル取得 |
+| user-setup | 「ユーザー設定」 | トークン・ユーザー設定 |
+| profile-update | 「プロフィール更新」 | 自分のプロフィールを更新 |
 
 ### エージェント
 
@@ -254,7 +254,9 @@ python plugins/shiiman-slack/skills/setup-user/scripts/slack_config.py token-set
 ### アーキテクチャ
 
 ```
-Pythonスクリプト (各スキルの scripts/ ディレクトリ)
+plugins/shiiman-slack/
+  ├─ lib/
+  │   └─ slack_utils.py (共通ユーティリティ: 認証・出力・エラーハンドリング)
   ├─ skills/send-message/scripts/
   │   └─ slack_post.py (post)
   ├─ skills/reply-thread/scripts/
@@ -275,7 +277,7 @@ Pythonスクリプト (各スキルの scripts/ ディレクトリ)
       └─ slack_profile.py (show, update, clear-status)
 ```
 
-**注**: 各スキルの `scripts/` ディレクトリには共通ユーティリティ `slack_utils.py` も配置されています。
+**注**: 共通ユーティリティ `slack_utils.py` は `lib/` ディレクトリに集約されています。各スキルスクリプトは `sys.path` 経由でインポートします。
 
 ### Pythonスクリプトの使用方法
 

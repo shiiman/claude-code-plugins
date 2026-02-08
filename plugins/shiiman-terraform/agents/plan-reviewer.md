@@ -1,7 +1,7 @@
 ---
 name: plan-reviewer
 description: Terraform plan 結果をレビュー・要約する専門家。plan 出力を分析し、破壊的変更の警告、影響範囲の評価、推奨アクションを提示。「plan をレビュー」「plan 結果を確認」「変更内容を教えて」「plan 解析」「plan の影響」などで起動。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

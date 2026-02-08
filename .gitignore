@@ -31,3 +31,4 @@ dist/
 # Claude
 settings.local.json
 tmp
+.claude/plans/

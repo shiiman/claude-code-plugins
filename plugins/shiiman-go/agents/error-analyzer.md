@@ -1,7 +1,7 @@
 ---
 name: error-analyzer
 description: Go のエラー分析・修正専門家。コンパイルエラー、ランタイムエラー、lint エラーを診断し、原因特定から修正まで実施。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 

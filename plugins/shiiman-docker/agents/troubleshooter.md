@@ -1,7 +1,7 @@
 ---
 name: troubleshooter
 description: Docker のトラブルシューティング専門家。起動エラー、ネットワーク問題、パフォーマンス問題を診断・解決。「コンテナが起動しない」「接続できない」「遅い」「エラーが出る」「docker トラブル」などで起動。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

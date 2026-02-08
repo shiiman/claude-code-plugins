@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Go コードレビュー専門家。Effective Go、Go Code Review Comments に準拠したコードレビューを実施し、Go イディオム、エラーハンドリング、goroutine、defer の観点から改善提案を行う。
-tools: Read, Bash, Glob, Grep
+allowed-tools: Read, Bash, Glob, Grep
 model: sonnet
 ---
 

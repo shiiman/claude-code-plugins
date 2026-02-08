@@ -20,20 +20,20 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 
 | スキル | トリガー例 | 説明 |
 |--------|------------|------|
-| setup-github | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
-| setup-commit-message | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
+| github-setup | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
+| commit-message-setup | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
 | commit | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
-| create-branch | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
-| check-gitignore | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
-| create-issue | 「Issue 作成」 | タスクを分割して Issue を作成 |
-| update-issue | 「Issue 更新」 | Issue の状態を更新 |
-| list-issues | 「Issue 一覧」 | オープン Issue を表示 |
-| create-pr | 「PR 作成」 | PR を作成し関連 Issue を参照 |
-| review-pr | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
-| check-pr-review | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
-| list-prs | 「PR 一覧」 | オープン PR を表示 |
-| approve-pr | 「PR 承認」 | PR を approve |
-| debug-actions | 「Actions エラー」 | GitHub Actions のエラーを調査 |
+| branch-create | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
+| gitignore-check | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
+| issue-create | 「Issue 作成」 | タスクを分割して Issue を作成 |
+| issue-update | 「Issue 更新」 | Issue の状態を更新 |
+| issue-list | 「Issue 一覧」 | オープン Issue を表示 |
+| pr-create | 「PR 作成」 | PR を作成し関連 Issue を参照 |
+| pr-review | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
+| pr-review-check | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
+| pr-list | 「PR 一覧」 | オープン PR を表示 |
+| pr-approve | 「PR 承認」 | PR を approve |
+| actions-debug | 「Actions エラー」 | GitHub Actions のエラーを調査 |
 | worktree | 「worktree 作成」「gtr list」 | gtr で worktree を管理 |
 | gtrconfig-setup | 「gtrconfig 設定」 | .gtrconfig を生成 |
 
@@ -105,22 +105,22 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 個別のスキルを使う場合:
 
 1. **作業開始時**
-   - `create-issue` → タスクを Issue 化
-   - `create-branch` → Issue 番号でブランチ作成
+   - `issue-create` → タスクを Issue 化
+   - `branch-create` → Issue 番号でブランチ作成
 
 2. **コミット時**
-   - `check-gitignore` → 機密ファイルチェック
+   - `gitignore-check` → 機密ファイルチェック
    - `commit` → コミット＆プッシュ
 
 3. **PR 作成時**
-   - `create-pr` → PR 作成
+   - `pr-create` → PR 作成
 
 4. **レビュー時**
-   - `review-pr` → **他者の PR** をレビュー（レビュアーとして）
-   - `check-pr-review` → **自分の PR** のレビューコメントに対応（作成者として）
+   - `pr-review` → **他者の PR** をレビュー（レビュアーとして）
+   - `pr-review-check` → **自分の PR** のレビューコメントに対応（作成者として）
 
 5. **完了時**
-   - `approve-pr` → PR 承認
+   - `pr-approve` → PR 承認
 
 ## トラブルシューティング
 

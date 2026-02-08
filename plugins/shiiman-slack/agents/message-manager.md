@@ -1,7 +1,7 @@
 ---
 name: message-manager
 description: Slack メッセージの送信、編集、削除、履歴取得、要約などメッセージに関する操作を包括的にサポート。効果的なコミュニケーションのベストプラクティスに基づいた提案も行う。
-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 

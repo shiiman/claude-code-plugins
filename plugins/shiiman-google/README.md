@@ -148,47 +148,46 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 「フォームに質問を追加して」
 ```
 
+## 参考ドキュメント
+
+- [認証・トークン運用リファレンス](docs/auth-reference.md) — OAuth の保存先・スコープ一覧
+
 ## ディレクトリ構成
 
 ```
 plugins/shiiman-google/
 ├── .claude-plugin/plugin.json   # プラグインメタデータ
+├── docs/                        # 参考ドキュメント
+│   └── auth-reference.md        # 認証・トークン運用リファレンス
+├── lib/                         # 共有ライブラリ
+│   └── google_utils.py          # 共通ユーティリティ（認証・出力・リトライ）
 └── skills/                      # 自然言語トリガースキル
     ├── auth-login/
-    │   └── scripts/             # 認証関連スクリプト
-    │       ├── google_utils.py  # 共通ユーティリティ
+    │   └── scripts/
     │       └── google_auth.py   # 認証
     ├── calendar-list-events/
-    │   └── scripts/             # カレンダー関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_calendar.py
     ├── docs-list/
-    │   └── scripts/              # ドキュメント関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_docs.py
     ├── drive-list/
-    │   └── scripts/              # ドライブ関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_drive.py
     ├── forms-list/
-    │   └── scripts/              # フォーム関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_forms.py
     ├── gmail-list-unread/
-    │   └── scripts/              # Gmail関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_gmail.py
     ├── sheets-list/
-    │   └── scripts/              # スプレッドシート関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_sheets.py
     ├── slides-list/
-    │   └── scripts/              # スライド関連スクリプト
-    │       ├── google_utils.py
+    │   └── scripts/
     │       └── google_slides.py
     └── apps-script-list/
-        └── scripts/              # Apps Script関連スクリプト
-            ├── google_utils.py
+        └── scripts/
             └── google_apps_script.py
 ```
 

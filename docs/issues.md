@@ -26,7 +26,7 @@
 ```bash
 # プラグイン
 gh issue create \
-  --title "[Plugin] shiiman-common" \
+  --title "[Plugin] shiiman-plugin" \
   --body "## プラグイン名
 common
 
@@ -36,9 +36,9 @@ common
 
 # コマンド
 gh issue create \
-  --title "[Command] shiiman-common:commit" \
+  --title "[Command] shiiman-plugin:commit" \
   --body "## 対象プラグイン
-shiiman-common
+shiiman-plugin
 
 ## コマンド名
 commit
@@ -49,9 +49,9 @@ commit
 
 # スキル
 gh issue create \
-  --title "[Skill] shiiman-common:code-reviewer" \
+  --title "[Skill] shiiman-plugin:code-reviewer" \
   --body "## 対象プラグイン
-shiiman-common
+shiiman-plugin
 
 ## スキル名
 code-reviewer
@@ -63,9 +63,9 @@ code-reviewer
 
 # サブエージェント
 gh issue create \
-  --title "[Subagent] shiiman-common:test-runner" \
+  --title "[Subagent] shiiman-plugin:test-runner" \
   --body "## 対象プラグイン
-shiiman-common
+shiiman-plugin
 
 ## サブエージェント名
 test-runner
@@ -77,9 +77,9 @@ test-runner
 
 # フック
 gh issue create \
-  --title "[Hook] shiiman-common:PreToolUse:Bash" \
+  --title "[Hook] shiiman-plugin:PreToolUse:Bash" \
   --body "## 対象プラグイン
-shiiman-common
+shiiman-plugin
 
 ## イベント
 PreToolUse

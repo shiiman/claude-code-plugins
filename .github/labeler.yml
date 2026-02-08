@@ -15,3 +15,49 @@
   - changed-files:
       - any-glob-to-any-file:
           - ".github/**/*"
+
+# Plugin labels
+"plugin:shiiman-plugin":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-plugin/**/*"
+
+"plugin:shiiman-claude":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-claude/**/*"
+
+"plugin:shiiman-git":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-git/**/*"
+
+"plugin:shiiman-workflow":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-workflow/**/*"
+
+"plugin:shiiman-google":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-google/**/*"
+
+"plugin:shiiman-go":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-go/**/*"
+
+"plugin:shiiman-docker":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-docker/**/*"
+
+"plugin:shiiman-terraform":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-terraform/**/*"
+
+"plugin:shiiman-slack":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-slack/**/*"

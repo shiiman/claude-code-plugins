@@ -1,7 +1,7 @@
 ---
 name: test-writer
 description: Go 言語のテストコード専門家。テーブル駆動テスト、t.Parallel() による並行テスト、モック実装など、Go のベストプラクティスに準拠したテストを作成・修正。
-tools: Read, Write, Edit, Bash, Grep, Glob
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 

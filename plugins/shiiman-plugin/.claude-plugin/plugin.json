@@ -1,8 +1,9 @@
 {
-    "name": "shiiman-plugin",
-    "version": "1.3.0",
-    "description": "プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート、検索、更新チェック、Issue報告機能を提供",
-    "author": {
-        "name": "shiiman"
-    }
+  "name": "shiiman-plugin",
+  "version": "1.3.0",
+  "description": "プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート、検索、更新チェック、Issue報告機能を提供",
+  "author": {
+    "name": "shiiman"
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
 }

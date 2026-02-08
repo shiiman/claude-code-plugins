@@ -1,6 +1,7 @@
 ---
 name: check-updates
 description: 更新可能なプラグインがあるか確認する。「更新があるか確認」「アップデート確認」「新しいバージョン」「更新チェック」「アップデートあるか」「プラグインの更新確認」「最新版があるか」などで起動。
+allowed-tools: [Read, Bash, Grep, Glob]
 ---
 
 # Plugin Update Checker

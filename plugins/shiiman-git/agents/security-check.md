@@ -1,7 +1,7 @@
 ---
 name: security-check
 description: Pull Request のコード変更をセキュリティの観点から分析し、脆弱性を検出して GitHub にコメント。OWASP Top 10 を基準にリスク評価を行う。
-tools: Read, Bash, Glob, Grep
+allowed-tools: Read, Bash, Glob, Grep
 model: sonnet
 ---
 

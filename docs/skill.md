@@ -554,7 +554,7 @@ plugins/{plugin-name}/
 
 ## 実装例
 
-ファイル: `plugins/shiiman-common/skills/plugin-creator/SKILL.md`
+ファイル: `plugins/shiiman-plugin/skills/plugin-creator/SKILL.md`
 
 ````markdown
 ---
