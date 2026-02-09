@@ -144,23 +144,17 @@ mcp__multi-agent-mcp__read_messages(
 )
 ```
 
-### ステップ 1: 結果統合確認
+### ステップ 1: 変更内容をユーザーに表示
 
 ```bash
-git checkout feature/{slug}
-git pull origin feature/{slug}
-```
-
-### ステップ 2: 変更内容をユーザーに表示
-
-```bash
-git diff main...feature/{slug} --stat
-git log main..feature/{slug} --oneline
+git status --short --branch
+git diff
+git diff --cached
 ```
 
 変更内容、品質チェック結果（Admin からの報告）をユーザーに表示。
 
-### ステップ 3: ユーザー確認（🔴 必須）
+### ステップ 2: ユーザー確認（🔴 必須）
 
 **⚠️ クリーンアップの前に必ずユーザー確認を行う**
 
@@ -182,7 +176,7 @@ AskUserQuestion:
 
 ### OK（承認）の場合
 
-#### ステップ 4: Admin に承認通知を送信
+#### ステップ 3: Admin に承認通知を送信
 
 ```
 mcp__multi-agent-mcp__send_message(
@@ -215,20 +209,20 @@ mcp__multi-agent-mcp__send_message(
 
 ---
 
-#### ステップ 5: クリーンアップ
+#### ステップ 4: クリーンアップ
 
 ```
 mcp__multi-agent-mcp__check_all_tasks_completed(caller_agent_id="{owner_id}")
 mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 ```
 
-#### ステップ 6: セキュリティチェック
+#### ステップ 5: セキュリティチェック
 
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
 ```
 
-#### ステップ 7: コミットメッセージ出力
+#### ステップ 6: コミットメッセージ出力
 
 **重要: このフローではコミット・プッシュ・PR作成を行いません。**
 

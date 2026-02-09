@@ -165,23 +165,17 @@ mcp__multi-agent-mcp__read_messages(
 )
 ```
 
-### ステップ 1: 結果統合確認
+### ステップ 1: 変更内容をユーザーに表示
 
 ```bash
-git checkout feature/{issue番号}
-git pull origin feature/{issue番号}
-```
-
-### ステップ 2: 変更内容をユーザーに表示
-
-```bash
-git diff main...feature/{issue番号} --stat
-git log main..feature/{issue番号} --oneline
+git status --short --branch
+git diff
+git diff --cached
 ```
 
 変更内容、品質チェック結果（Admin からの報告）をユーザーに表示。
 
-### ステップ 3: ユーザー確認（🔴 必須）
+### ステップ 2: ユーザー確認（🔴 必須）
 
 **⚠️ クリーンアップの前に必ずユーザー確認を行う**
 
@@ -203,7 +197,7 @@ AskUserQuestion:
 
 ### OK（承認）の場合
 
-#### ステップ 4: Admin に承認通知を送信
+#### ステップ 3: Admin に承認通知を送信
 
 ```
 mcp__multi-agent-mcp__send_message(
@@ -236,24 +230,24 @@ mcp__multi-agent-mcp__send_message(
 
 ---
 
-#### ステップ 5: クリーンアップ
+#### ステップ 4: クリーンアップ
 
 ```
 mcp__multi-agent-mcp__check_all_tasks_completed(caller_agent_id="{owner_id}")
 mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 ```
 
-#### ステップ 6: セキュリティチェック
+#### ステップ 5: セキュリティチェック
 
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
 ```
 
-#### ステップ 7: Issue チェックボックス更新
+#### ステップ 6: Issue チェックボックス更新
 
 Issue の全てのチェックボックスを完了状態に更新。
 
-#### ステップ 8: コミット・プッシュ
+#### ステップ 7: コミット・プッシュ
 
 ```bash
 git add .
@@ -261,7 +255,7 @@ git commit -m "{コミットメッセージ}"
 git push origin feature/{issue番号}
 ```
 
-#### ステップ 9: PR 作成
+#### ステップ 8: PR 作成
 
 ```bash
 gh pr create --title "{PRタイトル}" --body "{PR本文}"
@@ -286,7 +280,7 @@ Closes #{issue番号}
 - [ ] {テスト項目}
 ```
 
-#### ステップ 10: 完了報告
+#### ステップ 9: 完了報告
 
 ```
 ## 開発フロー完了

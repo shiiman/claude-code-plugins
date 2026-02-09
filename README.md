@@ -62,12 +62,12 @@ pip install -r requirements.txt
 | [`shiiman-plugin`](plugins/shiiman-plugin/) | プラグイン管理用プラグイン - 一覧表示、詳細表示、インストール、アンインストール、有効化、無効化、アップデート機能を提供 | `/plugin install shiiman-plugin@shiiman-claude-code-plugins` |
 | [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理機能を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
 | [`shiiman-git`](plugins/shiiman-git/) | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
-| [`shiiman-workflow`](plugins/shiiman-workflow/) | 開発ワークフロー自動化 - シングル/マルチエージェントでの Issue 管理付き・なしのフローを提供 | `/plugin install shiiman-workflow@shiiman-claude-code-plugins` |
+| [`shiiman-workflow`](plugins/shiiman-workflow/) | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供 | `/plugin install shiiman-workflow@shiiman-claude-code-plugins` |
 | [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail 機能を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
 | [`shiiman-docker`](plugins/shiiman-docker/) | Docker/Docker Compose 管理 - コンテナ、イメージ、ネットワーク、ボリューム、Dockerfile の操作を支援 | `/plugin install shiiman-docker@shiiman-claude-code-plugins` |
 | [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
-| [`shiiman-slack`](plugins/shiiman-slack/) | Slack ワークスペース管理 - MCP サーバーによるチャンネル操作、メッセージ管理、要約機能を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
+| [`shiiman-slack`](plugins/shiiman-slack/) | Slack ワークスペース管理 - チャンネル操作、メッセージ管理、要約機能、User Token によるユーザー操作を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
 
 **インストール例**:
 
@@ -102,9 +102,14 @@ pip install -r requirements.txt
 | コマンド | 説明 |
 |----------|------|
 | `/plugin-create` | 新しいプラグインを作成 |
+| `/plugin-create-full` | スキル/サブエージェント/フックを含むプラグインを一括作成 |
 | `/skill-create` | プラグインにスキルを追加 |
 | `/subagent-create` | プラグインにサブエージェントを追加 |
 | `/hook-create` | プラグインにフックを追加 |
+| `/issue-create` | 計画から GitHub Issue を作成 |
+| `/pr-create` | PR を作成し関連 Issue をクローズ |
+| `/pr-review-check` | PR のレビューコメントを確認して修正対応 |
+| `/multi-agent-test` | MCP マルチエージェント環境検証と Admin 起動を実行 |
 
 ## 利用可能なスキル
 
@@ -136,6 +141,8 @@ pip install -r requirements.txt
 | multi-issue-flow | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」 | MCP マルチエージェントで Issue から PR まで並列実行 |
 | single-flow | shiiman-workflow | 「シングルフロー」「軽量フロー」 | Issue/PR なしで計画書からタスク実行する軽量フロー |
 | multi-flow | shiiman-workflow | 「マルチフロー」「並列軽量フロー」 | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー |
+| agent-team-issue-flow | shiiman-workflow | 「agent-team-issue-flow」「Agent Team Issue」 | Agent Team で Issue から PR まで並列実行 |
+| agent-team-flow | shiiman-workflow | 「agent-team-flow」「エージェントチームフロー」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
 
 ### 開発支援
 

@@ -171,6 +171,7 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 
 ## バージョン履歴
 
+- v1.7.4: Phase 5 の変更確認手順を統一（`git status --short --branch` + `git diff` + `git diff --cached`）
 - v1.7.1: agent-team-flow / agent-team-issue-flow を仕様準拠に修正（Ghostty/iTerm2 + tmux + Agent Team 実行フローへ統一）
 - v1.5.0: SKILL.md を約 60% スリム化。MCP 側で Admin/Worker 指示を自動生成
 - v1.4.0: Worker 数をデフォルト 6、最大 16 に変更。MCP 自動機能（ペルソナ、メモリ、7セクション構造）を統合
