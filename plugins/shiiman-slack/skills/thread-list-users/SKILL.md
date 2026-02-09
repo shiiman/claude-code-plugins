@@ -21,7 +21,7 @@ allowed-tools: [Bash]
 Pythonスクリプトを実行:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/check-mentions/slack_message.py thread-users \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py thread-users \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --format table

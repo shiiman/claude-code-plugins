@@ -22,7 +22,7 @@ Slack メッセージを要約用データとして取得します。
 Pythonスクリプトで要約用データを取得:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/message-summarizer/slack_message.py summarize \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py summarize \
   --channel C01234567 \
   --limit 50 \
   --format json
