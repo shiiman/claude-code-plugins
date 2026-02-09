@@ -55,6 +55,11 @@ if [[ -z "$TARGET" || -z "$MESSAGE_FILE" ]]; then
   exit 2
 fi
 
+if [[ ! "$SLEEP_MS" =~ ^[0-9]+$ ]]; then
+  echo "--sleep-ms must be a non-negative integer (milliseconds): $SLEEP_MS" >&2
+  exit 2
+fi
+
 if [[ ! -f "$MESSAGE_FILE" ]]; then
   echo "message file not found: $MESSAGE_FILE" >&2
   exit 2
@@ -73,8 +78,8 @@ trap 'tmux delete-buffer -b "$buffer_name" >/dev/null 2>&1 || true' EXIT
 
 # 1回目: メッセージ本文を送信（Enterなし）
 tmux load-buffer -b "$buffer_name" "$MESSAGE_FILE"
-tmux paste-buffer -d -b "$buffer_name" -t "$TARGET"
+tmux paste-buffer -b "$buffer_name" -t "$TARGET"
 
 # 2回目: Enter を自動送信
-sleep "$(awk "BEGIN { printf \"%.3f\", ${SLEEP_MS}/1000 }")"
+sleep "$(printf '%d.%03d' "$((SLEEP_MS / 1000))" "$((SLEEP_MS % 1000))")"
 tmux send-keys -t "$TARGET" C-m 2>/dev/null || tmux send-keys -t "$TARGET" Enter

@@ -3,7 +3,7 @@
 import os
 import sys
 import argparse
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 # lib/ ディレクトリをパスに追加
 lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib")
@@ -341,8 +341,8 @@ def unshare_file(
 
     # permission_idが指定されていない場合、emailから検索
     if not permission_id and email:
-        permissions = get_permissions(token_path, file_id)
-        for perm in permissions:
+        permissions_info = get_permissions(token_path, file_id)
+        for perm in permissions_info.get("permissions", []):
             if perm.get("emailAddress") == email:
                 permission_id = perm.get("id")
                 break
@@ -364,7 +364,7 @@ def unshare_file(
 def get_permissions(
     token_path: str,
     file_id: str,
-) -> List[dict]:
+) -> Dict[str, Any]:
     """ファイルの共有設定一覧を取得する。
 
     Args:
@@ -372,7 +372,7 @@ def get_permissions(
         file_id: ファイルID
 
     Returns:
-        パーミッション情報のリスト
+        ファイル情報とパーミッション情報
     """
     service = _get_service(token_path)
 
