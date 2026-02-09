@@ -114,6 +114,8 @@ Agent Team が計画書を分解して実装を進める。呼び出し元は待
 
 ```bash
 git status --short --branch
+git diff
+git diff --cached
 ```
 
 ### ステップ 2: ユーザー承認を取得（必須）
