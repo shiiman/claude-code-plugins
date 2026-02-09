@@ -13,14 +13,14 @@ Google OAuth 認証を実行してトークンを取得・保存します。
 ### 基本的な認証（デフォルトプロファイル）
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/auth-login/google_auth.py login
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py login
 ```
 
 ### プロファイルを指定して認証
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/auth-login/google_auth.py login --profile work
-python ${CLAUDE_PLUGIN_ROOT}/scripts/auth-login/google_auth.py login --profile personal
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py login --profile work
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py login --profile personal
 ```
 
 ## 前提条件

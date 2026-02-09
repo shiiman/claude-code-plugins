@@ -13,25 +13,25 @@ Gmail の未読メッセージを既読化します（単体/一括）。
 ### 特定メッセージを既読化
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-list-unread/google_gmail.py mark-read --ids <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --ids <message-id>
 ```
 
 ### 複数メッセージを一括で既読化
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-list-unread/google_gmail.py mark-read --ids <id1>,<id2>,<id3>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --ids <id1>,<id2>,<id3>
 ```
 
 ### 未読メッセージを一括で既読化
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-list-unread/google_gmail.py mark-read --all
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --all
 ```
 
 ### プロファイル指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-list-unread/google_gmail.py mark-read --profile <profile-name> --all
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --profile <profile-name> --all
 ```
 
 ## オプション

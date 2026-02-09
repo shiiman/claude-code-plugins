@@ -13,19 +13,19 @@ Google Slides プレゼンテーションにスライドを追加します。
 ### タイトルと本文付きスライド追加
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slides-update/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --body "本文"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --body "本文"
 ```
 
 ### 空白スライド追加
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slides-update/google_slides.py add-slide --presentation-id "ID" --layout BLANK
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py add-slide --presentation-id "ID" --layout BLANK
 ```
 
 ### タイトルのみのスライド
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slides-update/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --layout TITLE
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py add-slide --presentation-id "ID" --title "タイトル" --layout TITLE
 ```
 
 ## レイアウト種別

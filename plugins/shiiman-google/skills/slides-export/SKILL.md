@@ -20,11 +20,11 @@ Google Slides をファイルにエクスポートします。
 ## 実行方法
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slides-list/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pdf
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pdf
 ```
 
 ### PowerPoint形式でエクスポート
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slides-list/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pptx --type pptx
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py export --presentation-id <presentation-id> --output ~/Downloads/presentation.pptx --type pptx
 ```

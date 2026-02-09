@@ -26,7 +26,7 @@ import argparse
 import json
 
 # lib/ ディレクトリをパスに追加
-lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib")
 sys.path.insert(0, lib_dir)
 
 from google_utils import (

@@ -13,19 +13,19 @@ Google Apps Script の一覧を取得します。
 ### 基本的な一覧取得
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/drive-list/google_drive.py search --query "mimeType='application/vnd.google-apps.script'"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.script'"
 ```
 
 ### 最大件数を指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/drive-list/google_drive.py search --query "mimeType='application/vnd.google-apps.script'" --max 50
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.script'" --max 50
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/drive-list/google_drive.py --format json search --query "mimeType='application/vnd.google-apps.script'"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py --format json search --query "mimeType='application/vnd.google-apps.script'"
 ```
 
 ## 出力項目

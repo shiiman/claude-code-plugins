@@ -13,19 +13,19 @@ Gmail で下書きを作成します。送信前に確認したい場合に便�
 ### 下書きを作成
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-draft/google_gmail.py draft --to "user@example.com" --subject "件名" --body "本文です。"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py draft --to "user@example.com" --subject "件名" --body "本文です。"
 ```
 
 ### CC/BCC 付きで下書き作成
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-draft/google_gmail.py draft --to "user@example.com" --subject "報告" --body "内容" --cc "cc1@example.com"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py draft --to "user@example.com" --subject "報告" --body "内容" --cc "cc1@example.com"
 ```
 
 ### HTML 形式の下書き
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-draft/google_gmail.py draft --to "user@example.com" --subject "お知らせ" --body "<h1>見出し</h1><p>本文</p>" --html
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py draft --to "user@example.com" --subject "お知らせ" --body "<h1>見出し</h1><p>本文</p>" --html
 ```
 
 ## 必要な情報
