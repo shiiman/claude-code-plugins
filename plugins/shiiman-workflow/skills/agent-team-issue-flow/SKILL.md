@@ -99,10 +99,13 @@ SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 
 ### ステップ 6: 計画書を送信して Agent Team 実行を開始
 
+送信スクリプトは、本文貼り付け後に 2 通目の Enter を自動送信する。
+
 ```bash
 REQUEST_FILE="$(mktemp)"
 cat > "$REQUEST_FILE" <<'EOF'
 Issue #{issue_number} の対応を開始してください。以下の計画書に従って実装してください。
+git add / commit / push は実行しないでください。
 
 計画書:
 {plan_or_task}
@@ -111,7 +114,7 @@ Issue #{issue_number} の対応を開始してください。以下の計画書�
 - 完了時は以下コマンドを実行して macOS 通知を送る
   osascript -e 'display notification "Agent Team Issue 実装が完了しました" with title "agent-team-issue-flow" sound name "default"'
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE" --enter
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
 rm -f "$REQUEST_FILE"
 ```
 
@@ -133,8 +136,7 @@ Agent Team が計画書を分解して実装を進める。呼び出し元は待
 ### ステップ 1: 変更内容を確認
 
 ```bash
-git diff main...feature/{issue_number} --stat
-git log main..feature/{issue_number} --oneline
+git status --short --branch
 ```
 
 ### ステップ 2: ユーザー承認を取得（必須）
@@ -158,7 +160,7 @@ APPROVAL_FILE="$(mktemp)"
 cat > "$APPROVAL_FILE" <<'EOF'
 実装を承認します。Agent Team をクリーンアップして、最終サマリーを出してください。
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$APPROVAL_FILE" --enter
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$APPROVAL_FILE"
 rm -f "$APPROVAL_FILE"
 ```
 
@@ -227,15 +229,20 @@ Closes #{issue_number}
 USER_FEEDBACK="{user_feedback}"
 FIX_FILE="$(mktemp)"
 cat > "$FIX_FILE" <<EOF
+Agent Team を作成して、以下の修正指示に従って実装を開始してください。
+コミット（git add / commit / push）は行わないでください。
+
 修正依頼: ${USER_FEEDBACK}
 
-上記を反映し、完了後に差分とテスト結果を再報告してください。
+上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
+完了時は以下コマンドを実行して macOS 通知を送ってください。
+osascript -e 'display notification "Agent Team Issue 修正対応が完了しました" with title "agent-team-issue-flow" sound name "default"'
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE" --enter
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE"
 rm -f "$FIX_FILE"
 ```
 
-2. Phase 2-4 に戻って再実行
+1. Phase 2-4 に戻って再実行
 
 ### 保留の場合
 
@@ -246,7 +253,7 @@ HOLD_FILE="$(mktemp)"
 cat > "$HOLD_FILE" <<'EOF'
 現在は保留です。追加指示があるまで待機してください。
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$HOLD_FILE" --enter
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$HOLD_FILE"
 rm -f "$HOLD_FILE"
 ```
 

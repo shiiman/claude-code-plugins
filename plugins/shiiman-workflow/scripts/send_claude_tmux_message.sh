@@ -4,12 +4,11 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  send_claude_tmux_message.sh --target <session:window.pane> --file <message_file> [--enter]
+  send_claude_tmux_message.sh --target <session:window.pane> --file <message_file>
 
 Options:
   --target <value>   tmux target (e.g. agent-team-foo:0.0)
   --file <path>      message text file path
-  --enter            send phase-2 Enter automatically after pasting message
   --sleep-ms <ms>    wait before Enter (default: 150)
   --no-verify        skip pane_current_command == claude check
 USAGE
@@ -17,7 +16,6 @@ USAGE
 
 TARGET=""
 MESSAGE_FILE=""
-SEND_ENTER=0
 SLEEP_MS=150
 VERIFY_PANE=1
 
@@ -30,10 +28,6 @@ while [[ $# -gt 0 ]]; do
     --file)
       MESSAGE_FILE="${2:-}"
       shift 2
-      ;;
-    --enter)
-      SEND_ENTER=1
-      shift
       ;;
     --sleep-ms)
       SLEEP_MS="${2:-150}"
@@ -81,8 +75,6 @@ trap 'tmux delete-buffer -b "$buffer_name" >/dev/null 2>&1 || true' EXIT
 tmux load-buffer -b "$buffer_name" "$MESSAGE_FILE"
 tmux paste-buffer -d -b "$buffer_name" -t "$TARGET"
 
-# 2回目: 必要な場合のみ Enter を自動送信
-if [[ "$SEND_ENTER" -eq 1 ]]; then
-  sleep "$(awk "BEGIN { printf \"%.3f\", ${SLEEP_MS}/1000 }")"
-  tmux send-keys -t "$TARGET" C-m 2>/dev/null || tmux send-keys -t "$TARGET" Enter
-fi
+# 2回目: Enter を自動送信
+sleep "$(awk "BEGIN { printf \"%.3f\", ${SLEEP_MS}/1000 }")"
+tmux send-keys -t "$TARGET" C-m 2>/dev/null || tmux send-keys -t "$TARGET" Enter
