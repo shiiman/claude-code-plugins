@@ -93,7 +93,8 @@ claude --dangerously-skip-permissions
 ### ステップ 5: 送信スクリプトを設定（multi-agent-mcp の送信方式）
 
 ```bash
-TARGET="$SESSION:0.0"
+TARGET="$(tmux list-panes -t "$SESSION" -F '#{pane_active} #{session_name}:#{window_index}.#{pane_index}' | awk '$1==1{print $2; exit}')"
+[ -n "$TARGET" ] || TARGET="$SESSION:0.0"
 
 test -n "${CLAUDE_PLUGIN_ROOT:-}" || {
   echo "CLAUDE_PLUGIN_ROOT is not set. Run this skill via Claude plugin runtime." >&2
@@ -107,26 +108,26 @@ test -x "$SEND_SCRIPT" || { echo "script not found: $SEND_SCRIPT" >&2; exit 1; }
 ### ステップ 6: 計画書を送信して Agent Team 実行を開始
 
 メッセージは 2 回に分けて送る（1通目は Enter なし、2通目で Enter）。
-- 1通目: 実行指示
-- 2通目: 計画書本文（2回目も Enter で確定）
+- 1通目: 実行指示 + 計画書本文をまとめて送信
+- 2通目: Enter のみ送信して確定
 
 ```bash
-INSTRUCTION_FILE="$(mktemp)"
-cat > "$INSTRUCTION_FILE" <<'EOF'
-Issue #{issue_number} の対応を開始してください。次のメッセージで計画書本体を送ります。
-EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$INSTRUCTION_FILE"
-rm -f "$INSTRUCTION_FILE"
+REQUEST_FILE="$(mktemp)"
+cat > "$REQUEST_FILE" <<'EOF'
+Issue #{issue_number} の対応を開始してください。以下の計画書に従って実装してください。
 
-PLAN_MSG_FILE="$(mktemp)"
-cat > "$PLAN_MSG_FILE" <<'EOF'
 計画書:
 {plan_or_task}
 
 - 完了条件: 実装、テスト、変更サマリー、残課題の報告
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$PLAN_MSG_FILE" --enter
-rm -f "$PLAN_MSG_FILE"
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
+rm -f "$REQUEST_FILE"
+
+ENTER_ONLY_FILE="$(mktemp)"
+: > "$ENTER_ONLY_FILE"
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$ENTER_ONLY_FILE" --enter
+rm -f "$ENTER_ONLY_FILE"
 ```
 
 ### ステップ 7: macOS 通知を待機
