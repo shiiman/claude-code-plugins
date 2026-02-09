@@ -13,37 +13,37 @@ Google Calendar の予定を今日/週/月で取得します。
 ### 今日の予定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py --range today
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py --range today
 ```
 
 ### 今週の予定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py --range week
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py --range week
 ```
 
 ### 今月の予定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py --range month
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py --range month
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py --format json --range today
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py --format json --range today
 ```
 
 ### カレンダー一覧を取得
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py calendars
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py calendars
 ```
 
 ### 色一覧を表示
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py colors
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_calendar.py colors
 ```
 
 ## 期間の解釈

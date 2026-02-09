@@ -13,19 +13,19 @@ Google Docs ドキュメントを新規作成します。
 ### 基本的な作成
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-create/google_docs.py create --name "ドキュメント名"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py create --name "ドキュメント名"
 ```
 
 ### フォルダを指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-create/google_docs.py create --name "ドキュメント名" --folder-id "フォルダID"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py create --name "ドキュメント名" --folder-id "フォルダID"
 ```
 
 ### 初期内容を指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-create/google_docs.py create --name "ドキュメント名" --content "初期テキスト"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py create --name "ドキュメント名" --content "初期テキスト"
 ```
 
 ## ユーザー入力の解釈

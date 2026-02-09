@@ -13,13 +13,13 @@ Google Sheets スプレッドシートを新規作成します。
 ### 基本的な作成
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-create/google_sheets.py create --name "スプレッドシート名"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_sheets.py create --name "スプレッドシート名"
 ```
 
 ### フォルダを指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-create/google_sheets.py create --name "スプレッドシート名" --folder-id "フォルダID"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_sheets.py create --name "スプレッドシート名" --folder-id "フォルダID"
 ```
 
 ## ユーザー入力の解釈

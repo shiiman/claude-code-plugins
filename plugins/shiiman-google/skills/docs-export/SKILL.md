@@ -20,11 +20,11 @@ Google Docs をファイルにエクスポートします。
 ## 実行方法
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-list/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.pdf
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.pdf
 ```
 
 ### Word形式でエクスポート
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-list/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.docx --type docx
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.docx --type docx
 ```
