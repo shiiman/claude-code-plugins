@@ -9,7 +9,7 @@ Usage:
 Options:
   --target <value>   tmux target (e.g. agent-team-foo:0.0)
   --file <path>      message text file path
-  --enter            press Enter after pasting message
+  --enter            send phase-2 Enter automatically after pasting message
   --sleep-ms <ms>    wait before Enter (default: 150)
   --no-verify        skip pane_current_command == claude check
 USAGE
@@ -81,7 +81,7 @@ trap 'tmux delete-buffer -b "$buffer_name" >/dev/null 2>&1 || true' EXIT
 tmux load-buffer -b "$buffer_name" "$MESSAGE_FILE"
 tmux paste-buffer -d -b "$buffer_name" -t "$TARGET"
 
-# 2回目: 必要な場合のみ Enter を送信
+# 2回目: 必要な場合のみ Enter を自動送信
 if [[ "$SEND_ENTER" -eq 1 ]]; then
   sleep "$(awk "BEGIN { printf \"%.3f\", ${SLEEP_MS}/1000 }")"
   tmux send-keys -t "$TARGET" C-m 2>/dev/null || tmux send-keys -t "$TARGET" Enter

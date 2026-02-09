@@ -64,7 +64,6 @@ git fetch origin main
 git checkout main
 git pull origin main
 git checkout -b feature/{issue_number}
-git push -u origin feature/{issue_number}
 ```
 
 ### ステップ 3: Ghostty (なければ iTerm2) を起動して tmux セッションを用意
@@ -93,23 +92,12 @@ claude --dangerously-skip-permissions
 ### ステップ 5: 送信スクリプトを設定（multi-agent-mcp の送信方式）
 
 ```bash
-TARGET="$(tmux list-panes -t "$SESSION" -F '#{pane_active} #{session_name}:#{window_index}.#{pane_index}' | awk '$1==1{print $2; exit}')"
-[ -n "$TARGET" ] || TARGET="$SESSION:0.0"
-
-test -n "${CLAUDE_PLUGIN_ROOT:-}" || {
-  echo "CLAUDE_PLUGIN_ROOT is not set. Run this skill via Claude plugin runtime." >&2
-  exit 1
-}
+TARGET="$SESSION:0.0"
 
 SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
-test -x "$SEND_SCRIPT" || { echo "script not found: $SEND_SCRIPT" >&2; exit 1; }
 ```
 
 ### ステップ 6: 計画書を送信して Agent Team 実行を開始
-
-メッセージは 2 回に分けて送る（1通目は Enter なし、2通目で Enter）。
-- 1通目: 実行指示 + 計画書本文をまとめて送信
-- 2通目: Enter のみ送信して確定
 
 ```bash
 REQUEST_FILE="$(mktemp)"
@@ -120,14 +108,11 @@ Issue #{issue_number} の対応を開始してください。以下の計画書�
 {plan_or_task}
 
 - 完了条件: 実装、テスト、変更サマリー、残課題の報告
+- 完了時は以下コマンドを実行して macOS 通知を送る
+  osascript -e 'display notification "Agent Team Issue 実装が完了しました" with title "agent-team-issue-flow" sound name "default"'
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE" --enter
 rm -f "$REQUEST_FILE"
-
-ENTER_ONLY_FILE="$(mktemp)"
-: > "$ENTER_ONLY_FILE"
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$ENTER_ONLY_FILE" --enter
-rm -f "$ENTER_ONLY_FILE"
 ```
 
 ### ステップ 7: macOS 通知を待機
@@ -141,15 +126,13 @@ tmux capture-pane -pt "$SESSION":0.0 | tail -n 120
 
 ## Phase 2-4: Agent Team の自律実行
 
-Agent Team が計画書を分解して実装を進める。呼び出し元は待機し、必要時のみ追加指示を送る。
+Agent Team が計画書を分解して実装を進める。呼び出し元は待機する。
 
 ## Phase 5: 結果確認と承認フロー
 
 ### ステップ 1: 変更内容を確認
 
 ```bash
-git checkout feature/{issue_number}
-git pull origin feature/{issue_number}
 git diff main...feature/{issue_number} --stat
 git log main..feature/{issue_number} --oneline
 ```
@@ -238,25 +221,18 @@ Closes #{issue_number}
 
 ### NG（修正依頼）の場合
 
-1. 修正内容を変数に入れて送信スクリプトで再送（2通）
+1. 修正内容を変数に入れて送信スクリプトで再送
 
 ```bash
 USER_FEEDBACK="{user_feedback}"
-FIX_HEAD_FILE="$(mktemp)"
-cat > "$FIX_HEAD_FILE" <<'EOF'
-修正依頼を送ります。次のメッセージの内容を反映してください。
-EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_HEAD_FILE"
-rm -f "$FIX_HEAD_FILE"
-
-FIX_BODY_FILE="$(mktemp)"
-cat > "$FIX_BODY_FILE" <<EOF
+FIX_FILE="$(mktemp)"
+cat > "$FIX_FILE" <<EOF
 修正依頼: ${USER_FEEDBACK}
 
 上記を反映し、完了後に差分とテスト結果を再報告してください。
 EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_BODY_FILE" --enter
-rm -f "$FIX_BODY_FILE"
+bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE" --enter
+rm -f "$FIX_FILE"
 ```
 
 2. Phase 2-4 に戻って再実行
