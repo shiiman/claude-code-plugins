@@ -9,7 +9,20 @@ plugins/{plugin-name}/
 ├── skills/               # スキル定義
 ├── agents/               # エージェント定義
 ├── hooks/                # フック設定
+├── scripts/              # オプション: plugin 全体で共有する実行スクリプト
 └── README.md             # プラグイン説明
+```
+
+## scripts パス規約
+
+plugin 内の Skill から scripts を参照する場合は、plugin ルートの `scripts/` を使用します。
+
+- 配置先: `plugins/{plugin-name}/scripts/{script-file}`
+- 呼び出し先: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/example.sh"
+python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 ```
 
 ## plugin.json

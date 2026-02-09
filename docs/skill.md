@@ -52,6 +52,18 @@ Skills とコマンドの最大の違いは起動方法です：
 plugins/{plugin-name}/skills/{skill-name}/SKILL.md
 ```
 
+## scripts パス規約（プラグイン内）
+
+プラグイン内で複数 Skill から再利用するスクリプトは、Skill 配下ではなく plugin ルート `scripts/` に集約します。
+
+- 配置先: `plugins/{plugin-name}/scripts/{script-file}`
+- 呼び出し: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
+- 非推奨: Skill 配下に分散した scripts を直接参照する運用
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/scripts/helper-script.py" --help
+```
+
 ## ディレクトリ構造
 
 ```text
