@@ -1,6 +1,6 @@
 ---
 name: message-delete
-description: Slack メッセージを削除する。「メッセージ削除」「さっきのを消して」「メッセージを消す」「削除して」「メッセージ取り消し」「投稿を削除」「このメッセージ削除」などで起動。User Token があれば自分の投稿を削除可能、なければ Bot 投稿のみ削除可能。
+description: Slack メッセージを削除する。「メッセージ削除」「さっきのを消して」「メッセージを消す」「削除して」「メッセージ取り消し」「投稿を削除」「このメッセージ削除」などで起動。
 allowed-tools: [Bash]
 ---
 
@@ -13,10 +13,6 @@ Slack メッセージを削除します。
 | トークン | 削除可能な投稿 |
 | -------- | -------------- |
 | User Token（xoxp-） | 自分の投稿 |
-| Bot Token（xoxb-） | Bot の投稿のみ |
-
-**User Token が設定されていない場合**:
-Bot 投稿のみ削除可能です。自分の投稿を削除したい場合は SLACK_USER_TOKEN の設定が必要であることを通知してください。
 
 ## ワークフロー
 
@@ -30,16 +26,16 @@ Bot 投稿のみ削除可能です。自分の投稿を削除したい場合は 
 ### 2. トークン状態の確認
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py token-show
 ```
 
-User Token の有無を確認し、削除可能な投稿を判定。
+User Token が設定済みかを確認。未設定の場合は先に `token-set` を実行する。
 
 ### 3. 削除前の確認
 
 削除前に必ずユーザーに確認を取る:
 
-**User Token がある場合:**
+**確認例:**
 
 ```
 以下のメッセージを削除してよろしいですか？
@@ -53,35 +49,13 @@ User Token の有無を確認し、削除可能な投稿を判定。
 [はい/いいえ]
 ```
 
-**User Token がない場合:**
-
-```
-User Token が設定されていないため、Bot 投稿のみ削除可能です。
-
-チャンネル: #general (C01234567)
-タイムスタンプ: 1234567890.123456
-
-この Bot 投稿を削除してよろしいですか？
-⚠️ 注意: 削除は取り消しできません
-
-[はい/いいえ]
-
-※ 自分の投稿を削除するには SLACK_USER_TOKEN を設定してください。
-```
-
 ### 4. メッセージ削除
 
 ```bash
-# ユーザーとして削除（User Token がある場合のデフォルト）
-python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py delete \
+# メッセージ削除
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py delete \
   --channel C01234567 \
   --ts 1234567890.123456
-
-# Bot として削除（明示的に指定）
-python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py delete \
-  --channel C01234567 \
-  --ts 1234567890.123456 \
-  --as-bot
 ```
 
 ### 5. 結果の報告
@@ -94,7 +68,6 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py delete \
 | ---------- | ---- | ---- |
 | `--channel` | Yes | チャンネルID |
 | `--ts` | Yes | メッセージのタイムスタンプ |
-| `--as-bot` | No | Bot として削除（User Token があっても） |
 
 ## 注意事項
 

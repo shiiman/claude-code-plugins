@@ -15,7 +15,7 @@ Slack の未読メッセージを確認します。
 Pythonスクリプトで未読メッセージ一覧を取得:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/check-unread/slack_message.py unread \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
   --format table
 ```
 

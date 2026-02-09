@@ -41,7 +41,7 @@ Slack の未読メッセージ確認、メンション確認、既読化など�
 またはPythonスクリプト:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py unread \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
   --channel C01234567 \
   --max 20 \
   --format table
@@ -63,7 +63,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py unread \
 またはPythonスクリプト:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py mark-read \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mark-read \
   --channel C01234567
 ```
 
@@ -82,7 +82,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py mark-read \
 またはPythonスクリプト:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/mention-checker/slack_message.py mentions \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \
   --max 20 \
   --format table
 ```
