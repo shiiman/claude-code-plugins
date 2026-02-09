@@ -1,0 +1,23 @@
+[copy]
+include = [
+    "*.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+]
+exclude = [
+    "**/.env.*.local",
+    "**/.venv/**",
+    "**/node_modules/**",
+    "**/__pycache__/**",
+    "**/.env",
+    "**/.git/**",
+    "**/vendor/**",
+    "**/.env.local",
+    "**/target/**",
+    "**/venv/**",
+]
+
+[hooks]
+postCreate = [
+    "pip install -r requirements.txt",
+]

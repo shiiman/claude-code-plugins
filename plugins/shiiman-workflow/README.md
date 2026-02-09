@@ -21,6 +21,8 @@ Issue 管理付き・なしの両方のパターンに対応。
 | single-flow | ❌ | ✅ | ❌ | シングル | 軽量な実装タスク |
 | multi-issue-flow | ✅ | ✅ | ✅ | マルチ | 大規模な開発タスク |
 | multi-flow | ❌ | ✅ | ❌ | マルチ | 並列実装タスク |
+| agent-team-issue-flow | ✅ | ✅ | ✅ | Agent Team | Agent Team で Issue から PR まで |
+| agent-team-flow | ❌ | ✅ | ❌ | Agent Team | Agent Team 軽量並列実装 |
 
 ## スキル
 
@@ -109,6 +111,42 @@ MCP マルチエージェントで並列実行する軽量フロー。
 - 複数 Worker が並列実行
 - 統合後にコミットメッセージを出力
 
+### agent-team-issue-flow
+
+Agent Team で Issue から PR まで並列実行する開発フロー。
+
+**トリガー例**: 「agent-team-issue-flow」「エージェントチーム Issue フロー」「Agent Team Issue」
+
+**フロー**:
+
+```text
+計画書 → Issue → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミット → PR
+```
+
+**特徴**:
+
+- `multi-issue-flow` の MCP 使用部分を Agent Team 実行に置き換え
+- `claude --dangerously-skip-permissions` で Agent Team 実行
+- Ghostty 優先、未導入時は iTerm2 で tmux セッションを起動
+
+### agent-team-flow
+
+Agent Team で Issue/PR なしに並列実行する軽量フロー。
+
+**トリガー例**: 「agent-team-flow」「エージェントチームフロー」「Agent Team で実装」
+
+**フロー**:
+
+```text
+計画書 → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
+```
+
+**特徴**:
+
+- `multi-flow` の MCP 使用部分を Agent Team 実行に置き換え
+- `claude --dangerously-skip-permissions` で Agent Team 実行
+- 問題時は Agent Team に再指示してループ可能
+
 ## 必要条件
 
 ### 全スキル共通
@@ -121,8 +159,16 @@ MCP マルチエージェントで並列実行する軽量フロー。
 - multi-agent-mcp がインストール済み
 - tmux がインストール済み
 
+### Agent Team スキル（agent-team-*）
+
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を有効化
+- `claude` コマンドが利用可能
+- tmux がインストール済み
+- macOS で Ghostty または iTerm2 が利用可能
+
 ## バージョン履歴
 
+- v1.7.1: agent-team-flow / agent-team-issue-flow を仕様準拠に修正（Ghostty/iTerm2 + tmux + Agent Team 実行フローへ統一）
 - v1.5.0: SKILL.md を約 60% スリム化。MCP 側で Admin/Worker 指示を自動生成
 - v1.4.0: Worker 数をデフォルト 6、最大 16 に変更。MCP 自動機能（ペルソナ、メモリ、7セクション構造）を統合
 - v1.0.0: 初期リリース（shiiman-git の dev-flow から移行）
