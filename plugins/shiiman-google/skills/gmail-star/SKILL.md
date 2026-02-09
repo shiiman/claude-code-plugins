@@ -17,25 +17,25 @@ Gmail のメッセージをスター化/解除します。
 ### スターを付ける
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py star --ids <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py star --ids <message-id>
 ```
 
 ### スターを解除する
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py unstar --ids <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py unstar --ids <message-id>
 ```
 
 ### 複数メッセージを一括でスター化
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py star --ids <id1>,<id2>,<id3>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py star --ids <id1>,<id2>,<id3>
 ```
 
 ### プロファイル指定
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py star --profile <profile-name> --ids <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py star --profile <profile-name> --ids <message-id>
 ```
 
 ## 関連操作

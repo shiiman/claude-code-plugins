@@ -17,13 +17,13 @@ Google Docs を検索します。
 ### アクティブプロファイルで検索
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document' and name contains '<検索キーワード>'"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --query "mimeType='application/vnd.google-apps.document' and name contains '<検索キーワード>'"
 ```
 
 ### プロファイル指定で検索
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py search --profile <profile-name> --query "mimeType='application/vnd.google-apps.document' and name contains '<検索キーワード>'"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --profile <profile-name> --query "mimeType='application/vnd.google-apps.document' and name contains '<検索キーワード>'"
 ```
 
 ## 検索クエリ例

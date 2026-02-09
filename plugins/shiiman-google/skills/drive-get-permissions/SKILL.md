@@ -15,13 +15,13 @@ Google Drive のファイルの共有設定を確認します。
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py permissions --file-id <file-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py permissions --file-id <file-id>
 ```
 
 ## 使用例
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py permissions --file-id 1abc...xyz
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py permissions --file-id 1abc...xyz
 ```
 
 ## 出力項目

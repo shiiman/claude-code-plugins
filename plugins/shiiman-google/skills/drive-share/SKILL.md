@@ -17,25 +17,25 @@ Google Drive のファイルを共有します。
 ### 特定ユーザーに共有（閲覧権限）
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role reader --type user
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role reader --type user
 ```
 
 ### 特定ユーザーに共有（編集権限）
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role writer --type user
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --role writer --type user
 ```
 
 ### リンクを知っている全員に共有
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --type anyone --role reader
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py share --file-id <file-id> --type anyone --role reader
 ```
 
 ### 共有通知メールを送信しない
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --no-notify
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py share --file-id <file-id> --email <user@example.com> --no-notify
 ```
 
 ## オプション

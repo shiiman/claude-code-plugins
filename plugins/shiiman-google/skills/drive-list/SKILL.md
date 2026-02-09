@@ -13,25 +13,25 @@ Google Drive のファイル一覧を取得します。
 ### アクティブプロファイルで一覧を取得
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py list
 ```
 
 ### プロファイル指定で一覧を取得
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list --profile <profile-name>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py list --profile <profile-name>
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py list --max 50
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py list --max 50
 ```
 
 ### JSON 形式で出力
 
 ```bash
-python plugins/shiiman-google/skills/drive-list/scripts/google_drive.py --format json list
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py --format json list
 ```
 
 ## 出力項目
