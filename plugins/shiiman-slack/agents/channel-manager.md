@@ -56,7 +56,7 @@ slack_list_channels()
 またはPythonスクリプト:
 
 ```bash
-python plugins/shiiman-slack/skills/channel-lister/scripts/slack_channel.py search \
+python ${CLAUDE_PLUGIN_ROOT}/skills/channel-search/scripts/slack_channel.py search \
   --query "project" \
   --format table
 ```

@@ -9,7 +9,24 @@ plugins/{plugin-name}/
 ├── skills/               # スキル定義
 ├── agents/               # エージェント定義
 ├── hooks/                # フック設定
+├── scripts/              # オプション: plugin 全体で共有する実行スクリプト
 └── README.md             # プラグイン説明
+```
+
+## scripts パス規約
+
+plugin 内の scripts は、Skill 固有か共通処理かで配置先を分けます。
+
+- 標準配置（Skill 固有）: `plugins/{plugin-name}/skills/{skill-name}/scripts/{script-file}`
+- 標準呼び出し: `${CLAUDE_PLUGIN_ROOT}/skills/{skill-name}/scripts/{script-file}`
+- 共通配置（複数 Skill で再利用）: `plugins/{plugin-name}/scripts/{script-file}`
+- 共通呼び出し: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
+- 共通化の運用基準: 2 つ以上の `SKILL.md` から参照される script を plugin ルートへ配置
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/skills/example-skill/scripts/example.py"
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/example.sh"
+python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 ```
 
 ## plugin.json

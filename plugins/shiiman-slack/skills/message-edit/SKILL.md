@@ -1,6 +1,6 @@
 ---
 name: message-edit
-description: Slack メッセージを編集する。「メッセージ編集」「さっきのを修正」「メッセージ修正」「訂正して」「編集して」「メッセージを直す」「内容を変更」などで起動。User Token があれば自分の投稿を編集可能、なければ Bot 投稿のみ編集可能。
+description: Slack メッセージを編集する。「メッセージ編集」「さっきのを修正」「メッセージ修正」「訂正して」「編集して」「メッセージを直す」「内容を変更」などで起動。
 allowed-tools: [Bash]
 ---
 
@@ -13,10 +13,6 @@ Slack メッセージを編集します。
 | トークン | 編集可能な投稿 |
 | -------- | -------------- |
 | User Token（xoxp-） | 自分の投稿 |
-| Bot Token（xoxb-） | Bot の投稿のみ |
-
-**User Token が設定されていない場合**:
-Bot 投稿のみ編集可能です。自分の投稿を編集したい場合は SLACK_USER_TOKEN の設定が必要であることを通知してください。
 
 ## ワークフロー
 
@@ -31,16 +27,16 @@ Bot 投稿のみ編集可能です。自分の投稿を編集したい場合は 
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py token-show
 ```
 
-User Token の有無を確認し、編集可能な投稿を判定。
+User Token が設定済みかを確認。未設定の場合は先に `token-set` を実行する。
 
 ### 3. 編集前の確認
 
 編集前に必ずユーザーに確認を取る:
 
-**User Token がある場合:**
+**確認例:**
 
 ```
 以下のメッセージを編集してよろしいですか？
@@ -53,36 +49,14 @@ User Token の有無を確認し、編集可能な投稿を判定。
 [はい/いいえ]
 ```
 
-**User Token がない場合:**
-
-```
-User Token が設定されていないため、Bot 投稿のみ編集可能です。
-
-チャンネル: #general (C01234567)
-タイムスタンプ: 1234567890.123456
-新しい内容: 訂正: お疲れ様でした
-
-この Bot 投稿を編集してよろしいですか？
-[はい/いいえ]
-
-※ 自分の投稿を編集するには SLACK_USER_TOKEN を設定してください。
-```
-
 ### 4. メッセージ編集
 
 ```bash
-# ユーザーとして編集（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit \
+# メッセージ編集
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py edit \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --text "訂正: お疲れ様でした"
-
-# Bot として編集（明示的に指定）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit \
-  --channel C01234567 \
-  --ts 1234567890.123456 \
-  --text "訂正: お疲れ様でした" \
-  --as-bot
 ```
 
 ### 5. 結果の報告
@@ -96,7 +70,6 @@ python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit
 | `--channel` | Yes | チャンネルID |
 | `--ts` | Yes | メッセージのタイムスタンプ |
 | `--text` | Yes | 新しいメッセージテキスト |
-| `--as-bot` | No | Bot として編集（User Token があっても） |
 
 ## User Token の設定方法
 

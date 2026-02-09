@@ -26,7 +26,7 @@ Slack で自分へのメンションを確認します。
 
 ```bash
 # Pythonスクリプトでメンション取得
-python plugins/shiiman-slack/skills/mention-checker/scripts/slack_message.py mentions \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \
   --max 20 \
   --format table
 ```

@@ -85,6 +85,15 @@ allowed-tools: [{ツール}]
 - ❌ 禁止する動作
 ```
 
+### ステップ 3.1: scripts パス規約を適用（プラグイン配下の Skill を作る場合）
+
+プラグイン配下に Skill を作成して scripts を使う場合は、以下の規約を適用する:
+
+- 標準: scripts は `plugins/{plugin-name}/skills/{skill-name}/scripts/` に配置
+- 標準参照: `${CLAUDE_PLUGIN_ROOT}/skills/{skill-name}/scripts/{script-file}`
+- 共通処理のみ `plugins/{plugin-name}/scripts/` に配置
+- 共通化基準（運用）: 2 つ以上の `SKILL.md` から参照される script を plugin ルートへ配置
+
 ### ステップ 4: 報告
 
 作成されたファイルと次のステップを表示:
@@ -109,4 +118,5 @@ allowed-tools: [{ツール}]
 - ✅ 小文字・ハイフン区切りを使用
 - ✅ description に 7 つのトリガーフレーズを含める
 - ✅ `.claude/skills/{name}/SKILL.md` に作成
+- ✅ scripts は原則 `skills/{skill}/scripts/`、共通処理のみ `scripts/` を使用
 - ❌ アンダースコアやキャメルケースは使用しない

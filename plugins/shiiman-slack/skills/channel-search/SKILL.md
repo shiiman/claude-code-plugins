@@ -19,7 +19,7 @@ Slack チャンネルを名前で検索します。
 Pythonスクリプトで検索を実行:
 
 ```bash
-python plugins/shiiman-slack/skills/list-channels/scripts/slack_channel.py search \
+python ${CLAUDE_PLUGIN_ROOT}/skills/channel-search/scripts/slack_channel.py search \
   --query "project" \
   --format table
 ```

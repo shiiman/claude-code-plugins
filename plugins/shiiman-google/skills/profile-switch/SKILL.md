@@ -13,19 +13,19 @@ allowed-tools: [Read, Bash]
 ### プロファイル一覧を表示
 
 ```bash
-python plugins/shiiman-google/skills/auth-login/scripts/google_auth.py profiles
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py profiles
 ```
 
 ### プロファイルを切り替え
 
 ```bash
-python plugins/shiiman-google/skills/auth-login/scripts/google_auth.py switch <profile-name>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch <profile-name>
 ```
 
 例:
 ```bash
-python plugins/shiiman-google/skills/auth-login/scripts/google_auth.py switch work
-python plugins/shiiman-google/skills/auth-login/scripts/google_auth.py switch personal
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch work
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch personal
 ```
 
 ## 保存場所

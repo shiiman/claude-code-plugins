@@ -20,19 +20,19 @@ Gmail でメールを検索します。Gmail の検索クエリ構文を使用�
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py search --query "<query>"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py search --query "<query>"
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py search --query "<query>" --max 50
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py search --query "<query>" --max 50
 ```
 
 ### 本文プレビューを含める
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py search --query "<query>" --include-body
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py search --query "<query>" --include-body
 ```
 
 ## クエリ例

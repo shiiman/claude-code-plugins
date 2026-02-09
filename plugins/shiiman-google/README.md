@@ -161,34 +161,24 @@ plugins/shiiman-google/
 │   └── auth-reference.md        # 認証・トークン運用リファレンス
 ├── lib/                         # 共有ライブラリ
 │   └── google_utils.py          # 共通ユーティリティ（認証・出力・リトライ）
+├── scripts/                     # 集約スクリプト（canonical）
+│   ├── google_auth.py           # 認証
+│   ├── google_calendar.py       # Calendar
+│   ├── google_docs.py           # Docs
+│   ├── google_drive.py          # Drive
+│   ├── google_forms.py          # Forms
+│   ├── google_gmail.py          # Gmail
+│   ├── google_sheets.py         # Sheets
+│   ├── google_slides.py         # Slides
+│   └── google_apps_script.py    # Apps Script
 └── skills/                      # 自然言語トリガースキル
     ├── auth-login/
-    │   └── scripts/
-    │       └── google_auth.py   # 認証
+    │   └── SKILL.md
     ├── calendar-list-events/
-    │   └── scripts/
-    │       └── google_calendar.py
+    │   └── SKILL.md
     ├── docs-list/
-    │   └── scripts/
-    │       └── google_docs.py
-    ├── drive-list/
-    │   └── scripts/
-    │       └── google_drive.py
-    ├── forms-list/
-    │   └── scripts/
-    │       └── google_forms.py
-    ├── gmail-list-unread/
-    │   └── scripts/
-    │       └── google_gmail.py
-    ├── sheets-list/
-    │   └── scripts/
-    │       └── google_sheets.py
-    ├── slides-list/
-    │   └── scripts/
-    │       └── google_slides.py
-    └── apps-script-list/
-        └── scripts/
-            └── google_apps_script.py
+    │   └── SKILL.md
+    └── ...                      # 他スキルも同様
 ```
 
 ## ライセンス

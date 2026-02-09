@@ -26,7 +26,7 @@ import argparse
 import json
 
 # lib/ ディレクトリをパスに追加
-lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib")
 sys.path.insert(0, lib_dir)
 
 from google_utils import (
@@ -157,8 +157,8 @@ def add_question(token_path: str, form_id: str, question: str, question_type: st
         token_path: トークンファイルのパス
         form_id: フォームID
         question: 質問文
-        question_type: 質問タイプ（TEXT, RADIO, CHECKBOX, DROPDOWN, SCALE, DATE, TIME）
-        options: 選択肢（RADIO, CHECKBOX, DROPDOWN の場合）
+        question_type: 質問タイプ（TEXT, RADIO, CHECKBOX, DROP_DOWN, SCALE, DATE, TIME）
+        options: 選択肢（RADIO, CHECKBOX, DROP_DOWN の場合）
         required: 必須かどうか
 
     Returns:
@@ -174,26 +174,28 @@ def add_question(token_path: str, form_id: str, question: str, question_type: st
         }
     }
 
-    if question_type == "TEXT":
+    normalized_type = "DROP_DOWN" if question_type == "DROPDOWN" else question_type
+
+    if normalized_type == "TEXT":
         question_item["question"]["textQuestion"] = {"paragraph": False}
-    elif question_type == "PARAGRAPH":
+    elif normalized_type == "PARAGRAPH":
         question_item["question"]["textQuestion"] = {"paragraph": True}
-    elif question_type in ["RADIO", "CHECKBOX", "DROP_DOWN"]:
+    elif normalized_type in ["RADIO", "CHECKBOX", "DROP_DOWN"]:
         if not options:
-            print_error(f"{question_type} タイプには --options が必要です")
+            print_error(f"{normalized_type} タイプには --options が必要です")
             sys.exit(1)
         question_item["question"]["choiceQuestion"] = {
-            "type": question_type,
+            "type": normalized_type,
             "options": [{"value": opt} for opt in options]
         }
-    elif question_type == "SCALE":
+    elif normalized_type == "SCALE":
         question_item["question"]["scaleQuestion"] = {
             "low": 1,
             "high": 5
         }
-    elif question_type == "DATE":
+    elif normalized_type == "DATE":
         question_item["question"]["dateQuestion"] = {}
-    elif question_type == "TIME":
+    elif normalized_type == "TIME":
         question_item["question"]["timeQuestion"] = {}
     else:
         print_error(f"不明な質問タイプ: {question_type}")
@@ -219,7 +221,7 @@ def add_question(token_path: str, form_id: str, question: str, question_type: st
         "id": form_id,
         "status": "question_added",
         "question": question,
-        "type": question_type,
+        "type": normalized_type,
         "editUrl": f"https://docs.google.com/forms/d/{form_id}/edit"
     }
 
@@ -315,7 +317,7 @@ def main():
     add_question_parser.add_argument("--form-id", required=True, help="フォームID")
     add_question_parser.add_argument("--question", required=True, help="質問文")
     add_question_parser.add_argument("--type", required=True,
-                                      choices=["TEXT", "PARAGRAPH", "RADIO", "CHECKBOX", "DROP_DOWN", "SCALE", "DATE", "TIME"],
+                                      choices=["TEXT", "PARAGRAPH", "RADIO", "CHECKBOX", "DROP_DOWN", "DROPDOWN", "SCALE", "DATE", "TIME"],
                                       help="質問タイプ")
     add_question_parser.add_argument("--options", help="選択肢（カンマ区切り）")
     add_question_parser.add_argument("--required", action="store_true", help="必須にする")

@@ -29,7 +29,7 @@ Slack チャンネルを既読にします（一括既読化）。
 Pythonスクリプトを実行:
 
 ```bash
-python plugins/shiiman-slack/skills/check-unread/scripts/slack_message.py mark-read \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mark-read \
   --channel C01234567
 ```
 

@@ -82,6 +82,16 @@ allowed-tools: [{ツール}]
 - ❌ 禁止する動作
 ```
 
+### 3.1 scripts パス規約を適用
+
+scripts を使う Skill の場合は、以下の規約を適用する:
+
+- 標準配置: `plugins/{plugin-name}/skills/{skill-name}/scripts/{script-file}`
+- 標準参照: `${CLAUDE_PLUGIN_ROOT}/skills/{skill-name}/scripts/{script-file}`
+- 共通処理のみ配置: `plugins/{plugin-name}/scripts/{script-file}`
+- 共通参照: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
+- 共通化基準（運用）: 2 つ以上の `SKILL.md` から参照される script は plugin ルートへ配置
+
 ### 4. プラグイン README を更新
 
 `plugins/{plugin-name}/README.md` のスキルセクションにスキルを追加。
@@ -113,4 +123,5 @@ allowed-tools: [{ツール}]
 - ✅ 小文字・ハイフン区切りを使用
 - ✅ description に 7 つのトリガーワードを含める
 - ✅ 独自実装パターンで完全な手順を記載
+- ✅ scripts は原則 `skills/{skill}/scripts/`、共通処理のみ `scripts/` を使用
 - ❌ トリガーワードが不足している description は避ける

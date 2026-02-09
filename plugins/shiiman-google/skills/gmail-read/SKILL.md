@@ -17,13 +17,13 @@ Gmail メッセージ本文を表示します。
 ### アクティブプロファイルで本文を取得
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py read --id <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py read --id <message-id>
 ```
 
 ### プロファイル指定で本文を取得
 
 ```bash
-python plugins/shiiman-google/skills/gmail-list-unread/scripts/google_gmail.py read --profile <profile-name> --id <message-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py read --profile <profile-name> --id <message-id>
 ```
 
 ## 出力項目

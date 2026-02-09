@@ -32,7 +32,7 @@ import argparse
 import json
 
 # lib/ ディレクトリをパスに追加
-lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "lib")
+lib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib")
 sys.path.insert(0, lib_dir)
 
 from google_utils import (
@@ -144,7 +144,7 @@ def resolve_sheet_name(token_path: str, sheet_id: str, sheet_spec: str) -> str:
     Args:
         token_path: トークンファイルのパス
         sheet_id: スプレッドシートID
-        sheet_spec: シート指定（名前、インデックス番号、またはGID）
+        sheet_spec: シート指定（名前、インデックス番号）
 
     Returns:
         シート名
@@ -384,7 +384,7 @@ def export_spreadsheet(
         export_format = "csv" if mime_type == "text/csv" else "tsv"
         export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format={export_format}&gid={sheet_gid}"
         headers = {"Authorization": f"Bearer {creds.token}"}
-        response = requests.get(export_url, headers=headers)
+        response = requests.get(export_url, headers=headers, timeout=(5, 30))
         response.raise_for_status()
         content = response.content
     else:
