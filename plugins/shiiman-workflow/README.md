@@ -128,6 +128,7 @@ Agent Team で Issue から PR まで並列実行する開発フロー。
 - `multi-issue-flow` の MCP 使用部分を Agent Team 実行に置き換え
 - `claude --dangerously-skip-permissions` で Agent Team 実行
 - Ghostty 優先、未導入時は iTerm2 で tmux セッションを起動
+- 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ### agent-team-flow
 
@@ -146,6 +147,7 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 - `multi-flow` の MCP 使用部分を Agent Team 実行に置き換え
 - `claude --dangerously-skip-permissions` で Agent Team 実行
 - 問題時は Agent Team に再指示してループ可能
+- 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ## 必要条件
 

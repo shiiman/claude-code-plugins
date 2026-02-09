@@ -89,8 +89,10 @@ allowed-tools: [{ツール}]
 
 プラグイン配下に Skill を作成して scripts を使う場合は、以下の規約を適用する:
 
-- scripts は `plugins/{plugin-name}/scripts/` に配置
-- SKILL.md からは `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}` で参照
+- 標準: scripts は `plugins/{plugin-name}/skills/{skill-name}/scripts/` に配置
+- 標準参照: `${CLAUDE_PLUGIN_ROOT}/skills/{skill-name}/scripts/{script-file}`
+- 共通処理のみ `plugins/{plugin-name}/scripts/` に配置
+- 共通化基準（運用）: 2 つ以上の `SKILL.md` から参照される script を plugin ルートへ配置
 
 ### ステップ 4: 報告
 
@@ -116,5 +118,5 @@ allowed-tools: [{ツール}]
 - ✅ 小文字・ハイフン区切りを使用
 - ✅ description に 7 つのトリガーフレーズを含める
 - ✅ `.claude/skills/{name}/SKILL.md` に作成
-- ✅ プラグイン配下 Skill の scripts 参照は `${CLAUDE_PLUGIN_ROOT}/scripts/...` を使用
+- ✅ scripts は原則 `skills/{skill}/scripts/`、共通処理のみ `scripts/` を使用
 - ❌ アンダースコアやキャメルケースは使用しない

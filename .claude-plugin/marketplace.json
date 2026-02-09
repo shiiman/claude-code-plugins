@@ -15,7 +15,7 @@
     {
       "name": "shiiman-claude",
       "description": "Claude Code プロジェクト設定管理 - スキル/エージェント/フックの追加、設定更新、ドキュメント更新、モデル切り替え、コンテキスト管理、MCP サーバー管理機能を提供",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "source": "./plugins/shiiman-claude",
       "category": "utility"
     },
@@ -29,14 +29,14 @@
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
-      "version": "1.7.1",
+      "version": "1.7.2",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-google",
       "description": "Google Workspace 操作（認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail）",
-      "version": "1.5.0",
+      "version": "1.5.1",
       "source": "./plugins/shiiman-google",
       "category": "productivity"
     },
@@ -64,7 +64,7 @@
     {
       "name": "shiiman-slack",
       "description": "Slack ワークスペース管理 - チャンネル操作、メッセージ管理、要約機能、User Token によるユーザー操作を提供",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "source": "./plugins/shiiman-slack",
       "category": "productivity"
     }

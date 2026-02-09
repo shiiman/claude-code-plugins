@@ -54,14 +54,17 @@ plugins/{plugin-name}/skills/{skill-name}/SKILL.md
 
 ## scripts パス規約（プラグイン内）
 
-プラグイン内で複数 Skill から再利用するスクリプトは、Skill 配下ではなく plugin ルート `scripts/` に集約します。
+scripts の標準配置は Skill 配下です。複数 Skill で共通利用する場合のみ plugin ルートに配置します。
 
-- 配置先: `plugins/{plugin-name}/scripts/{script-file}`
-- 呼び出し: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
-- 非推奨: Skill 配下に分散した scripts を直接参照する運用
+- 標準配置: `plugins/{plugin-name}/skills/{skill-name}/scripts/{script-file}`
+- 標準呼び出し: `${CLAUDE_PLUGIN_ROOT}/skills/{skill-name}/scripts/{script-file}`
+- 共通配置: `plugins/{plugin-name}/scripts/{script-file}`
+- 共通呼び出し: `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}`
+- 共通化の運用基準: 2 つ以上の `SKILL.md` から参照される script を plugin ルートへ集約
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/scripts/helper-script.py" --help
+python "${CLAUDE_PLUGIN_ROOT}/skills/example-skill/scripts/helper-script.py" --help
+python "${CLAUDE_PLUGIN_ROOT}/scripts/shared-helper.py" --help
 ```
 
 ## ディレクトリ構造

@@ -49,7 +49,7 @@ User Token が設定済みかを確認。未設定の場合は先に `token-set`
 
 ```bash
 # メッセージ投稿
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_post.py post \
+python ${CLAUDE_PLUGIN_ROOT}/skills/message-send/scripts/slack_post.py post \
   --channel "C01234567" \
   --text "お疲れ様です。本日の作業完了しました。"
 ```

@@ -53,7 +53,7 @@ User Token が設定済みかを確認。未設定の場合は先に `token-set`
 
 ```bash
 # リアクション追加
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_reaction.py add \
+python ${CLAUDE_PLUGIN_ROOT}/skills/reaction-add/scripts/slack_reaction.py add \
   --channel "C01234567" \
   --timestamp "1234567890.123456" \
   --emoji "thumbsup"
@@ -76,7 +76,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_reaction.py add \
 一覧を表示:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_reaction.py list
+python ${CLAUDE_PLUGIN_ROOT}/skills/reaction-add/scripts/slack_reaction.py list
 ```
 
 | 絵文字名 | 表示 |

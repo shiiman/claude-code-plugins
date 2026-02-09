@@ -257,17 +257,18 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py token-set --token xoxp-your
 plugins/shiiman-slack/
   ├─ lib/
   │   └─ slack_utils.py (共通ユーティリティ: 認証・出力・エラーハンドリング)
-  └─ scripts/
-      ├─ slack_post.py (post)
-      ├─ slack_thread.py (reply)
-      ├─ slack_reaction.py (add, list)
-      ├─ slack_message.py (unread, mark-read, mentions, thread-users, summarize, edit, delete)
-      ├─ slack_channel.py (search)
-      ├─ slack_config.py (token-set, token-show, token-clear, auto-detect, set-user, show, clear)
-      └─ slack_profile.py (show, update, clear-status)
+  ├─ scripts/
+  │   ├─ slack_message.py (unread, mark-read, mentions, thread-users, summarize, edit, delete)
+  │   └─ slack_config.py (token-set, token-show, token-clear, auto-detect, set-user, show, clear)
+  └─ skills/
+      ├─ message-send/scripts/slack_post.py (post)
+      ├─ thread-reply/scripts/slack_thread.py (reply)
+      ├─ reaction-add/scripts/slack_reaction.py (add, list)
+      ├─ channel-search/scripts/slack_channel.py (search)
+      └─ profile-update/scripts/slack_profile.py (show, update, clear-status)
 ```
 
-**注**: 共通ユーティリティ `slack_utils.py` は `lib/` ディレクトリに集約されています。各スキルスクリプトは `sys.path` 経由でインポートします。
+**注**: `scripts/` は複数スキルで再利用する共通処理のみ配置し、Skill 固有処理は `skills/{skill}/scripts/` に配置します。共通ユーティリティ `slack_utils.py` は `lib/` ディレクトリに集約されています。
 
 ### Pythonスクリプトの使用方法
 
@@ -282,18 +283,18 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py token-set \
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py show
 
 # メッセージ送信
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_post.py post \
+python ${CLAUDE_PLUGIN_ROOT}/skills/message-send/scripts/slack_post.py post \
   --channel C01234567 \
   --text "お疲れ様です"
 
 # スレッド返信
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_thread.py reply \
+python ${CLAUDE_PLUGIN_ROOT}/skills/thread-reply/scripts/slack_thread.py reply \
   --channel C01234567 \
   --thread-ts 1234567890.123456 \
   --text "了解しました"
 
 # リアクション追加
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_reaction.py add \
+python ${CLAUDE_PLUGIN_ROOT}/skills/reaction-add/scripts/slack_reaction.py add \
   --channel C01234567 \
   --timestamp 1234567890.123456 \
   --emoji thumbsup
@@ -316,7 +317,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \
   --format table
 
 # チャンネル検索
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_channel.py search \
+python ${CLAUDE_PLUGIN_ROOT}/skills/channel-search/scripts/slack_channel.py search \
   --query "project" \
   --format table
 
@@ -328,7 +329,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py set-user \
   --user-id U01234567
 
 # プロフィール更新
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py update \
+python ${CLAUDE_PLUGIN_ROOT}/skills/profile-update/scripts/slack_profile.py update \
   --status-text "会議中" \
   --status-emoji ":calendar:"
 ```

@@ -53,7 +53,7 @@ User Token が設定済みかを確認。未設定の場合は先に `token-set`
 
 ```bash
 # スレッド返信
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_thread.py reply \
+python ${CLAUDE_PLUGIN_ROOT}/skills/thread-reply/scripts/slack_thread.py reply \
   --channel "C01234567" \
   --thread-ts "1234567890.123456" \
   --text "了解しました！"
