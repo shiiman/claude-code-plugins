@@ -40,19 +40,19 @@ User Token に以下のスコープが必要：
 ### 1. 現在のプロフィールを確認
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py show
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py show
 ```
 
 ### 2. 表示名を変更
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py update --display-name "新しい表示名"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py update --display-name "新しい表示名"
 ```
 
 ### 3. ステータスを設定
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py update \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py update \
   --status-text "会議中" \
   --status-emoji ":calendar:"
 ```
@@ -60,7 +60,7 @@ python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py upd
 ### 4. ステータスをクリア
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py clear-status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py clear-status
 ```
 
 ## 更新可能なフィールド
@@ -80,7 +80,7 @@ python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py cle
 ### 表示名とステータスを同時に変更
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py update \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py update \
   --display-name "山田太郎 - リモート" \
   --status-text "在宅勤務中" \
   --status-emoji ":house:"
@@ -89,7 +89,7 @@ python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py upd
 ### 役職を変更
 
 ```bash
-python plugins/shiiman-slack/skills/profile-updater/scripts/slack_profile.py update \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_profile.py update \
   --title "シニアエンジニア"
 ```
 
