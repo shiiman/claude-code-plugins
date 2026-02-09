@@ -29,7 +29,7 @@ Bot としてメッセージを投稿します。ユーザーに「Bot として
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/message-sender/scripts/slack_post.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/message-sender/slack_post.py status
 ```
 
 User Token の有無を確認し、投稿者を決定。
@@ -65,12 +65,12 @@ Bot として送信してよろしいですか？
 
 ```bash
 # ユーザーとして投稿（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/message-sender/scripts/slack_post.py post \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/message-sender/slack_post.py post \
   --channel "C01234567" \
   --text "お疲れ様です。本日の作業完了しました。"
 
 # Bot として投稿（明示的に指定）
-python plugins/shiiman-slack/skills/message-sender/scripts/slack_post.py post \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/message-sender/slack_post.py post \
   --channel "C01234567" \
   --text "お疲れ様です。本日の作業完了しました。" \
   --as-bot

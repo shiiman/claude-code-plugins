@@ -31,7 +31,7 @@ Bot としてスレッドに返信します。ユーザーに「Bot として返
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/thread-replier/scripts/slack_thread.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/thread-replier/slack_thread.py status
 ```
 
 User Token の有無を確認し、返信者を決定。
@@ -71,13 +71,13 @@ Bot として返信してよろしいですか？
 
 ```bash
 # ユーザーとして返信（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/thread-replier/scripts/slack_thread.py reply \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/thread-replier/slack_thread.py reply \
   --channel "C01234567" \
   --thread-ts "1234567890.123456" \
   --text "了解しました！"
 
 # Bot として返信（明示的に指定）
-python plugins/shiiman-slack/skills/thread-replier/scripts/slack_thread.py reply \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/thread-replier/slack_thread.py reply \
   --channel "C01234567" \
   --thread-ts "1234567890.123456" \
   --text "了解しました！" \

@@ -30,7 +30,7 @@ Bot 投稿のみ削除可能です。自分の投稿を削除したい場合は 
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py status
 ```
 
 User Token の有無を確認し、削除可能な投稿を判定。
@@ -73,12 +73,12 @@ User Token が設定されていないため、Bot 投稿のみ削除可能で�
 
 ```bash
 # ユーザーとして削除（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py delete \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py delete \
   --channel C01234567 \
   --ts 1234567890.123456
 
 # Bot として削除（明示的に指定）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py delete \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py delete \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --as-bot

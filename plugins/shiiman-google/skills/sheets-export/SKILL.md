@@ -20,11 +20,11 @@ Google Sheets をファイルにエクスポートします。
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py export --sheet-id <sheet-id> --output ~/Downloads/data.csv
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-list/google_sheets.py export --sheet-id <sheet-id> --output ~/Downloads/data.csv
 ```
 
 ### Excel形式でエクスポート
 
 ```bash
-python plugins/shiiman-google/skills/sheets-list/scripts/google_sheets.py export --sheet-id <sheet-id> --output ~/Downloads/data.xlsx --type xlsx
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-list/google_sheets.py export --sheet-id <sheet-id> --output ~/Downloads/data.xlsx --type xlsx
 ```

@@ -31,7 +31,7 @@ Bot としてリアクションを追加します。ユーザーに「Bot とし
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/reaction-adder/slack_reaction.py status
 ```
 
 User Token の有無を確認し、リアクション元を決定。
@@ -71,13 +71,13 @@ Bot としてリアクションしてよろしいですか？
 
 ```bash
 # ユーザーとしてリアクション（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py add \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/reaction-adder/slack_reaction.py add \
   --channel "C01234567" \
   --timestamp "1234567890.123456" \
   --emoji "thumbsup"
 
 # Bot としてリアクション（明示的に指定）
-python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py add \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/reaction-adder/slack_reaction.py add \
   --channel "C01234567" \
   --timestamp "1234567890.123456" \
   --emoji ":heart:" \
@@ -102,7 +102,7 @@ python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py add
 一覧を表示:
 
 ```bash
-python plugins/shiiman-slack/skills/reaction-adder/scripts/slack_reaction.py list
+python ${CLAUDE_PLUGIN_ROOT}/scripts/reaction-adder/slack_reaction.py list
 ```
 
 | 絵文字名 | 表示 |
