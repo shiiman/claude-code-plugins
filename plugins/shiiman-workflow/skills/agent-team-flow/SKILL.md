@@ -72,10 +72,10 @@ claude --dangerously-skip-permissions
 ```bash
 TARGET="$SESSION:0.0"
 
-if [ -z "${CLAUDE_PLUGIN_ROOT:-}" ]; then
-  REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-  CLAUDE_PLUGIN_ROOT="$REPO_ROOT/plugins/shiiman-workflow"
-fi
+test -n "${CLAUDE_PLUGIN_ROOT:-}" || {
+  echo "CLAUDE_PLUGIN_ROOT is not set. Run this skill via Claude plugin runtime." >&2
+  exit 1
+}
 
 SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 test -x "$SEND_SCRIPT" || { echo "script not found: $SEND_SCRIPT" >&2; exit 1; }

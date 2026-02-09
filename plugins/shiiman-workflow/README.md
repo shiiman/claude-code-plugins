@@ -164,6 +164,7 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 ### Agent Team スキル（agent-team-*）
 
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を有効化
+- `CLAUDE_PLUGIN_ROOT` が利用可能なプラグイン実行コンテキストで実行
 - `claude` コマンドが利用可能
 - tmux がインストール済み
 - macOS で Ghostty または iTerm2 が利用可能
