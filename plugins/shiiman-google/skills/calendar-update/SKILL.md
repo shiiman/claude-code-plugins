@@ -25,11 +25,11 @@ Google Calendar の予定を更新します。
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py update --event-id <event-id> --summary "新しいタイトル"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py update --event-id <event-id> --summary "新しいタイトル"
 ```
 
 ### 日時を変更
 
 ```bash
-python plugins/shiiman-google/skills/calendar-list-events/scripts/google_calendar.py update --event-id <event-id> --start 2025-01-08T15:00:00 --end 2025-01-08T16:00:00
+python ${CLAUDE_PLUGIN_ROOT}/scripts/calendar-list-events/google_calendar.py update --event-id <event-id> --start 2025-01-08T15:00:00 --end 2025-01-08T16:00:00
 ```

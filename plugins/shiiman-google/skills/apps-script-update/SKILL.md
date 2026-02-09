@@ -13,13 +13,13 @@ Google Apps Script プロジェクトのコードを更新します。
 ### コード更新
 
 ```bash
-python plugins/shiiman-google/skills/apps-script-update/scripts/google_apps_script.py update --script-id "ID" --filename "Code.gs" --code "function myFunc() { Logger.log('Hello'); }"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/apps-script-update/google_apps_script.py update --script-id "ID" --filename "Code.gs" --code "function myFunc() { Logger.log('Hello'); }"
 ```
 
 ### 新しいファイル追加
 
 ```bash
-python plugins/shiiman-google/skills/apps-script-update/scripts/google_apps_script.py update --script-id "ID" --filename "Utils.gs" --code "function helper() {}"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/apps-script-update/google_apps_script.py update --script-id "ID" --filename "Utils.gs" --code "function helper() {}"
 ```
 
 ## ファイルタイプ

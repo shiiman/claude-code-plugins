@@ -13,19 +13,19 @@ Google Sheets スプレッドシートのセルを更新します。
 ### セルを更新
 
 ```bash
-python plugins/shiiman-google/skills/sheets-update/scripts/google_sheets.py update --sheet-id "シートID" --range "A1" --values '["値1", "値2"]'
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-update/google_sheets.py update --sheet-id "シートID" --range "A1" --values '["値1", "値2"]'
 ```
 
 ### 複数行を更新
 
 ```bash
-python plugins/shiiman-google/skills/sheets-update/scripts/google_sheets.py update --sheet-id "シートID" --range "A1:B2" --values '[["A1","B1"],["A2","B2"]]'
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-update/google_sheets.py update --sheet-id "シートID" --range "A1:B2" --values '[["A1","B1"],["A2","B2"]]'
 ```
 
 ### 行を末尾に追加
 
 ```bash
-python plugins/shiiman-google/skills/sheets-update/scripts/google_sheets.py append --sheet-id "シートID" --range "Sheet1" --values '["値1", "値2"]'
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sheets-update/google_sheets.py append --sheet-id "シートID" --range "Sheet1" --values '["値1", "値2"]'
 ```
 
 ## ユーザー入力の解釈

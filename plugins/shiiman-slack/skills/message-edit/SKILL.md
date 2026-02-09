@@ -31,7 +31,7 @@ Bot 投稿のみ編集可能です。自分の投稿を編集したい場合は 
 ### 2. トークン状態の確認
 
 ```bash
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py status
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py status
 ```
 
 User Token の有無を確認し、編集可能な投稿を判定。
@@ -72,13 +72,13 @@ User Token が設定されていないため、Bot 投稿のみ編集可能で�
 
 ```bash
 # ユーザーとして編集（User Token がある場合のデフォルト）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py edit \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --text "訂正: お疲れ様でした"
 
 # Bot として編集（明示的に指定）
-python plugins/shiiman-slack/skills/unread-checker/scripts/slack_message.py edit \
+python ${CLAUDE_PLUGIN_ROOT}/scripts/unread-checker/slack_message.py edit \
   --channel C01234567 \
   --ts 1234567890.123456 \
   --text "訂正: お疲れ様でした" \

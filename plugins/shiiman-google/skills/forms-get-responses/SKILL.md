@@ -19,13 +19,13 @@ Google Forms の回答を取得します。
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py responses --form-id <form-id>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/forms-list/google_forms.py responses --form-id <form-id>
 ```
 
 ### 最大件数を指定
 
 ```bash
-python plugins/shiiman-google/skills/forms-list/scripts/google_forms.py responses --form-id <form-id> --max 100
+python ${CLAUDE_PLUGIN_ROOT}/scripts/forms-list/google_forms.py responses --form-id <form-id> --max 100
 ```
 
 ## 出力項目

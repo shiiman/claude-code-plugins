@@ -13,19 +13,19 @@ Gmail でメールを送信します。
 ### メールを送信
 
 ```bash
-python plugins/shiiman-google/skills/gmail-send/scripts/google_gmail.py send --to "user@example.com" --subject "件名" --body "本文です。"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-send/google_gmail.py send --to "user@example.com" --subject "件名" --body "本文です。"
 ```
 
 ### CC/BCC 付きで送信
 
 ```bash
-python plugins/shiiman-google/skills/gmail-send/scripts/google_gmail.py send --to "user@example.com" --subject "報告" --body "内容" --cc "cc1@example.com,cc2@example.com" --bcc "bcc@example.com"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-send/google_gmail.py send --to "user@example.com" --subject "報告" --body "内容" --cc "cc1@example.com,cc2@example.com" --bcc "bcc@example.com"
 ```
 
 ### HTML メールとして送信
 
 ```bash
-python plugins/shiiman-google/skills/gmail-send/scripts/google_gmail.py send --to "user@example.com" --subject "お知らせ" --body "<h1>見出し</h1><p>本文</p>" --html
+python ${CLAUDE_PLUGIN_ROOT}/scripts/gmail-send/google_gmail.py send --to "user@example.com" --subject "お知らせ" --body "<h1>見出し</h1><p>本文</p>" --html
 ```
 
 ## 必要な情報

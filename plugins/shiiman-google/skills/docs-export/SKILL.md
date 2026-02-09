@@ -20,11 +20,11 @@ Google Docs をファイルにエクスポートします。
 ## 実行方法
 
 ```bash
-python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.pdf
+python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-list/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.pdf
 ```
 
 ### Word形式でエクスポート
 
 ```bash
-python plugins/shiiman-google/skills/docs-list/scripts/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.docx --type docx
+python ${CLAUDE_PLUGIN_ROOT}/scripts/docs-list/google_docs.py export --doc-id <doc-id> --output ~/Downloads/document.docx --type docx
 ```
