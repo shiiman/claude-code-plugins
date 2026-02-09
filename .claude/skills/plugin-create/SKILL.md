@@ -58,8 +58,15 @@ plugins/{plugin-name}/
 │   └── .gitkeep
 ├── hooks/
 │   └── .gitkeep
+├── scripts/
+│   └── .gitkeep
 └── README.md
 ```
+
+**scripts パス規約**:
+
+- plugin 内の Skill が scripts を参照する場合は `${CLAUDE_PLUGIN_ROOT}/scripts/{script-file}` を使用
+- scripts は `plugins/{plugin-name}/scripts/` に配置
 
 ### 4. plugin.json を生成
 
@@ -130,6 +137,7 @@ MIT
 - plugins/{plugin-name}/skills/.gitkeep
 - plugins/{plugin-name}/agents/.gitkeep
 - plugins/{plugin-name}/hooks/.gitkeep
+- plugins/{plugin-name}/scripts/.gitkeep
 
 更新:
 - .claude-plugin/marketplace.json
@@ -145,5 +153,6 @@ MIT
 - ✅ shiiman- プレフィックスを必ず付与
 - ✅ 小文字・ハイフン区切りを使用
 - ✅ README にインストール方法を必ず記載
+- ✅ scripts は plugin ルートに配置し、`${CLAUDE_PLUGIN_ROOT}/scripts/...` で参照
 - ❌ アンダースコアやキャメルケースは使用しない
 - ❌ コロンは使用しない
