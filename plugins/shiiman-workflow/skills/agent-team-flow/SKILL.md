@@ -31,7 +31,7 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 
 1. `--no-git` 指定あり: 常に no-git モード
 2. `--no-git` 指定なし + `git rev-parse --is-inside-work-tree` 成功: git モード
-3. それ以外: git モード
+3. それ以外: no-git モード
 
 判定コマンド:
 
@@ -128,13 +128,16 @@ SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 
 ```bash
 REQUEST_FILE="$(mktemp)"
-NO_COMMIT_LINE=""
-if [ "$FLOW_MODE" = "git" ]; then
-  NO_COMMIT_LINE="git add / commit / push は実行しないでください。"
-fi
-cat > "$REQUEST_FILE" <<EOF
+{
+  cat <<'EOF'
 Agent Team を作成して、以下の計画書に従って実装を開始してください。
-${NO_COMMIT_LINE}
+EOF
+
+  if [ "$FLOW_MODE" = "git" ]; then
+    printf '%s\n' 'git add / commit / push は実行しないでください。'
+  fi
+
+  cat <<'EOF'
 
 計画書:
 {plan_or_task}
@@ -143,6 +146,7 @@ ${NO_COMMIT_LINE}
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 実装が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
+} > "$REQUEST_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
 rm -f "$REQUEST_FILE"
 ```
@@ -258,20 +262,23 @@ no-git モード:
 ```bash
 USER_FEEDBACK="{user_feedback}"
 FIX_FILE="$(mktemp)"
-NO_COMMIT_FIX_LINE=""
-if [ "$FLOW_MODE" = "git" ]; then
-  NO_COMMIT_FIX_LINE="コミット（git add / commit / push）は行わないでください。"
-fi
-cat > "$FIX_FILE" <<EOF
+{
+  cat <<'EOF'
 Agent Team を作成して、以下の修正指示に従って実装を開始してください。
-${NO_COMMIT_FIX_LINE}
+EOF
 
-修正依頼: ${USER_FEEDBACK}
+  if [ "$FLOW_MODE" = "git" ]; then
+    printf '%s\n' 'コミット（git add / commit / push）は行わないでください。'
+  fi
 
+  printf '\n修正依頼: %s\n\n' "$USER_FEEDBACK"
+
+  cat <<'EOF'
 上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 修正対応が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
+} > "$FIX_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE"
 rm -f "$FIX_FILE"
 ```

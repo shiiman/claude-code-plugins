@@ -28,7 +28,7 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 
 1. `--no-git` 指定あり: 常に no-git モード
 2. `--no-git` 指定なし + `git rev-parse --is-inside-work-tree` 成功: git モード
-3. それ以外: git モード
+3. それ以外: no-git モード
 
 判定コマンド:
 
