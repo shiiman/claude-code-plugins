@@ -21,20 +21,66 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
+- `--no-git`: git を使わず no-git モードで実行（強制）
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行
+
+## 実行モード判定（重要）
+
+優先順位は以下。
+
+1. `--no-git` 指定あり: 常に no-git モード
+2. `--no-git` 指定なし + `git rev-parse --is-inside-work-tree` 成功: git モード
+3. それ以外: no-git モード
+
+判定コマンド:
+
+```bash
+git rev-parse --is-inside-work-tree >/dev/null 2>&1
+```
+
+## セッション名 / slug ルール
+
+- slug はタスク内容から簡潔な英語キーワードで作成
+- slug を生成できない場合は `no-git-task` を使用
+- tmux セッション名は `agent-team-{slug}` を使用
 
 ## 実行フロー
 
 ```text
+git モード:
 Phase 1: ブランチ作成 → Ghostty/iTerm2 + tmux 起動 → claude 起動 → 計画書送信
 Phase 2-4: Agent Team が計画書を読み取り自律実装
 Phase 5: 結果確認 → 承認/修正依頼 → クリーンアップ → コミットメッセージ出力
+
+no-git モード:
+Phase 1: Ghostty/iTerm2 + tmux 起動 → claude 起動 → 計画書送信
+Phase 2-4: Agent Team が計画書を読み取り自律実装
+Phase 5: 結果確認（Agent Team 報告）→ 承認/修正依頼 → クリーンアップ
 ```
 
 ## Phase 1: セットアップと Agent Team 起動
 
-### ステップ 1: ブランチ作成
+### ステップ 1: 実行モード判定
+
+```bash
+if [ "{no_git_flag}" = "true" ]; then
+  FLOW_MODE="no-git"
+elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  FLOW_MODE="git"
+else
+  FLOW_MODE="no-git"
+fi
+```
+
+### ステップ 2: slug を決定
+
+```text
+slug = {task_slug}
+if slug が空なら slug = "no-git-task"
+```
+
+### ステップ 3: git モード時のみブランチ作成
 
 ```bash
 git fetch origin main
@@ -43,7 +89,9 @@ git pull origin main
 git checkout -b feature/{slug}
 ```
 
-### ステップ 2: Ghostty (なければ iTerm2) を起動して tmux セッションを用意
+no-git モードではこのステップをスキップする。
+
+### ステップ 4: Ghostty (なければ iTerm2) を起動して tmux セッションを用意
 
 ```bash
 SESSION="agent-team-{slug}"
@@ -60,13 +108,13 @@ else
 fi
 ```
 
-### ステップ 3: tmux 内で Claude Code を起動
+### ステップ 5: tmux 内で Claude Code を起動
 
 ```bash
 claude --dangerously-skip-permissions
 ```
 
-### ステップ 4: 送信スクリプトを設定（multi-agent-mcp の送信方式）
+### ステップ 6: 送信スクリプトを設定（multi-agent-mcp の送信方式）
 
 ```bash
 TARGET="$SESSION:0.0"
@@ -74,15 +122,22 @@ TARGET="$SESSION:0.0"
 SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 ```
 
-### ステップ 5: 計画書を送信して Agent Team 実行を開始
+### ステップ 7: 計画書を送信して Agent Team 実行を開始
 
 送信スクリプトは、本文貼り付け後に 2 通目の Enter を自動送信する。
 
 ```bash
 REQUEST_FILE="$(mktemp)"
-cat > "$REQUEST_FILE" <<'EOF'
+{
+  cat <<'EOF'
 Agent Team を作成して、以下の計画書に従って実装を開始してください。
-git add / commit / push は実行しないでください。
+EOF
+
+  if [ "$FLOW_MODE" = "git" ]; then
+    printf '%s\n' 'git add / commit / push は実行しないでください。'
+  fi
+
+  cat <<'EOF'
 
 計画書:
 {plan_or_task}
@@ -91,11 +146,12 @@ git add / commit / push は実行しないでください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 実装が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
+} > "$REQUEST_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
 rm -f "$REQUEST_FILE"
 ```
 
-### ステップ 6: macOS 通知を待機
+### ステップ 8: macOS 通知を待機
 
 - Agent Team 側の処理が完了すると通知が届く想定
 - 進捗確認が必要な場合は tmux 出力を確認
@@ -112,10 +168,21 @@ Agent Team が計画書を分解して実装を進める。呼び出し元は待
 
 ### ステップ 1: 変更内容を確認
 
+git モード:
+
 ```bash
 git status --short --branch
 git diff
 git diff --cached
+```
+
+no-git モード:
+
+- Agent Team の最終報告（実装サマリー・変更ファイル・テスト結果・残課題）を確認
+- 必要に応じて以下で tmux 出力を再確認
+
+```bash
+tmux capture-pane -pt "$SESSION":0.0 | tail -n 200
 ```
 
 ### ステップ 2: ユーザー承認を取得（必須）
@@ -145,11 +212,21 @@ rm -f "$APPROVAL_FILE"
 
 2. セキュリティチェック
 
+git モード:
+
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
 ```
 
-3. 推奨コミットメッセージを出力（Conventional Commits）
+no-git モード:
+
+```bash
+find . -maxdepth 3 \( -name ".env*" -o -name "*.pem" -o -name "credentials.json" \)
+```
+
+3. 完了出力
+
+git モード:
 
 ```text
 ## 実装完了
@@ -164,6 +241,20 @@ git status  # .env*, *.pem, credentials.json を検出したら警告
 4. 必要に応じて gh pr create
 ```
 
+no-git モード:
+
+```text
+## 実装完了（no-git モード）
+
+### 実装サマリー
+- 変更ファイル: {agent_team_files}
+- テスト結果: {agent_team_tests}
+- 残課題: {agent_team_todos}
+
+### 次のステップ
+- 必要に応じてユーザー環境の手順に沿って成果物を反映
+```
+
 ### NG（修正依頼）の場合
 
 1. 修正内容を変数に入れて送信スクリプトで再送
@@ -171,21 +262,28 @@ git status  # .env*, *.pem, credentials.json を検出したら警告
 ```bash
 USER_FEEDBACK="{user_feedback}"
 FIX_FILE="$(mktemp)"
-cat > "$FIX_FILE" <<EOF
+{
+  cat <<'EOF'
 Agent Team を作成して、以下の修正指示に従って実装を開始してください。
-コミット（git add / commit / push）は行わないでください。
+EOF
 
-修正依頼: ${USER_FEEDBACK}
+  if [ "$FLOW_MODE" = "git" ]; then
+    printf '%s\n' 'コミット（git add / commit / push）は行わないでください。'
+  fi
 
+  printf '\n修正依頼: %s\n\n' "$USER_FEEDBACK"
+
+  cat <<'EOF'
 上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 修正対応が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
+} > "$FIX_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE"
 rm -f "$FIX_FILE"
 ```
 
-1. Phase 2-4 に戻って再実行
+2. Phase 2-4 に戻って再実行
 
 ### 保留の場合
 
