@@ -18,8 +18,29 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
+- `--no-git`: git を使わず no-git モードで実行（強制）
 - `--help`: ヘルプを表示
 - `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
+
+## 実行モード判定（重要）
+
+優先順位は以下。
+
+1. `--no-git` 指定あり: 常に no-git モード
+2. `--no-git` 指定なし + `git rev-parse --is-inside-work-tree` 成功: git モード
+3. それ以外: git モード
+
+判定コマンド:
+
+```bash
+git rev-parse --is-inside-work-tree >/dev/null 2>&1
+```
+
+## セッション ID / slug ルール
+
+- slug はタスク内容から簡潔な英語キーワードで作成
+- no-git モードでも `session_id` として slug を使用
+- slug を生成できない場合は `no-git-task` を使用
 
 ## 環境変数
 
@@ -31,10 +52,16 @@ MCP_MODEL_PROFILE_ACTIVE=performance  # standard または performance
 
 ## 実行フロー
 
-```
-Phase 1: Owner  → ブランチ作成 → MCP 初期化 → Admin 起動 → 計画書送信
+```text
+git モード:
+Phase 1: Owner → ブランチ作成 → MCP 初期化 → Admin 起動 → 計画書送信
 Phase 2-4: Admin/Worker が自律実行（MCP が自動制御）
-Phase 5: Owner  → 結果確認 → クリーンアップ → コミットメッセージ出力
+Phase 5: Owner → 結果確認 → 承認/修正依頼 → クリーンアップ → コミットメッセージ出力
+
+no-git モード:
+Phase 1: Owner → MCP 初期化(enable_git=false) → Admin 起動 → 計画書送信
+Phase 2-4: Admin/Worker が自律実行（MCP が自動制御）
+Phase 5: Owner → 結果確認（Admin 報告）→ 承認/修正依頼 → クリーンアップ
 ```
 
 ## ⚠️ caller_agent_id について（重要）
@@ -48,7 +75,26 @@ Phase 5: Owner  → 結果確認 → クリーンアップ → コミットメ�
 
 ## Phase 1: セットアップ + Admin 起動
 
-### ステップ 1: ブランチ作成
+### ステップ 1: 実行モード判定
+
+```bash
+if [ "{no_git_flag}" = "true" ]; then
+  FLOW_MODE="no-git"
+elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  FLOW_MODE="git"
+else
+  FLOW_MODE="no-git"
+fi
+```
+
+### ステップ 2: slug を決定
+
+```text
+slug = {task_slug}
+if slug が空なら slug = "no-git-task"
+```
+
+### ステップ 3: git モード時のみブランチ作成
 
 ```bash
 git fetch origin main
@@ -58,16 +104,16 @@ git checkout -b feature/{slug}
 git push -u origin feature/{slug}
 ```
 
-**slug の生成ルール**: タスク内容から簡潔な英語キーワードに変換
+no-git モードではこのステップをスキップする。
 
-### ステップ 2: Owner エージェント作成
+### ステップ 4: Owner エージェント作成
 
 ```
 owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パス")
 # owner_result["agent"]["id"] を {owner_id} として保存
 ```
 
-### ステップ 3: Owner の役割を取得（🔴 必須）
+### ステップ 5: Owner の役割を取得（🔴 必須）
 
 **Owner として行動する前に、必ずロールガイドを取得してください。**
 
@@ -75,9 +121,9 @@ owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パ
 mcp__multi-agent-mcp__get_role_guide(role="owner", caller_agent_id="{owner_id}")
 ```
 
-このガイドには Owner の責務、禁止事項、ワークフローが記載されています。
+### ステップ 6: MCP ワークスペース初期化
 
-### ステップ 4: MCP ワークスペース初期化
+git モード:
 
 ```
 mcp__multi-agent-mcp__init_tmux_workspace(
@@ -89,9 +135,22 @@ mcp__multi-agent-mcp__init_tmux_workspace(
 )
 ```
 
-**重要**: `session_id` には Step 1 で作成したブランチの slug を指定。これにより MCP ディレクトリ（デフォルト: `.multi-agent-mcp`）の `{slug}/` 配下に全てのセッションデータが配置される。
+no-git モード:
 
-### ステップ 5: Admin エージェント作成
+```
+mcp__multi-agent-mcp__init_tmux_workspace(
+    working_dir="プロジェクトのルートパス",
+    open_terminal=true,
+    auto_setup_gtr=true,
+    session_id="{slug}",
+    enable_git=false,
+    caller_agent_id="{owner_id}"
+)
+```
+
+**重要**: no-git モードでは `enable_git=false` を必ず渡す。
+
+### ステップ 7: Admin エージェント作成
 
 ```
 admin_result = mcp__multi-agent-mcp__create_agent(
@@ -102,19 +161,34 @@ admin_result = mcp__multi-agent-mcp__create_agent(
 # admin_result["agent"]["id"] を {admin_id} として保存
 ```
 
-### ステップ 6: Admin に計画書を送信
+### ステップ 8: Admin に計画書を送信
+
+git モード:
 
 ```
 mcp__multi-agent-mcp__send_task(
     agent_id="{admin_id}",
     task_content="計画書またはタスク説明",
-    session_id="ブランチの slug",
+    session_id="{slug}",
     branch_name="feature/{slug}",
     caller_agent_id="{owner_id}"
 )
 ```
 
-### ステップ 7: Admin の完了を待機
+no-git モード:
+
+```
+mcp__multi-agent-mcp__send_task(
+    agent_id="{admin_id}",
+    task_content="計画書またはタスク説明",
+    session_id="{slug}",
+    caller_agent_id="{owner_id}"
+)
+```
+
+**重要**: no-git モードでは `branch_name` を渡さない。
+
+### ステップ 9: Admin の完了を待機
 
 **待機中**: macOS 通知で Admin からの完了報告が届きます。ユーザーから「Admin から完了通知来てるか確認して」と指示されたら Phase 5 へ進みます。
 
@@ -135,8 +209,6 @@ mcp__multi-agent-mcp__read_messages(agent_id="{owner_id}", caller_agent_id="{own
 
 ### ステップ 0: Admin からの完了報告を確認
 
-macOS 通知が届いたら、ユーザーから「Admin から完了通知来てるか確認して」と指示されます。
-
 ```
 mcp__multi-agent-mcp__read_messages(
     agent_id="{owner_id}",
@@ -146,19 +218,24 @@ mcp__multi-agent-mcp__read_messages(
 
 ### ステップ 1: 変更内容をユーザーに表示
 
+git モード:
+
 ```bash
 git status --short --branch
 git diff
 git diff --cached
 ```
 
-変更内容、品質チェック結果（Admin からの報告）をユーザーに表示。
+no-git モード:
+
+- Admin の最終報告（実装サマリー・変更ファイル・テスト結果・残課題）をユーザーに表示
+- `mcp__multi-agent-mcp__get_dashboard_summary` と `read_messages` の結果を確認対象にする
 
 ### ステップ 2: ユーザー確認（🔴 必須）
 
 **⚠️ クリーンアップの前に必ずユーザー確認を行う**
 
-`AskUserQuestion` でユーザーに確認を求める：
+`AskUserQuestion` でユーザーに確認を求める:
 
 ```
 AskUserQuestion:
@@ -171,8 +248,6 @@ AskUserQuestion:
     - label: "保留"
       description: "手動で確認してから判断"
 ```
-
----
 
 ### OK（承認）の場合
 
@@ -187,8 +262,6 @@ mcp__multi-agent-mcp__send_message(
     caller_agent_id="{owner_id}"
 )
 ```
-
----
 
 ### NG（修正依頼）の場合
 
@@ -207,8 +280,6 @@ mcp__multi-agent-mcp__send_message(
 
 3. Phase 2-4 に戻り、Admin が修正タスクを実行
 
----
-
 #### ステップ 4: クリーンアップ
 
 ```
@@ -218,15 +289,25 @@ mcp__multi-agent-mcp__cleanup_on_completion(caller_agent_id="{owner_id}")
 
 #### ステップ 5: セキュリティチェック
 
+git モード:
+
 ```bash
 git status  # .env*, *.pem, credentials.json を検出したら警告
 ```
 
-#### ステップ 6: コミットメッセージ出力
+no-git モード:
+
+```bash
+find . -maxdepth 3 \( -name ".env*" -o -name "*.pem" -o -name "credentials.json" \)
+```
+
+#### ステップ 6: 完了出力
+
+git モード:
 
 **重要: このフローではコミット・プッシュ・PR作成を行いません。**
 
-```
+```text
 ## 実装完了
 
 ### 推奨コミットメッセージ
@@ -237,4 +318,18 @@ git status  # .env*, *.pem, credentials.json を検出したら警告
 2. git commit -m "{メッセージ}"
 3. git push origin feature/{slug}
 4. 必要に応じて gh pr create
+```
+
+no-git モード:
+
+```text
+## 実装完了（no-git モード）
+
+### 実装サマリー
+- 変更ファイル: {admin_report_files}
+- テスト結果: {admin_report_tests}
+- 残課題: {admin_report_todos}
+
+### 次のステップ
+- 必要に応じてユーザー環境の手順に沿って成果物を反映
 ```

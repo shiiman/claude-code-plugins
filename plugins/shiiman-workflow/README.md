@@ -20,9 +20,9 @@ Issue 管理付き・なしの両方のパターンに対応。
 | single-issue-flow | ✅ | ✅ | ✅ | シングル | 標準的な開発フロー |
 | single-flow | ❌ | ✅ | ❌ | シングル | 軽量な実装タスク |
 | multi-issue-flow | ✅ | ✅ | ✅ | マルチ | 大規模な開発タスク |
-| multi-flow | ❌ | ✅ | ❌ | マルチ | 並列実装タスク |
+| multi-flow | ❌ | ✅/❌ | ❌ | マルチ | 並列実装タスク（`--no-git` / 自動判定で非git対応） |
 | agent-team-issue-flow | ✅ | ✅ | ✅ | Agent Team | Agent Team で Issue から PR まで |
-| agent-team-flow | ❌ | ✅ | ❌ | Agent Team | Agent Team 軽量並列実装 |
+| agent-team-flow | ❌ | ✅/❌ | ❌ | Agent Team | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
 
 ## スキル
 
@@ -100,16 +100,19 @@ MCP マルチエージェントで並列実行する軽量フロー。
 **フロー**:
 
 ```
-計画書 → ブランチ → MCP初期化 → 並列実行 → 統合 → レビュー → コミットメッセージ出力
+git モード: 計画書 → ブランチ → MCP初期化 → 並列実行 → 統合 → レビュー → コミットメッセージ出力
+no-git モード: 計画書 → MCP初期化(enable_git=false) → 並列実行 → 統合 → レビュー
 ```
 
 **特徴**:
 
 - Issue を作成しない
-- ブランチを作成する（feature/{slug} 形式）
+- git 管理プロジェクトではブランチを作成する（feature/{slug} 形式）
+- `--no-git` 指定時、または `git rev-parse --is-inside-work-tree` 失敗時は no-git モードへ切替
+- no-git モードでは `init_tmux_workspace(..., enable_git=false)` で実行
 - PR を作成しない
 - 複数 Worker が並列実行
-- 統合後にコミットメッセージを出力
+- git モードでは統合後にコミットメッセージを出力
 
 ### agent-team-issue-flow
 
@@ -139,13 +142,16 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 **フロー**:
 
 ```text
-計画書 → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
+git モード: 計画書 → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
+no-git モード: 計画書 → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー
 ```
 
 **特徴**:
 
 - `multi-flow` の MCP 使用部分を Agent Team 実行に置き換え
 - `claude --dangerously-skip-permissions` で Agent Team 実行
+- `--no-git` 指定時、または `git rev-parse --is-inside-work-tree` 失敗時は no-git モードへ切替
+- no-git モードではブランチ作成と push 前提手順を行わない
 - 問題時は Agent Team に再指示してループ可能
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
@@ -171,6 +177,7 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 
 ## バージョン履歴
 
+- v1.8.0: `multi-flow` / `agent-team-flow` に `--no-git` と git/no-git 自動分岐を追加（非gitディレクトリ対応）
 - v1.7.4: Phase 5 の変更確認手順を統一（`git status --short --branch` + `git diff` + `git diff --cached`）
 - v1.7.1: agent-team-flow / agent-team-issue-flow を仕様準拠に修正（Ghostty/iTerm2 + tmux + Agent Team 実行フローへ統一）
 - v1.5.0: SKILL.md を約 60% スリム化。MCP 側で Admin/Worker 指示を自動生成
