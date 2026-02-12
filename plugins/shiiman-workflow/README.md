@@ -182,6 +182,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v1.8.4: `agent-team-flow` / `agent-team-issue-flow` の送信テンプレートを `>|` に統一して `zsh noclobber` を回避。`send_claude_tmux_message.sh` に空ファイルガードを追加
 - v1.8.3: Agent Team 承認時のクリーンアップを「送信指示」から「実行側の直接実行」に変更し、依頼テンプレート形式を統一
 - v1.8.2: Ghostty 起動フォールバックと tmux target 解決を修正（`0.0` 固定を廃止し実値解決へ変更）
 - v1.8.1: `agent-team-flow` / `agent-team-issue-flow` のターミナル起動を共通化し、既存起動時の新規タブ化と文字化け対策を修正
