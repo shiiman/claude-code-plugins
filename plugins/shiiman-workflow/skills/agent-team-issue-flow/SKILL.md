@@ -174,15 +174,12 @@ options:
 
 ### OK（承認）の場合
 
-1. 送信スクリプトで Claude Code へクリーンアップ指示を送信
+1. 実行側で tmux セッションを直接クリーンアップ
 
 ```bash
-APPROVAL_FILE="$(mktemp)"
-cat > "$APPROVAL_FILE" <<'EOF'
-実装を承認します。Agent Team をクリーンアップして、最終サマリーを出してください。
-EOF
-bash "$SEND_SCRIPT" --target "$TARGET" --file "$APPROVAL_FILE"
-rm -f "$APPROVAL_FILE"
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+  tmux kill-session -t "$SESSION"
+fi
 ```
 
 2. セキュリティチェック
