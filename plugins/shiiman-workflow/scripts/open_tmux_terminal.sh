@@ -78,6 +78,28 @@ esac
 
 printf -v TMUX_CMD 'tmux new-session -A -s %q -c %q' "$SESSION" "$REPO_ROOT"
 
+log() {
+  echo "[open_tmux_terminal] $*" >&2
+}
+
+session_exists_exact() {
+  local name="$1"
+  tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -Fxq "$name"
+}
+
+wait_for_tmux_session() {
+  local retries="${1:-20}"
+  local delay="${2:-0.2}"
+  local i
+  for ((i = 1; i <= retries; i++)); do
+    if session_exists_exact "$SESSION"; then
+      return 0
+    fi
+    sleep "$delay"
+  done
+  return 1
+}
+
 escape_applescript() {
   local value="${1:-}"
   value="${value//\\/\\\\}"
@@ -95,7 +117,17 @@ is_iterm2_available() {
 
 is_ghostty_running() {
   local stdout
-  if stdout="$(osascript -e 'if application "Ghostty" is running then return "true" else return "false" end if' 2>/dev/null)"; then
+  local applescript
+  applescript=$(
+    cat <<'EOF'
+if application "Ghostty" is running then
+    return "true"
+else
+    return "false"
+end if
+EOF
+  )
+  if stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
     [[ "$stdout" == "true" ]]
     return
   fi
@@ -148,10 +180,15 @@ open_in_ghostty() {
       return 0
     fi
     if open_in_running_ghostty_tab; then
-      echo "Opened tmux in a new Ghostty tab."
-      return 0
+      if wait_for_tmux_session 15 0.2; then
+        echo "Opened tmux in a new Ghostty tab."
+        return 0
+      fi
+      log "Ghostty tab command was sent, but tmux session '$SESSION' was not created."
+    else
+      log "Ghostty tab open failed."
     fi
-    echo "Ghostty tab open failed, falling back to new window." >&2
+    log "Falling back to a new Ghostty window."
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -159,7 +196,12 @@ open_in_ghostty() {
     return 0
   fi
 
-  if ! open -a Ghostty.app --args -e /bin/bash -lc "$TMUX_CMD" >/dev/null 2>&1; then
+  if ! open -na Ghostty.app --args -e tmux new-session -A -s "$SESSION" -c "$REPO_ROOT" >/dev/null 2>&1; then
+    log "Ghostty new-window launch failed."
+    return 1
+  fi
+  if ! wait_for_tmux_session 25 0.2; then
+    log "Ghostty new-window command finished, but tmux session '$SESSION' was not created."
     return 1
   fi
   echo "Opened tmux in a new Ghostty window."
