@@ -131,6 +131,7 @@ Agent Team で Issue から PR まで並列実行する開発フロー。
 - `multi-issue-flow` の MCP 使用部分を Agent Team 実行に置き換え
 - `claude --dangerously-skip-permissions` で Agent Team 実行
 - ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
+- 承認時クリーンアップは `plugins/shiiman-workflow/scripts/cleanup_tmux_terminal.sh` を使用（tmux は常に終了、window 起動時のみ terminal をクローズ）
 - ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
 - tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
@@ -156,6 +157,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 - no-git モードではブランチ作成と push 前提手順を行わない
 - 問題時は Agent Team に再指示してループ可能
 - ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
+- 承認時クリーンアップは `plugins/shiiman-workflow/scripts/cleanup_tmux_terminal.sh` を使用（tmux は常に終了、window 起動時のみ terminal をクローズ）
 - ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
 - tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
@@ -182,6 +184,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v1.8.5: `open_tmux_terminal.sh` に `--state-file` を追加し、`cleanup_tmux_terminal.sh` を新規追加。Agent Team 承認時は tmux を常に終了し、window 起動時のみ terminal をクローズする仕様へ変更
 - v1.8.4: `agent-team-flow` / `agent-team-issue-flow` の送信テンプレートを `>|` に統一して `zsh noclobber` を回避。`send_claude_tmux_message.sh` に空ファイルガードを追加
 - v1.8.3: Agent Team 承認時のクリーンアップを「送信指示」から「実行側の直接実行」に変更し、依頼テンプレート形式を統一
 - v1.8.2: Ghostty 起動フォールバックと tmux target 解決を修正（`0.0` 固定を廃止し実値解決へ変更）

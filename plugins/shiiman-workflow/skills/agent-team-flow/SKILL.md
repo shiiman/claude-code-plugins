@@ -97,8 +97,14 @@ no-git モードではこのステップをスキップする。
 SESSION="agent-team-{slug}"
 REPO_ROOT="$(pwd)"
 OPEN_TMUX_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/open_tmux_terminal.sh"
+CLEANUP_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/cleanup_tmux_terminal.sh"
+TERMINAL_STATE_FILE="$(mktemp)"
 
-bash "$OPEN_TMUX_SCRIPT" --session "$SESSION" --repo-root "$REPO_ROOT" --terminal auto
+bash "$OPEN_TMUX_SCRIPT" \
+  --session "$SESSION" \
+  --repo-root "$REPO_ROOT" \
+  --terminal auto \
+  --state-file "$TERMINAL_STATE_FILE"
 ```
 
 ### ステップ 5: tmux 内で Claude Code を起動
@@ -214,13 +220,15 @@ options:
 
 ### OK（承認）の場合
 
-1. 実行側で tmux セッションを直接クリーンアップ
+1. 実行側でクリーンアップスクリプトを実行（tmux は常に終了、window 起動時のみ terminal をクローズ）
 
 ```bash
-if tmux has-session -t "$SESSION" 2>/dev/null; then
-  tmux kill-session -t "$SESSION"
-fi
+bash "$CLEANUP_SCRIPT" --session "$SESSION" --state-file "$TERMINAL_STATE_FILE"
+rm -f "$TERMINAL_STATE_FILE"
 ```
+
+- `OPEN_MODE=tab` / `OPEN_MODE=current_shell` の場合、terminal は閉じない
+- terminal window クローズ失敗時は `WARN` を出して継続（best-effort）
 
 2. セキュリティチェック
 
