@@ -78,7 +78,6 @@ git fetch origin main
 git checkout main
 git pull origin main
 git checkout -b feature/{issue番号}
-git push -u origin feature/{issue番号}
 ```
 
 ### ステップ 3: Owner エージェント作成

@@ -101,7 +101,6 @@ git fetch origin main
 git checkout main
 git pull origin main
 git checkout -b feature/{slug}
-git push -u origin feature/{slug}
 ```
 
 no-git モードではこのステップをスキップする。

@@ -123,14 +123,15 @@ Agent Team で Issue から PR まで並列実行する開発フロー。
 **フロー**:
 
 ```text
-計画書 → Issue → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミット → PR
+計画書 → Issue → ブランチ → ターミナル + tmux 起動 → Agent Team 実装 → レビュー → コミット → PR
 ```
 
 **特徴**:
 
 - `multi-issue-flow` の MCP 使用部分を Agent Team 実行に置き換え
 - `claude --dangerously-skip-permissions` で Agent Team 実行
-- Ghostty 優先、未導入時は iTerm2 で tmux セッションを起動
+- ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
+- ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ### agent-team-flow
@@ -142,8 +143,8 @@ Agent Team で Issue/PR なしに並列実行する軽量フロー。
 **フロー**:
 
 ```text
-git モード: 計画書 → ブランチ → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
-no-git モード: 計画書 → Ghostty/iTerm2 + tmux 起動 → Agent Team 実装 → レビュー
+git モード: 計画書 → ブランチ → ターミナル + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
+no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実装 → レビュー
 ```
 
 **特徴**:
@@ -153,6 +154,8 @@ no-git モード: 計画書 → Ghostty/iTerm2 + tmux 起動 → Agent Team 実�
 - `--no-git` 指定時、または `git rev-parse --is-inside-work-tree` 失敗時は no-git モードへ切替
 - no-git モードではブランチ作成と push 前提手順を行わない
 - 問題時は Agent Team に再指示してループ可能
+- ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
+- ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ## 必要条件
@@ -173,10 +176,11 @@ no-git モード: 計画書 → Ghostty/iTerm2 + tmux 起動 → Agent Team 実�
 - `CLAUDE_PLUGIN_ROOT` が利用可能なプラグイン実行コンテキストで実行
 - `claude` コマンドが利用可能
 - tmux がインストール済み
-- macOS で Ghostty または iTerm2 が利用可能
+- macOS で Ghostty または iTerm2 を推奨（未導入時は Terminal.app / 現在端末にフォールバック）
 
 ## バージョン履歴
 
+- v1.8.1: `agent-team-flow` / `agent-team-issue-flow` のターミナル起動を共通化し、既存起動時の新規タブ化と文字化け対策を修正
 - v1.8.0: `multi-flow` / `agent-team-flow` に `--no-git` と git/no-git 自動分岐を追加（非gitディレクトリ対応）
 - v1.7.4: Phase 5 の変更確認手順を統一（`git status --short --branch` + `git diff` + `git diff --cached`）
 - v1.7.1: agent-team-flow / agent-team-issue-flow を仕様準拠に修正（Ghostty/iTerm2 + tmux + Agent Team 実行フローへ統一）
