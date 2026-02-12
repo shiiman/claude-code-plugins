@@ -110,36 +110,56 @@ claude --dangerously-skip-permissions
 ### ステップ 6: 送信スクリプトを設定（multi-agent-mcp の送信方式）
 
 ```bash
-TARGET="$SESSION:0.0"
+TARGET="$(tmux display-message -p -t "$SESSION" '#{session_name}:#{window_index}.#{pane_index}' 2>/dev/null || true)"
+if [ -z "$TARGET" ]; then
+  TARGET="$(tmux list-panes -t "$SESSION" -F '#{session_name}:#{window_index}.#{pane_index}' | head -n 1)"
+fi
+if [ -z "$TARGET" ]; then
+  echo "ERROR: tmux target を解決できませんでした (session: $SESSION)" >&2
+  exit 1
+fi
+
+PANE_CMD="$(tmux display-message -p -t "$TARGET" '#{pane_current_command}' 2>/dev/null || true)"
+if [ "$PANE_CMD" != "claude" ]; then
+  echo "WARN: target pane is not claude (target: $TARGET, current: ${PANE_CMD:-unknown})"
+  echo "必要に応じて Step 5 の claude 起動をやり直してください。"
+fi
 
 SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 ```
+
+- `TARGET` は固定値（`0.0`）を使わず tmux 実値で解決する
+- `base-index` / `pane-base-index` が `1` の環境でも同じ手順で動作する
 
 ### ステップ 7: 計画書を送信して Agent Team 実行を開始
 
 送信スクリプトは、本文貼り付け後に 2 通目の Enter を自動送信する。
 
 ```bash
+REPO_ROOT="$(pwd)"
 REQUEST_FILE="$(mktemp)"
-{
-  cat <<'EOF'
+COMMIT_NOTICE=""
+if [ "$FLOW_MODE" = "git" ]; then
+  COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
+fi
+
+cat > "$REQUEST_FILE" <<EOF
 Agent Team を作成して、以下の計画書に従って実装を開始してください。
-EOF
-
-  if [ "$FLOW_MODE" = "git" ]; then
-    printf '%s\n' 'git add / commit / push は実行しないでください。'
-  fi
-
-  cat <<'EOF'
+報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
+${COMMIT_NOTICE}
 
 計画書:
 {plan_or_task}
 
-完了時は、実装サマリー・変更ファイル・テスト結果・残課題を報告してください。
+完了時は以下を報告してください。
+- 実装サマリー
+- 変更ファイル
+- テスト結果
+- 残課題
+
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 実装が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
-} > "$REQUEST_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$REQUEST_FILE"
 rm -f "$REQUEST_FILE"
 ```
@@ -150,7 +170,8 @@ rm -f "$REQUEST_FILE"
 - 進捗確認が必要な場合は tmux 出力を確認
 
 ```bash
-tmux capture-pane -pt "$SESSION":0.0 | tail -n 120
+CAPTURE_TARGET="$(tmux display-message -p -t "$SESSION" '#{session_name}:#{window_index}.#{pane_index}' 2>/dev/null || tmux list-panes -t "$SESSION" -F '#{session_name}:#{window_index}.#{pane_index}' | head -n 1)"
+tmux capture-pane -pt "$CAPTURE_TARGET" | tail -n 120
 ```
 
 ## Phase 2-4: Agent Team の自律実行
@@ -175,7 +196,8 @@ no-git モード:
 - 必要に応じて以下で tmux 出力を再確認
 
 ```bash
-tmux capture-pane -pt "$SESSION":0.0 | tail -n 200
+CAPTURE_TARGET="$(tmux display-message -p -t "$SESSION" '#{session_name}:#{window_index}.#{pane_index}' 2>/dev/null || tmux list-panes -t "$SESSION" -F '#{session_name}:#{window_index}.#{pane_index}' | head -n 1)"
+tmux capture-pane -pt "$CAPTURE_TARGET" | tail -n 200
 ```
 
 ### ステップ 2: ユーザー承認を取得（必須）
@@ -254,24 +276,24 @@ no-git モード:
 
 ```bash
 USER_FEEDBACK="{user_feedback}"
+REPO_ROOT="$(pwd)"
 FIX_FILE="$(mktemp)"
-{
-  cat <<'EOF'
+COMMIT_NOTICE=""
+if [ "$FLOW_MODE" = "git" ]; then
+  COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
+fi
+
+cat > "$FIX_FILE" <<EOF
 Agent Team を作成して、以下の修正指示に従って実装を開始してください。
-EOF
+報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
+${COMMIT_NOTICE}
 
-  if [ "$FLOW_MODE" = "git" ]; then
-    printf '%s\n' 'コミット（git add / commit / push）は行わないでください。'
-  fi
+修正依頼: ${USER_FEEDBACK}
 
-  printf '\n修正依頼: %s\n\n' "$USER_FEEDBACK"
-
-  cat <<'EOF'
 上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 修正対応が完了しました" with title "agent-team-flow" sound name "default"'
 EOF
-} > "$FIX_FILE"
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$FIX_FILE"
 rm -f "$FIX_FILE"
 ```

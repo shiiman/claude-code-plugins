@@ -132,6 +132,7 @@ Agent Team で Issue から PR まで並列実行する開発フロー。
 - `claude --dangerously-skip-permissions` で Agent Team 実行
 - ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
 - ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
+- tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ### agent-team-flow
@@ -156,6 +157,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 - 問題時は Agent Team に再指示してループ可能
 - ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
 - ターミナル選択順は `ghostty -> iterm2 -> Terminal.app -> current shell`
+- tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
 ## 必要条件
@@ -180,6 +182,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v1.8.2: Ghostty 起動フォールバックと tmux target 解決を修正（`0.0` 固定を廃止し実値解決へ変更）
 - v1.8.1: `agent-team-flow` / `agent-team-issue-flow` のターミナル起動を共通化し、既存起動時の新規タブ化と文字化け対策を修正
 - v1.8.0: `multi-flow` / `agent-team-flow` に `--no-git` と git/no-git 自動分岐を追加（非gitディレクトリ対応）
 - v1.7.4: Phase 5 の変更確認手順を統一（`git status --short --branch` + `git diff` + `git diff --cached`）
