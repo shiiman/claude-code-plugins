@@ -115,7 +115,7 @@ REPO_ROOT="$(pwd)"
 REQUEST_FILE="$(mktemp)"
 COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 
-cat > "$REQUEST_FILE" <<EOF
+cat >| "$REQUEST_FILE" <<EOF
 Issue #{issue_number} の対応を開始してください。以下の計画書に従って実装してください。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
@@ -249,7 +249,7 @@ REPO_ROOT="$(pwd)"
 FIX_FILE="$(mktemp)"
 COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 
-cat > "$FIX_FILE" <<EOF
+cat >| "$FIX_FILE" <<EOF
 Agent Team を作成して、以下の修正指示に従って実装を開始してください。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
@@ -272,7 +272,7 @@ rm -f "$FIX_FILE"
 
 ```bash
 HOLD_FILE="$(mktemp)"
-cat > "$HOLD_FILE" <<'EOF'
+cat >| "$HOLD_FILE" <<'EOF'
 現在は保留です。追加指示があるまで待機してください。
 EOF
 bash "$SEND_SCRIPT" --target "$TARGET" --file "$HOLD_FILE"

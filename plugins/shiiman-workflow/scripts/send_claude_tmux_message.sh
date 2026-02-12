@@ -65,6 +65,12 @@ if [[ ! -f "$MESSAGE_FILE" ]]; then
   exit 2
 fi
 
+if [[ ! -s "$MESSAGE_FILE" ]]; then
+  echo "message file is empty: $MESSAGE_FILE" >&2
+  echo "HINT: if zsh noclobber is enabled, write heredoc with >| (e.g. cat >| \"\$REQUEST_FILE\" <<EOF)." >&2
+  exit 2
+fi
+
 target_session="${TARGET%%:*}"
 if [[ -z "$target_session" || "$target_session" == "$TARGET" ]]; then
   echo "ERROR: invalid --target format (expected session:window.pane, got: $TARGET)" >&2
