@@ -17,7 +17,7 @@ Agent Team で Issue 作成から PR 作成までを並列実行するフロー�
 - `claude` コマンドが利用可能
 - `tmux` が利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
-- macOS で `Ghostty` または `iTerm2` が利用可能（Ghostty 優先）
+- macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
 
 ## 引数
 
@@ -28,7 +28,7 @@ Agent Team で Issue 作成から PR 作成までを並列実行するフロー�
 ## 実行フロー
 
 ```text
-Phase 1: Issue 作成 → ブランチ作成 → Ghostty/iTerm2 + tmux 起動 → claude 起動 → 計画書送信
+Phase 1: Issue 作成 → ブランチ作成 → ターミナル + tmux 起動 → claude 起動 → 計画書送信
 Phase 2-4: Agent Team が計画書を読み取り自律実装
 Phase 5: 結果確認 → 承認/修正依頼 → クリーンアップ → Issue 更新 → コミット/Push → PR 作成
 ```
@@ -66,21 +66,14 @@ git pull origin main
 git checkout -b feature/{issue_number}
 ```
 
-### ステップ 3: Ghostty (なければ iTerm2) を起動して tmux セッションを用意
+### ステップ 3: 共通スクリプトで tmux セッションを起動
 
 ```bash
 SESSION="agent-team-issue-{issue_number}"
 REPO_ROOT="$(pwd)"
+OPEN_TMUX_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/open_tmux_terminal.sh"
 
-if [ -d "/Applications/Ghostty.app" ]; then
-  open -na Ghostty
-  echo "Ghostty を起動。新しいウィンドウで: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-elif [ -d "/Applications/iTerm.app" ]; then
-  open -na iTerm
-  echo "iTerm2 を起動。新しいウィンドウで: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-else
-  echo "Ghostty/iTerm2 が見つからないため、現在の端末で: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-fi
+bash "$OPEN_TMUX_SCRIPT" --session "$SESSION" --repo-root "$REPO_ROOT" --terminal auto
 ```
 
 ### ステップ 4: tmux 内で Claude Code を起動
@@ -267,5 +260,4 @@ rm -f "$HOLD_FILE"
 - `gh` 認証失敗: `gh auth login` 実施後に再開
 - `claude` 未インストール: インストール後に再実行
 - `tmux` 未インストール: `tmux` 導入後に再実行
-- Ghostty/iTerm2 なし: 現在のターミナルで tmux を起動して継続
 - Agent Team 側で部分失敗: 失敗タスクのみを再指示してループ

@@ -16,7 +16,7 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` が設定済み（必須）
 - `claude` コマンドが利用可能
 - `tmux` が利用可能
-- macOS で `Ghostty` または `iTerm2` が利用可能（Ghostty 優先）
+- macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
 
 ## 引数
 
@@ -49,12 +49,12 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1
 
 ```text
 git モード:
-Phase 1: ブランチ作成 → Ghostty/iTerm2 + tmux 起動 → claude 起動 → 計画書送信
+Phase 1: ブランチ作成 → ターミナル + tmux 起動 → claude 起動 → 計画書送信
 Phase 2-4: Agent Team が計画書を読み取り自律実装
 Phase 5: 結果確認 → 承認/修正依頼 → クリーンアップ → コミットメッセージ出力
 
 no-git モード:
-Phase 1: Ghostty/iTerm2 + tmux 起動 → claude 起動 → 計画書送信
+Phase 1: ターミナル + tmux 起動 → claude 起動 → 計画書送信
 Phase 2-4: Agent Team が計画書を読み取り自律実装
 Phase 5: 結果確認（Agent Team 報告）→ 承認/修正依頼 → クリーンアップ
 ```
@@ -91,21 +91,14 @@ git checkout -b feature/{slug}
 
 no-git モードではこのステップをスキップする。
 
-### ステップ 4: Ghostty (なければ iTerm2) を起動して tmux セッションを用意
+### ステップ 4: 共通スクリプトで tmux セッションを起動
 
 ```bash
 SESSION="agent-team-{slug}"
 REPO_ROOT="$(pwd)"
+OPEN_TMUX_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/open_tmux_terminal.sh"
 
-if [ -d "/Applications/Ghostty.app" ]; then
-  open -na Ghostty
-  echo "Ghostty を起動。新しいウィンドウで: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-elif [ -d "/Applications/iTerm.app" ]; then
-  open -na iTerm
-  echo "iTerm2 を起動。新しいウィンドウで: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-else
-  echo "Ghostty/iTerm2 が見つからないため、現在の端末で: cd \"$REPO_ROOT\" && tmux new -As \"$SESSION\""
-fi
+bash "$OPEN_TMUX_SCRIPT" --session "$SESSION" --repo-root "$REPO_ROOT" --terminal auto
 ```
 
 ### ステップ 5: tmux 内で Claude Code を起動
@@ -305,5 +298,4 @@ rm -f "$HOLD_FILE"
 
 - `claude` 未インストール: インストール後に再実行
 - `tmux` 未インストール: `tmux` 導入後に再実行
-- Ghostty/iTerm2 なし: 現在のターミナルで tmux を起動して継続
 - Agent Team 側で部分失敗: 失敗タスクのみを再指示してループ
