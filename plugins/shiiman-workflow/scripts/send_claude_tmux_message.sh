@@ -66,8 +66,8 @@ if [[ ! -f "$MESSAGE_FILE" ]]; then
 fi
 
 if [[ ! -s "$MESSAGE_FILE" ]]; then
-  echo "message file is empty: $MESSAGE_FILE" >&2
-  echo "HINT: if zsh noclobber is enabled, write heredoc with >| (e.g. cat >| \"\$REQUEST_FILE\" <<EOF)." >&2
+  printf '%s\n' "ERROR: message file is empty: $MESSAGE_FILE" >&2
+  printf '%s\n' "HINT: if zsh noclobber is enabled, write heredoc with >| (e.g. cat >| \"\$REQUEST_FILE\" <<EOF)." >&2
   exit 2
 fi
 
