@@ -184,6 +184,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v1.8.6: `agent-team-issue-flow` の Step 6 送信テンプレート先頭を `Agent Team を作成して` へ修正し、実行意図を明確化
 - v1.8.5: `open_tmux_terminal.sh` に `--state-file` を追加し、`cleanup_tmux_terminal.sh` を新規追加。Agent Team 承認時は tmux を常に終了し、window 起動時のみ terminal をクローズする仕様へ変更
 - v1.8.4: `agent-team-flow` / `agent-team-issue-flow` の送信テンプレートを `>|` に統一して `zsh noclobber` を回避。`send_claude_tmux_message.sh` に空ファイルガードを追加
 - v1.8.3: Agent Team 承認時のクリーンアップを「送信指示」から「実行側の直接実行」に変更し、依頼テンプレート形式を統一
