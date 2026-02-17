@@ -122,7 +122,7 @@ REQUEST_FILE="$(mktemp)"
 COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 
 cat >| "$REQUEST_FILE" <<EOF
-Issue #{issue_number} の対応を開始してください。以下の計画書に従って実装してください。
+Agent Team を作成して、Issue #{issue_number} の対応を開始してください。以下の計画書に従って実装してください。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
 
