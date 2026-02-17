@@ -2,108 +2,64 @@
 
 ## 概要
 
-計画から複数の GitHub Issue をまとめて作成します。
+このリポジトリでは、Issue はローカルのスキルコマンドではなく、GitHub の Issue Template から作成します。
 
-## コマンド
+## 前提
 
-```bash
-/issue-create
-```
+- GitHub 上でこのリポジトリを開けること
+- `New issue` 画面にアクセスできること
 
-## Issue タイプ
+## 利用するテンプレート
 
-| タイプ | プレフィックス | ラベル |
-|--------|----------------|--------|
-| プラグイン | `[Plugin]` | enhancement, plugin |
-| コマンド | `[Command]` | enhancement, command |
-| スキル | `[Skill]` | enhancement, skill |
-| サブエージェント | `[Subagent]` | enhancement, subagent |
-| フック | `[Hook]` | enhancement, hook |
-| その他 | `[Request]` | question |
+`.github/ISSUE_TEMPLATE/` 配下のテンプレートを利用します。
 
-## Issue 作成コマンド
+| テンプレート | 用途 | 付与ラベル |
+|-------------|------|-----------|
+| `plugin-creation.yml` | 新しいプラグイン作成 | `enhancement`, `plugin` |
+| `skill-creation.yml` | 既存プラグインへのスキル追加 | `enhancement`, `skill` |
+| `subagent-creation.yml` | 既存プラグインへのサブエージェント追加 | `enhancement`, `subagent` |
+| `hook-creation.yml` | 既存プラグインへのフック追加 | `enhancement`, `hook` |
+| `other-request.yml` | その他の機能追加・改善提案・質問 | `question` |
 
-```bash
-# プラグイン
-gh issue create \
-  --title "[Plugin] shiiman-plugin" \
-  --body "## プラグイン名
-common
+### 設定ファイル
 
-## 説明
-汎用ユーティリティコマンドを提供" \
-  --label "enhancement,plugin"
+`config.yml` では `blank_issues_enabled: false` が設定されているため、テンプレートを選択して起票する運用です。
 
-# コマンド
-gh issue create \
-  --title "[Command] shiiman-plugin:commit" \
-  --body "## 対象プラグイン
-shiiman-plugin
+## 起票手順（GitHub UI）
 
-## コマンド名
-commit
+1. GitHub の `Issues` タブを開く
+2. `New issue` をクリック
+3. 用途に合うテンプレートを選択
+4. 必須項目を入力して `Submit new issue` で作成
 
-## 説明
-コミットメッセージを生成" \
-  --label "enhancement,command"
+## テンプレート別の入力ポイント
 
-# スキル
-gh issue create \
-  --title "[Skill] shiiman-plugin:code-reviewer" \
-  --body "## 対象プラグイン
-shiiman-plugin
+### プラグイン作成 (`plugin-creation.yml`)
 
-## スキル名
-code-reviewer
+- プラグイン名: 小文字・ハイフン区切り
+- 説明: 1-2文で目的を記載
 
-## 説明
-コードレビューを行うスキル。
-トリガー: 「レビューして」「コードチェック」" \
-  --label "enhancement,skill"
+### スキル追加 (`skill-creation.yml`)
 
-# サブエージェント
-gh issue create \
-  --title "[Subagent] shiiman-plugin:test-runner" \
-  --body "## 対象プラグイン
-shiiman-plugin
+- 対象プラグイン: `shiiman-xxx` 形式
+- スキル名: 小文字・ハイフン区切り
+- 説明: 目的とトリガーフレーズ
 
-## サブエージェント名
-test-runner
+### サブエージェント追加 (`subagent-creation.yml`)
 
-## 説明
-テストを実行して結果を報告するサブエージェント。
-使用ツール: Bash, Read, Grep" \
-  --label "enhancement,subagent"
+- 対象プラグイン: `shiiman-xxx` 形式
+- サブエージェント名: 小文字・ハイフン区切り
+- 説明: 目的と使用ツール
 
-# フック
-gh issue create \
-  --title "[Hook] shiiman-plugin:PreToolUse:Bash" \
-  --body "## 対象プラグイン
-shiiman-plugin
+### フック追加 (`hook-creation.yml`)
 
-## イベント
-PreToolUse
+- 対象プラグイン: `shiiman-xxx` 形式
+- イベント: `PreToolUse` / `PostToolUse` など
+- マッチャー: `PreToolUse` / `PostToolUse` の場合は指定
+- フックタイプ: `command` または `prompt`
+- 説明: 実行目的と内容
 
-## マッチャー
-Bash
+## 起票後の進め方
 
-## 説明
-Bash コマンド実行前にセキュリティチェックを行う。" \
-  --label "enhancement,hook"
-```
-
-## ワークフロー
-
-```text
-1. 計画を立てる（plan mode）
-   ↓
-2. /issue-create で Issue をまとめて作成
-   ↓
-3. 各 Issue の実装
-   ↓
-4. /pr-create で PR 作成（Issue をクローズ）
-```
-
-## 関連コマンド
-
-- `/pr-create` - PR を作成して Issue をクローズ
+- 実装は通常の開発フローで進める
+- 必要に応じてグローバルスキルまたは `shiiman-git` 側のスキルで GitHub 操作（PR作成など）を行う

@@ -101,15 +101,10 @@ pip install -r requirements.txt
 
 | コマンド | 説明 |
 |----------|------|
-| `/plugin-create` | 新しいプラグインを作成 |
-| `/plugin-create-full` | スキル/サブエージェント/フックを含むプラグインを一括作成 |
+| `/plugin-create` | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
 | `/skill-create` | プラグインにスキルを追加 |
 | `/subagent-create` | プラグインにサブエージェントを追加 |
 | `/hook-create` | プラグインにフックを追加 |
-| `/issue-create` | 計画から GitHub Issue を作成 |
-| `/pr-create` | PR を作成し関連 Issue をクローズ |
-| `/pr-review-check` | PR のレビューコメントを確認して修正対応 |
-| `/multi-agent-test` | MCP マルチエージェント環境検証と Admin 起動を実行 |
 
 ## 利用可能なスキル
 
@@ -119,19 +114,10 @@ pip install -r requirements.txt
 
 | スキル | プラグイン | トリガー例 | 説明 |
 |--------|-----------|------------|------|
-| plugin-create | - | 「プラグイン作成」「新しいプラグイン」 | 新しいプラグインを作成 |
-| plugin-create-full | - | 「プラグイン一括作成」「フル作成」 | プラグインをスキル・エージェント・フック含め一括作成 |
+| plugin-create | - | 「プラグイン作成」「プラグイン一括作成」 | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
 | skill-create | - | 「スキル作成」「新しいスキル」 | プラグインにスキルを追加 |
 | subagent-create | - | 「サブエージェント作成」「エージェント作成」 | プラグインにサブエージェントを追加 |
 | hook-create | - | 「フック作成」「新しいフック」 | プラグインにフックを追加 |
-
-### GitHub 連携
-
-| スキル | プラグイン | トリガー例 | 説明 |
-|--------|-----------|------------|------|
-| issue-create | - | 「Issue 作成」「Issue を作って」 | 計画から GitHub Issue を作成 |
-| pr-create | - | 「PR 作成」「PR を作って」 | PR を作成し関連 Issue をクローズ |
-| pr-review-check | - | 「レビューコメント確認」「レビュー対応」 | PR のレビューコメントを確認し修正対応 |
 
 ### ワークフロー
 
@@ -144,11 +130,7 @@ pip install -r requirements.txt
 | agent-team-issue-flow | shiiman-workflow | 「agent-team-issue-flow」「Agent Team Issue」 | Agent Team で Issue から PR まで並列実行 |
 | agent-team-flow | shiiman-workflow | 「agent-team-flow」「エージェントチームフロー」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
 
-### 開発支援
-
-| スキル | プラグイン | トリガー例 | 説明 |
-|--------|-----------|------------|------|
-| multi-agent-test | - | 「マルチエージェントテスト」「MCP テスト」 | MCP マルチエージェント環境検証と Admin 起動を一括実行 |
+GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、グローバルまたは `shiiman-git` 側のスキルを利用してください。
 
 ## ドキュメント
 
@@ -156,6 +138,7 @@ pip install -r requirements.txt
 - [docs/skill.md](docs/skill.md) - スキル作成ガイド
 - [docs/subagent.md](docs/subagent.md) - サブエージェント作成ガイド
 - [docs/hook.md](docs/hook.md) - フック作成ガイド
+- [docs/issues.md](docs/issues.md) - GitHub Issue Template からの起票ガイド
 
 ## プラグインの追加
 

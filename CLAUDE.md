@@ -23,17 +23,10 @@ plugins/{plugin-name}/
 
 ### Plugin Management
 
-- `/plugin-create` - Create a new plugin with directory structure and metadata
-- `/plugin-create-full` - Create a plugin with all features (skills, subagents, hooks) at once
+- `/plugin-create` - Create a new plugin (plugin-only mode or full mode with skills/subagents/hooks)
 - `/skill-create` - Add a skill to a plugin
 - `/subagent-create` - Add a subagent to a plugin
 - `/hook-create` - Add a hook to a plugin
-
-### GitHub Integration
-
-- `/issue-create` - Create GitHub Issues from a plan (trigger: "Issue 作成", "Issue を作って")
-- `/pr-create` - Create a PR and close related issues (trigger: "PR 作成", "PR を作って")
-- `/pr-review-check` - Check PR review comments and apply fixes (trigger: "レビューコメント確認", "レビュー対応")
 
 ### Workflow
 
@@ -42,9 +35,9 @@ plugins/{plugin-name}/
 - `/shiiman-workflow:single-flow` - Lightweight single-agent flow without Issue/PR (trigger: "シングルフロー")
 - `/shiiman-workflow:multi-flow` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
 
-### Development Support
+### GitHub Operations
 
-- `/multi-agent-test` - Verify MCP multi-agent environment and spawn Admin (trigger: "マルチエージェントテスト")
+Issue and PR operations are handled by global skills or `shiiman-git` plugin skills, not by local `.claude` skills in this repository.
 
 ## Documentation
 
@@ -53,7 +46,6 @@ plugins/{plugin-name}/
 - docs/subagent.md - Subagent creation guide
 - docs/hook.md - Hook creation guide
 - docs/issues.md - Issue creation guide
-- docs/pr.md - PR creation guide
 
 ## Commit Messages
 
