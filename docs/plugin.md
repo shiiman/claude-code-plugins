@@ -127,7 +127,7 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 | 小文字のみ | `shiiman-common` ✅ / `shiiman-Common` ❌ |
 | ハイフン区切り | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
 | コロン禁止 | `shiiman:common` ❌（コマンド区切りと競合） |
-| 簡潔な名前 | `shiiman-plugin` ✅ / `shiiman-plugin-manager` ❌ |
+| 簡潔な名前 | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌ |
 
 **呼び出し形式**: `/shiiman-common:commit`
 
@@ -135,12 +135,12 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 
 ```bash
 # ✅ 良い例: 簡潔で分かりやすい
-shiiman-plugin      # プラグイン管理
+shiiman-claude      # Claude 設定管理
 shiiman-git         # Git 操作
 shiiman-react       # React 開発
 
 # ❌ 悪い例: 冗長
-shiiman-plugin-manager
+shiiman-claude-settings-manager
 shiiman-git-operations
 shiiman-react-development-tools
 ```

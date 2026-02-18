@@ -17,11 +17,6 @@
           - ".github/**/*"
 
 # Plugin labels
-"plugin:shiiman-plugin":
-  - changed-files:
-      - any-glob-to-any-file:
-          - "plugins/shiiman-plugin/**/*"
-
 "plugin:shiiman-claude":
   - changed-files:
       - any-glob-to-any-file:
