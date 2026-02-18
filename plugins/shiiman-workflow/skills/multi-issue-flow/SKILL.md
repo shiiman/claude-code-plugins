@@ -4,22 +4,41 @@ description: MCP マルチエージェントで Issue から PR まで並列実�
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--help]"
 ---
 
 # Multi Issue Flow
 
 MCP マルチエージェントで Issue から PR まで並列実行する開発フロー。
 
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/multi-issue-flow - MCP マルチエージェント Issue 開発フロー
+
+概要:
+  MCP マルチエージェントで Issue 作成から PR 作成まで並列実行する。
+  Issue 作成 → MCP 初期化 → Admin/Worker 並列実行 → コミット → PR 作成。
+
+使用方法:
+  /multi-issue-flow [タスク説明] [オプション]
+
+オプション:
+  --plan  plan mode で計画書を新規作成してから実行
+  --help  このヘルプを表示
+
+例:
+  /multi-issue-flow                        # 既存計画書から実行
+  /multi-issue-flow --plan                 # 計画書を作成してから実行
+  /multi-issue-flow "認証機能を並列実装"    # タスク説明から直接実行
+```
+
 ## 前提条件
 
 - multi-agent-mcp がインストール済み（**必須**）
 - tmux がインストール済み（**必須**）
-
-## 引数
-
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
 ## 環境変数
 

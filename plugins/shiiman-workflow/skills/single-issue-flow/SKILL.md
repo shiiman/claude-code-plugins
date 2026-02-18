@@ -4,17 +4,36 @@ description: Issue 作成から PR 作成まで自動実行するシングルエ
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--help]"
 ---
 
 # Single Issue Flow
 
 Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。
 
-## 引数
+## Help
 
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/single-issue-flow - シングルエージェント Issue 開発フロー
+
+概要:
+  Issue 作成から PR 作成まで自動実行する。
+  Issue 作成 → ブランチ作成 → 実装 → コミット → PR 作成。
+
+使用方法:
+  /single-issue-flow [タスク説明] [オプション]
+
+オプション:
+  --plan  plan mode で計画書を新規作成してから実行
+  --help  このヘルプを表示
+
+例:
+  /single-issue-flow                        # 既存計画書から実行
+  /single-issue-flow --plan                 # 計画書を作成してから実行
+  /single-issue-flow "ログイン機能を追加"    # タスク説明から直接実行
+```
 
 ## 3つの実行モード
 

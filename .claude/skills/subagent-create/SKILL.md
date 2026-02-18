@@ -2,11 +2,30 @@
 name: subagent-create
 description: プラグインに新しいサブエージェントを作成する。「サブエージェント作成」「新しいエージェント」「エージェントを作って」「エージェント追加」「subagent 作成」「エージェントを追加したい」「新規エージェント」などで起動。特定の役割を持つサブエージェントを生成。
 allowed-tools: [Read, Write, Bash, Glob]
+argument-hint: "[--help]"
 ---
 
 # Create Subagent
 
 プラグインに新しいサブエージェントを作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/subagent-create - Create Subagent
+
+概要:
+  プラグインに新しいサブエージェントを作成します。
+
+使用方法:
+  /subagent-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

@@ -2,11 +2,30 @@
 name: google-auth-login
 description: Google OAuth 認証を実行する。「Google ログイン」「認証して」「ログインして」「Google 認証」「アカウント追加」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Auth Login
 
 Google OAuth 認証を実行してトークンを取得・保存します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-auth-login - Auth Login
+
+概要:
+  Google OAuth 認証を実行してトークンを取得・保存します。
+
+使用方法:
+  /google-auth-login [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 実行方法
 

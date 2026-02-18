@@ -2,11 +2,30 @@
 name: hook-create
 description: プラグインに新しいフックを作成する。「フック作成」「新しいフック」「フックを作って」「フック追加」「hook 作成」「フックを追加したい」「新規フック」などで起動。ツール実行前後やセッションイベントで実行されるフックを生成。
 allowed-tools: [Read, Write, Bash, Glob]
+argument-hint: "[--help]"
 ---
 
 # Create Hook
 
 プラグインに新しいフックを作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/hook-create - Create Hook
+
+概要:
+  プラグインに新しいフックを作成します。
+
+使用方法:
+  /hook-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

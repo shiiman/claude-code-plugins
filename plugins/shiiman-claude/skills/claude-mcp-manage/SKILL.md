@@ -2,23 +2,43 @@
 name: claude-mcp-manage
 description: MCP サーバーの一覧表示・追加・削除を一つのスキルで管理する。「MCP 管理」「MCP 一覧」「MCP を追加」「MCP を削除」「MCP サーバー管理」「MCP 設定」「MCP 操作」などで起動。引数があれば優先し、なければ発話内容から list/install/remove を判定。
 allowed-tools: [Bash, AskUserQuestion]
+argument-hint: "[list|install|remove] [--help]"
 ---
 
 # Claude MCP Manage
 
 MCP サーバーの一覧表示・追加・削除を統合して管理します。
 
-## 引数
+## Help
 
-- `$ARGUMENTS`:
-  - `--list`: MCP サーバー一覧を表示
-  - `--install`: MCP サーバーを追加
-  - `--remove`: MCP サーバーを削除
-  - `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/claude-mcp-manage - MCP サーバー管理
+
+概要:
+  MCP サーバーの一覧表示・追加・削除を一つのスキルで管理する。
+  引数があれば優先し、なければ発話内容から操作を判定。
+
+使用方法:
+  /claude-mcp-manage [操作] [オプション]
+
+操作:
+  list     MCP サーバー一覧を表示
+  install  MCP サーバーを追加
+  remove   MCP サーバーを削除
+
+オプション:
+  --help   このヘルプを表示
+
+例:
+  /claude-mcp-manage              # 発話内容から操作を判定
+  /claude-mcp-manage list         # MCP サーバー一覧を表示
+  /claude-mcp-manage install      # MCP サーバーを追加
+  /claude-mcp-manage remove       # MCP サーバーを削除
+```
 
 ## 実行手順
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 ### 1. 操作種別の決定
 

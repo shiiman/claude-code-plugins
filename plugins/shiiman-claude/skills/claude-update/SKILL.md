@@ -2,22 +2,41 @@
 name: claude-update
 description: Claude Code CLI のバージョン確認と更新を実行する。「Claude を更新」「Claude Code をアップデート」「claude update」「Claude のバージョン確認」「最新版にして」「Claude を最新に」「Claude 本体更新」などで起動。引数があれば優先し、なければ発話内容から version/update を判定。
 allowed-tools: [Bash, AskUserQuestion]
+argument-hint: "[version|update] [--help]"
 ---
 
 # Claude Update
 
 Claude Code CLI のバージョン確認と更新を行います。
 
-## 引数
+## Help
 
-- `$ARGUMENTS`:
-  - `--version`: 現在バージョンを確認
-  - `--update`: Claude Code CLI を更新
-  - `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/claude-update - Claude Code 更新
+
+概要:
+  Claude Code CLI のバージョン確認と更新を実行する。
+  Homebrew 管理の場合は brew upgrade を使用。
+
+使用方法:
+  /claude-update [操作] [オプション]
+
+操作:
+  version  現在のバージョンを確認
+  update   Claude Code CLI を更新
+
+オプション:
+  --help   このヘルプを表示
+
+例:
+  /claude-update              # 発話内容から操作を判定
+  /claude-update version      # バージョン確認
+  /claude-update update       # Claude Code を更新
+```
 
 ## 実行手順
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 ### 1. 操作種別の決定
 

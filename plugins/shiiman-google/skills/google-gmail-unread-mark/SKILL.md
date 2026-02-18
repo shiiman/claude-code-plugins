@@ -2,11 +2,30 @@
 name: google-gmail-unread-mark
 description: Gmail の未読を既読化する。「既読にする」「未読を既読」「メールを既読化」「Gmail 既読化」「未読を消す」「メールを開封扱い」「一括既読」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Gmail Mark Read
 
 Gmail の未読メッセージを既読化します（単体/一括）。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-gmail-unread-mark - Gmail Mark Read
+
+概要:
+  Gmail の未読メッセージを既読化します（単体/一括）。
+
+使用方法:
+  /google-gmail-unread-mark [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 実行方法
 

@@ -4,22 +4,41 @@ description: Issue/PR なしで計画書からタスクを実行しコミット�
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--help]"
 ---
 
 # Single Flow
 
 Issue/PR なしで計画書からタスクを実行し、コミットメッセージを出力する軽量フロー。
 
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/single-flow - 軽量シングルエージェントフロー
+
+概要:
+  Issue/PR なしで計画書からタスクを実行し、コミットメッセージを出力する。
+  ブランチ作成 → 実装 → 自己レビュー → コミットメッセージ出力。
+
+使用方法:
+  /single-flow [タスク説明] [オプション]
+
+オプション:
+  --plan  plan mode で計画書を新規作成してから実行
+  --help  このヘルプを表示
+
+例:
+  /single-flow                        # 既存計画書から実行
+  /single-flow --plan                 # 計画書を作成してから実行
+  /single-flow "ログイン機能を追加"    # タスク説明から直接実行
+```
+
 ## 前提条件
 
 - `gh` コマンドが利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
-
-## 引数
-
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
 ## 3つの実行モード
 

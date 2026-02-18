@@ -2,11 +2,30 @@
 name: issue-update
 description: 実装状況に応じて Issue の状態を更新する。「Issue 更新」「Issue を更新」「Issue 状態変更」「Issue をクローズ」「Issue 完了」「チケットを閉じる」「Issue の進捗を更新」などで起動。コメント追加やラベル変更、クローズ処理を実行。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Update Issue
 
 実装状況に応じて Issue の状態を更新します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/issue-update - Update Issue
+
+概要:
+  実装状況に応じて Issue の状態を更新します。
+
+使用方法:
+  /issue-update [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

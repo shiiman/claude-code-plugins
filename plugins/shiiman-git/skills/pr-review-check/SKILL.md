@@ -2,6 +2,7 @@
 name: pr-review-check
 description: 自分の PR に付いたレビューコメントを確認し、修正対応を実行する（PR作成者向け）。「レビュー対応」「レビューコメント確認」「指摘を修正」「PRコメント確認」などで起動。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
+argument-hint: "[PR番号] [--fix|--help]"
 context: fork
 agent: shiiman-git:reviewer
 ---
@@ -10,13 +11,32 @@ agent: shiiman-git:reviewer
 
 **自分の PR** に付いたレビューコメントを確認し、修正対応を実行します。
 
-> **注意**: 他者の PR をレビューする場合は `pr-reviewer` を使用してください。
+> **注意**: 他者の PR をレビューする場合は `pr-review` を使用してください。
 
-## 引数
+## Help
 
-- `[PR番号]`: 対象の PR 番号（省略時は現在のブランチの PR を自動検出）
-- `--fix`: 指摘事項を修正する（指定しない場合は確認のみ）
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/pr-review-check - レビュー指摘対応（PR 作成者向け）
+
+概要:
+  自分の PR に付いたレビューコメントを確認し、修正対応を実行する。
+  デフォルトは確認のみ。--fix で修正を実行。
+
+使用方法:
+  /pr-review-check [PR番号] [オプション]
+
+オプション:
+  --fix   指摘事項を修正する（指定しない場合は確認のみ）
+  --help  このヘルプを表示
+
+例:
+  /pr-review-check              # 現在のブランチの PR のレビューを確認
+  /pr-review-check 123          # PR #123 のレビューを確認
+  /pr-review-check --fix        # レビュー指摘を修正
+  /pr-review-check 123 --fix    # PR #123 のレビュー指摘を修正
+```
 
 ## ワークフロー
 

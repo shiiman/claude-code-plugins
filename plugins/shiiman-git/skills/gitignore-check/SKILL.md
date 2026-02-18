@@ -2,6 +2,7 @@
 name: gitignore-check
 description: コミット前に .gitignore に追加すべきファイルをチェックする。「gitignore チェック」「コミット前チェック」「機密ファイル確認」「.gitignore 確認」「追加すべきファイル」「無視すべきファイル」「gitignore 推奨」などで起動。機密情報や不要なファイルがコミットされないように確認。
 allowed-tools: [Read, Bash, Glob, Grep]
+argument-hint: "[--help]"
 context: fork
 agent: shiiman-git:security-check
 ---
@@ -9,6 +10,24 @@ agent: shiiman-git:security-check
 # Check Gitignore
 
 コミット前に .gitignore に追加すべきファイルをチェックします。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/gitignore-check - Check Gitignore
+
+概要:
+  コミット前に .gitignore に追加すべきファイルをチェックします。
+
+使用方法:
+  /gitignore-check [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

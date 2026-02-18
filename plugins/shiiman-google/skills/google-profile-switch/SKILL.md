@@ -2,11 +2,30 @@
 name: google-profile-switch
 description: 保存済みの Google 認証プロファイルを切り替える。「アカウント切替」「プロファイル変更」「別アカウントで使いたい」「Google アカウントを変える」「認証を切り替え」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Profile Switch
 
 保存済み認証プロファイルを切り替えます。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-profile-switch - Profile Switch
+
+概要:
+  保存済み認証プロファイルを切り替えます。
+
+使用方法:
+  /google-profile-switch [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 実行方法
 

@@ -2,11 +2,30 @@
 name: google-slides
 description: Google Slides プレゼンテーションを新規作成・スライド追加する。「プレゼン作成」「Slides 作成」「新しいスライド」「スライド追加」「Slides 更新」「スライドを追加して」「ページを追加」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Slides Editor
 
 Google Slides プレゼンテーションの新規作成・スライド追加を行います。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-slides - Slides Editor
+
+概要:
+  Google Slides プレゼンテーションの新規作成・スライド追加を行います。
+
+使用方法:
+  /google-slides [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

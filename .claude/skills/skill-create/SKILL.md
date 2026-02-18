@@ -2,11 +2,30 @@
 name: skill-create
 description: プラグインに新しいスキルを作成する。「スキル作成」「新しいスキル」「スキルを作って」「スキル追加」「skill 作成」「スキルを追加したい」「新規スキル」などで起動。自然言語トリガーで起動するスキルを生成。
 allowed-tools: [Read, Write, Bash, Glob]
+argument-hint: "[--help]"
 ---
 
 # Create Skill
 
 プラグインに新しいスキルを作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/skill-create - Create Skill
+
+概要:
+  プラグインに新しいスキルを作成します。
+
+使用方法:
+  /skill-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 
@@ -35,6 +54,8 @@ allowed-tools: [Read, Write, Bash, Glob]
 - プラグインが存在するか確認
 - スキルが既に存在しないか確認
 - description にトリガーフレーズが 7 つ含まれているか確認
+- frontmatter に `argument-hint: "[--help]"` があることを確認
+- 本文に `## Help` セクションがあり、`$ARGUMENTS` の `--help` 分岐を記載していることを確認
 
 ### description の書き方（重要）
 
@@ -60,11 +81,29 @@ allowed-tools: [Read, Write, Bash, Glob]
 name: {skill-name}
 description: {トリガーフレーズを7つ含む説明}
 allowed-tools: [{ツール}]
+argument-hint: "[--help]"
 ---
 
 # {スキル名}
 
 {説明}
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/{skill-name} - {スキル名}
+
+概要:
+  {1行要約}
+
+使用方法:
+  /{skill-name} [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 
@@ -124,4 +163,5 @@ scripts を使う Skill の場合は、以下の規約を適用する:
 - ✅ description に 7 つのトリガーワードを含める
 - ✅ 独自実装パターンで完全な手順を記載
 - ✅ scripts は原則 `skills/{skill}/scripts/`、共通処理のみ `scripts/` を使用
+- ✅ すべての Skill に `argument-hint: "[--help]"` と `## Help` セクションを必ず含める
 - ❌ トリガーワードが不足している description は避ける

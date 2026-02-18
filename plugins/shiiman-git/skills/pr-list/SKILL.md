@@ -2,17 +2,36 @@
 name: pr-list
 description: オープン PR の一覧を優先順位付きで表示する。「PR 一覧」「PR リスト」「オープン PR」「PR を見せて」「プルリク一覧」「レビュー待ち PR」「PR 確認」などで起動。レビュー状態と優先度順にソートして表示。
 allowed-tools: [Bash]
+argument-hint: "[--all|--mine|--help]"
 ---
 
 # List PRs
 
 オープン PR の一覧を優先順位付きで表示します。
 
-## 引数
+## Help
 
-- `--all`: マージ済みも含めて表示
-- `--mine`: 自分が作成したもののみ
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/pr-list - PR 一覧表示
+
+概要:
+  オープン PR の一覧をレビュー状態と優先順位付きで表示する。
+
+使用方法:
+  /pr-list [オプション]
+
+オプション:
+  --all   マージ済みも含めて表示
+  --mine  自分が作成したもののみ
+  --help  このヘルプを表示
+
+例:
+  /pr-list          # オープン PR を表示
+  /pr-list --all    # 全 PR を表示
+  /pr-list --mine   # 自分作成の PR を表示
+```
 
 ## 実行手順
 

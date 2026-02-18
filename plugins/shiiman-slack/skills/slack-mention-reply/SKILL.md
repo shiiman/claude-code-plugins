@@ -2,11 +2,30 @@
 name: slack-mention-reply
 description: Slack でメンションに返信する。「メンションに返信」「メンションへの返信」「メンション返信して」「メンションに返事」「メンションに対応」「メンションにリプライ」「返信して」などで起動。
 allowed-tools: [Bash]
+argument-hint: "[--help]"
 ---
 
 # Mention Replier
 
 Slack でメンションに対してスレッド返信します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/slack-mention-reply - Mention Replier
+
+概要:
+  Slack でメンションに対してスレッド返信します。
+
+使用方法:
+  /slack-mention-reply [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## トークンについて
 

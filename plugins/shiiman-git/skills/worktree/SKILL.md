@@ -2,11 +2,30 @@
 name: worktree
 description: gtr で worktree を管理。「worktree 作成」「gtr list」「gtr rm」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
+argument-hint: "[--help]"
 ---
 
 # Worktree Management with gtr
 
 gtr (git-worktree-runner) を使用して git worktree を管理するスキル。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/worktree - Worktree Management with gtr
+
+概要:
+  gtr (git-worktree-runner) を使用して git worktree を管理するスキル。
+
+使用方法:
+  /worktree [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 前提条件
 

@@ -4,11 +4,38 @@ description: MCP マルチエージェントで Issue/PR なしに並列実行�
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--no-git|--help]"
 ---
 
 # Multi Flow
 
 MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー。
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/multi-flow - MCP マルチエージェント軽量フロー
+
+概要:
+  MCP マルチエージェントで Issue/PR なしに並列実行する。
+  ブランチ作成 → MCP 初期化 → Admin/Worker 並列実行 → コミットメッセージ出力。
+
+使用方法:
+  /multi-flow [タスク説明] [オプション]
+
+オプション:
+  --plan    plan mode で計画書を新規作成してから実行
+  --no-git  git を使わず no-git モードで実行
+  --help    このヘルプを表示
+
+例:
+  /multi-flow                        # 既存計画書から実行
+  /multi-flow --plan                 # 計画書を作成してから実行
+  /multi-flow "API リファクタリング"  # タスク説明から直接実行
+  /multi-flow --no-git               # git なしモードで実行
+```
 
 ## 前提条件
 
@@ -16,13 +43,6 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 - tmux がインストール済み（**必須**）
 - `gh` コマンドが利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
-
-## 引数
-
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--no-git`: git を使わず no-git モードで実行（強制）
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行（簡単なタスク用）
 
 ## 実行モード判定（重要）
 

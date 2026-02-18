@@ -2,11 +2,30 @@
 name: pr-approve
 description: PR を承認（approve）する。「PR 承認」「PR を approve」「approve して」「PR を通す」「LGTM」「PR OK」「マージ許可」などで起動。レビュー後に承認コメントを投稿。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Approve PR
 
 PR を承認（approve）します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/pr-approve - Approve PR
+
+概要:
+  PR を承認（approve）します。
+
+使用方法:
+  /pr-approve [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

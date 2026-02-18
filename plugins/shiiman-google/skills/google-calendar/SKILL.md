@@ -2,11 +2,30 @@
 name: google-calendar
 description: Google Calendar の予定を取得する。「今日の予定」「今週の予定」「今月の予定」「カレンダー予定」「スケジュール確認」などで起動。期間を指定可能。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Calendar Events
 
 Google Calendar の予定を今日/週/月で取得します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-calendar - Calendar Events
+
+概要:
+  Google Calendar の予定を今日/週/月で取得します。
+
+使用方法:
+  /google-calendar [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 実行方法
 

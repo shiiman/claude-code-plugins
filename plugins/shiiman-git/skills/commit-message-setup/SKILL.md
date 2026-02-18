@@ -2,16 +2,35 @@
 name: commit-message-setup
 description: コミットメッセージの命名規則を設定する。「コミットメッセージ設定」「コミット規則」「コミット形式を設定」「コミットメッセージルール」「commit message 設定」「コミットの書き方を設定」「コミットフォーマット」などで起動。プロジェクト固有のコミットメッセージルールを管理。
 allowed-tools: [Read, Write, Bash, AskUserQuestion]
+argument-hint: "[--set|--help]"
 ---
 
 # Setup Commit Message
 
 コミットメッセージの命名規則を設定・表示します。
 
-## 引数
+## Help
 
-- `--set`: 命名規則を対話的に設定
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/commit-message-setup - コミットメッセージ設定
+
+概要:
+  コミットメッセージの命名規則を設定・表示する。
+  Conventional Commits、日本語プレフィックス、カスタム形式に対応。
+
+使用方法:
+  /commit-message-setup [オプション]
+
+オプション:
+  --set   命名規則を対話的に設定
+  --help  このヘルプを表示
+
+例:
+  /commit-message-setup          # 現在の設定を表示
+  /commit-message-setup --set    # 命名規則を対話的に設定
+```
 
 ## 実行手順
 

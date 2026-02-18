@@ -2,11 +2,30 @@
 name: branch-create
 description: Issue 番号に基づいて feature ブランチを自動作成する。「ブランチ作成」「ブランチを作って」「新しいブランチ」「feature ブランチ」「Issue からブランチ」「作業ブランチを作成」「ブランチ切って」などで起動。feature/[issue番号] 形式でブランチを作成。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Create Branch
 
 Issue 番号に基づいて feature ブランチを自動作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/branch-create - Create Branch
+
+概要:
+  Issue 番号に基づいて feature ブランチを自動作成します。
+
+使用方法:
+  /branch-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

@@ -2,24 +2,39 @@
 name: claude-resource-list
 description: プロジェクトの Claude Code リソース一覧を表示する。「Claude リソース一覧」「スキル一覧」「エージェント一覧」「フック一覧」「プロジェクトリソース確認」「何があるか確認」「リソースを見せて」などで起動。
 allowed-tools: [Read, Glob]
+argument-hint: "[--skills|--agents|--hooks|--help]"
 ---
 
 # Claude Resource List
 
 プロジェクトの Claude Code リソース一覧を表示します。
 
-## 引数
+## Help
 
-- `$ARGUMENTS`:
-  - `--skills`: スキルのみ表示
-  - `--agents`: エージェントのみ表示
-  - `--hooks`: フックのみ表示
-  - `--help`: ヘルプを表示
-  - （なし）: すべて表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/claude-resource-list - Claude リソース一覧
+
+概要:
+  プロジェクトの Claude Code リソース（スキル・エージェント・フック）を一覧表示する。
+
+使用方法:
+  /claude-resource-list [オプション]
+
+オプション:
+  --skills  スキルのみ表示
+  --agents  エージェントのみ表示
+  --hooks   フックのみ表示
+  --help    このヘルプを表示
+
+例:
+  /claude-resource-list              # すべてのリソースを表示
+  /claude-resource-list --skills     # スキルのみ表示
+  /claude-resource-list --agents     # エージェントのみ表示
+```
 
 ## 実行手順
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 ### 1. 表示対象を決定
 

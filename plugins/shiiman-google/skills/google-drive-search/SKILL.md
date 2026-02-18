@@ -2,11 +2,30 @@
 name: google-drive-search
 description: Google Drive を検索する。「Drive を検索」「ドライブ検索」「ファイルを探して」「Drive で検索」「Google Drive 検索」「ファイル名で検索」「条件で検索」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Drive Search
 
 Google Drive を検索します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-drive-search - Drive Search
+
+概要:
+  Google Drive を検索します。
+
+使用方法:
+  /google-drive-search [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 引数
 
