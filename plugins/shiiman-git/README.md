@@ -23,12 +23,12 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 | github-setup | 「GitHub 設定をセットアップ」 | .github 設定ファイルを一括生成 |
 | commit-message-setup | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
 | commit | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
-| branch-create | 「ブランチ作成」 | feature/[issue番号] ブランチを作成 |
+| branch-create | 「ブランチ作成」 | `gh` で取得したデフォルトブランチから feature/[issue番号] ブランチを作成 |
 | gitignore-check | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
 | issue-create | 「Issue 作成」 | タスクを分割して Issue を作成 |
 | issue-update | 「Issue 更新」 | Issue の状態を更新 |
 | issue-list | 「Issue 一覧」 | オープン Issue を表示 |
-| pr-create | 「PR 作成」 | PR を作成し関連 Issue を参照 |
+| pr-create | 「PR 作成」 | デフォルトブランチとの差分を確認して PR を作成し関連 Issue を参照 |
 | pr-review | 「PR レビュー」 | **他者の PR** をレビューしてコメント投稿 |
 | pr-review-check | 「レビュー対応」 | **自分の PR** に付いたコメントを確認・修正 |
 | pr-list | 「PR 一覧」 | オープン PR を表示 |
@@ -153,3 +153,7 @@ gh auth status  # 認証状態確認
 
 - リポジトリへの適切な権限があるか確認
 - Organization リポジトリの場合は SSO 認証を確認
+
+## バージョン履歴
+
+- v1.9.1: `branch-create` と `pr-create` のベースブランチ解決を `main` 固定から `gh repo view --json defaultBranchRef` 方式へ変更。`commit` の注意事項もデフォルトブランチ基準へ更新

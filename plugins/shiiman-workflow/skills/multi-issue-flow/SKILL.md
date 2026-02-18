@@ -74,11 +74,19 @@ gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
 ### ステップ 2: ベースブランチ作成
 
 ```bash
-git fetch origin main
-git checkout main
-git pull origin main
+DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
+if [ -z "$DEFAULT_BRANCH" ]; then
+  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
+  exit 1
+fi
+
+git fetch origin "$DEFAULT_BRANCH"
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH"
 git checkout -b feature/{issue番号}
 ```
+
+ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
 ### ステップ 3: Owner エージェント作成
 

@@ -1,6 +1,6 @@
 {
   "name": "shiiman-workflow",
-  "version": "1.8.6",
+  "version": "1.8.7",
   "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
   "author": {
     "name": "shiiman"

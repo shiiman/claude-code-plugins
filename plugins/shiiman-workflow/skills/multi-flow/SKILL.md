@@ -14,6 +14,8 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 
 - multi-agent-mcp がインストール済み（**必須**）
 - tmux がインストール済み（**必須**）
+- `gh` コマンドが利用可能
+- `gh auth status` が成功する（GitHub CLI 認証済み）
 
 ## 引数
 
@@ -97,13 +99,20 @@ if slug が空なら slug = "no-git-task"
 ### ステップ 3: git モード時のみブランチ作成
 
 ```bash
-git fetch origin main
-git checkout main
-git pull origin main
+DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
+if [ -z "$DEFAULT_BRANCH" ]; then
+  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
+  exit 1
+fi
+
+git fetch origin "$DEFAULT_BRANCH"
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH"
 git checkout -b feature/{slug}
 ```
 
 no-git モードではこのステップをスキップする。
+ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
 ### ステップ 4: Owner エージェント作成
 
