@@ -30,15 +30,9 @@ Slack の未読メッセージ確認、メンション確認、既読化など�
 - メンションの適切な対応
 - 通知設定の最適化
 
-## 使用するコマンド・スキル
+## 使用するスキル
 
-### 未読メッセージ確認
-
-```bash
-/shiiman-slack:message-unread C01234567 --max 20
-```
-
-またはPythonスクリプト:
+### 未読メッセージ確認（slack-unread-check）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
@@ -47,51 +41,19 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
   --format table
 ```
 
-またはスキル:
-
-```
-「#project-alpha の未読を確認して」
-「Slack未読確認」
-```
-
-### 一括既読化
-
-```bash
-/shiiman-slack:message-mark-read C01234567
-```
-
-またはPythonスクリプト:
+### 一括既読化（slack-unread-mark）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mark-read \
   --channel C01234567
 ```
 
-またはスキル:
-
-```
-「#general を既読にして」
-```
-
-### メンション確認
-
-```bash
-/shiiman-slack:message-mentions --max 20
-```
-
-またはPythonスクリプト:
+### メンション確認（slack-mention-check）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \
   --max 20 \
   --format table
-```
-
-またはスキル:
-
-```
-「自分へのメンションを見せて」
-「メンション確認」
 ```
 
 ## 出力形式

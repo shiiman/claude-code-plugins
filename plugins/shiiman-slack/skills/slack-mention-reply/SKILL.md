@@ -1,5 +1,5 @@
 ---
-name: thread-reply
+name: slack-mention-reply
 description: Slack スレッドに返信する。「スレッドに返信」「スレッド返信して」「このスレッドに返信」「スレッドで返信」「スレッドに投稿」「スレッドに書き込み」「返信をスレッドで」などで起動。
 allowed-tools: [Bash]
 ---
@@ -53,7 +53,7 @@ User Token が設定済みかを確認。未設定の場合は先に `token-set`
 
 ```bash
 # スレッド返信
-python ${CLAUDE_PLUGIN_ROOT}/skills/thread-reply/scripts/slack_thread.py reply \
+python ${CLAUDE_PLUGIN_ROOT}/skills/slack-mention-reply/scripts/slack_thread.py reply \
   --channel "C01234567" \
   --thread-ts "1234567890.123456" \
   --text "了解しました！"

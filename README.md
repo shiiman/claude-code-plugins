@@ -63,7 +63,7 @@ pip install -r requirements.txt
 | [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive/Docs/Sheets/Slides/Forms/Apps Script、Calendar、Gmail 機能を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
 | [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
-| [`shiiman-slack`](plugins/shiiman-slack/) | Slack ワークスペース管理 - チャンネル操作、メッセージ管理、要約機能、User Token によるユーザー操作を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
+| [`shiiman-slack`](plugins/shiiman-slack/) | Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
 
 **インストール例**:
 

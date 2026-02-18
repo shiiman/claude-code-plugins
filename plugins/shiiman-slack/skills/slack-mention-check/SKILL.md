@@ -1,5 +1,5 @@
 ---
-name: mention-check
+name: slack-mention-check
 description: Slack で自分へのメンションを確認する。「メンション確認」「Slackメンション」「自分へのメンション」「@mention を見せて」などで起動。Pythonスクリプト `slack_message.py mentions` を使用。
 allowed-tools: [Bash, Read]
 ---

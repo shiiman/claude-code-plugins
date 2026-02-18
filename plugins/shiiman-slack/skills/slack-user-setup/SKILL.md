@@ -1,5 +1,5 @@
 ---
-name: user-setup
+name: slack-user-setup
 description: Slack のデフォルトユーザーを設定する。「自分を設定」「ユーザー設定」「デフォルトユーザー設定」「Slackユーザー登録」「自分のIDを設定」「自分のSlackを設定」などで起動。
 allowed-tools: [Bash]
 ---
