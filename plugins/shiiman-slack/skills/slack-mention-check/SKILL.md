@@ -21,6 +21,7 @@ Slack で自分へのメンションを確認します。
 1. Pythonスクリプト `slack_message.py mentions` を実行
 2. 自分へのメンションを検索
 3. メンション一覧を整理して表示
+4. 返信するか確認する（slack-mention-reply で返信できます）
 
 ## 実装
 
