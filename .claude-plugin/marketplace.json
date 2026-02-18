@@ -33,7 +33,7 @@
     {
       "name": "shiiman-google",
       "description": "Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "source": "./plugins/shiiman-google",
       "category": "productivity"
     },
@@ -47,14 +47,14 @@
     {
       "name": "shiiman-terraform",
       "description": "Terraform リソース import 支援プラグイン",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "source": "./plugins/shiiman-terraform",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-slack",
       "description": "Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供",
-      "version": "3.0.0",
+      "version": "3.0.1",
       "source": "./plugins/shiiman-slack",
       "category": "productivity"
     }
