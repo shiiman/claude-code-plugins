@@ -1,7 +1,7 @@
 {
   "name": "shiiman-slack",
-  "version": "2.3.1",
-  "description": "Slack ワークスペース管理 - チャンネル操作、メッセージ管理、要約機能、User Token によるユーザー操作を提供",
+  "version": "3.0.0",
+  "description": "Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供",
   "author": {
     "name": "shiiman"
   },

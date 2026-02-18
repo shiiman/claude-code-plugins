@@ -1,5 +1,5 @@
 ---
-name: unread-check
+name: slack-unread-check
 description: Slack の未読メッセージを確認する。「Slack未読確認」「未読メッセージ」「未読ある？」「Slackの未読」「未読を見せて」「未読チェック」「未読メール確認」などで起動。Pythonスクリプト `slack_message.py unread` を使用。
 allowed-tools: [Bash]
 ---
@@ -48,6 +48,14 @@ PRレビューお願いします
 - メンション付き: 高優先度
 - DMやプライベートチャンネル: 中優先度
 - パブリックチャンネル: 通常優先度
+
+### 4. 既読化の提案
+
+未読メッセージ表示後、既読にするか確認する:
+
+```
+確認した未読を既読にしますか？（slack-unread-mark で既読化できます）
+```
 
 ## 必要な環境変数
 
