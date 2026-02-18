@@ -47,11 +47,6 @@
       - any-glob-to-any-file:
           - "plugins/shiiman-go/**/*"
 
-"plugin:shiiman-docker":
-  - changed-files:
-      - any-glob-to-any-file:
-          - "plugins/shiiman-docker/**/*"
-
 "plugin:shiiman-terraform":
   - changed-files:
       - any-glob-to-any-file:

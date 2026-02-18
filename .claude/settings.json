@@ -57,7 +57,6 @@
     "shiiman-workflow@shiiman-claude-code-plugins": true,
     "shiiman-google@shiiman-claude-code-plugins": true,
     "shiiman-go@shiiman-claude-code-plugins": true,
-    "shiiman-docker@shiiman-claude-code-plugins": true,
     "shiiman-terraform@shiiman-claude-code-plugins": true,
     "shiiman-slack@shiiman-claude-code-plugins": true
   }
