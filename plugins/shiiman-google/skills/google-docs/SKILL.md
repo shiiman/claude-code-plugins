@@ -2,11 +2,30 @@
 name: google-docs
 description: Google Docs ドキュメントを新規作成・更新する。「ドキュメント作成」「Docs 作成」「新しいドキュメント」「ドキュメント更新」「Docs 更新」「ドキュメントに追加」「ドキュメントを編集」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Docs Editor
 
 Google Docs ドキュメントの新規作成・テキスト追加を行います。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-docs - Docs Editor
+
+概要:
+  Google Docs ドキュメントの新規作成・テキスト追加を行います。
+
+使用方法:
+  /google-docs [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

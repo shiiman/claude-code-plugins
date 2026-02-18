@@ -2,17 +2,37 @@
 name: issue-list
 description: オープン Issue の一覧を優先順位付きで表示する。「Issue 一覧」「Issue リスト」「オープン Issue」「Issue を見せて」「チケット一覧」「未解決 Issue」「Issue 確認」などで起動。優先度順にソートして表示。
 allowed-tools: [Bash]
+argument-hint: "[--all|--mine|--help]"
 ---
 
 # List Issues
 
 オープン Issue の一覧を優先順位付きで表示します。
 
-## 引数
+## Help
 
-- `--all`: クローズ済みも含めて表示
-- `--mine`: 自分がアサインされたもののみ
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/issue-list - Issue 一覧表示
+
+概要:
+  オープン Issue の一覧を優先順位付きで表示する。
+  ラベルに基づく優先度ソートに対応。
+
+使用方法:
+  /issue-list [オプション]
+
+オプション:
+  --all   クローズ済みも含めて表示
+  --mine  自分がアサインされたもののみ
+  --help  このヘルプを表示
+
+例:
+  /issue-list          # オープン Issue を表示
+  /issue-list --all    # 全 Issue を表示
+  /issue-list --mine   # 自分担当の Issue を表示
+```
 
 ## 実行手順
 

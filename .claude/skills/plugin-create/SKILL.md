@@ -2,11 +2,30 @@
 name: plugin-create
 description: 新しい Claude Code プラグインを作成する。「プラグイン作成」「新しいプラグイン」「プラグインを作って」「プラグイン追加」「plugin 作成」「プラグイン一括作成」「フル作成」などで起動。プラグインのみ作成と、スキル/サブエージェント/フックを含む一括作成の両方に対応。
 allowed-tools: [Read, Write, Bash, Glob]
+argument-hint: "[--help]"
 ---
 
 # Create Plugin
 
 必要なディレクトリ構造とファイルを持つ新しい Claude Code プラグインを作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/plugin-create - Create Plugin
+
+概要:
+  必要なディレクトリ構造とファイルを持つ新しい Claude Code プラグインを作成します。
+
+使用方法:
+  /plugin-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

@@ -2,11 +2,30 @@
 name: slack-unread-mark
 description: Slack チャンネルを既読にする。「既読にして」「既読化」「チャンネル既読」「未読を消す」「既読マーク」「全部読んだことにして」「既読にしたい」などで起動。Pythonスクリプト `slack_message.py mark-read` を使用。
 allowed-tools: [Bash]
+argument-hint: "[--help]"
 ---
 
 # Mark Reader
 
 Slack チャンネルを既読にします（一括既読化）。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/slack-unread-mark - Mark Reader
+
+概要:
+  Slack チャンネルを既読にします（一括既読化）。
+
+使用方法:
+  /slack-unread-mark [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

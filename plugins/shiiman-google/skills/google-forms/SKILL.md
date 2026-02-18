@@ -2,11 +2,30 @@
 name: google-forms
 description: Google Forms フォームを新規作成・質問追加する。「フォーム作成」「Forms 作成」「新しいフォーム」「アンケート作成」「質問追加」「Forms 更新」「フォームに質問を追加」「アンケート項目追加」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Forms Editor
 
 Google Forms フォームの新規作成・質問追加を行います。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-forms - Forms Editor
+
+概要:
+  Google Forms フォームの新規作成・質問追加を行います。
+
+使用方法:
+  /google-forms [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

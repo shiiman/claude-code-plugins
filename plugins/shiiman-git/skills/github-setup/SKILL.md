@@ -2,17 +2,37 @@
 name: github-setup
 description: GitHub 設定ファイルをセットアップする。「GitHub 設定をセットアップ」「.github を作って」「Issue テンプレート作成」「PR テンプレート作成」「GitHub 設定を初期化」「リポジトリ設定をセットアップ」「ラベル設定を作成」などで起動。.github ディレクトリに必要な設定ファイルを一括生成。
 allowed-tools: [Read, Write, Bash, Glob, AskUserQuestion]
+argument-hint: "[--dry-run|--force|--help]"
 ---
 
 # Setup GitHub
 
 プロジェクトの `.github` ディレクトリに GitHub 設定ファイルを一括生成します。
 
-## 引数
+## Help
 
-- `--dry-run`: 生成予定のファイル一覧を表示（実行しない）
-- `--force`: 既存ファイルを上書き
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/github-setup - GitHub 設定セットアップ
+
+概要:
+  .github ディレクトリに Issue テンプレート、PR テンプレート、
+  ラベル定義、GitHub Actions workflow を一括生成する。
+
+使用方法:
+  /github-setup [オプション]
+
+オプション:
+  --dry-run  生成予定のファイル一覧を表示（実行しない）
+  --force    既存ファイルを上書き
+  --help     このヘルプを表示
+
+例:
+  /github-setup              # 設定ファイルを生成
+  /github-setup --dry-run    # 生成予定のファイルを確認
+  /github-setup --force      # 既存ファイルを上書きして生成
+```
 
 ## 生成されるファイル
 

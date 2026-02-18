@@ -2,11 +2,30 @@
 name: google-sheets
 description: Google Sheets スプレッドシートを新規作成・更新する。「スプレッドシート作成」「Sheets 作成」「新しいシート」「スプレッドシート更新」「Sheets 更新」「シートに書き込み」「セルを更新」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Sheets Editor
 
 Google Sheets スプレッドシートの新規作成・セル更新を行います。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-sheets - Sheets Editor
+
+概要:
+  Google Sheets スプレッドシートの新規作成・セル更新を行います。
+
+使用方法:
+  /google-sheets [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

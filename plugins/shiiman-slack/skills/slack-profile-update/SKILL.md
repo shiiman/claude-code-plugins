@@ -2,11 +2,30 @@
 name: slack-profile-update
 description: Slack プロフィールを更新する。「プロフィール更新」「ステータス変更」「表示名を変更」「自分のステータス」「プロフィールを変更」「ステータス設定」などで起動。ユーザートークン（SLACK_USER_TOKEN）が必要。
 allowed-tools: [Bash]
+argument-hint: "[--help]"
 ---
 
 # Profile Updater
 
 Slack のプロフィールを更新します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/slack-profile-update - Profile Updater
+
+概要:
+  Slack のプロフィールを更新します。
+
+使用方法:
+  /slack-profile-update [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 前提条件
 

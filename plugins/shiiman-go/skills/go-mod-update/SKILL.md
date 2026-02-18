@@ -2,6 +2,7 @@
 name: go-mod-update
 description: Go モジュールのバージョンを更新する。「依存関係を更新」「go mod update」「モジュール更新」「依存関係確認」「go.mod 更新」「パッケージ更新」「依存関係を整理」「モジュールアップデート」「依存パッケージ更新」「go get」などで起動。更新可能なモジュールの一覧、危険度評価、段階的更新をサポート。更新後は go-check で品質チェックを自動実行。
 allowed-tools: [Read, Bash, Glob, Grep, Skill]
+argument-hint: "[--check|--help]"
 ---
 
 # Go Mod Update
@@ -9,10 +10,29 @@ allowed-tools: [Read, Bash, Glob, Grep, Skill]
 Go モジュールのバージョンを更新します。危険度評価付きで安全な段階的更新をサポート。
 更新後は go-check と同じ品質チェック（テスト・静的解析・脆弱性スキャン・ベンチマーク・コードレビュー）を並列実行します。
 
-## 引数
+## Help
 
-- `--check`: 更新可能なモジュールを確認のみ（更新しない）
-- `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/go-mod-update - Go モジュール更新
+
+概要:
+  Go モジュールのバージョンを更新する。
+  危険度評価付きで安全な段階的更新をサポート。
+  更新後は go-check で品質チェックを自動実行。
+
+使用方法:
+  /go-mod-update [オプション]
+
+オプション:
+  --check  更新可能なモジュールを確認のみ（更新しない）
+  --help   このヘルプを表示
+
+例:
+  /go-mod-update            # モジュールを更新
+  /go-mod-update --check    # 更新可能なモジュールを確認
+```
 
 ## ワークフロー
 

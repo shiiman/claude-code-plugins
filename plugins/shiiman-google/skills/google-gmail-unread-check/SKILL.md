@@ -2,11 +2,30 @@
 name: google-gmail-unread-check
 description: Gmail の未読メッセージ一覧を取得する。「未読メール」「Gmail 未読」「未読一覧」「未読メールを見たい」「未読メッセージ」「メールの未読」「全アカウントの未読」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Gmail Unread
 
 Gmail の未読メッセージ一覧を取得します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-gmail-unread-check - Gmail Unread
+
+概要:
+  Gmail の未読メッセージ一覧を取得します。
+
+使用方法:
+  /google-gmail-unread-check [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 実行方法
 

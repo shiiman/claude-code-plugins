@@ -2,11 +2,30 @@
 name: gtrconfig-setup
 description: .gtrconfig を生成。「gtrconfig 設定」「gtr 設定」「.gtrconfig 作成」などで起動。
 allowed-tools: [Read, Write, Bash, Glob, AskUserQuestion]
+argument-hint: "[--help]"
 ---
 
 # GTR Config Setup
 
 .gtrconfig ファイルを生成してプロジェクトの worktree 設定を構成するスキル。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/gtrconfig-setup - GTR Config Setup
+
+概要:
+  .gtrconfig ファイルを生成してプロジェクトの worktree 設定を構成するスキル。
+
+使用方法:
+  /gtrconfig-setup [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 前提条件
 

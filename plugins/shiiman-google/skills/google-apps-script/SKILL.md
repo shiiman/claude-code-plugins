@@ -2,11 +2,30 @@
 name: google-apps-script
 description: Google Apps Script プロジェクトを新規作成・コード更新する。「GAS 作成」「Apps Script 作成」「スクリプト作成」「GAS 更新」「Apps Script 更新」「スクリプト編集」「コードを更新」などで起動。
 allowed-tools: [Read, Bash]
+argument-hint: "[--help]"
 ---
 
 # Apps Script Editor
 
 Google Apps Script プロジェクトの新規作成・コード更新を行います。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-apps-script - Apps Script Editor
+
+概要:
+  Google Apps Script プロジェクトの新規作成・コード更新を行います。
+
+使用方法:
+  /google-apps-script [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

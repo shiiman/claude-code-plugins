@@ -2,23 +2,43 @@
 name: claude-settings-manage
 description: Claude Code 設定の表示・更新・ローカル更新を統合管理する。「Claude 設定管理」「設定を表示」「settings を更新」「local settings を更新」「権限設定を変更」「設定ファイル管理」「claude settings」などで起動。引数があれば優先し、なければ発話内容から view/update/local-update を判定。
 allowed-tools: [Read, Write, Bash, Glob]
+argument-hint: "[view|update|local-update] [--help]"
 ---
 
 # Claude Settings Manage
 
 Claude Code の設定ファイル表示と更新を一つのスキルで管理します。
 
-## 引数
+## Help
 
-- `$ARGUMENTS`:
-  - `--view`: 設定を表示
-  - `--update`: `.claude/settings.json` を更新
-  - `--local-update`: `.claude/settings.local.json` を更新
-  - `--help`: ヘルプを表示
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/claude-settings-manage - Claude 設定管理
+
+概要:
+  Claude Code 設定の表示・更新・ローカル更新を統合管理する。
+  引数があれば優先し、なければ発話内容から操作を判定。
+
+使用方法:
+  /claude-settings-manage [操作] [オプション]
+
+操作:
+  view          設定を表示
+  update        .claude/settings.json を更新
+  local-update  .claude/settings.local.json を更新
+
+オプション:
+  --help        このヘルプを表示
+
+例:
+  /claude-settings-manage              # 発話内容から操作を判定
+  /claude-settings-manage view         # 設定を表示
+  /claude-settings-manage update       # settings.json を更新
+  /claude-settings-manage local-update # settings.local.json を更新
+```
 
 ## 実行手順
-
-**`--help` が指定された場合**: このファイルの内容を要約して表示し、終了。
 
 ### 1. 操作種別の決定
 

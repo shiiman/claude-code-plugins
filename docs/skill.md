@@ -97,11 +97,29 @@ plugins/{plugin-name}/skills/{skill-name}/
 name: skill-name
 description: Skill の説明（最大 1024 文字）。何をするか + いつ使うか。
 allowed-tools: [Read, Write, Bash]
+argument-hint: "[--help]"
 ---
 
 # Skill タイトル
 
 この Skill は、[目的] を効率化します。
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/skill-name - Skill タイトル
+
+概要:
+  この Skill は、[目的] を効率化します。
+
+使用方法:
+  /skill-name [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 
@@ -130,6 +148,16 @@ allowed-tools: [Read, Write, Bash]
 | name          | はい   | スキル識別子（小文字、ハイフン、最大 64 文字）     |
 | description   | はい   | トリガーフレーズを含む説明（最大 1024 文字）       |
 | allowed-tools | いいえ | スキルが使用できるツール（省略時は全ツール使用可） |
+| argument-hint | はい（このリポジトリ運用） | 引数ヒント。必ず `"[--help]"` を指定する            |
+
+## `--help` 必須ルール（このリポジトリ運用）
+
+このリポジトリで作成・更新する `SKILL.md` には、以下を必須とします。
+
+1. frontmatter に `argument-hint: "[--help]"` を記載する
+2. 本文の冒頭（タイトル・導入文の直後、最初の `##` 見出しの前）に `## Help` を置く
+3. `## Help` に ``$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:`` を記載する
+4. Usage は `/skill-name [オプション]` 形式で記載する
 
 ## description フィールドの書き方
 
@@ -575,11 +603,29 @@ plugins/{plugin-name}/
 ---
 name: commit
 description: 変更をコミットしてプッシュする。「コミット」「コミットして」「変更をコミット」「プッシュして」「commit して」「git commit」「コミットしたい」などで起動。差分を分析し適切なコミットメッセージを生成。
+argument-hint: "[--help]"
 ---
 
 # Commit
 
 変更をコミットしてプッシュします。
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/commit - Commit
+
+概要:
+  変更をコミットしてプッシュします。
+
+使用方法:
+  /commit [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

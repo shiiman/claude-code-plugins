@@ -2,11 +2,30 @@
 name: slack-unread-check
 description: Slack の未読メッセージを確認する。「Slack未読確認」「未読メッセージ」「未読ある？」「Slackの未読」「未読を見せて」「未読チェック」「未読メール確認」などで起動。Pythonスクリプト `slack_message.py unread` を使用。
 allowed-tools: [Bash]
+argument-hint: "[--help]"
 ---
 
 # Unread Checker
 
 Slack の未読メッセージを確認します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/slack-unread-check - Unread Checker
+
+概要:
+  Slack の未読メッセージを確認します。
+
+使用方法:
+  /slack-unread-check [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

@@ -2,11 +2,30 @@
 name: google-auth-setup
 description: Google OAuth クライアント設定の手順を案内する。「OAuth 設定」「Google 認証の準備」「クライアント ID 作成」「認証手順を教えて」「Google ログイン準備」「OAuth セットアップ」「認証設定したい」などで起動。
 allowed-tools: [Read]
+argument-hint: "[--help]"
 ---
 
 # Auth Setup
 
 Google OAuth クライアント（デスクトップアプリ）の作成手順を案内します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/google-auth-setup - Auth Setup
+
+概要:
+  Google OAuth クライアント（デスクトップアプリ）の作成手順を案内します。
+
+使用方法:
+  /google-auth-setup [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## 前提条件
 

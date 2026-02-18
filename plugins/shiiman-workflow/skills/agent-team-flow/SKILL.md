@@ -4,12 +4,39 @@ description: Agent Team で Issue/PR なしの並列実装を実行する軽量�
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--no-git|--help]"
 ---
 
 # Agent Team Flow
 
 Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 `multi-flow` のうち MCP 依存部分を Agent Team 実行に置き換えます。
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/agent-team-flow - Agent Team 軽量フロー
+
+概要:
+  Agent Team で Issue/PR なしに並列実装を実行する。
+  ブランチ作成 → tmux + Claude 起動 → Agent Team 並列実行 → コミットメッセージ出力。
+
+使用方法:
+  /agent-team-flow [タスク説明] [オプション]
+
+オプション:
+  --plan    plan mode で計画書を新規作成してから実行
+  --no-git  git を使わず no-git モードで実行
+  --help    このヘルプを表示
+
+例:
+  /agent-team-flow                        # 既存計画書から実行
+  /agent-team-flow --plan                 # 計画書を作成してから実行
+  /agent-team-flow "API リファクタリング"  # タスク説明から直接実行
+  /agent-team-flow --no-git               # git なしモードで実行
+```
 
 ## 前提条件
 
@@ -19,13 +46,6 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 - `gh` コマンドが利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
 - macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
-
-## 引数
-
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--no-git`: git を使わず no-git モードで実行（強制）
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行
 
 ## 実行モード判定（重要）
 

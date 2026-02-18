@@ -2,12 +2,31 @@
 name: issue-create
 description: タスクを細かい単位に分割して GitHub Issue を作成する。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。実装可能な粒度にタスクを分割して複数 Issue を生成。
 allowed-tools: [Read, Bash, Glob, Grep]
+argument-hint: "[--help]"
 context: fork
 ---
 
 # Create Issue
 
 タスクを細かい単位に分割して GitHub Issue を作成します。
+
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/issue-create - Create Issue
+
+概要:
+  タスクを細かい単位に分割して GitHub Issue を作成します。
+
+使用方法:
+  /issue-create [オプション]
+
+オプション:
+  --help  このヘルプを表示
+```
 
 ## ワークフロー
 

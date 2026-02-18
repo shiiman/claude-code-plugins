@@ -4,12 +4,37 @@ description: Agent Team で Issue から PR まで並列実行する開発フロ
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite]
 context: fork
 user-invocable: true
+argument-hint: "[タスク説明] [--plan|--help]"
 ---
 
 # Agent Team Issue Flow
 
 Agent Team で Issue 作成から PR 作成までを並列実行するフロー。
 `multi-issue-flow` のうち MCP 依存部分を Agent Team 実行に置き換えます。
+
+## Help
+
+`$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
+
+```text
+/agent-team-issue-flow - Agent Team Issue 開発フロー
+
+概要:
+  Agent Team で Issue 作成から PR 作成まで並列実行する。
+  Issue 作成 → tmux + Claude 起動 → Agent Team 並列実行 → コミット → PR 作成。
+
+使用方法:
+  /agent-team-issue-flow [タスク説明] [オプション]
+
+オプション:
+  --plan  plan mode で計画書を新規作成してから実行
+  --help  このヘルプを表示
+
+例:
+  /agent-team-issue-flow                        # 既存計画書から実行
+  /agent-team-issue-flow --plan                 # 計画書を作成してから実行
+  /agent-team-issue-flow "認証機能を並列実装"    # タスク説明から直接実行
+```
 
 ## 前提条件
 
@@ -18,12 +43,6 @@ Agent Team で Issue 作成から PR 作成までを並列実行するフロー�
 - `tmux` が利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
 - macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
-
-## 引数
-
-- `--plan`: plan mode で計画書を新規作成してから実行
-- `--help`: ヘルプを表示
-- `[タスク説明]`: 計画書なしで直接実行
 
 ## 実行フロー
 
