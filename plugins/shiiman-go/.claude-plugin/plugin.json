@@ -1,7 +1,7 @@
 {
   "name": "shiiman-go",
   "version": "2.0.0",
-  "description": "Go 言語開発を支援するプラグイン（静的解析、依存関係管理、パフォーマンス計測、脆弱性スキャン）",
+  "description": "Go 言語開発を支援するプラグイン（品質総合チェック、依存関係管理）",
   "author": {
     "name": "shiiman"
   },
