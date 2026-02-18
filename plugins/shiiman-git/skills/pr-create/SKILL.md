@@ -14,10 +14,16 @@ context: fork
 ### 1. 変更内容の確認
 
 ```bash
+DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
+if [ -z "$DEFAULT_BRANCH" ]; then
+  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
+  exit 1
+fi
+
 git status
 git diff --staged
 git diff
-git log main..HEAD --oneline
+git log "origin/${DEFAULT_BRANCH}..HEAD" --oneline
 ```
 
 ### 2. 関連 Issue の特定

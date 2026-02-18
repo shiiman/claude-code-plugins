@@ -1,6 +1,6 @@
 {
   "name": "shiiman-git",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Git/GitHub 管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
   "author": {
     "name": "shiiman"

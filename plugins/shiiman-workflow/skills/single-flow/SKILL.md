@@ -10,6 +10,11 @@ user-invocable: true
 
 Issue/PR なしで計画書からタスクを実行し、コミットメッセージを出力する軽量フロー。
 
+## 前提条件
+
+- `gh` コマンドが利用可能
+- `gh auth status` が成功する（GitHub CLI 認証済み）
+
 ## 引数
 
 - `--plan`: plan mode で計画書を新規作成してから実行
@@ -110,11 +115,19 @@ ls -t ~/.claude/plans/*.md | head -1
 計画書またはタスク説明から適切なブランチ名を生成します。
 
 ```bash
-git fetch origin main
-git checkout main
-git pull origin main
+DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
+if [ -z "$DEFAULT_BRANCH" ]; then
+  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
+  exit 1
+fi
+
+git fetch origin "$DEFAULT_BRANCH"
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH"
 git checkout -b feature/{slug}
 ```
+
+ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
 **slug の生成ルール**:
 
@@ -234,4 +247,4 @@ git diff
 - ❌ Issue を作成しない
 - ❌ 自動でコミット・プッシュしない
 - ❌ PR を作成しない
-- ❌ main ブランチで直接作業しない
+- ❌ デフォルトブランチで直接作業しない

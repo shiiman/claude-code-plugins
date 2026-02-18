@@ -22,14 +22,14 @@
     {
       "name": "shiiman-git",
       "description": "Git/GitHub 管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
-      "version": "1.9.0",
+      "version": "1.9.1",
       "source": "./plugins/shiiman-git",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
-      "version": "1.8.6",
+      "version": "1.8.7",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },

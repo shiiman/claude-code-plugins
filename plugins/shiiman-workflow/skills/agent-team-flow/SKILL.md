@@ -16,6 +16,8 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` が設定済み（必須）
 - `claude` コマンドが利用可能
 - `tmux` が利用可能
+- `gh` コマンドが利用可能
+- `gh auth status` が成功する（GitHub CLI 認証済み）
 - macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
 
 ## 引数
@@ -83,13 +85,20 @@ if slug が空なら slug = "no-git-task"
 ### ステップ 3: git モード時のみブランチ作成
 
 ```bash
-git fetch origin main
-git checkout main
-git pull origin main
+DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
+if [ -z "$DEFAULT_BRANCH" ]; then
+  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
+  exit 1
+fi
+
+git fetch origin "$DEFAULT_BRANCH"
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH"
 git checkout -b feature/{slug}
 ```
 
 no-git モードではこのステップをスキップする。
+ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
 ### ステップ 4: 共通スクリプトで tmux セッションを起動
 
