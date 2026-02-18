@@ -42,14 +42,6 @@
       "Bash(sudo:*)"
     ]
   },
-  "extraKnownMarketplaces": {
-    "shiiman-claude-code-plugins": {
-      "source": {
-        "source": "directory",
-        "path": "."
-      }
-    }
-  },
   "enabledPlugins": {
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
@@ -58,5 +50,13 @@
     "shiiman-go@shiiman-claude-code-plugins": true,
     "shiiman-terraform@shiiman-claude-code-plugins": true,
     "shiiman-slack@shiiman-claude-code-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "shiiman-claude-code-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
   }
 }
