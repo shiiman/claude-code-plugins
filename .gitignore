@@ -19,6 +19,7 @@ yarn-error.log*
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 .env
 .venv/
 venv/
