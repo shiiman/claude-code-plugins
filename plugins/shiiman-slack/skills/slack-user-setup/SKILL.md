@@ -63,6 +63,6 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py clear
 
 設定されたユーザーID は以下のスキルで自動的に使用されます：
 
-- **mention-checker**: 自分へのメンションを確認
-- **unread-checker**: 自分の未読メッセージを確認
-- **mark-reader**: 自分としてメッセージを既読化
+- **slack-mention-check**: 自分へのメンションを確認
+- **slack-unread-check**: 自分の未読メッセージを確認
+- **slack-unread-mark**: 自分としてメッセージを既読化
