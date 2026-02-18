@@ -1,10 +1,10 @@
 ---
-name: resource-import
-description: 既存リソースを Terraform に import する。「import して」「リソース import」「既存リソース取り込み」「terraform import」「インポート」「既存インフラを管理」「import ガイド」「リソースを terraform で管理」などで起動。
+name: tf-import
+description: 既存リソースを Terraform に import する。「import して」「リソース import」「既存リソース取り込み」「terraform import」「tf import」「インポート」「既存インフラを管理」「import ガイド」「リソースを terraform で管理」などで起動。
 allowed-tools: [Bash, Read, Write, Edit]
 ---
 
-# Import Helper
+# Terraform Import
 
 既存の AWS/GCP/Azure リソースを Terraform の管理下に取り込む支援をします。
 
