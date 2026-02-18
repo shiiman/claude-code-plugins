@@ -11,7 +11,7 @@ Slack User Token を使用してワークスペースを操作します。
 ## インストール
 
 ```bash
-/shiiman-plugin:installer shiiman-slack
+claude plugin install shiiman-slack@shiiman-claude-code-plugins
 ```
 
 ## セットアップ

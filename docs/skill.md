@@ -569,48 +569,42 @@ plugins/{plugin-name}/
 
 ## 実装例
 
-ファイル: `plugins/shiiman-plugin/skills/plugin-creator/SKILL.md`
+ファイル: `plugins/shiiman-git/skills/commit/SKILL.md`
 
 ````markdown
 ---
-name: plugin-creator
-description: 新しいプラグインを作成する。「プラグイン作成」「新しいプラグイン」「プラグインを作って」「プラグイン追加」「新規プラグイン」「プラグインを追加したい」「プラグインを新規作成」などで起動。必要な構造を持つ新しい Claude Code プラグインを生成。
-allowed-tools: [Read, Write, Bash]
+name: commit
+description: 変更をコミットしてプッシュする。「コミット」「コミットして」「変更をコミット」「プッシュして」「commit して」「git commit」「コミットしたい」などで起動。差分を分析し適切なコミットメッセージを生成。
 ---
 
-# Plugin Creator
+# Commit
 
-必要な構造を持つ新しい Claude Code プラグインを作成します。
+変更をコミットしてプッシュします。
 
 ## ワークフロー
 
-### 1. 情報収集
-
-ユーザーに以下を確認：
-
-- プラグイン名（shiiman- プレフィックスは自動付与）
-- 説明（1-2 文）
-
-### 2. ディレクトリ構造の作成
+### 1. 変更確認
 
 ```bash
-mkdir -p plugins/shiiman-{name}/{commands,skills,agents,hooks,.claude-plugin}
+git status --short --branch
+git diff
+git diff --cached
 ```
 
-### 3. ファイル生成
+### 2. コミット対象の選定
 
-- `.claude-plugin/plugin.json` - メタデータ
-- `README.md` - 使用方法
+変更内容を分析し、コミットに含めるファイルを決定。
 
-### 4. 完了確認
+### 3. コミット＆プッシュ
 
-作成したファイル一覧を表示
+- Conventional Commits 形式でメッセージを生成
+- `git add` → `git commit` → `git push`
 
 ## 重要な注意事項
 
-- ✅ shiiman- プレフィックスを必ず付与
-- ✅ 小文字・ハイフン区切りを使用
-- ❌ アンダースコアやキャメルケースは使用しない
+- ✅ Conventional Commits 形式を使用
+- ✅ `--no-verify` は絶対に使わない
+- ❌ デフォルトブランチへの直接プッシュは禁止
 ````
 
 ## 参考資料

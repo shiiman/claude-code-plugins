@@ -11,7 +11,7 @@ GitHub リポジトリのセットアップ、コミット管理、Issue 管理�
 ## インストール
 
 ```bash
-/shiiman-plugin:install shiiman-git
+claude plugin install shiiman-git@shiiman-claude-code-plugins
 ```
 
 ## 機能

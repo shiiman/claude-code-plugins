@@ -51,7 +51,6 @@
     }
   },
   "enabledPlugins": {
-    "shiiman-plugin@shiiman-claude-code-plugins": true,
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
     "shiiman-workflow@shiiman-claude-code-plugins": true,

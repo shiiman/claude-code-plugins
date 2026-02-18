@@ -10,7 +10,7 @@ Issue 管理付き・なしの両方のパターンに対応。
 ## インストール
 
 ```bash
-/shiiman-plugin:install shiiman-workflow
+claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 ```
 
 ## 機能比較
