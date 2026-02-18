@@ -1,6 +1,6 @@
 ---
-name: single-flow
-description: Issue/PR なしで計画書からタスクを実行しコミットメッセージを出力する軽量フロー。「シングルフロー」「single-flow」「軽量フロー」「Issue なしフロー」「シンプル実行」「計画書実行」「コミットのみフロー」などで起動。PR を作らない軽量な開発フロー。
+name: workflow-single
+description: Issue/PR なしで計画書からタスクを実行しコミットメッセージを出力する軽量フロー。「シングルフロー」「workflow-single」「軽量フロー」「Issue なしフロー」「シンプル実行」「計画書実行」「コミットのみフロー」などで起動。PR を作らない軽量な開発フロー。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
@@ -16,23 +16,23 @@ Issue/PR なしで計画書からタスクを実行し、コミットメッセ�
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/single-flow - 軽量シングルエージェントフロー
+/workflow-single - 軽量シングルエージェントフロー
 
 概要:
   Issue/PR なしで計画書からタスクを実行し、コミットメッセージを出力する。
   ブランチ作成 → 実装 → 自己レビュー → コミットメッセージ出力。
 
 使用方法:
-  /single-flow [タスク説明] [オプション]
+  /workflow-single [タスク説明] [オプション]
 
 オプション:
   --plan  plan mode で計画書を新規作成してから実行
   --help  このヘルプを表示
 
 例:
-  /single-flow                        # 既存計画書から実行
-  /single-flow --plan                 # 計画書を作成してから実行
-  /single-flow "ログイン機能を追加"    # タスク説明から直接実行
+  /workflow-single                        # 既存計画書から実行
+  /workflow-single --plan                 # 計画書を作成してから実行
+  /workflow-single "ログイン機能を追加"    # タスク説明から直接実行
 ```
 
 ## 前提条件
@@ -102,8 +102,8 @@ ls -t ~/.claude/plans/*.md | head -1
 計画書が見つかりませんでした。
 
 ### 代替手段
-- `single-flow --plan` で新しい計画を作成
-- `single-flow タスク説明` で直接実行
+- `workflow-single --plan` で新しい計画を作成
+- `workflow-single タスク説明` で直接実行
 ```
 
 計画書が見つかったら、ステップ 1 から実行。
@@ -115,7 +115,7 @@ ls -t ~/.claude/plans/*.md | head -1
 1. ユーザーに実装したい内容を確認
 2. `EnterPlanMode` を実行して plan mode に入る
 3. 計画書を作成（`.claude/plans/` に保存される）
-4. ユーザーが計画を承認したら、自動的に single-flow の実行フェーズに進む
+4. ユーザーが計画を承認したら、自動的に workflow-single の実行フェーズに進む
 
 ## モード 3: 直接実行モード（タスク説明あり）
 

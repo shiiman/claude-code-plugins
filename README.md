@@ -117,12 +117,12 @@ pip install -r requirements.txt
 
 | スキル | プラグイン | トリガー例 | 説明 |
 |--------|-----------|------------|------|
-| single-issue-flow | shiiman-workflow | 「シングル Issue フロー」「Issue から PR まで」 | Issue 作成から PR 作成まで自動実行するシングルエージェントフロー |
-| multi-issue-flow | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」 | MCP マルチエージェントで Issue から PR まで並列実行 |
-| single-flow | shiiman-workflow | 「シングルフロー」「軽量フロー」 | Issue/PR なしで計画書からタスク実行する軽量フロー |
-| multi-flow | shiiman-workflow | 「マルチフロー」「並列軽量フロー」 | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー |
-| agent-team-issue-flow | shiiman-workflow | 「agent-team-issue-flow」「Agent Team Issue」 | Agent Team で Issue から PR まで並列実行 |
-| agent-team-flow | shiiman-workflow | 「agent-team-flow」「エージェントチームフロー」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
+| workflow-single-issue | shiiman-workflow | 「シングル Issue フロー」「Issue から PR まで」 | Issue 作成から PR 作成まで自動実行するシングルエージェントフロー |
+| workflow-multi-issue | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」 | MCP マルチエージェントで Issue から PR まで並列実行 |
+| workflow-single | shiiman-workflow | 「シングルフロー」「軽量フロー」 | Issue/PR なしで計画書からタスク実行する軽量フロー |
+| workflow-multi | shiiman-workflow | 「マルチフロー」「並列軽量フロー」 | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー |
+| workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行 |
+| workflow-agent-team | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
 
 GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、グローバルまたは `shiiman-git` 側のスキルを利用してください。
 
