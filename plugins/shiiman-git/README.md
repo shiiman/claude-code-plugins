@@ -96,9 +96,9 @@ claude plugin install shiiman-git@shiiman-claude-code-plugins
 ## ワークフローガイド
 
 > **開発フローについて**: Issue → 実装 → PR の自動開発フローは `shiiman-workflow` プラグインをご利用ください。
-> - `single-issue-flow`: シングルエージェントで Issue から PR まで
-> - `multi-issue-flow`: マルチエージェントで並列実行
-> - `single-flow` / `multi-flow`: Issue/PR なしの軽量フロー
+> - `workflow-single-issue`: シングルエージェントで Issue から PR まで
+> - `workflow-multi-issue`: マルチエージェントで並列実行
+> - `workflow-single` / `workflow-multi`: Issue/PR なしの軽量フロー
 
 ### 手動フロー
 

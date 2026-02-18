@@ -30,10 +30,12 @@ plugins/{plugin-name}/
 
 ### Workflow
 
-- `/shiiman-workflow:single-issue-flow` - Single-agent flow: Issue creation → implementation → PR (trigger: "シングル Issue フロー")
-- `/shiiman-workflow:multi-issue-flow` - Multi-agent flow: parallel Issue-based development with MCP (trigger: "マルチ Issue フロー")
-- `/shiiman-workflow:single-flow` - Lightweight single-agent flow without Issue/PR (trigger: "シングルフロー")
-- `/shiiman-workflow:multi-flow` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
+- `/shiiman-workflow:workflow-single-issue` - Single-agent flow: Issue creation → implementation → PR (trigger: "シングル Issue フロー")
+- `/shiiman-workflow:workflow-multi-issue` - Multi-agent flow: parallel Issue-based development with MCP (trigger: "マルチ Issue フロー")
+- `/shiiman-workflow:workflow-single` - Lightweight single-agent flow without Issue/PR (trigger: "シングルフロー")
+- `/shiiman-workflow:workflow-multi` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
+- `/shiiman-workflow:workflow-agent-team` - Agent Team lightweight parallel flow without Issue/PR (trigger: "エージェントチームフロー")
+- `/shiiman-workflow:workflow-agent-team-issue` - Agent Team flow: Issue creation → parallel implementation → PR (trigger: "Agent Team Issue")
 
 ### GitHub Operations
 

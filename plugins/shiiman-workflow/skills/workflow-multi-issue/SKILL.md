@@ -1,6 +1,6 @@
 ---
-name: multi-issue-flow
-description: MCP マルチエージェントで Issue から PR まで並列実行する開発フロー。「マルチ Issue フロー」「multi-issue-flow」「並列 Issue 開発」「マルチエージェント Issue」「複数人で Issue」「並列 Issue フロー」「マルチフロー Issue」などで起動。複数 Worker でタスクを並列実行。
+name: workflow-multi-issue
+description: MCP マルチエージェントで Issue から PR まで並列実行する開発フロー。「マルチ Issue フロー」「workflow-multi-issue」「並列 Issue 開発」「マルチエージェント Issue」「複数人で Issue」「並列 Issue フロー」「マルチフロー Issue」などで起動。複数 Worker でタスクを並列実行。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
@@ -16,23 +16,23 @@ MCP マルチエージェントで Issue から PR まで並列実行する開�
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/multi-issue-flow - MCP マルチエージェント Issue 開発フロー
+/workflow-multi-issue - MCP マルチエージェント Issue 開発フロー
 
 概要:
   MCP マルチエージェントで Issue 作成から PR 作成まで並列実行する。
   Issue 作成 → MCP 初期化 → Admin/Worker 並列実行 → コミット → PR 作成。
 
 使用方法:
-  /multi-issue-flow [タスク説明] [オプション]
+  /workflow-multi-issue [タスク説明] [オプション]
 
 オプション:
   --plan  plan mode で計画書を新規作成してから実行
   --help  このヘルプを表示
 
 例:
-  /multi-issue-flow                        # 既存計画書から実行
-  /multi-issue-flow --plan                 # 計画書を作成してから実行
-  /multi-issue-flow "認証機能を並列実装"    # タスク説明から直接実行
+  /workflow-multi-issue                        # 既存計画書から実行
+  /workflow-multi-issue --plan                 # 計画書を作成してから実行
+  /workflow-multi-issue "認証機能を並列実装"    # タスク説明から直接実行
 ```
 
 ## 前提条件

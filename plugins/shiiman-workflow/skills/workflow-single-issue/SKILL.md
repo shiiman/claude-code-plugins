@@ -1,6 +1,6 @@
 ---
-name: single-issue-flow
-description: Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。「シングル Issue フロー」「single-issue-flow」「Issue から PR まで」「Issue ベース開発」「シングルフロー Issue」「1人で Issue 開発」「Issue 付きフロー」などで起動。計画書に基づいた自動実装を実行。
+name: workflow-single-issue
+description: Issue 作成から PR 作成まで自動実行するシングルエージェント開発フロー。「シングル Issue フロー」「workflow-single-issue」「Issue から PR まで」「Issue ベース開発」「シングルフロー Issue」「1人で Issue 開発」「Issue 付きフロー」などで起動。計画書に基づいた自動実装を実行。
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
 context: fork
 user-invocable: true
@@ -16,23 +16,23 @@ Issue 作成から PR 作成まで自動実行するシングルエージェン�
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/single-issue-flow - シングルエージェント Issue 開発フロー
+/workflow-single-issue - シングルエージェント Issue 開発フロー
 
 概要:
   Issue 作成から PR 作成まで自動実行する。
   Issue 作成 → ブランチ作成 → 実装 → コミット → PR 作成。
 
 使用方法:
-  /single-issue-flow [タスク説明] [オプション]
+  /workflow-single-issue [タスク説明] [オプション]
 
 オプション:
   --plan  plan mode で計画書を新規作成してから実行
   --help  このヘルプを表示
 
 例:
-  /single-issue-flow                        # 既存計画書から実行
-  /single-issue-flow --plan                 # 計画書を作成してから実行
-  /single-issue-flow "ログイン機能を追加"    # タスク説明から直接実行
+  /workflow-single-issue                        # 既存計画書から実行
+  /workflow-single-issue --plan                 # 計画書を作成してから実行
+  /workflow-single-issue "ログイン機能を追加"    # タスク説明から直接実行
 ```
 
 ## 3つの実行モード
@@ -97,8 +97,8 @@ ls -t ~/.claude/plans/*.md | head -1
 計画書が見つかりませんでした。
 
 ### 代替手段
-- `single-issue-flow --plan` で新しい計画を作成
-- `single-issue-flow タスク説明` で直接実行
+- `workflow-single-issue --plan` で新しい計画を作成
+- `workflow-single-issue タスク説明` で直接実行
 ```
 
 計画書が見つかったら、ステップ 1 から実行。
@@ -110,7 +110,7 @@ ls -t ~/.claude/plans/*.md | head -1
 1. ユーザーに実装したい内容を確認
 2. `EnterPlanMode` を実行して plan mode に入る
 3. 計画書を作成（`.claude/plans/` に保存される）
-4. ユーザーが計画を承認したら、自動的に single-issue-flow の実行フェーズに進む
+4. ユーザーが計画を承認したら、自動的に workflow-single-issue の実行フェーズに進む
 
 ## モード 3: 直接実行モード（タスク説明あり）
 
