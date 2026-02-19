@@ -71,13 +71,13 @@ MCP サーバーの一覧表示・追加・削除を統合して管理します�
 
 ## 人気の MCP サーバー
 
-| 名前 | 説明 | 必要な環境変数 |
-|------|------|----------------|
-| github | GitHub API 操作 | GITHUB_PERSONAL_ACCESS_TOKEN |
-| filesystem | ファイルシステム操作 | なし |
-| puppeteer | ブラウザ自動化 | なし |
-| postgres | PostgreSQL 操作 | DATABASE_URL |
-| sqlite | SQLite 操作 | なし |
+| 名前       | 説明                 | 必要な環境変数               |
+| ---------- | -------------------- | ---------------------------- |
+| github     | GitHub API 操作      | GITHUB_PERSONAL_ACCESS_TOKEN |
+| filesystem | ファイルシステム操作 | なし                         |
+| puppeteer  | ブラウザ自動化       | なし                         |
+| postgres   | PostgreSQL 操作      | DATABASE_URL                 |
+| sqlite     | SQLite 操作          | なし                         |
 
 ## 出力フォーマット
 
@@ -85,9 +85,11 @@ MCP サーバーの一覧表示・追加・削除を統合して管理します�
 ## MCP サーバー管理
 
 ### 実行モード
+
 - list / install / remove
 
 ### 結果
+
 - 実行コマンド: claude mcp ...
 - ステータス: 成功 / 失敗
 - 補足: 必要なら環境変数の案内

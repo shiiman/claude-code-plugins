@@ -1,7 +1,19 @@
 ---
 name: workflow-single
 description: Issue/PR なしで計画書からタスクを実行しコミットメッセージを出力する軽量フロー。「シングルフロー」「workflow-single」「軽量フロー」「Issue なしフロー」「シンプル実行」「計画書実行」「コミットのみフロー」などで起動。PR を作らない軽量な開発フロー。
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
+allowed-tools:
+  [
+    Read,
+    Write,
+    Edit,
+    Bash,
+    Glob,
+    Grep,
+    AskUserQuestion,
+    EnterPlanMode,
+    TodoWrite,
+    Task,
+  ]
 context: fork
 user-invocable: true
 argument-hint: "[タスク説明] [--plan|--help]"
@@ -239,7 +251,9 @@ git diff
 以下のコミットメッセージを推奨します:
 
 ```
+
 {Conventional Commits 形式のメッセージ}
+
 ```
 
 **コミットメッセージ形式**:

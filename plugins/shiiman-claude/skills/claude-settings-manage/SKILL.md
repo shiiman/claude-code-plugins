@@ -104,9 +104,11 @@ Claude Code の設定ファイル表示と更新を一つのスキルで管理�
 ## Claude Settings 管理
 
 ### 実行モード
+
 - view / update / local-update
 
 ### 結果
+
 - 対象ファイル: .claude/settings.json or .claude/settings.local.json
 - 変更点: 箇条書きで要約
 - ステータス: 成功 / 失敗

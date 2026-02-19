@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Gmail の未読メッセージを既読化します（単体/一括）。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

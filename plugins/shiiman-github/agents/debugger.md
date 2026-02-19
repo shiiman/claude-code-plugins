@@ -68,13 +68,13 @@ gh workflow view {workflow_name}
 
 ログから以下のエラーパターンを特定:
 
-| パターン | キーワード | 対処方針 |
-|----------|-----------|----------|
-| テスト失敗 | `FAIL`, `AssertionError`, `Expected` | テストコードまたは実装を修正 |
-| ビルドエラー | `error TS`, `SyntaxError`, `compile` | コンパイルエラーを修正 |
-| 依存関係エラー | `npm ERR!`, `ModuleNotFoundError` | 依存関係を更新 |
-| 権限エラー | `Permission denied`, `403`, `401` | permissions / secrets を確認 |
-| タイムアウト | `timeout`, `exceeded` | ジョブのタイムアウト設定を調整 |
+| パターン       | キーワード                           | 対処方針                       |
+| -------------- | ------------------------------------ | ------------------------------ |
+| テスト失敗     | `FAIL`, `AssertionError`, `Expected` | テストコードまたは実装を修正   |
+| ビルドエラー   | `error TS`, `SyntaxError`, `compile` | コンパイルエラーを修正         |
+| 依存関係エラー | `npm ERR!`, `ModuleNotFoundError`    | 依存関係を更新                 |
+| 権限エラー     | `Permission denied`, `403`, `401`    | permissions / secrets を確認   |
+| タイムアウト   | `timeout`, `exceeded`                | ジョブのタイムアウト設定を調整 |
 
 ### 2. 関連ファイルの調査
 

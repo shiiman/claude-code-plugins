@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 実装状況に応じて Issue の状態を更新します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

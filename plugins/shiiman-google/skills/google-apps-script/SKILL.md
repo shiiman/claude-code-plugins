@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Apps Script プロジェクトの新規作成・コード更新を行います。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -37,10 +36,10 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_apps_script.py create \
   --parent-id "親ドキュメントID"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--name` | Yes | スクリプト名 |
-| `--parent-id` | No | 親ドキュメントID（スプレッドシート等に紐付ける場合） |
+| オプション    | 必須 | 説明                                                 |
+| ------------- | ---- | ---------------------------------------------------- |
+| `--name`      | Yes  | スクリプト名                                         |
+| `--parent-id` | No   | 親ドキュメントID（スプレッドシート等に紐付ける場合） |
 
 ### コード更新
 
@@ -51,8 +50,8 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_apps_script.py update \
   --code "function myFunction() { ... }"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--script-id` | Yes | スクリプトID |
-| `--filename` | Yes | ファイル名（.gs, .html, .json） |
-| `--code` | Yes | コード内容 |
+| オプション    | 必須 | 説明                            |
+| ------------- | ---- | ------------------------------- |
+| `--script-id` | Yes  | スクリプトID                    |
+| `--filename`  | Yes  | ファイル名（.gs, .html, .json） |
+| `--code`      | Yes  | コード内容                      |

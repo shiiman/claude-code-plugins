@@ -69,11 +69,11 @@ gh issue list --assignee @me --json number,title,labels,assignees,createdAt --li
 
 ## 優先度の判定
 
-| 優先度 | アイコン | 条件 |
-|--------|----------|------|
-| 高 | 🔴 | `priority: high` ラベル または `bug` ラベル |
-| 中 | 🟡 | `priority: medium` ラベル または ラベルなし |
-| 低 | 🟢 | `priority: low` ラベル または `documentation` ラベル |
+| 優先度 | アイコン | 条件                                                 |
+| ------ | -------- | ---------------------------------------------------- |
+| 高     | 🔴       | `priority: high` ラベル または `bug` ラベル          |
+| 中     | 🟡       | `priority: medium` ラベル または ラベルなし          |
+| 低     | 🟢       | `priority: low` ラベル または `documentation` ラベル |
 
 ## 重要な注意事項
 

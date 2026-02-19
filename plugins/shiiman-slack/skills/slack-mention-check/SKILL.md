@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Slack で自分へのメンションを確認します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

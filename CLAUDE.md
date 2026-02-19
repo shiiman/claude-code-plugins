@@ -64,12 +64,12 @@ Use Conventional Commits format:
 
 **Important**: All plugin names MUST use the `shiiman-` prefix to avoid namespace collision with other marketplaces.
 
-| Rule | Example |
-|------|---------|
-| Prefix required | `shiiman-` |
-| Lowercase only | `shiiman-common` ✅ / `shiiman-Common` ❌ |
-| Hyphen separator | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
-| No colons | `shiiman:common` ❌ (conflicts with command separator) |
+| Rule             | Example                                                |
+| ---------------- | ------------------------------------------------------ |
+| Prefix required  | `shiiman-`                                             |
+| Lowercase only   | `shiiman-common` ✅ / `shiiman-Common` ❌              |
+| Hyphen separator | `shiiman-code-review` ✅ / `shiiman_code_review` ❌    |
+| No colons        | `shiiman:common` ❌ (conflicts with command separator) |
 
 **Invocation format**: `/shiiman-common:commit`
 
@@ -77,11 +77,11 @@ Use Conventional Commits format:
 
 Follow [Semantic Versioning](https://semver.org/) (SemVer) for plugin versions:
 
-| Change Type                        | Version Bump | Example         |
-|------------------------------------|--------------|-----------------|
-| Breaking change                    | MAJOR        | 1.0.0 → 2.0.0   |
-| New feature (backward compatible)  | MINOR        | 1.0.0 → 1.1.0   |
-| Bug fix (backward compatible)      | PATCH        | 1.0.0 → 1.0.1   |
+| Change Type                       | Version Bump | Example       |
+| --------------------------------- | ------------ | ------------- |
+| Breaking change                   | MAJOR        | 1.0.0 → 2.0.0 |
+| New feature (backward compatible) | MINOR        | 1.0.0 → 1.1.0 |
+| Bug fix (backward compatible)     | PATCH        | 1.0.0 → 1.0.1 |
 
 **Rules**:
 
@@ -94,11 +94,21 @@ Follow [Semantic Versioning](https://semver.org/) (SemVer) for plugin versions:
 **Update Process**:
 
 When updating a plugin version:
+
 1. Update `plugins/{plugin-name}/.claude-plugin/plugin.json` version
 2. Update `plugins/{plugin-name}/README.md` (if needed)
 3. Update `.claude-plugin/marketplace.json` entry version (must match `plugin.json`)
 
 See [docs/plugin.md](docs/plugin.md) for detailed update procedures.
+
+## Markdown Formatting
+
+All `.md` files are formatted with Prettier.
+
+- Run `npm run format` to format all Markdown files
+- Run `npm run format:check` to verify formatting
+- Config: `.prettierrc` (`proseWrap: "preserve"` to keep Japanese line breaks intact)
+- After creating or editing `.md` files, run `npm run format` before committing
 
 ## Constraints
 

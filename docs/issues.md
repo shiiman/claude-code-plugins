@@ -13,13 +13,13 @@
 
 `.github/ISSUE_TEMPLATE/` 配下のテンプレートを利用します。
 
-| テンプレート | 用途 | 付与ラベル |
-|-------------|------|-----------|
-| `plugin-creation.yml` | 新しいプラグイン作成 | `enhancement`, `plugin` |
-| `skill-creation.yml` | 既存プラグインへのスキル追加 | `enhancement`, `skill` |
+| テンプレート            | 用途                                   | 付与ラベル                |
+| ----------------------- | -------------------------------------- | ------------------------- |
+| `plugin-creation.yml`   | 新しいプラグイン作成                   | `enhancement`, `plugin`   |
+| `skill-creation.yml`    | 既存プラグインへのスキル追加           | `enhancement`, `skill`    |
 | `subagent-creation.yml` | 既存プラグインへのサブエージェント追加 | `enhancement`, `subagent` |
-| `hook-creation.yml` | 既存プラグインへのフック追加 | `enhancement`, `hook` |
-| `other-request.yml` | その他の機能追加・改善提案・質問 | `question` |
+| `hook-creation.yml`     | 既存プラグインへのフック追加           | `enhancement`, `hook`     |
+| `other-request.yml`     | その他の機能追加・改善提案・質問       | `question`                |
 
 ### 設定ファイル
 

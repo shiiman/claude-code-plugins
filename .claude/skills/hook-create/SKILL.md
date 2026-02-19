@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 プラグインに新しいフックを作成します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -65,17 +64,17 @@ argument-hint: "[--help]"
 
 ### イベント一覧
 
-| イベント           | matcher | 説明                           |
-|--------------------|---------|--------------------------------|
-| `PreToolUse`       | 必須    | ツール実行前（ブロック可能）   |
-| `PostToolUse`      | 必須    | ツール実行後                   |
-| `UserPromptSubmit` | 不要    | ユーザープロンプト送信時       |
-| `Notification`     | 不要    | 通知時                         |
-| `Stop`             | 不要    | レスポンス完了時               |
-| `SubagentStop`     | 不要    | サブエージェント完了時         |
-| `PreCompact`       | 不要    | Compact 操作前                 |
-| `SessionStart`     | 不要    | セッション開始時               |
-| `SessionEnd`       | 不要    | セッション終了時               |
+| イベント           | matcher | 説明                         |
+| ------------------ | ------- | ---------------------------- |
+| `PreToolUse`       | 必須    | ツール実行前（ブロック可能） |
+| `PostToolUse`      | 必須    | ツール実行後                 |
+| `UserPromptSubmit` | 不要    | ユーザープロンプト送信時     |
+| `Notification`     | 不要    | 通知時                       |
+| `Stop`             | 不要    | レスポンス完了時             |
+| `SubagentStop`     | 不要    | サブエージェント完了時       |
+| `PreCompact`       | 不要    | Compact 操作前               |
+| `SessionStart`     | 不要    | セッション開始時             |
+| `SessionEnd`       | 不要    | セッション終了時             |
 
 ### 3. settings.json の hooks セクションを更新
 

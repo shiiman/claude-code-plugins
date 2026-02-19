@@ -21,19 +21,19 @@ claude plugin install shiiman-slack@shiiman-claude-code-plugins
 1. [Slack API](https://api.slack.com/apps) で新しいアプリを作成
 2. **OAuth & Permissions** で **User Token Scopes** に以下を追加:
 
-| スコープ | 用途 |
-|---------|------|
-| `channels:read` | パブリックチャンネル一覧 |
-| `channels:history` | パブリックチャンネル履歴 |
-| `channels:write` | チャンネル既読マーク |
-| `groups:read` | プライベートチャンネル一覧 |
-| `groups:history` | プライベートチャンネル履歴 |
-| `groups:write` | プライベートチャンネル既読マーク |
-| `chat:write` | スレッド返信 |
-| `users:read` | ユーザー情報取得 |
-| `users.profile:read` | ユーザープロファイル詳細取得 |
-| `users.profile:write` | プロフィール更新 |
-| `search:read` | メッセージ検索 |
+| スコープ              | 用途                             |
+| --------------------- | -------------------------------- |
+| `channels:read`       | パブリックチャンネル一覧         |
+| `channels:history`    | パブリックチャンネル履歴         |
+| `channels:write`      | チャンネル既読マーク             |
+| `groups:read`         | プライベートチャンネル一覧       |
+| `groups:history`      | プライベートチャンネル履歴       |
+| `groups:write`        | プライベートチャンネル既読マーク |
+| `chat:write`          | スレッド返信                     |
+| `users:read`          | ユーザー情報取得                 |
+| `users.profile:read`  | ユーザープロファイル詳細取得     |
+| `users.profile:write` | プロフィール更新                 |
+| `search:read`         | メッセージ検索                   |
 
 3. ワークスペースにインストール（**Install to Workspace**）
 4. 左メニューの **Install App** ページで **User OAuth Token** (`xoxp-...`) をコピー
@@ -80,19 +80,19 @@ pip install slack-sdk
 
 ### スキル（6個）
 
-| スキル | トリガー例 | 説明 |
-|--------|------------|------|
-| slack-user-setup | 「ユーザー設定」 | トークン・ユーザー設定 |
-| slack-unread-check | 「Slack未読確認」 | 未読メッセージを確認 |
-| slack-unread-mark | 「既読にして」 | チャンネルを既読化 |
-| slack-mention-check | 「メンション確認」 | 自分へのメンションを確認 |
-| slack-mention-reply | 「スレッドに返信」 | メンションに対してスレッド返信 |
-| slack-profile-update | 「プロフィール更新」 | 自分のプロフィールを更新 |
+| スキル               | トリガー例           | 説明                           |
+| -------------------- | -------------------- | ------------------------------ |
+| slack-user-setup     | 「ユーザー設定」     | トークン・ユーザー設定         |
+| slack-unread-check   | 「Slack未読確認」    | 未読メッセージを確認           |
+| slack-unread-mark    | 「既読にして」       | チャンネルを既読化             |
+| slack-mention-check  | 「メンション確認」   | 自分へのメンションを確認       |
+| slack-mention-reply  | 「スレッドに返信」   | メンションに対してスレッド返信 |
+| slack-profile-update | 「プロフィール更新」 | 自分のプロフィールを更新       |
 
 ### エージェント
 
-| エージェント | 説明 |
-|-------------|------|
+| エージェント         | 説明                                     |
+| -------------------- | ---------------------------------------- |
 | notification-manager | 通知管理（未読確認、メンション、既読化） |
 
 ## 使用例
@@ -144,6 +144,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py token-set --token xoxp-your
 エラー: `missing_scope`
 
 **対処法:**
+
 - Slack App の OAuth スコープを確認
 - 必要なスコープを追加後、再インストール
 

@@ -15,14 +15,14 @@ claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 
 ## 機能比較
 
-| スキル | Issue | ブランチ | PR | エージェント | 用途 |
-|--------|-------|----------|-----|--------------|------|
-| workflow-single-issue | ✅ | ✅ | ✅ | シングル | 標準的な開発フロー |
-| workflow-single | ❌ | ✅ | ❌ | シングル | 軽量な実装タスク |
-| workflow-multi-issue | ✅ | ✅ | ✅ | マルチ | 大規模な開発タスク |
-| workflow-multi | ❌ | ✅/❌ | ❌ | マルチ | 並列実装タスク（`--no-git` / 自動判定で非git対応） |
-| workflow-agent-team-issue | ✅ | ✅ | ✅ | Agent Team | Agent Team で Issue から PR まで |
-| workflow-agent-team | ❌ | ✅/❌ | ❌ | Agent Team | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
+| スキル                    | Issue | ブランチ | PR  | エージェント | 用途                                                        |
+| ------------------------- | ----- | -------- | --- | ------------ | ----------------------------------------------------------- |
+| workflow-single-issue     | ✅    | ✅       | ✅  | シングル     | 標準的な開発フロー                                          |
+| workflow-single           | ❌    | ✅       | ❌  | シングル     | 軽量な実装タスク                                            |
+| workflow-multi-issue      | ✅    | ✅       | ✅  | マルチ       | 大規模な開発タスク                                          |
+| workflow-multi            | ❌    | ✅/❌    | ❌  | マルチ       | 並列実装タスク（`--no-git` / 自動判定で非git対応）          |
+| workflow-agent-team-issue | ✅    | ✅       | ✅  | Agent Team   | Agent Team で Issue から PR まで                            |
+| workflow-agent-team       | ❌    | ✅/❌    | ❌  | Agent Team   | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
 
 ## スキル
 
@@ -169,12 +169,12 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 - GitHub CLI (`gh`) がインストール済み
 - `gh auth login` で認証済み
 
-### マルチエージェントスキル（workflow-multi-*）
+### マルチエージェントスキル（workflow-multi-\*）
 
 - multi-agent-mcp がインストール済み
 - tmux がインストール済み
 
-### Agent Team スキル（workflow-agent-team-*）
+### Agent Team スキル（workflow-agent-team-\*）
 
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を有効化
 - `CLAUDE_PLUGIN_ROOT` が利用可能なプラグイン実行コンテキストで実行

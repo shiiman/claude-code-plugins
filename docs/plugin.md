@@ -66,18 +66,18 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 
 **バージョニングルール**（[Semantic Versioning](https://semver.org/) に準拠）:
 
-| 変更内容 | バージョンアップ | 例 |
-|---------|----------------|-----|
-| 破壊的変更 | MAJOR | 1.0.0 → 2.0.0 |
-| 新機能追加（後方互換） | MINOR | 1.0.0 → 1.1.0 |
-| バグ修正（後方互換） | PATCH | 1.0.0 → 1.0.1 |
+| 変更内容               | バージョンアップ | 例            |
+| ---------------------- | ---------------- | ------------- |
+| 破壊的変更             | MAJOR            | 1.0.0 → 2.0.0 |
+| 新機能追加（後方互換） | MINOR            | 1.0.0 → 1.1.0 |
+| バグ修正（後方互換）   | PATCH            | 1.0.0 → 1.0.1 |
 
 **更新例**:
 
 ```json
 {
   "name": "plugin-name",
-  "version": "1.1.0",  // 1.0.0 から更新
+  "version": "1.1.0", // 1.0.0 から更新
   "description": "プラグインの説明",
   "author": {
     "name": "shiiman"
@@ -105,7 +105,7 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 {
   "name": "plugin-name",
   "description": "プラグインの説明",
-  "version": "1.1.0",  // 1.0.0 から更新（plugin.json と一致させる）
+  "version": "1.1.0", // 1.0.0 から更新（plugin.json と一致させる）
   "source": "./plugins/plugin-name",
   "category": "development"
 }
@@ -121,13 +121,13 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 
 **重要**: 他のマーケットプレイスとの競合を避けるため、プラグイン名には必ず `shiiman-` プレフィックスを付ける。
 
-| ルール | 例 |
-|--------|-----|
-| プレフィックス必須 | `shiiman-` |
-| 小文字のみ | `shiiman-common` ✅ / `shiiman-Common` ❌ |
-| ハイフン区切り | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
-| コロン禁止 | `shiiman:common` ❌（コマンド区切りと競合） |
-| 簡潔な名前 | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌ |
+| ルール             | 例                                                  |
+| ------------------ | --------------------------------------------------- |
+| プレフィックス必須 | `shiiman-`                                          |
+| 小文字のみ         | `shiiman-common` ✅ / `shiiman-Common` ❌           |
+| ハイフン区切り     | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
+| コロン禁止         | `shiiman:common` ❌（コマンド区切りと競合）         |
+| 簡潔な名前         | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌   |
 
 **呼び出し形式**: `/shiiman-common:commit`
 

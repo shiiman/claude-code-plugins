@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Drive を検索します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

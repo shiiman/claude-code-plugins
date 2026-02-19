@@ -10,7 +10,6 @@ context: fork
 
 タスクを細かい単位に分割して GitHub Issue を作成します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -129,13 +128,13 @@ gh issue create \
 
 ## ラベルの自動判定
 
-| 内容 | ラベル |
-|------|--------|
-| 新機能 | `enhancement` |
-| バグ修正 | `bug` |
-| テスト | `enhancement` |
-| ドキュメント | `documentation` |
-| リファクタリング | `improvement` |
+| 内容             | ラベル          |
+| ---------------- | --------------- |
+| 新機能           | `enhancement`   |
+| バグ修正         | `bug`           |
+| テスト           | `enhancement`   |
+| ドキュメント     | `documentation` |
+| リファクタリング | `improvement`   |
 
 ## 重要な注意事項
 

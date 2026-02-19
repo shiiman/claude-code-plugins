@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google OAuth 認証を実行してトークンを取得・保存します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

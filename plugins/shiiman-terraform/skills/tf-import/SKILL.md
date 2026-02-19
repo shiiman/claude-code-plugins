@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 既存の AWS/GCP/Azure リソースを Terraform の管理下に取り込む支援をします。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -29,11 +28,11 @@ argument-hint: "[--help]"
 
 ## 対応操作
 
-| 操作 | トリガー例 |
-|------|-----------|
-| import ガイド | 「import して」「インポート」 |
-| リソース指定 | 「EC2 を import」「S3 を import」 |
-| 設定生成 | 「import 用の tf を作成」 |
+| 操作          | トリガー例                        |
+| ------------- | --------------------------------- |
+| import ガイド | 「import して」「インポート」     |
+| リソース指定  | 「EC2 を import」「S3 を import」 |
+| 設定生成      | 「import 用の tf を作成」         |
 
 ## 実行手順
 
@@ -159,16 +158,16 @@ import 後は設定ファイルと state の同期が必要です。
 
 ## 主要リソースの import コマンド例
 
-| リソース | コマンド |
-|----------|---------|
-| EC2 インスタンス | `terraform import aws_instance.NAME INSTANCE_ID` |
-| S3 バケット | `terraform import aws_s3_bucket.NAME BUCKET_NAME` |
-| IAM ロール | `terraform import aws_iam_role.NAME ROLE_NAME` |
-| VPC | `terraform import aws_vpc.NAME VPC_ID` |
-| サブネット | `terraform import aws_subnet.NAME SUBNET_ID` |
-| セキュリティグループ | `terraform import aws_security_group.NAME SG_ID` |
-| RDS インスタンス | `terraform import aws_db_instance.NAME DB_IDENTIFIER` |
-| Lambda 関数 | `terraform import aws_lambda_function.NAME FUNCTION_NAME` |
+| リソース             | コマンド                                                  |
+| -------------------- | --------------------------------------------------------- |
+| EC2 インスタンス     | `terraform import aws_instance.NAME INSTANCE_ID`          |
+| S3 バケット          | `terraform import aws_s3_bucket.NAME BUCKET_NAME`         |
+| IAM ロール           | `terraform import aws_iam_role.NAME ROLE_NAME`            |
+| VPC                  | `terraform import aws_vpc.NAME VPC_ID`                    |
+| サブネット           | `terraform import aws_subnet.NAME SUBNET_ID`              |
+| セキュリティグループ | `terraform import aws_security_group.NAME SG_ID`          |
+| RDS インスタンス     | `terraform import aws_db_instance.NAME DB_IDENTIFIER`     |
+| Lambda 関数          | `terraform import aws_lambda_function.NAME FUNCTION_NAME` |
 
 ## 注意事項
 

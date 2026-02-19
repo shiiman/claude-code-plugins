@@ -19,12 +19,12 @@ model: sonnet
 
 ### Frontmatter Fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Must match filename (without `.md`). Lowercase, hyphen-separated. |
-| `description` | Yes | Concise summary (1-2 sentences). Used by Claude Code to decide when to invoke the agent. |
-| `allowed-tools` | Yes | Comma-separated list of tools the agent can use. See [Allowed Tools Guide](#allowed-tools-guide). |
-| `model` | No | Model to use. Default: `sonnet`. Use `opus` only for complex reasoning tasks. |
+| Field           | Required | Description                                                                                       |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `name`          | Yes      | Must match filename (without `.md`). Lowercase, hyphen-separated.                                 |
+| `description`   | Yes      | Concise summary (1-2 sentences). Used by Claude Code to decide when to invoke the agent.          |
+| `allowed-tools` | Yes      | Comma-separated list of tools the agent can use. See [Allowed Tools Guide](#allowed-tools-guide). |
+| `model`         | No       | Model to use. Default: `sonnet`. Use `opus` only for complex reasoning tasks.                     |
 
 ## Allowed Tools Guide
 
@@ -32,22 +32,22 @@ Choosing the right `allowed-tools` set is critical. Grant the **minimum permissi
 
 ### Tool Categories
 
-| Tool | Capability | Risk Level |
-|------|-----------|------------|
-| `Read` | Read files | Low - read-only |
-| `Glob` | Find files by pattern | Low - read-only |
-| `Grep` | Search file contents | Low - read-only |
-| `Bash` | Execute shell commands | **High** - can modify system state |
-| `Edit` | Modify existing files | **Medium** - changes code |
-| `Write` | Create/overwrite files | **Medium** - changes code |
+| Tool    | Capability             | Risk Level                         |
+| ------- | ---------------------- | ---------------------------------- |
+| `Read`  | Read files             | Low - read-only                    |
+| `Glob`  | Find files by pattern  | Low - read-only                    |
+| `Grep`  | Search file contents   | Low - read-only                    |
+| `Bash`  | Execute shell commands | **High** - can modify system state |
+| `Edit`  | Modify existing files  | **Medium** - changes code          |
+| `Write` | Create/overwrite files | **Medium** - changes code          |
 
 ### Recommended Tool Sets by Agent Type
 
-| Agent Type | Recommended Tools | Rationale |
-|------------|-------------------|-----------|
-| **Reviewer / Analyzer** | `Read, Bash, Glob, Grep` | Needs Bash for `gh` CLI, but should NOT edit files |
-| **Specialist / Fixer** | `Read, Write, Edit, Bash, Grep, Glob` | Needs write access to apply fixes |
-| **Read-only Inspector** | `Read, Glob, Grep` | Pure analysis, no side effects |
+| Agent Type              | Recommended Tools                     | Rationale                                          |
+| ----------------------- | ------------------------------------- | -------------------------------------------------- |
+| **Reviewer / Analyzer** | `Read, Bash, Glob, Grep`              | Needs Bash for `gh` CLI, but should NOT edit files |
+| **Specialist / Fixer**  | `Read, Write, Edit, Bash, Grep, Glob` | Needs write access to apply fixes                  |
+| **Read-only Inspector** | `Read, Glob, Grep`                    | Pure analysis, no side effects                     |
 
 ### Decision Checklist
 
@@ -66,40 +66,46 @@ After the frontmatter, the Markdown body defines the agent's behavior:
 {1-2 sentence description of expertise and value.}
 
 ## 実行内容
+
 - Specific task 1
 - Specific task 2
 
 ## 使用タイミング
+
 - When to invoke this agent
 
 ## 専門知識
+
 - Domain expertise this agent relies on
 
 ## 出力形式
+
 {Expected output format — tables, reports, etc.}
 
 ## 使用例
+
 {Example invocations}
 
 ## 注意事項
+
 - Do's and Don'ts
 ```
 
 ### Required Sections
 
-| Section | Purpose |
-|---------|---------|
-| Title + description | Claude Code uses this to match user intent to the agent |
-| 実行内容 | Explicit list of what the agent does (no ambiguity) |
-| 使用タイミング | When to trigger — helps Claude Code select the right agent |
+| Section             | Purpose                                                    |
+| ------------------- | ---------------------------------------------------------- |
+| Title + description | Claude Code uses this to match user intent to the agent    |
+| 実行内容            | Explicit list of what the agent does (no ambiguity)        |
+| 使用タイミング      | When to trigger — helps Claude Code select the right agent |
 
 ### Optional but Recommended
 
-| Section | Purpose |
-|---------|---------|
+| Section  | Purpose                                                        |
+| -------- | -------------------------------------------------------------- |
 | 専門知識 | Reference standards (OWASP, SOLID, etc.) for grounded analysis |
-| 出力形式 | Structured output templates improve consistency |
-| 注意事項 | Guard rails — what the agent should NOT do |
+| 出力形式 | Structured output templates improve consistency                |
+| 注意事項 | Guard rails — what the agent should NOT do                     |
 
 ## Design Best Practices
 
@@ -137,9 +143,11 @@ If the agent uses `Bash`, document the specific commands it should run. This pre
 ## 使用する gh コマンド
 
 ### PR 情報の取得
+
 gh pr view {pr番号} --json title,body,additions,deletions
 
 ### レビューコメントの投稿
+
 gh pr review {pr番号} --comment --body "レビュー内容"
 ```
 
@@ -150,9 +158,9 @@ Define output tables/templates so results are consistent across invocations.
 ```markdown
 ## 出力形式
 
-| 重要度 | ファイル | 行 | 問題 |
-|--------|---------|-----|------|
-| 高     | foo.ts  | 42  | SQL インジェクションの可能性 |
+| 重要度 | ファイル | 行  | 問題                         |
+| ------ | -------- | --- | ---------------------------- |
+| 高     | foo.ts   | 42  | SQL インジェクションの可能性 |
 ```
 
 ### 5. Guard Rails (注意事項)
@@ -161,6 +169,7 @@ Explicitly state what the agent should and should NOT do.
 
 ```markdown
 ## 注意事項
+
 - ✅ エラーログを詳細に分析する
 - ✅ 具体的な修正提案を含める
 - ❌ 漠然とした提案を避ける
@@ -169,14 +178,14 @@ Explicitly state what the agent should and should NOT do.
 
 ## Common Pitfalls
 
-| Pitfall | Fix |
-|---------|-----|
-| Agent description too vague | Be specific about what it does and when |
-| Giving `Edit`/`Write` to a reviewer | Reviewers should only read and report |
-| No output format defined | Add a template table or report structure |
-| Overly broad scope | Split into multiple focused agents |
-| Missing command documentation | List exact CLI commands the agent should use |
-| Using `opus` model unnecessarily | Default to `sonnet`; only use `opus` for tasks requiring deep reasoning |
+| Pitfall                             | Fix                                                                     |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| Agent description too vague         | Be specific about what it does and when                                 |
+| Giving `Edit`/`Write` to a reviewer | Reviewers should only read and report                                   |
+| No output format defined            | Add a template table or report structure                                |
+| Overly broad scope                  | Split into multiple focused agents                                      |
+| Missing command documentation       | List exact CLI commands the agent should use                            |
+| Using `opus` model unnecessarily    | Default to `sonnet`; only use `opus` for tasks requiring deep reasoning |
 
 ## Naming Conventions
 
@@ -211,3 +220,11 @@ After creating an agent file, register it in the plugin's `plugin.json`:
 ```
 
 Ensure `name` in `plugin.json` matches the frontmatter `name` and the filename.
+
+## Markdown Formatting
+
+All `.md` files (including agent definitions) are formatted with Prettier.
+
+- Run `npm run format` after creating or editing agent `.md` files
+- Run `npm run format:check` to verify formatting
+- Config: `.prettierrc` (`proseWrap: "preserve"` to keep Japanese line breaks intact)

@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Slack 操作で使用するデフォルトユーザーID を設定・管理します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -51,6 +50,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_config.py set-user --user-id U0123456
 ```
 
 **ユーザーID の確認方法**:
+
 - Slack でプロフィールを開く → 「...」→「メンバーIDをコピー」
 - または `U` で始まる11文字程度のID
 

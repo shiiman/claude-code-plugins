@@ -1,7 +1,19 @@
 ---
 name: workflow-multi
 description: MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー。「マルチフロー」「workflow-multi」「並列軽量フロー」「マルチエージェント実行」「複数人で実行」「並列フロー」「マルチ軽量」などで起動。複数 Worker でタスクを並列実行しコミットメッセージを出力。
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
+allowed-tools:
+  [
+    Read,
+    Write,
+    Edit,
+    Bash,
+    Glob,
+    Grep,
+    AskUserQuestion,
+    EnterPlanMode,
+    TodoWrite,
+    Task,
+  ]
 context: fork
 user-invocable: true
 argument-hint: "[タスク説明] [--plan|--no-git|--help]"
