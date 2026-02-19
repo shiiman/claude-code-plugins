@@ -19,17 +19,15 @@ claude plugin install shiiman-git@shiiman-claude-code-plugins
 
 | スキル | トリガー例 | 説明 |
 |--------|------------|------|
-| git-commit | 「コミット」「コミットして」 | 変更をコミットしてプッシュ |
+| git-add-commit | 「コミット」「コミットして」 | セキュリティチェック + ステージング + コミット |
 | git-worktree | 「worktree 作成」「gtr list」 | gtr で worktree を管理 |
-| git-gitignore-check | 「gitignore チェック」 | .gitignore に追加すべきファイルを確認 |
-| git-commit-message-setup | 「コミットメッセージ設定」 | コミットメッセージ命名規則を設定 |
-| git-gtrconfig-setup | 「gtrconfig 設定」 | .gtrconfig を生成 |
+| git-worktree-setup | 「worktree セットアップ」「gtr 設定」 | gtr インストールと .gtrconfig 設定 |
 
 ## 必要条件
 
 - git がインストール済み
 
-### git-worktree / git-gtrconfig-setup スキル
+### git-worktree / git-worktree-setup スキル
 
 - gtr (git-worktree-runner) がインストール済み
   - インストール: https://github.com/coderabbitai/git-worktree-runner
@@ -45,6 +43,7 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 
 ## バージョン履歴
 
+- v3.0.0: git-commit → git-add-commit にリネーム、git-gitignore-check を統合、git-commit-message-setup を削除、git-worktree を gtr v2.1.0 対応に更新、git-gtrconfig-setup → git-worktree-setup にリネーム（破壊的変更）
 - v2.0.0: shiiman-github プラグインへのスキル分離に伴い、GitHub 操作スキルを移動。全スキルを `git-` プレフィックス付きにリネーム（破壊的変更）
 - v1.9.2: worktree / gtrconfig スキル追加
 - v1.9.1: `branch-create` と `pr-create` のベースブランチ解決を `main` 固定から `gh repo view --json defaultBranchRef` 方式へ変更。`commit` の注意事項もデフォルトブランチ基準へ更新
