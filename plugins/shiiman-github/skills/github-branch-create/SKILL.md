@@ -1,13 +1,13 @@
 ---
 name: shiiman-github:github-branch-create
-description: Issue 番号に基づいて feature ブランチを自動作成する。「ブランチ作成」「ブランチを作って」「新しいブランチ」「feature ブランチ」「Issue からブランチ」「作業ブランチを作成」「ブランチ切って」などで起動。feature/[issue番号] 形式でブランチを作成。
+description: feature ブランチを作成する。「ブランチ作成」「ブランチを作って」「新しいブランチ」「feature ブランチ」「Issue からブランチ」「作業ブランチを作成」「ブランチ切って」などで起動。Issue 番号・ブランチ名の直接指定・コンテキストからの自動命名に対応。
 allowed-tools: [Read, Bash]
-argument-hint: "[--help]"
+argument-hint: "[Issue番号|ブランチ名] [--help]"
 ---
 
 # Create Branch
 
-Issue 番号に基づいて feature ブランチを自動作成します。
+feature ブランチを作成します。Issue 番号指定・ブランチ名直接指定・コンテキストからの自動命名に対応。
 
 ## Help
 
@@ -17,33 +17,36 @@ Issue 番号に基づいて feature ブランチを自動作成します。
 /shiiman-github:github-branch-create - Create Branch
 
 概要:
-  Issue 番号に基づいて feature ブランチを自動作成します。
+  feature ブランチを作成する。
+  Issue 番号、ブランチ名の直接指定、コンテキストからの自動命名に対応。
 
 使用方法:
-  /shiiman-github:github-branch-create [オプション]
+  /shiiman-github:github-branch-create [Issue番号|ブランチ名] [オプション]
 
 オプション:
   --help  このヘルプを表示
+
+例:
+  /shiiman-github:github-branch-create 5                   # Issue #5 から feature/5 を作成
+  /shiiman-github:github-branch-create feature/add-auth     # ブランチ名を直接指定
+  /shiiman-github:github-branch-create                      # コンテキストから自動命名
 ```
 
 ## ワークフロー
 
-### 1. Issue 番号の確認
+### 1. ブランチ名の決定
 
-ユーザーに Issue 番号を確認。または以下から推測:
+引数の内容に応じて分岐:
 
-- 直前の会話コンテキスト
-- 「Issue #5 のブランチを作って」のような指示
+**A) 引数が Issue 番号の場合**（数値のみ、例: `5`）:
 
-### 2. Issue 情報の取得
+1. Issue 情報を取得
 
 ```bash
 gh issue view {issue番号} --json title,labels
 ```
 
-### 3. ブランチ名の決定
-
-**命名規則**:
+2. Issue タイプに応じたブランチ名を決定
 
 | Issue タイプ                  | ブランチ形式           |
 | ----------------------------- | ---------------------- |
@@ -53,7 +56,18 @@ gh issue view {issue番号} --json title,labels
 | リファクタリング              | `refactor/{issue番号}` |
 | その他                        | `feature/{issue番号}`  |
 
-### 4. ブランチ作成
+**B) 引数がブランチ名の場合**（数値以外、例: `feature/add-auth`）:
+
+- そのまま使用
+
+**C) 引数なしの場合**:
+
+1. 会話コンテキスト（直前のタスク説明・指示内容）からブランチ名を自動命名
+   - 例: 「認証機能を追加」→ `feature/add-auth`
+   - 例: 「ログインバグを修正」→ `fix/login-bug`
+2. 手がかりがない場合のみユーザーに確認
+
+### 2. ブランチ作成
 
 ```bash
 # デフォルトブランチから最新を取得
@@ -67,12 +81,14 @@ git checkout "$DEFAULT_BRANCH"
 git pull origin "$DEFAULT_BRANCH"
 
 # 新しいブランチを作成
-git checkout -b feature/{issue番号}
+git checkout -b {ブランチ名}
 ```
 
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
-### 5. 結果報告
+### 3. 結果報告
+
+**Issue 指定時**:
 
 ```
 ブランチ `feature/{issue番号}` を作成しました。
@@ -82,10 +98,18 @@ git checkout -b feature/{issue番号}
 作業を開始できます。
 ```
 
+**Issue なし時**:
+
+```
+ブランチ `{ブランチ名}` を作成しました。
+
+作業を開始できます。
+```
+
 ## 重要な注意事項
 
 - ✅ デフォルトブランチから派生（ユーザー指定があればそちらを優先）
-- ✅ Issue 番号をブランチ名に含める
 - ✅ Issue タイプに応じたプレフィックス
+- ✅ コンテキストから自動命名を試みる
 - ❌ 既存ブランチを上書きしない
 - ❌ ユーザー指定なしでデフォルトブランチ以外から派生しない

@@ -26,7 +26,7 @@
     {
       "name": "shiiman-github",
       "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供",
-      "version": "1.0.1",
+      "version": "2.0.0",
       "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },

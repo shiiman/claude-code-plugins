@@ -1,6 +1,6 @@
 ---
 name: shiiman-github:github-pr-review
-description: PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「コードレビュー」「レビューして」「セキュリティレビュー」「パフォーマンスレビュー」などで起動。
+description: PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「コードレビュー」「レビューして」「セキュリティレビュー」「パフォーマンスレビュー」「PR 承認」「approve して」「LGTM」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
 argument-hint: "[PR番号] [--submit|--approve|--request-changes|--help]"
 context: fork
@@ -30,7 +30,7 @@ PR をレビューし、結果をローカル表示または GitHub に投稿し
 オプション:
   --help             このヘルプを表示
   --submit           GitHub にレビューコメントを投稿
-  --approve          Approve としてレビュー投稿（--submit 必須）
+  --approve          Approve として投稿（単独使用可、--submit なしでも GitHub に投稿）
   --request-changes  Request Changes としてレビュー投稿（--submit 必須）
 
 例:
@@ -38,6 +38,7 @@ PR をレビューし、結果をローカル表示または GitHub に投稿し
   /shiiman-github:github-pr-review 123                       # PR #123 をレビュー（ローカル表示）
   /shiiman-github:github-pr-review --submit                  # レビュー結果を GitHub に投稿
   /shiiman-github:github-pr-review 123 --submit --approve    # PR #123 をレビューして Approve
+  /shiiman-github:github-pr-review --approve                 # 現在のブランチの PR を承認（簡易承認）
 ```
 
 ## ワークフロー
@@ -159,10 +160,69 @@ PR #{pr番号} のレビューを完了しました。
 改善提案: {suggestion_count}件
 ```
 
+## 簡易承認フロー（--approve 単独使用時）
+
+`--approve` を `--submit` なしで単独使用した場合、レビューをスキップして承認のみ実行する。
+
+### 1. PR 状態の確認
+
+```bash
+gh pr view {pr番号} --json title,state,reviews,mergeable,statusCheckRollup
+```
+
+以下を確認:
+
+- 未対応の必須修正がないか
+- CI が通っているか
+- マージ可能な状態か
+
+### 2. 承認実行
+
+```bash
+gh pr review {pr番号} --approve --body "{承認コメント}"
+```
+
+### 3. 結果報告
+
+```
+PR #{pr番号} を承認しました。
+
+ステータス: ✅ Approved
+マージ可能: {mergeable}
+
+マージする場合:
+gh pr merge {pr番号}
+```
+
+### 承認コメントテンプレート
+
+**シンプル**:
+
+```
+LGTM! 🎉
+```
+
+**詳細**:
+
+```markdown
+## Approved
+
+{approval_comment}
+
+### 確認済み項目
+
+- [x] コード品質
+- [x] テスト
+- [x] ドキュメント
+
+LGTM! 🎉
+```
+
 ## 重要な注意事項
 
 - ✅ `--submit` がない場合はローカルに結果を表示するだけ（誤投稿防止）
-- ✅ `--approve` または `--request-changes` は `--submit` が必須
+- ✅ `--approve` は単独使用可（簡易承認として GitHub に直接投稿）
+- ✅ `--request-changes` は `--submit` が必須
 - ✅ 具体的な改善提案を含める
 - ✅ 良い点も指摘する
 - ✅ 重要度を明確にする

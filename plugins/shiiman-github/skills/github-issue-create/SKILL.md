@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:github-issue-create
-description: タスクを細かい単位に分割して GitHub Issue を作成する。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。実装可能な粒度にタスクを分割して複数 Issue を生成。
+description: タスクを細かい単位に分割して GitHub Issue を作成する。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。実装可能な粒度にタスクを分割して複数 Issue を生成。--branch でブランチも自動作成。
 allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[--help]"
+argument-hint: "[--branch|--help]"
 context: fork
 ---
 
@@ -19,12 +19,18 @@ context: fork
 
 概要:
   タスクを細かい単位に分割して GitHub Issue を作成します。
+  --branch で Issue 作成後にブランチも自動作成。
 
 使用方法:
   /shiiman-github:github-issue-create [オプション]
 
 オプション:
-  --help  このヘルプを表示
+  --branch  Issue 作成後にブランチを自動作成
+  --help    このヘルプを表示
+
+例:
+  /shiiman-github:github-issue-create              # Issue を作成
+  /shiiman-github:github-issue-create --branch     # Issue 作成後にブランチも作成
 ```
 
 ## ワークフロー
@@ -118,6 +124,19 @@ gh issue create \
 
 推奨作業順序: #10 → #11 → #12
 ```
+
+### 6. ブランチ作成の提案
+
+**`--branch` 指定時**:
+
+最初に作成した Issue の番号で `github-branch-create` の手順に従いブランチを自動作成する。
+
+**`--branch` なし**:
+
+ユーザーに「ブランチを作成しますか？」と確認:
+
+- はい → 最初に作成した Issue の番号で `github-branch-create` の手順に従いブランチを作成
+- いいえ → スキップ
 
 ## Issue タイトルの形式
 
