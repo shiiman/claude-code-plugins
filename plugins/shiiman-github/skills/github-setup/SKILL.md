@@ -75,7 +75,7 @@ argument-hint: "[--dry-run|--force|--help]"
 
 ### ステップ 3: テンプレート読み込み
 
-`skills/setup-github/assets/` からテンプレートを読み込み、プロジェクト情報で変数を置換。
+`skills/github-setup/assets/` からテンプレートを読み込み、プロジェクト情報で変数を置換。
 
 **置換する変数**:
 
