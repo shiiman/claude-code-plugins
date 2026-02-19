@@ -1,6 +1,6 @@
 {
   "name": "shiiman-claude",
-  "version": "1.5.3",
+  "version": "2.0.0",
   "description": "Claude Code プロジェクト設定管理 - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供",
   "author": {
     "name": "shiiman"

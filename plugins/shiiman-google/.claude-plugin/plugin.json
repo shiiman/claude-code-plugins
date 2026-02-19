@@ -1,6 +1,6 @@
 {
   "name": "shiiman-google",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供",
   "author": {
     "name": "shiiman"

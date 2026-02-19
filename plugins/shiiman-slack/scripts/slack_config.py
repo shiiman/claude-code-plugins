@@ -111,7 +111,7 @@ def show_token() -> None:
         print("トークンが設定されていません。")
         print("")
         print("トークンを設定するには:")
-        print("  /shiiman-slack:slack-user-setup --token xoxp-your-token")
+        print("  /shiiman-slack:user-setup --token xoxp-your-token")
         return
 
     # トークンをマスク表示（最初と最後の4文字のみ表示）
@@ -195,7 +195,7 @@ def show_config() -> None:
         print("設定が見つかりません。")
         print("")
         print("トークンを設定するには:")
-        print("  /shiiman-slack:slack-user-setup --token xoxp-your-token")
+        print("  /shiiman-slack:user-setup --token xoxp-your-token")
         return
 
     # トークン状況
@@ -282,7 +282,7 @@ def auto_detect() -> None:
             "トークンが設定されていません。\n"
             "\n"
             "先にトークンを設定してください:\n"
-            "  /shiiman-slack:slack-user-setup --token xoxp-your-token\n"
+            "  /shiiman-slack:user-setup --token xoxp-your-token\n"
             "\n"
             "または、手動でユーザーIDを指定:\n"
             "  python slack_config.py set-user --user-id U01234567"

@@ -1,6 +1,6 @@
 {
   "name": "shiiman-terraform",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Terraform リソース import 支援プラグイン",
   "author": {
     "name": "shiiman"

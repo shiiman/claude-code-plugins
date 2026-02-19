@@ -120,7 +120,7 @@ def get_slack_client() -> WebClient:
         raise ValueError(
             "Slack トークンが設定されていません。\n"
             "以下のコマンドでトークンを設定してください:\n"
-            "  /shiiman-slack:slack-user-setup --token xoxp-your-token\n"
+            "  /shiiman-slack:user-setup --token xoxp-your-token\n"
             "\n"
             "または config.json を直接編集:\n"
             f"  {CONFIG_FILE}"
@@ -240,7 +240,7 @@ def handle_api_error(func: Callable) -> Callable:
             elif error_code == "not_authed":
                 print_error(
                     "認証エラー: トークンが無効です。\n"
-                    "/shiiman-slack:slack-user-setup --token でトークンを再設定してください。"
+                    "/shiiman-slack:user-setup --token でトークンを再設定してください。"
                 )
             elif error_code == "missing_scope":
                 print_error(
