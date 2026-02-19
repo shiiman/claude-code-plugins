@@ -1,6 +1,6 @@
 {
   "name": "shiiman-git",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Git ローカル操作 - ステージング・コミット、worktree 管理・セットアップを提供",
   "author": {
     "name": "shiiman"

@@ -13,6 +13,7 @@ allowed-tools:
     EnterPlanMode,
     TodoWrite,
     Task,
+    Skill,
   ]
 context: fork
 user-invocable: true
@@ -138,12 +139,7 @@ ls -t ~/.claude/plans/*.md | head -1
 
 ### ステップ 1: Issue 作成
 
-`gh issue create` で Issue を作成:
-
-```bash
-gh repo view --json owner,name
-gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
-```
+Skill ツールで `shiiman-github:issue-create --no-confirm` を呼び出す。
 
 **Issue タイトル**: タスク内容を簡潔に（50文字以内）
 
@@ -175,27 +171,9 @@ gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
 
 ### ステップ 2: ブランチ作成
 
-```bash
-DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
-if [ -z "$DEFAULT_BRANCH" ]; then
-  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
-  exit 1
-fi
-
-git fetch origin "$DEFAULT_BRANCH"
-git checkout "$DEFAULT_BRANCH"
-git pull origin "$DEFAULT_BRANCH"
-git checkout -b feature/{issue番号}
-```
+Skill ツールで `shiiman-github:branch-create {issue番号}` を呼び出す。
 
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
-
-**ブランチ名プレフィックス**:
-
-- `enhancement` → `feature/{issue番号}`
-- `bug` → `fix/{issue番号}`
-- `documentation` → `docs/{issue番号}`
-- `improvement` → `refactor/{issue番号}`
 
 ### ステップ 3: 実装
 
@@ -262,18 +240,11 @@ git diff
 
 ### ステップ 7: コミット
 
-```bash
-git add .
-git commit -m "{コミットメッセージ}"
-```
+Skill ツールで `shiiman-git:add-commit --no-confirm` を呼び出す。
 
-**コミットメッセージ形式**:
+### ステップ 8: プッシュ案内
 
-1. まず `.claude/settings.json` の `git.commitMessage` 設定を確認
-2. 設定がある場合はその形式に従う
-3. 設定がない場合は Conventional Commits（日本語）を使用
-
-### ステップ 8: プッシュ
+以下のコマンドをユーザーに提示する（自動実行しない）:
 
 ```bash
 git push -u origin {ブランチ名}
@@ -281,9 +252,7 @@ git push -u origin {ブランチ名}
 
 ### ステップ 9: PR 作成
 
-```bash
-gh pr create --title "{PRタイトル}" --body "{PR本文}"
-```
+Skill ツールで `shiiman-github:pr-create --no-confirm` を呼び出す。
 
 **PR 本文**:
 

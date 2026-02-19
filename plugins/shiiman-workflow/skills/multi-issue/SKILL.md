@@ -13,6 +13,7 @@ allowed-tools:
     EnterPlanMode,
     TodoWrite,
     Task,
+    Skill,
   ]
 context: fork
 user-invocable: true
@@ -81,10 +82,7 @@ Phase 5: Owner  → 結果確認 → ユーザー承認 → クリーンアッ�
 
 ### ステップ 1: Issue 作成
 
-```bash
-gh repo view --json owner,name
-gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
-```
+Skill ツールで `shiiman-github:issue-create --no-confirm` を呼び出す。
 
 **Issue 本文フォーマット**:
 
@@ -107,18 +105,7 @@ gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
 
 ### ステップ 2: ベースブランチ作成
 
-```bash
-DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
-if [ -z "$DEFAULT_BRANCH" ]; then
-  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
-  exit 1
-fi
-
-git fetch origin "$DEFAULT_BRANCH"
-git checkout "$DEFAULT_BRANCH"
-git pull origin "$DEFAULT_BRANCH"
-git checkout -b feature/{issue番号}
-```
+Skill ツールで `shiiman-github:branch-create {issue番号}` を呼び出す。
 
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
@@ -288,19 +275,21 @@ git status  # .env*, *.pem, credentials.json を検出したら警告
 
 Issue の全てのチェックボックスを完了状態に更新。
 
-#### ステップ 7: コミット・プッシュ
+#### ステップ 7: コミット
+
+Skill ツールで `shiiman-git:add-commit --no-confirm` を呼び出す。
+
+#### ステップ 8: プッシュ案内
+
+以下のコマンドをユーザーに提示する（自動実行しない）:
 
 ```bash
-git add .
-git commit -m "{コミットメッセージ}"
-git push origin feature/{issue番号}
+git push -u origin feature/{issue番号}
 ```
 
-#### ステップ 8: PR 作成
+#### ステップ 9: PR 作成
 
-```bash
-gh pr create --title "{PRタイトル}" --body "{PR本文}"
-```
+Skill ツールで `shiiman-github:pr-create --no-confirm` を呼び出す。
 
 **PR 本文**:
 
@@ -326,7 +315,7 @@ Closes #{issue番号}
 - [ ] {テスト項目}
 ```
 
-#### ステップ 9: 完了報告
+#### ステップ 10: 完了報告
 
 ```
 ## 開発フロー完了

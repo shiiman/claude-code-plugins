@@ -1,14 +1,14 @@
 ---
 name: shiiman-github:issue-create
-description: タスクを細かい単位に分割して GitHub Issue を作成する。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。実装可能な粒度にタスクを分割して複数 Issue を生成。--branch でブランチも自動作成。
+description: GitHub Issue を作成する。タスクは Issue 本文内でチェックボックスに分割。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。--branch でブランチも自動作成。
 allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[--branch|--help]"
+argument-hint: "[--branch|--no-confirm|--help]"
 context: fork
 ---
 
 # Create Issue
 
-タスクを細かい単位に分割して GitHub Issue を作成します。
+GitHub Issue を作成します。タスクは Issue 本文内でチェックボックスに分割します。
 
 ## Help
 
@@ -18,19 +18,22 @@ context: fork
 /shiiman-github:issue-create - Create Issue
 
 概要:
-  タスクを細かい単位に分割して GitHub Issue を作成します。
+  GitHub Issue を作成します。
+  タスクは Issue 本文内でチェックボックスに分割します。
   --branch で Issue 作成後にブランチも自動作成。
 
 使用方法:
   /shiiman-github:issue-create [オプション]
 
 オプション:
-  --branch  Issue 作成後にブランチを自動作成
-  --help    このヘルプを表示
+  --branch      Issue 作成後にブランチを自動作成
+  --no-confirm  ユーザー確認をスキップして即座に Issue を作成
+  --help        このヘルプを表示
 
 例:
   /shiiman-github:issue-create              # Issue を作成
   /shiiman-github:issue-create --branch     # Issue 作成後にブランチも作成
+  /shiiman-github:issue-create --no-confirm # 確認なしで Issue を作成
 ```
 
 ## ワークフロー
@@ -41,46 +44,47 @@ context: fork
 
 ### 2. タスクの分割
 
-タスクを実装可能な粒度に分割:
+タスクを Issue 本文内のチェックボックスに分割:
 
-- 1 Issue = 1-2 時間で完了できる作業単位
-- 依存関係がある場合は明記
-- 各 Issue は独立してテスト可能
-
-**タスク分割のルール**:
-
-- 1つのタスクは 1ファイル or 1機能単位
-- 具体的なアクションを記述（「〜を追加」「〜を修正」「〜を削除」）
+- 1 タスク = 具体的なアクション（「〜を追加」「〜を修正」「〜を削除」）
 - 依存関係がある場合は順番に並べる
 - テストやドキュメント更新も個別タスクとして記載
 
 ### 3. Issue 内容の確認
 
-分割した Issue 一覧をユーザーに提示して確認:
+**`--no-confirm` なしの場合**:
+
+作成する Issue の内容をユーザーに提示して確認:
 
 ```
 以下の Issue を作成します:
 
-1. [機能A] 基本実装
-   - 説明: ...
-   - ラベル: enhancement
+タイトル: [{scope}] {title}
+ラベル: {labels}
 
-2. [機能A] テスト追加
-   - 説明: ...
-   - ラベル: enhancement
-   - 依存: #1
+本文:
+## 概要
+{description}
 
-3. [機能A] ドキュメント更新
-   - 説明: ...
-   - ラベル: documentation
-   - 依存: #1
+## タスク
+- [ ] {task1}
+- [ ] {task2}
+- [ ] {task3}
+
+## 完了条件
+- {condition1}
+- {condition2}
 
 よろしいですか？
 ```
 
+**`--no-confirm` 指定時**:
+
+ユーザー確認をスキップして即座に Issue を作成する。
+
 ### 4. Issue 作成
 
-承認後、`gh issue create` で各 Issue を作成。
+承認後（または `--no-confirm` 指定時は即座に）、`gh issue create` で Issue を作成。
 
 **コマンドテンプレート**:
 
@@ -101,41 +105,34 @@ gh issue create \
 
 - {condition1}
 - {condition2}
-
-## 依存関係
-
-{dependencies または「なし」}
 " \
   --label "{labels}"
 ```
 
 ### 5. 結果報告
 
-作成した Issue の一覧を報告:
+作成した Issue の結果を報告:
 
 ```
-以下の Issue を作成しました:
+Issue を作成しました:
 
-| # | タイトル | ラベル |
-|---|----------|--------|
-| #10 | [機能A] 基本実装 | enhancement |
-| #11 | [機能A] テスト追加 | enhancement |
-| #12 | [機能A] ドキュメント更新 | documentation |
-
-推奨作業順序: #10 → #11 → #12
+- 番号: #{number}
+- タイトル: [{scope}] {title}
+- ラベル: {labels}
+- URL: {issue_url}
 ```
 
 ### 6. ブランチ作成の提案
 
 **`--branch` 指定時**:
 
-最初に作成した Issue の番号で `branch-create` の手順に従いブランチを自動作成する。
+作成した Issue の番号で `branch-create` の手順に従いブランチを自動作成する。
 
 **`--branch` なし**:
 
 ユーザーに「ブランチを作成しますか？」と確認:
 
-- はい → 最初に作成した Issue の番号で `branch-create` の手順に従いブランチを作成
+- はい → 作成した Issue の番号で `branch-create` の手順に従いブランチを作成
 - いいえ → スキップ
 
 ## Issue タイトルの形式
@@ -157,8 +154,7 @@ gh issue create \
 
 ## 重要な注意事項
 
-- ✅ 1-2 時間で完了できる粒度に分割
-- ✅ 依存関係を明記
+- ✅ タスクは Issue 本文内のチェックボックスで管理
 - ✅ 完了条件を明確にする
-- ❌ 巨大な Issue を作成しない
+- ✅ 具体的なアクションを記述
 - ❌ 曖昧なタスク記述

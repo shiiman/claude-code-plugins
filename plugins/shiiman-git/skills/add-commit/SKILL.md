@@ -2,7 +2,7 @@
 name: shiiman-git:add-commit
 description: 変更をステージング・コミットする。「コミット」「コミットして」「変更をコミット」「gitignore チェック」「コミット前チェック」「機密ファイル確認」などで起動。
 allowed-tools: [Read, Write, Bash, Glob, Grep]
-argument-hint: "[--help]"
+argument-hint: "[--help] [--no-confirm]"
 ---
 
 # Add & Commit
@@ -24,7 +24,8 @@ argument-hint: "[--help]"
   /shiiman-git:add-commit [オプション]
 
 オプション:
-  --help  このヘルプを表示
+  --help        このヘルプを表示
+  --no-confirm  ユーザー確認ダイアログをスキップ（workflow 自動呼び出し用）
 ```
 
 ## ワークフロー
@@ -106,6 +107,9 @@ git diff --staged
 
 ### 4. ユーザー確認
 
+`$ARGUMENTS` に `--no-confirm` が含まれる場合、このステップをスキップする。
+セキュリティチェック（ステップ 2）は `--no-confirm` でも必ず実行される。
+
 変更ファイル一覧とコミットメッセージを表示して承認を得る。
 
 ```
@@ -155,9 +159,9 @@ git push -u origin {branch_name}
 
 ## 重要な注意事項
 
-- ✅ コミット前に必ずユーザー確認を行う
-- ✅ 機密ファイルを検出した場合はコミットをブロック
+- ✅ コミット前に必ずユーザー確認を行う（`--no-confirm` 時はスキップ）
+- ✅ 機密ファイルを検出した場合はコミットをブロック（`--no-confirm` でも実行）
 - ✅ Conventional Commits 形式を使用
-- ❌ 確認なしでコミットしない
+- ❌ 確認なしでコミットしない（`--no-confirm` 指定時を除く）
 - ❌ プッシュは実行しない（案内のみ）
 - ❌ デフォルトブランチへの直接コミットは避ける（警告を出す）

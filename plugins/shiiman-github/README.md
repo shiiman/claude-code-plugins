@@ -20,7 +20,7 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 | --------------- | ----------------------------- | -------------------------------------------------------- |
 | actions-debug   | 「Actions エラー」            | GitHub Actions のエラーを調査                            |
 | branch-create   | 「ブランチ作成」              | feature ブランチ作成（Issue 番号・ブランチ名・自動命名） |
-| issue-create    | 「Issue 作成」                | タスクを分割して GitHub Issue を作成（--branch 対応）    |
+| issue-create    | 「Issue 作成」                | GitHub Issue を作成（タスクはチェックボックスで分割）    |
 | issue-list      | 「Issue 一覧」                | オープン Issue の一覧を優先順位付きで表示                |
 | pr-create       | 「PR 作成」                   | PR を作成または更新                                      |
 | pr-list         | 「PR 一覧」                   | オープン PR の一覧を表示                                 |

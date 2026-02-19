@@ -2,7 +2,7 @@
 name: shiiman-github:pr-create
 description: 現在のブランチから PR を作成または更新する。「PR 作成」「PR を作って」「プルリク作成」「pull request」「PR 出して」「プルリクエスト」「レビュー依頼したい」「PR 更新」などで起動。変更内容を分析し適切な PR を生成。
 allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[タイトル] [--base <branch>|--draft|--help]"
+argument-hint: "[タイトル] [--base <branch>|--draft|--no-confirm|--help]"
 context: fork
 ---
 
@@ -29,12 +29,14 @@ context: fork
   --help           このヘルプを表示
   --base <branch>  宛先ブランチを指定（デフォルト: リポジトリのデフォルトブランチ）
   --draft          ドラフト PR として作成
+  --no-confirm     PR 内容確認をスキップして即座に作成
 
 例:
   /shiiman-github:pr-create                    # PR を作成または更新
   /shiiman-github:pr-create --draft            # ドラフト PR を作成
   /shiiman-github:pr-create "タイトル"          # タイトルを指定して PR 作成
   /shiiman-github:pr-create --base develop     # develop ブランチ向けに PR 作成
+  /shiiman-github:pr-create --no-confirm       # 確認なしで PR を作成
 ```
 
 ## ワークフロー
@@ -106,6 +108,10 @@ PR タイトルに破壊的変更を明示しますか？
 | docs     | ドキュメント     | `docs: README を更新`                |
 | refactor | リファクタリング | `refactor: スキル構造を整理`         |
 | chore    | その他の変更     | `chore: 依存関係を更新`              |
+
+**`--no-confirm` なしの場合**: PR 内容をユーザーに提示して確認を取る。
+
+**`--no-confirm` 指定時**: ユーザー確認をスキップして即座に PR を作成する。
 
 ### 7. PR 作成・更新
 

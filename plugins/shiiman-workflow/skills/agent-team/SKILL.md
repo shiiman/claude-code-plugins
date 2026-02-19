@@ -12,6 +12,7 @@ allowed-tools:
     AskUserQuestion,
     EnterPlanMode,
     TodoWrite,
+    Skill,
   ]
 context: fork
 user-invocable: true
@@ -115,18 +116,7 @@ if slug が空なら slug = "no-git-task"
 
 ### ステップ 3: git モード時のみブランチ作成
 
-```bash
-DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
-if [ -z "$DEFAULT_BRANCH" ]; then
-  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
-  exit 1
-fi
-
-git fetch origin "$DEFAULT_BRANCH"
-git checkout "$DEFAULT_BRANCH"
-git pull origin "$DEFAULT_BRANCH"
-git checkout -b feature/{slug}
-```
+Skill ツールで `shiiman-github:branch-create` を呼び出す。
 
 no-git モードではこのステップをスキップする。
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
@@ -294,11 +284,13 @@ git モード:
 ### 推奨コミットメッセージ
 {Conventional Commits 形式}
 
-### 次のステップ（手動）
-1. git add .
-2. git commit -m "{メッセージ}"
-3. git push origin feature/{slug}
-4. 必要に応じて gh pr create
+### 次のステップ
+
+プッシュするには以下を実行:
+
+git push -u origin feature/{slug}
+
+必要に応じて gh pr create
 ```
 
 no-git モード:
