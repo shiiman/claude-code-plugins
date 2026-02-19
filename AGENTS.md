@@ -189,6 +189,31 @@ Explicitly state what the agent should and should NOT do.
 
 ## Naming Conventions
 
+### Plugin
+
+All plugin names MUST use the `shiiman-` prefix to avoid namespace collision with other marketplaces.
+
+| Rule             | Example                                                |
+| ---------------- | ------------------------------------------------------ |
+| Prefix required  | `shiiman-`                                             |
+| Lowercase only   | `shiiman-common` ✅ / `shiiman-Common` ❌              |
+| Hyphen separator | `shiiman-code-review` ✅ / `shiiman_code_review` ❌    |
+| No colons        | `shiiman:common` ❌ (conflicts with command separator) |
+| Keep it short    | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌      |
+
+### Skill
+
+| Rule                         | Example                                          |
+| ---------------------------- | ------------------------------------------------ |
+| name field format            | `{plugin-name}:{skill-name}`                     |
+| Directory matches skill-name | `skills/pr-create/` → `shiiman-github:pr-create` |
+| No redundant plugin prefix   | `review` ✅ / `common-review` ❌                 |
+| Lowercase + hyphen only      | `add-commit` ✅ / `add_commit` ❌                |
+
+Invocation format: `/{plugin-name}:{skill-name}` (e.g., `/shiiman-github:pr-create`)
+
+### Agent / Subagent
+
 ```text
 # Pattern: {role} or {domain}-{role}
 reviewer              # generic reviewer
@@ -202,7 +227,12 @@ command-runner        # command execution specialist
 - Hyphen-separated
 - Must match the `name` field in frontmatter
 - Must match the filename (e.g., code-reviewer.md → name: code-reviewer)
+- No plugin prefix in agent name (reviewer ✅ / github-reviewer ❌)
 ```
+
+### Common rules
+
+- All resource names use kebab-case (`a-z`, `0-9`, `-`)
 
 ## Registration in plugin.json
 

@@ -66,9 +66,11 @@ Use Conventional Commits format:
 - docs: Documentation update
 - refactor: Code refactoring
 
-## Plugin Naming Convention
+## Naming Convention
 
-**Important**: All plugin names MUST use the `shiiman-` prefix to avoid namespace collision with other marketplaces.
+### Plugin
+
+All plugin names MUST use the `shiiman-` prefix to avoid namespace collision with other marketplaces.
 
 | Rule             | Example                                                |
 | ---------------- | ------------------------------------------------------ |
@@ -76,8 +78,29 @@ Use Conventional Commits format:
 | Lowercase only   | `shiiman-common` ✅ / `shiiman-Common` ❌              |
 | Hyphen separator | `shiiman-code-review` ✅ / `shiiman_code_review` ❌    |
 | No colons        | `shiiman:common` ❌ (conflicts with command separator) |
+| Keep it short    | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌      |
 
-**Invocation format**: `/shiiman-common:commit`
+### Skill
+
+| Rule                         | Example                                          |
+| ---------------------------- | ------------------------------------------------ |
+| name field format            | `{plugin-name}:{skill-name}`                     |
+| Directory matches skill-name | `skills/pr-create/` → `shiiman-github:pr-create` |
+| No redundant plugin prefix   | `review` ✅ / `common-review` ❌                 |
+| Lowercase + hyphen only      | `add-commit` ✅ / `add_commit` ❌                |
+
+### Agent / Subagent
+
+| Rule              | Example                                    |
+| ----------------- | ------------------------------------------ |
+| File name         | `{agent-name}.md` (kebab-case)             |
+| name field        | Agent name only, no plugin prefix          |
+| Role-based naming | `reviewer`, `security-check`, `pr-manager` |
+
+### Common rules
+
+- All resource names use kebab-case (`a-z`, `0-9`, `-`)
+- Invocation format: `/{plugin-name}:{skill-name}` (e.g., `/shiiman-github:pr-create`)
 
 ## Plugin Versioning
 

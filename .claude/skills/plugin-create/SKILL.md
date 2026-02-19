@@ -80,7 +80,7 @@ argument-hint: "[--help]"
 | ハイフン区切り         | `shiiman-code-review` ✅ / `shiiman_code_review` ❌ |
 | コロン禁止             | `shiiman:common` ❌（コマンド区切りと競合）         |
 
-**呼び出し形式**: `/shiiman-common:commit`
+**呼び出し形式**: `/shiiman-github:pr-create`
 
 ### 5. ベースプラグインを作成
 

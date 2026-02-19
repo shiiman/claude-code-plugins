@@ -129,7 +129,7 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/example.py"
 | コロン禁止         | `shiiman:common` ❌（コマンド区切りと競合）         |
 | 簡潔な名前         | `shiiman-claude` ✅ / `shiiman-claude-manager` ❌   |
 
-**呼び出し形式**: `/shiiman-common:commit`
+**呼び出し形式**: `/shiiman-github:pr-create`
 
 ### 良い命名の例
 

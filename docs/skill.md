@@ -597,34 +597,37 @@ plugins/{plugin-name}/
 
 ## 実装例
 
-ファイル: `plugins/shiiman-git/skills/git-commit/SKILL.md`
+ファイル: `plugins/shiiman-git/skills/add-commit/SKILL.md`
 
 ````markdown
 ---
-name: shiiman-git:git-commit
-description: 変更をコミットしてプッシュする。「コミット」「コミットして」「変更をコミット」「プッシュして」「commit して」「git commit」「コミットしたい」などで起動。差分を分析し適切なコミットメッセージを生成。
-argument-hint: "[--help]"
+name: shiiman-git:add-commit
+description: 変更をステージング・コミットする。「コミット」「コミットして」「変更をコミット」「gitignore チェック」「コミット前チェック」「機密ファイル確認」などで起動。
+allowed-tools: [Read, Write, Bash, Glob, Grep]
+argument-hint: "[--help] [--no-confirm]"
 ---
 
-# git-commit
+# Add & Commit
 
-変更をコミットしてプッシュします。
+セキュリティチェック → コミットメッセージ生成 → ステージング → コミットを行うスキル。
 
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/shiiman-git:git-commit - git-commit
+/shiiman-git:add-commit - Add & Commit
 
 概要:
-  変更をコミットしてプッシュします。
+  セキュリティチェック + .gitignore チェックを実行し、
+  変更をステージング・コミットする。
 
 使用方法:
-  /shiiman-git:git-commit [オプション]
+  /shiiman-git:add-commit [オプション]
 
 オプション:
-  --help  このヘルプを表示
+  --help        このヘルプを表示
+  --no-confirm  ユーザー確認ダイアログをスキップ（workflow 自動呼び出し用）
 ```
 
 ## ワークフロー
@@ -637,14 +640,14 @@ git diff
 git diff --cached
 ```
 
-### 2. コミット対象の選定
+### 2. セキュリティチェック・コミット対象の選定
 
-変更内容を分析し、コミットに含めるファイルを決定。
+変更内容を分析し、機密ファイルや .gitignore のチェックを実施。
 
-### 3. コミット＆プッシュ
+### 3. コミット
 
 - Conventional Commits 形式でメッセージを生成
-- `git add` → `git commit` → `git push`
+- `git add` → `git commit`
 
 ## 重要な注意事項
 
