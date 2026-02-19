@@ -173,19 +173,28 @@ SEND_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/send_claude_tmux_message.sh"
 
 ```bash
 REPO_ROOT="$(pwd)"
-REQUEST_FILE="$(mktemp)"
 COMMIT_NOTICE=""
 if [ "$FLOW_MODE" = "git" ]; then
   COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 fi
 
+# 計画書をファイルに保存
+TS="$(date +%Y%m%d-%H%M%S)"
+PLAN_FILE="${REPO_ROOT}/.claude/tmp/${TS}-${slug}-plan.md"
+mkdir -p "${REPO_ROOT}/.claude/tmp"
+cat >| "$PLAN_FILE" <<EOF
+{plan_or_task}
+EOF
+
+# パス参照のみを送信
+REQUEST_FILE="$(mktemp)"
 cat >| "$REQUEST_FILE" <<EOF
-Agent Team を作成して、以下の計画書に従って実装を開始してください。
+Agent Team を作成して、計画書に従って実装を開始してください。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
 
-計画書:
-{plan_or_task}
+計画書ファイル: ${PLAN_FILE}
+Read ツールで上記ファイルを読み込んでから実装を進めてください。
 
 完了時は以下を報告してください。
 - 実装サマリー
@@ -314,18 +323,28 @@ no-git モード:
 ```bash
 USER_FEEDBACK="{user_feedback}"
 REPO_ROOT="$(pwd)"
-FIX_FILE="$(mktemp)"
 COMMIT_NOTICE=""
 if [ "$FLOW_MODE" = "git" ]; then
   COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 fi
 
+# 修正依頼をファイルに保存
+TS="$(date +%Y%m%d-%H%M%S)"
+FIX_REQUEST_FILE="${REPO_ROOT}/.claude/tmp/${TS}-${slug}-fix-request.md"
+mkdir -p "${REPO_ROOT}/.claude/tmp"
+cat >| "$FIX_REQUEST_FILE" <<EOF
+${USER_FEEDBACK}
+EOF
+
+# パス参照のみを送信
+FIX_FILE="$(mktemp)"
 cat >| "$FIX_FILE" <<EOF
-Agent Team を作成して、以下の修正指示に従って実装を開始してください。
+Agent Team を作成して、修正指示に従って実装を開始してください。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
 
-修正依頼: ${USER_FEEDBACK}
+修正依頼ファイル: ${FIX_REQUEST_FILE}
+Read ツールで上記ファイルを読み込んでから修正を進めてください。
 
 上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
