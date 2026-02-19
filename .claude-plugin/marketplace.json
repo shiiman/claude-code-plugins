@@ -18,9 +18,16 @@
     },
     {
       "name": "shiiman-git",
-      "description": "Git/GitHub 管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
-      "version": "1.9.2",
+      "description": "Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供",
+      "version": "2.0.0",
       "source": "./plugins/shiiman-git",
+      "category": "developer-tools"
+    },
+    {
+      "name": "shiiman-github",
+      "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供",
+      "version": "1.0.0",
+      "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },
     {

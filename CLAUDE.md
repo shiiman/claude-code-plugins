@@ -39,7 +39,9 @@ plugins/{plugin-name}/
 
 ### GitHub Operations
 
-Issue and PR operations are handled by global skills or `shiiman-git` plugin skills, not by local `.claude` skills in this repository.
+Issue and PR operations are handled by `shiiman-github` plugin skills, not by local `.claude` skills in this repository.
+
+Git local operations (commit, worktree, gitignore, etc.) are handled by `shiiman-git` plugin skills.
 
 ## Documentation
 

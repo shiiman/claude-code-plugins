@@ -45,6 +45,7 @@
   "enabledPlugins": {
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
+    "shiiman-github@shiiman-claude-code-plugins": true,
     "shiiman-workflow@shiiman-claude-code-plugins": true,
     "shiiman-google@shiiman-claude-code-plugins": true,
     "shiiman-go@shiiman-claude-code-plugins": true,
