@@ -18,8 +18,8 @@
     },
     {
       "name": "shiiman-git",
-      "description": "Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供",
-      "version": "2.0.0",
+      "description": "Git ローカル操作 - ステージング・コミット、worktree 管理・セットアップを提供",
+      "version": "3.0.0",
       "source": "./plugins/shiiman-git",
       "category": "developer-tools"
     },

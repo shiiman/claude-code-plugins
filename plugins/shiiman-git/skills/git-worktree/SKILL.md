@@ -1,6 +1,6 @@
 ---
 name: shiiman-git:git-worktree
-description: gtr で worktree を管理。「worktree 作成」「gtr list」「gtr rm」などで起動。
+description: gtr で worktree を管理。「worktree 作成」「gtr new」「gtr list」「gtr rm」「worktree 削除」「クリーンアップ」「マージ済み削除」「ワークツリー」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep]
 argument-hint: "[--help]"
 ---
@@ -8,7 +8,6 @@ argument-hint: "[--help]"
 # Worktree Management with gtr
 
 gtr (git-worktree-runner) を使用して git worktree を管理するスキル。
-
 
 ## Help
 
@@ -18,117 +17,55 @@ gtr (git-worktree-runner) を使用して git worktree を管理するスキル�
 /shiiman-git:git-worktree - Worktree Management with gtr
 
 概要:
-  gtr (git-worktree-runner) を使用して git worktree を管理するスキル。
+  gtr を使用して worktree の作成・一覧・削除・クリーンアップを行う。
 
 使用方法:
   /shiiman-git:git-worktree [オプション]
 
 オプション:
   --help  このヘルプを表示
+
+対応コマンド:
+  new     現在のブランチから worktree を作成
+  list    worktree の一覧を表示
+  rm      worktree をブランチごと削除
+  clean   不要な worktree をクリーンアップ
 ```
 
 ## 前提条件
 
 - gtr (git-worktree-runner) がインストール済み
-  - インストール方法: https://github.com/coderabbitai/git-worktree-runner
+  - 未インストールの場合は `git-worktree-setup` スキルを案内する
 
 ## 機能
 
-### 1. gtr インストール確認
+ユーザーの発話内容から以下の 3 パターンを判定して実行する。
 
-最初に gtr がインストールされているか確認します。
+### 1. worktree 作成
 
-```bash
-git gtr --version
-```
+トリガー: 「worktree 作成」「gtr new」「新しい worktree」「ワークツリー作成」
 
-**未インストール時の対応**:
-
-```
-gtr がインストールされていません。以下の手順でインストールしてください:
-
-## インストール方法
+現在のブランチをベースに worktree を作成する。
 
 ```bash
-# リポジトリをクローン
-git clone https://github.com/coderabbitai/git-worktree-runner.git
-cd git-worktree-runner
-
-# シンボリックリンクを作成
-sudo ln -s "$(pwd)/bin/git-gtr" /usr/local/bin/git-gtr
-
-# 確認
-git gtr --version
-```
-
-## エイリアス設定（推奨）
-
-```bash
-# .bashrc または .zshrc に追加
-alias gwr='git gtr'
-```
-```
-
-### 2. worktree 作成 (gtr new)
-
-ユーザー入力から以下を判定:
-- 「worktree 作成」「gtr new」「新しい worktree」「ワークツリー作成」
-
-**基本操作**:
-
-```bash
-git gtr new <branch-name>
-```
-
-**オプション**:
-
-- `--from-current`: 現在のブランチから派生
-- `--editor`: 作成後にエディタで開く
-- `--ai`: 作成後に AI ツール（Claude Code）で開く
-
-**実行例**:
-
-```bash
-# 基本
-git gtr new feature/new-feature
-
-# 現在のブランチから派生
-git gtr new feature/bugfix --from-current
-
-# 作成後にエディタで開く
-git gtr new feature/ui-update --editor
-
-# 作成後に Claude Code で開く
-git gtr new feature/refactor --ai
+git gtr new <branch> --from-current
 ```
 
 **処理フロー**:
 
 1. ブランチ名を確認（指定がない場合はユーザーに質問）
-2. オプションの確認（--from-current, --editor, --ai）
-3. `git gtr new` を実行
-4. 成功メッセージを表示
+2. `git gtr new <branch> --from-current` を実行
+3. 成功メッセージを表示
 
-### 3. worktree 一覧 (gtr list)
+### 2. worktree 一覧
 
-ユーザー入力から以下を判定:
-- 「worktree 一覧」「gtr list」「ワークツリー一覧」「worktree 確認」
-
-**基本操作**:
+トリガー: 「worktree 一覧」「gtr list」「ワークツリー一覧」「worktree 確認」
 
 ```bash
 git gtr list
 ```
 
-**詳細表示**:
-
-```bash
-git gtr list --porcelain
-```
-
-**実行結果の整形**:
-
-一覧を見やすく整形して表示します:
+結果をテーブル形式に整形して表示:
 
 ```
 ## Worktree 一覧
@@ -137,87 +74,56 @@ git gtr list --porcelain
 |----------|------|
 | main | /path/to/main |
 | feature/A | /path/to/feature-A |
-| feature/B | /path/to/feature-B |
 ```
 
-### 4. worktree 削除 (gtr rm)
+### 3. worktree 削除 + クリーンアップ
 
-ユーザー入力から以下を判定:
-- 「worktree 削除」「gtr rm」「ワークツリー削除」「worktree を消す」
+#### 個別削除
 
-**基本操作**:
+トリガー: 「worktree 削除」「gtr rm」「ワークツリー削除」「worktree を消す」
 
-```bash
-git gtr rm <branch-name>
-```
-
-**強制削除**:
+ブランチごと複数 worktree をまとめて削除する。
 
 ```bash
-git gtr rm <branch-name> --force
+git gtr rm <branch1> <branch2> --delete-branch
 ```
 
 **処理フロー**:
 
-1. 削除対象のブランチ名を確認
-2. 未コミット変更がある場合は警告
-3. ユーザー確認後に削除実行
-4. 成功メッセージを表示
+1. 削除対象のブランチ名を確認（`git gtr list` で一覧を提示）
+2. ユーザー確認後に `--delete-branch` 付きで削除実行
+3. 成功メッセージを表示
 
-### 5. worktree をエディタで開く (gtr editor)
+#### クリーンアップ
 
-ユーザー入力から以下を判定:
-- 「worktree を開く」「gtr editor」「エディタで開く」
+トリガー: 「クリーンアップ」「マージ済み削除」「不要な worktree を整理」
 
-**基本操作**:
+不要な worktree を一括削除する。
 
 ```bash
-git gtr editor <branch-name>
+git gtr clean
 ```
 
 **処理フロー**:
 
-1. ブランチ名を確認
-2. .gtrconfig の defaults.editor 設定を使用
-3. エディタで worktree を開く
-
-### 6. worktree を AI ツールで開く (gtr ai)
-
-ユーザー入力から以下を判定:
-- 「worktree を AI で」「gtr ai」「Claude で開く」「AI ツールで開く」
-
-**基本操作**:
-
-```bash
-git gtr ai <branch-name>
-```
-
-**処理フロー**:
-
-1. ブランチ名を確認
-2. .gtrconfig の defaults.ai 設定を使用（通常は claude）
-3. Claude Code で worktree を開く
+1. まず `git gtr clean --dry-run` でプレビューを表示
+2. ユーザー確認後に `git gtr clean` を実行
+3. 成功メッセージを表示
 
 ## エラーハンドリング
 
-### gtr コマンドが失敗した場合
+### gtr がインストールされていない場合
 
-エラーメッセージを確認し、以下を提案:
-
-1. gtr がインストールされているか確認
-2. git リポジトリ内で実行しているか確認
-3. .gtrconfig が正しく設定されているか確認
-
-### worktree 作成時にブランチが既に存在する場合
-
-gtr は自動的に既存ブランチの worktree を作成します。
+```
+gtr がインストールされていません。
+`/shiiman-git:git-worktree-setup` でインストールと設定ができます。
+```
 
 ### worktree 削除時に未コミット変更がある場合
 
-警告を表示し、`--force` オプションの使用を提案します。
+警告を表示し、`--force` オプションの使用を提案する。
 
 ## 関連リソース
 
 - gtr 公式リポジトリ: https://github.com/coderabbitai/git-worktree-runner
-- Zenn 記事: https://zenn.dev/yumemi_inc/articles/20251213_gtr
-- 関連スキル: `git-gtrconfig-setup` - .gtrconfig 設定ファイル生成
+- 関連スキル: `git-worktree-setup` - gtr のインストールと .gtrconfig 設定
