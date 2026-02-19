@@ -80,14 +80,14 @@ pip install slack-sdk
 
 ### スキル（6個）
 
-| スキル               | トリガー例           | 説明                           |
-| -------------------- | -------------------- | ------------------------------ |
-| slack-user-setup     | 「ユーザー設定」     | トークン・ユーザー設定         |
-| slack-unread-check   | 「Slack未読確認」    | 未読メッセージを確認           |
-| slack-unread-mark    | 「既読にして」       | チャンネルを既読化             |
-| slack-mention-check  | 「メンション確認」   | 自分へのメンションを確認       |
-| slack-mention-reply  | 「スレッドに返信」   | メンションに対してスレッド返信 |
-| slack-profile-update | 「プロフィール更新」 | 自分のプロフィールを更新       |
+| スキル                       | トリガー例           | 説明                           |
+| ---------------------------- | -------------------- | ------------------------------ |
+| shiiman-slack:user-setup     | 「ユーザー設定」     | トークン・ユーザー設定         |
+| shiiman-slack:unread-check   | 「Slack未読確認」    | 未読メッセージを確認           |
+| shiiman-slack:unread-mark    | 「既読にして」       | チャンネルを既読化             |
+| shiiman-slack:mention-check  | 「メンション確認」   | 自分へのメンションを確認       |
+| shiiman-slack:mention-reply  | 「スレッドに返信」   | メンションに対してスレッド返信 |
+| shiiman-slack:profile-update | 「プロフィール更新」 | 自分のプロフィールを更新       |
 
 ### エージェント
 
@@ -160,8 +160,8 @@ plugins/shiiman-slack/
   │   ├─ slack_message.py (unread, mark-read, mentions)
   │   └─ slack_config.py (token-set, token-show, token-clear, auto-detect, set-user, show, clear)
   └─ skills/
-      ├─ slack-mention-reply/scripts/slack_thread.py (reply)
-      └─ slack-profile-update/scripts/slack_profile.py (show, update, clear-status)
+      ├─ mention-reply/scripts/slack_thread.py (reply)
+      └─ profile-update/scripts/slack_profile.py (show, update, clear-status)
 ```
 
 ## 必要条件
@@ -172,4 +172,5 @@ plugins/shiiman-slack/
 
 ## バージョン履歴
 
+- v4.0.0: スキル名を `slack-xxx` → `shiiman-slack:xxx` 形式にリネーム
 - v3.0.0: スキルを 17 → 6 に整理。不要スキル（MCP ラッパー、低使用頻度機能）を削除し、全スキルを `slack-` プレフィックスでリネーム

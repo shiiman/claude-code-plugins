@@ -1,6 +1,6 @@
 {
   "name": "shiiman-github",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "GitHub APIおよびgh CLIを使った操作（Issue、PR、GitHub Actions等）",
   "author": {
     "name": "shiiman"

@@ -32,7 +32,7 @@ Slack の未読メッセージ確認、メンション確認、既読化など�
 
 ## 使用するスキル
 
-### 未読メッセージ確認（slack-unread-check）
+### 未読メッセージ確認（unread-check）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
@@ -41,14 +41,14 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
   --format table
 ```
 
-### 一括既読化（slack-unread-mark）
+### 一括既読化（unread-mark）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mark-read \
   --channel C01234567
 ```
 
-### メンション確認（slack-mention-check）
+### メンション確認（mention-check）
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \

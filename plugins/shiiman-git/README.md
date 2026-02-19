@@ -17,11 +17,11 @@ claude plugin install shiiman-git@shiiman-claude-code-plugins
 
 ### スキル
 
-| スキル             | トリガー例                            | 説明                                           |
-| ------------------ | ------------------------------------- | ---------------------------------------------- |
-| git-add-commit     | 「コミット」「コミットして」          | セキュリティチェック + ステージング + コミット |
-| git-worktree       | 「worktree 作成」「gtr list」         | gtr で worktree を管理                         |
-| git-worktree-setup | 「worktree セットアップ」「gtr 設定」 | gtr インストールと .gtrconfig 設定             |
+| スキル         | トリガー例                            | 説明                                           |
+| -------------- | ------------------------------------- | ---------------------------------------------- |
+| add-commit     | 「コミット」「コミットして」          | セキュリティチェック + ステージング + コミット |
+| worktree       | 「worktree 作成」「gtr list」         | gtr で worktree を管理                         |
+| worktree-setup | 「worktree セットアップ」「gtr 設定」 | gtr インストールと .gtrconfig 設定             |
 
 ## 必要条件
 
@@ -43,6 +43,7 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 
 ## バージョン履歴
 
+- v4.0.0: スキル名から `git-` プレフィックスを削除（git-add-commit → add-commit, git-worktree → worktree, git-worktree-setup → worktree-setup）（破壊的変更）
 - v3.0.0: git-commit → git-add-commit にリネーム、git-gitignore-check を統合、git-commit-message-setup を削除、git-worktree を gtr v2.1.0 対応に更新、git-gtrconfig-setup → git-worktree-setup にリネーム（破壊的変更）
 - v2.0.0: shiiman-github プラグインへのスキル分離に伴い、GitHub 操作スキルを移動。全スキルを `git-` プレフィックス付きにリネーム（破壊的変更）
 - v1.9.2: worktree / gtrconfig スキル追加

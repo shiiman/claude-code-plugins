@@ -16,17 +16,17 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 
 ### スキル
 
-| スキル                 | トリガー例                    | 説明                                                     |
-| ---------------------- | ----------------------------- | -------------------------------------------------------- |
-| github-actions-debug   | 「Actions エラー」            | GitHub Actions のエラーを調査                            |
-| github-branch-create   | 「ブランチ作成」              | feature ブランチ作成（Issue 番号・ブランチ名・自動命名） |
-| github-issue-create    | 「Issue 作成」                | タスクを分割して GitHub Issue を作成（--branch 対応）    |
-| github-issue-list      | 「Issue 一覧」                | オープン Issue の一覧を優先順位付きで表示                |
-| github-pr-create       | 「PR 作成」                   | PR を作成または更新                                      |
-| github-pr-list         | 「PR 一覧」                   | オープン PR の一覧を表示                                 |
-| github-pr-review       | 「PR レビュー」「PR 承認」    | PR をレビュー・承認（--approve で簡易承認）              |
-| github-pr-review-check | 「レビュー対応」              | PR に付いたレビューコメントを確認し対応                  |
-| github-setup           | 「GitHub 設定をセットアップ」 | GitHub リポジトリ設定ファイルのセットアップ              |
+| スキル          | トリガー例                    | 説明                                                     |
+| --------------- | ----------------------------- | -------------------------------------------------------- |
+| actions-debug   | 「Actions エラー」            | GitHub Actions のエラーを調査                            |
+| branch-create   | 「ブランチ作成」              | feature ブランチ作成（Issue 番号・ブランチ名・自動命名） |
+| issue-create    | 「Issue 作成」                | タスクを分割して GitHub Issue を作成（--branch 対応）    |
+| issue-list      | 「Issue 一覧」                | オープン Issue の一覧を優先順位付きで表示                |
+| pr-create       | 「PR 作成」                   | PR を作成または更新                                      |
+| pr-list         | 「PR 一覧」                   | オープン PR の一覧を表示                                 |
+| pr-review       | 「PR レビュー」「PR 承認」    | PR をレビュー・承認（--approve で簡易承認）              |
+| pr-review-check | 「レビュー対応」              | PR に付いたレビューコメントを確認し対応                  |
+| setup           | 「GitHub 設定をセットアップ」 | GitHub リポジトリ設定ファイルのセットアップ              |
 
 ### エージェント
 
