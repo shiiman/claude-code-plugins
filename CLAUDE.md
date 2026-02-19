@@ -28,6 +28,11 @@ plugins/{plugin-name}/
 - `/subagent-create` - Add a subagent to a plugin
 - `/hook-create` - Add a hook to a plugin
 
+### Common Tools
+
+- `/shiiman-common:review` - Parallel code review using Claude + Codex + Security (trigger: "レビュー", "コードレビュー", "セキュリティチェック")
+- `/shiiman-common:brew-upgrade-ai` - Batch upgrade AI CLI tools via brew (trigger: "AI ツール更新", "brew upgrade AI", "AI CLI 更新")
+
 ### Workflow
 
 - `/shiiman-workflow:single-issue` - Single-agent flow: Issue creation → implementation → PR (trigger: "シングル Issue フロー")
@@ -36,6 +41,7 @@ plugins/{plugin-name}/
 - `/shiiman-workflow:multi` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
 - `/shiiman-workflow:agent-team` - Agent Team lightweight parallel flow without Issue/PR (trigger: "エージェントチームフロー")
 - `/shiiman-workflow:agent-team-issue` - Agent Team flow: Issue creation → parallel implementation → PR (trigger: "Agent Team Issue")
+- `/shiiman-workflow:issue-branch-pr-create` - Backward flow: existing changes → Issue → branch → commit → PR (trigger: "変更から Issue と PR", "Backward フロー")
 
 ### GitHub Operations
 

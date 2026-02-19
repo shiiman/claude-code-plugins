@@ -13,6 +13,7 @@ allowed-tools:
     EnterPlanMode,
     TodoWrite,
     Task,
+    Skill,
   ]
 context: fork
 user-invocable: true
@@ -143,35 +144,11 @@ ls -t ~/.claude/plans/*.md | head -1
 
 ### ステップ 1: ブランチ作成
 
-計画書またはタスク説明から適切なブランチ名を生成します。
+Skill ツールで `shiiman-github:branch-create` を呼び出す。
 
-```bash
-DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q '.defaultBranchRef.name')"
-if [ -z "$DEFAULT_BRANCH" ]; then
-  echo "ERROR: デフォルトブランチを取得できませんでした。" >&2
-  exit 1
-fi
-
-git fetch origin "$DEFAULT_BRANCH"
-git checkout "$DEFAULT_BRANCH"
-git pull origin "$DEFAULT_BRANCH"
-git checkout -b feature/{slug}
-```
+計画書またはタスク説明から適切なブランチ名を生成する。
 
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
-
-**slug の生成ルール**:
-
-- タスク内容を簡潔な英語キーワードに変換
-- 小文字、ハイフン区切り
-- 例: 「ユーザー認証機能を追加」→ `feature/add-user-auth`
-
-**ブランチ名プレフィックス**（タスク内容から判断）:
-
-- 新機能 → `feature/{slug}`
-- バグ修正 → `fix/{slug}`
-- ドキュメント → `docs/{slug}`
-- リファクタリング → `refactor/{slug}`
 
 ### ステップ 2: 実装
 
@@ -262,12 +239,17 @@ git diff
 2. 設定がある場合はその形式に従う
 3. 設定がない場合は Conventional Commits（日本語）を使用
 
-### 次のステップ（手動）
+### 次のステップ
 
-1. 変更をステージ: `git add .`
-2. コミット: `git commit -m "{上記メッセージ}"`
-3. 必要に応じてプッシュ: `git push -u origin {ブランチ名}`
-4. 必要に応じて PR 作成: `gh pr create`
+プッシュするには以下を実行:
+
+```
+
+git push -u origin {ブランチ名}
+
+```
+
+必要に応じて PR 作成: `gh pr create`
 ```
 
 ## 重要な注意事項

@@ -17,23 +17,30 @@
       "category": "utility"
     },
     {
+      "name": "shiiman-common",
+      "description": "共通開発ツール - ローカル変更の統合レビュー（Claude + Codex + セキュリティ）、AI CLI 一括更新を提供",
+      "version": "1.0.0",
+      "source": "./plugins/shiiman-common",
+      "category": "developer-tools"
+    },
+    {
       "name": "shiiman-git",
       "description": "Git ローカル操作 - ステージング・コミット、worktree 管理・セットアップを提供",
-      "version": "4.0.0",
+      "version": "4.1.0",
       "source": "./plugins/shiiman-git",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-github",
       "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供",
-      "version": "3.0.0",
+      "version": "4.0.0",
       "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
-      "version": "3.0.0",
+      "version": "4.0.0",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },

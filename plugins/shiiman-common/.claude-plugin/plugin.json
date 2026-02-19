@@ -1,0 +1,9 @@
+{
+  "name": "shiiman-common",
+  "version": "1.0.0",
+  "description": "共通開発ツール - ローカル変更の統合レビュー（Claude + Codex + セキュリティ）、AI CLI 一括更新を提供",
+  "author": {
+    "name": "shiiman"
+  },
+  "homepage": "https://github.com/shiiman/claude-code-plugins"
+}

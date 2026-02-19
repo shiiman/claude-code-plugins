@@ -15,14 +15,15 @@ claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 
 ## 機能比較
 
-| スキル           | Issue | ブランチ | PR  | エージェント | 用途                                                        |
-| ---------------- | ----- | -------- | --- | ------------ | ----------------------------------------------------------- |
-| single-issue     | ✅    | ✅       | ✅  | シングル     | 標準的な開発フロー                                          |
-| single           | ❌    | ✅       | ❌  | シングル     | 軽量な実装タスク                                            |
-| multi-issue      | ✅    | ✅       | ✅  | マルチ       | 大規模な開発タスク                                          |
-| multi            | ❌    | ✅/❌    | ❌  | マルチ       | 並列実装タスク（`--no-git` / 自動判定で非git対応）          |
-| agent-team-issue | ✅    | ✅       | ✅  | Agent Team   | Agent Team で Issue から PR まで                            |
-| agent-team       | ❌    | ✅/❌    | ❌  | Agent Team   | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
+| スキル                 | Issue | ブランチ | PR  | エージェント | 用途                                                        |
+| ---------------------- | ----- | -------- | --- | ------------ | ----------------------------------------------------------- |
+| single-issue           | ✅    | ✅       | ✅  | シングル     | 標準的な開発フロー                                          |
+| single                 | ❌    | ✅       | ❌  | シングル     | 軽量な実装タスク                                            |
+| multi-issue            | ✅    | ✅       | ✅  | マルチ       | 大規模な開発タスク                                          |
+| multi                  | ❌    | ✅/❌    | ❌  | マルチ       | 並列実装タスク（`--no-git` / 自動判定で非git対応）          |
+| agent-team-issue       | ✅    | ✅       | ✅  | Agent Team   | Agent Team で Issue から PR まで                            |
+| agent-team             | ❌    | ✅/❌    | ❌  | Agent Team   | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
+| issue-branch-pr-create | ✅    | ✅       | ✅  | シングル     | 変更から Issue と PR を作成する Backward フロー             |
 
 ## スキル
 
@@ -162,6 +163,29 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 - tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
 - 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
 
+### issue-branch-pr-create
+
+既存の変更内容から Issue と PR を作成する Backward フロー。
+
+**トリガー例**: 「変更から Issue と PR」「既存変更を PR に」「Backward フロー」
+
+**フロー**:
+
+```
+変更検出 → Issue 作成 → ブランチ作成 → コミット → プッシュ提示 → PR 作成
+```
+
+**特徴**:
+
+- ワーキングツリーの変更やコミット済み未プッシュの変更から自動で Issue と PR を作成
+- 通常のフローと逆方向（Backward）で、既に実装済みの変更を Issue/PR 化する
+- プッシュはコマンド提示のみ（自動実行しない）
+
+## 依存プラグイン
+
+- **shiiman-git**: コミット操作（`shiiman-git:add-commit`）
+- **shiiman-github**: Issue 作成・ブランチ作成・PR 作成（`shiiman-github:issue-create`、`shiiman-github:branch-create`、`shiiman-github:pr-create`）
+
 ## 必要条件
 
 ### 全スキル共通
@@ -184,6 +208,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v4.0.0: git/GitHub 操作を Skill 呼び出しに置き換え、issue-branch-pr-create スキルを追加、push を自動実行からコマンド提示に変更（破壊的変更）
 - v3.0.0: 全スキルから `workflow-` プレフィックスを除去しリネーム（破壊的変更）
 - v2.0.0: 全スキルを `workflow-*` 形式にリネーム（破壊的変更）
 - v1.8.7: ブランチ作成手順を `main` 固定から `gh repo view --json defaultBranchRef` によるデフォルトブランチ取得へ変更
