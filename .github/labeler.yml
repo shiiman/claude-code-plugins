@@ -51,3 +51,8 @@
   - changed-files:
       - any-glob-to-any-file:
           - "plugins/shiiman-slack/**/*"
+
+"plugin:shiiman-github":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugins/shiiman-github/**/*"

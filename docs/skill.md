@@ -597,16 +597,16 @@ plugins/{plugin-name}/
 
 ## 実装例
 
-ファイル: `plugins/shiiman-git/skills/commit/SKILL.md`
+ファイル: `plugins/shiiman-git/skills/git-commit/SKILL.md`
 
 ````markdown
 ---
-name: commit
+name: shiiman-git:git-commit
 description: 変更をコミットしてプッシュする。「コミット」「コミットして」「変更をコミット」「プッシュして」「commit して」「git commit」「コミットしたい」などで起動。差分を分析し適切なコミットメッセージを生成。
 argument-hint: "[--help]"
 ---
 
-# Commit
+# git-commit
 
 変更をコミットしてプッシュします。
 
@@ -615,13 +615,13 @@ argument-hint: "[--help]"
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/commit - Commit
+/shiiman-git:git-commit - git-commit
 
 概要:
   変更をコミットしてプッシュします。
 
 使用方法:
-  /commit [オプション]
+  /shiiman-git:git-commit [オプション]
 
 オプション:
   --help  このヘルプを表示

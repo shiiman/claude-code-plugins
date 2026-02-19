@@ -1,7 +1,7 @@
 {
   "name": "shiiman-git",
-  "version": "1.9.2",
-  "description": "Git/GitHub 管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供",
+  "version": "2.0.0",
+  "description": "Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供",
   "author": {
     "name": "shiiman"
   },

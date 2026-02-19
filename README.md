@@ -30,6 +30,7 @@ pip install -r requirements.txt
   "enabledPlugins": {
     "shiiman-claude@shiiman-claude-code-plugins": true,
     "shiiman-git@shiiman-claude-code-plugins": true,
+    "shiiman-github@shiiman-claude-code-plugins": true,
     "shiiman-workflow@shiiman-claude-code-plugins": true,
     "shiiman-google@shiiman-claude-code-plugins": true,
     "shiiman-go@shiiman-claude-code-plugins": true,
@@ -58,7 +59,8 @@ pip install -r requirements.txt
 | プラグイン | 説明 | インストールコマンド |
 | ---------- | ---- | -------------------- |
 | [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
-| [`shiiman-git`](plugins/shiiman-git/) | Git/GitHub ワークフロー管理 - セットアップ、コミット、Issue、PR、Actions 管理機能を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
+| [`shiiman-git`](plugins/shiiman-git/) | Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
+| [`shiiman-github`](plugins/shiiman-github/) | GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供 | `/plugin install shiiman-github@shiiman-claude-code-plugins` |
 | [`shiiman-workflow`](plugins/shiiman-workflow/) | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供 | `/plugin install shiiman-workflow@shiiman-claude-code-plugins` |
 | [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
 | [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
@@ -71,6 +73,7 @@ pip install -r requirements.txt
 # すべてのプラグインをインストール
 /plugin install shiiman-claude@shiiman-claude-code-plugins
 /plugin install shiiman-git@shiiman-claude-code-plugins
+/plugin install shiiman-github@shiiman-claude-code-plugins
 /plugin install shiiman-workflow@shiiman-claude-code-plugins
 /plugin install shiiman-google@shiiman-claude-code-plugins
 /plugin install shiiman-go@shiiman-claude-code-plugins
@@ -124,7 +127,8 @@ pip install -r requirements.txt
 | workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行 |
 | workflow-agent-team | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
 
-GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、グローバルまたは `shiiman-git` 側のスキルを利用してください。
+GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、`shiiman-github` プラグインのスキルを利用してください。
+Git ローカル操作（コミット、worktree等）は `shiiman-git` プラグインのスキルを利用してください。
 
 ## ドキュメント
 
