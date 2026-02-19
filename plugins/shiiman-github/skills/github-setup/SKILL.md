@@ -36,18 +36,18 @@ argument-hint: "[--dry-run|--force|--help]"
 
 ## 生成されるファイル
 
-| ファイル | 説明 |
-|----------|------|
-| `.github/ISSUE_TEMPLATE/config.yml` | Issue テンプレート設定 |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | バグ報告テンプレート |
+| ファイル                                     | 説明                       |
+| -------------------------------------------- | -------------------------- |
+| `.github/ISSUE_TEMPLATE/config.yml`          | Issue テンプレート設定     |
+| `.github/ISSUE_TEMPLATE/bug-report.yml`      | バグ報告テンプレート       |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | 機能リクエストテンプレート |
-| `.github/ISSUE_TEMPLATE/improvement.yml` | 改善提案テンプレート |
-| `.github/pull_request_template.md` | PR テンプレート |
-| `.github/copilot-instructions.md` | GitHub Copilot 設定 |
-| `.github/labels.yml` | ラベル定義 |
-| `.github/labeler.yml` | 自動ラベル付けルール |
-| `.github/workflows/sync-labels.yml` | ラベル同期 workflow |
-| `.github/workflows/labeler.yml` | 自動ラベル付け workflow |
+| `.github/ISSUE_TEMPLATE/improvement.yml`     | 改善提案テンプレート       |
+| `.github/pull_request_template.md`           | PR テンプレート            |
+| `.github/copilot-instructions.md`            | GitHub Copilot 設定        |
+| `.github/labels.yml`                         | ラベル定義                 |
+| `.github/labeler.yml`                        | 自動ラベル付けルール       |
+| `.github/workflows/sync-labels.yml`          | ラベル同期 workflow        |
+| `.github/workflows/labeler.yml`              | 自動ラベル付け workflow    |
 
 ## 実行手順
 
@@ -79,10 +79,10 @@ argument-hint: "[--dry-run|--force|--help]"
 
 **置換する変数**:
 
-| 変数 | 説明 |
-|------|------|
-| `{{REPO}}` | リポジトリ名 |
-| `{{OWNER}}` | リポジトリオーナー |
+| 変数               | 説明               |
+| ------------------ | ------------------ |
+| `{{REPO}}`         | リポジトリ名       |
+| `{{OWNER}}`        | リポジトリオーナー |
 | `{{PROJECT_TYPE}}` | プロジェクトタイプ |
 
 ### ステップ 4: ファイル生成

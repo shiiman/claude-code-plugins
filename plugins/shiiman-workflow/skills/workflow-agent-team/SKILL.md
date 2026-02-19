@@ -1,7 +1,18 @@
 ---
 name: workflow-agent-team
 description: Agent Team で Issue/PR なしの並列実装を実行する軽量フロー。「workflow-agent-team」「エージェントチームフロー」「チーム並列実装」「Agent Team で実装」「チーム軽量フロー」「並列チーム開発」「Agent Team 軽量」などで起動。workflow-multi の MCP 使用部分を Agent Team に置き換えて実行。
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite]
+allowed-tools:
+  [
+    Read,
+    Write,
+    Edit,
+    Bash,
+    Glob,
+    Grep,
+    AskUserQuestion,
+    EnterPlanMode,
+    TodoWrite,
+  ]
 context: fork
 user-invocable: true
 argument-hint: "[タスク説明] [--plan|--no-git|--help]"

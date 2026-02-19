@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 プラグインに新しいスキルを作成します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -76,11 +75,11 @@ argument-hint: "[--help]"
 
 `plugins/{plugin-name}/skills/{skill-name}/SKILL.md` を作成:
 
-```markdown
+````markdown
 ---
-name: {skill-name}
-description: {トリガーフレーズを7つ含む説明}
-allowed-tools: [{ツール}]
+name: { skill-name }
+description: { トリガーフレーズを7つ含む説明 }
+allowed-tools: [{ ツール }]
 argument-hint: "[--help]"
 ---
 
@@ -104,6 +103,7 @@ argument-hint: "[--help]"
 オプション:
   --help  このヘルプを表示
 ```
+````
 
 ## ワークフロー
 
@@ -119,7 +119,8 @@ argument-hint: "[--help]"
 
 - ✅ 推奨する動作
 - ❌ 禁止する動作
-```
+
+````
 
 ### 3.1 scripts パス規約を適用
 
@@ -155,7 +156,7 @@ scripts を使う Skill の場合は、以下の規約を適用する:
 - /create-command でコマンドを追加
 - /create-subagent でサブエージェントを追加
 - /create-hook でフックを追加
-```
+````
 
 ## 重要な注意事項
 

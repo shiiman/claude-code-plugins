@@ -69,9 +69,11 @@ Claude Code CLI のバージョン確認と更新を行います。
 ## Claude Code 更新
 
 ### 実行モード
+
 - version / update
 
 ### 結果
+
 - 更新前: x.y.z
 - 更新後: x.y.z（version 時は省略可）
 - ステータス: 成功 / 失敗

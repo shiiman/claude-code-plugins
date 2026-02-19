@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Gmail の未読メッセージ一覧を取得します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

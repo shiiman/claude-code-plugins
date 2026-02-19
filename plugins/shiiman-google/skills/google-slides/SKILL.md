@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Slides プレゼンテーションの新規作成・スライド追加を行います。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -37,10 +36,10 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py create \
   --folder-id "フォルダID"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--name` | Yes | プレゼンテーション名 |
-| `--folder-id` | No | 保存先フォルダID |
+| オプション    | 必須 | 説明                 |
+| ------------- | ---- | -------------------- |
+| `--name`      | Yes  | プレゼンテーション名 |
+| `--folder-id` | No   | 保存先フォルダID     |
 
 ### スライド追加
 
@@ -52,9 +51,9 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_slides.py add-slide \
   --layout TITLE_AND_BODY
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--presentation-id` | Yes | プレゼンテーションID |
-| `--title` | No | スライドタイトル |
-| `--body` | No | スライド本文 |
-| `--layout` | No | レイアウト（BLANK, TITLE, TITLE_AND_BODY, TITLE_AND_TWO_COLUMNS） |
+| オプション          | 必須 | 説明                                                              |
+| ------------------- | ---- | ----------------------------------------------------------------- |
+| `--presentation-id` | Yes  | プレゼンテーションID                                              |
+| `--title`           | No   | スライドタイトル                                                  |
+| `--body`            | No   | スライド本文                                                      |
+| `--layout`          | No   | レイアウト（BLANK, TITLE, TITLE_AND_BODY, TITLE_AND_TWO_COLUMNS） |

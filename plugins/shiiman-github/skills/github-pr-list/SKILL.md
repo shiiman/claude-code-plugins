@@ -68,20 +68,20 @@ gh pr list --author @me --json number,title,headRefName,author,reviewDecision,up
 
 ## 状態アイコン
 
-| アイコン | 状態 | 条件 |
-|----------|------|------|
-| 🔄 | レビュー待ち | `reviewDecision` が null または REVIEW_REQUIRED |
-| ✅ | 承認済み | `reviewDecision` が APPROVED |
-| ⚠️ | 変更要求あり | `reviewDecision` が CHANGES_REQUESTED |
-| 🚧 | ドラフト | `isDraft` が true |
+| アイコン | 状態         | 条件                                            |
+| -------- | ------------ | ----------------------------------------------- |
+| 🔄       | レビュー待ち | `reviewDecision` が null または REVIEW_REQUIRED |
+| ✅       | 承認済み     | `reviewDecision` が APPROVED                    |
+| ⚠️       | 変更要求あり | `reviewDecision` が CHANGES_REQUESTED           |
+| 🚧       | ドラフト     | `isDraft` が true                               |
 
 ## レビュー状態アイコン
 
-| アイコン | 状態 |
-|----------|------|
+| アイコン  | 状態                           |
+| --------- | ------------------------------ |
 | ⏳ 待機中 | レビュー未依頼またはレビュー中 |
-| ✅ 承認済 | 承認済み（マージ可能） |
-| ❌ 要修正 | 変更要求あり |
+| ✅ 承認済 | 承認済み（マージ可能）         |
+| ❌ 要修正 | 変更要求あり                   |
 
 ## 重要な注意事項
 

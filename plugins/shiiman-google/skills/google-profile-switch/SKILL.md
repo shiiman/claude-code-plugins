@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 保存済み認証プロファイルを切り替えます。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -42,6 +41,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch <profile-name>
 ```
 
 例:
+
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch work
 python ${CLAUDE_PLUGIN_ROOT}/scripts/google_auth.py switch personal

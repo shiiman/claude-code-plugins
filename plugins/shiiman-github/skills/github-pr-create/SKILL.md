@@ -99,13 +99,13 @@ PR タイトルに破壊的変更を明示しますか？
 
 **タイトル**: Conventional Commits 形式
 
-| タイプ | 説明 | 例 |
-|--------|------|-----|
-| feat | 新機能 | `feat: shiiman-git プラグインを追加` |
-| fix | バグ修正 | `fix: Issue 番号の取得を修正` |
-| docs | ドキュメント | `docs: README を更新` |
-| refactor | リファクタリング | `refactor: スキル構造を整理` |
-| chore | その他の変更 | `chore: 依存関係を更新` |
+| タイプ   | 説明             | 例                                   |
+| -------- | ---------------- | ------------------------------------ |
+| feat     | 新機能           | `feat: shiiman-git プラグインを追加` |
+| fix      | バグ修正         | `fix: Issue 番号の取得を修正`        |
+| docs     | ドキュメント     | `docs: README を更新`                |
+| refactor | リファクタリング | `refactor: スキル構造を整理`         |
+| chore    | その他の変更     | `chore: 依存関係を更新`              |
 
 ### 7. PR 作成・更新
 

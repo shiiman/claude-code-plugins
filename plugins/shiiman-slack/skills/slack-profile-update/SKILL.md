@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Slack のプロフィールを更新します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -52,6 +51,7 @@ User Token がない場合はエラーになります。
 ### 必要なスコープ
 
 User Token に以下のスコープが必要：
+
 - `users.profile:write` - プロフィール更新
 
 ## ワークフロー
@@ -84,15 +84,15 @@ python ${CLAUDE_PLUGIN_ROOT}/skills/slack-profile-update/scripts/slack_profile.p
 
 ## 更新可能なフィールド
 
-| フィールド | オプション | 説明 |
-|-----------|-----------|------|
-| 表示名 | `--display-name` | Slack に表示される名前 |
-| ステータス | `--status-text` | 現在の状態を示すテキスト |
-| 絵文字 | `--status-emoji` | ステータスに付く絵文字 |
-| 役職 | `--title` | 役職・肩書き |
-| 電話番号 | `--phone` | 連絡先電話番号 |
-| 名 | `--first-name` | 名前（名） |
-| 姓 | `--last-name` | 名前（姓） |
+| フィールド | オプション       | 説明                     |
+| ---------- | ---------------- | ------------------------ |
+| 表示名     | `--display-name` | Slack に表示される名前   |
+| ステータス | `--status-text`  | 現在の状態を示すテキスト |
+| 絵文字     | `--status-emoji` | ステータスに付く絵文字   |
+| 役職       | `--title`        | 役職・肩書き             |
+| 電話番号   | `--phone`        | 連絡先電話番号           |
+| 名         | `--first-name`   | 名前（名）               |
+| 姓         | `--last-name`    | 名前（姓）               |
 
 ## 使用例
 
@@ -117,4 +117,3 @@ python ${CLAUDE_PLUGIN_ROOT}/skills/slack-profile-update/scripts/slack_profile.p
 - User Token がないとこのスキルは使用できません
 - ワークスペースの設定によっては一部フィールドが変更できない場合があります
 - ステータス絵文字は `:emoji_name:` 形式で指定します
-

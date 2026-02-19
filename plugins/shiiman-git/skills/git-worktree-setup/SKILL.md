@@ -246,31 +246,31 @@ cat .gtrconfig 2>/dev/null
 
 worktree 作成時にコピーするファイルのルールを定義する。
 
-| 設定項目 | 説明 | 例 |
-|----------|------|-----|
-| `include` | コピーする glob パターン | `**/.env.example` |
-| `exclude` | 除外する glob パターン | `**/.env` |
-| `includeDirs` | コピーするディレクトリ | `node_modules` |
-| `excludeDirs` | 除外するディレクトリ | `node_modules/.cache` |
+| 設定項目      | 説明                     | 例                    |
+| ------------- | ------------------------ | --------------------- |
+| `include`     | コピーする glob パターン | `**/.env.example`     |
+| `exclude`     | 除外する glob パターン   | `**/.env`             |
+| `includeDirs` | コピーするディレクトリ   | `node_modules`        |
+| `excludeDirs` | 除外するディレクトリ     | `node_modules/.cache` |
 
 ### [hooks] セクション
 
 worktree ライフサイクルで自動実行するコマンドを定義する。
 
-| フック名 | 説明 | 例 |
-|----------|------|-----|
-| `postCreate` | worktree 作成後 | `npm install` |
-| `preRemove` | worktree 削除前（失敗時中断） | `npm run clean` |
-| `postRemove` | worktree 削除後 | `echo "removed"` |
+| フック名     | 説明                          | 例               |
+| ------------ | ----------------------------- | ---------------- |
+| `postCreate` | worktree 作成後               | `npm install`    |
+| `preRemove`  | worktree 削除前（失敗時中断） | `npm run clean`  |
+| `postRemove` | worktree 削除後               | `echo "removed"` |
 
 ### [defaults] セクション
 
 デフォルトのエディタと AI ツールを定義する。
 
-| 設定項目 | 説明 | 例 |
-|----------|------|-----|
-| `editor` | デフォルトエディタ | `cursor`, `code`, `vim` |
-| `ai` | デフォルト AI ツール | `claude`, `other` |
+| 設定項目 | 説明                 | 例                      |
+| -------- | -------------------- | ----------------------- |
+| `editor` | デフォルトエディタ   | `cursor`, `code`, `vim` |
+| `ai`     | デフォルト AI ツール | `claude`, `other`       |
 
 ## 重要な注意事項
 

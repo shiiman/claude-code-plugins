@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Issue 番号に基づいて feature ブランチを自動作成します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -46,13 +45,13 @@ gh issue view {issue番号} --json title,labels
 
 **命名規則**:
 
-| Issue タイプ | ブランチ形式 |
-|--------------|--------------|
-| 機能追加（enhancement） | `feature/{issue番号}` |
-| バグ修正（bug） | `fix/{issue番号}` |
-| ドキュメント（documentation） | `docs/{issue番号}` |
-| リファクタリング | `refactor/{issue番号}` |
-| その他 | `feature/{issue番号}` |
+| Issue タイプ                  | ブランチ形式           |
+| ----------------------------- | ---------------------- |
+| 機能追加（enhancement）       | `feature/{issue番号}`  |
+| バグ修正（bug）               | `fix/{issue番号}`      |
+| ドキュメント（documentation） | `docs/{issue番号}`     |
+| リファクタリング              | `refactor/{issue番号}` |
+| その他                        | `feature/{issue番号}`  |
 
 ### 4. ブランチ作成
 

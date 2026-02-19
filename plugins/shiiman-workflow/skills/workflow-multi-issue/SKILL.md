@@ -1,7 +1,19 @@
 ---
 name: workflow-multi-issue
 description: MCP マルチエージェントで Issue から PR まで並列実行する開発フロー。「マルチ Issue フロー」「workflow-multi-issue」「並列 Issue 開発」「マルチエージェント Issue」「複数人で Issue」「並列 Issue フロー」「マルチフロー Issue」などで起動。複数 Worker でタスクを並列実行。
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite, Task]
+allowed-tools:
+  [
+    Read,
+    Write,
+    Edit,
+    Bash,
+    Glob,
+    Grep,
+    AskUserQuestion,
+    EnterPlanMode,
+    TodoWrite,
+    Task,
+  ]
 context: fork
 user-invocable: true
 argument-hint: "[タスク説明] [--plan|--help]"
@@ -78,14 +90,17 @@ gh issue create --title "{タイトル}" --body "{本文}" --label "{ラベル}"
 
 ```markdown
 ## 概要
+
 {タスクの目的・背景}
 
 ## タスク一覧
+
 - [ ] Task 1: {サブタスク1}
 - [ ] Task 2: {サブタスク2}
-...
+      ...
 
 ## 完了条件
+
 - 全てのTaskが完了していること
 - テストが通過していること
 ```
@@ -291,18 +306,23 @@ gh pr create --title "{PRタイトル}" --body "{PR本文}"
 
 ```markdown
 ## 概要
+
 {変更内容の説明}
 
 ## 並列実行サマリー
-| Worker | Task | 状態 |
-|--------|------|------|
+
+| Worker   | Task   | 状態    |
+| -------- | ------ | ------- |
 | Worker 1 | Task 1 | ✅ 完了 |
+
 ...
 
 ## 関連 Issue
+
 Closes #{issue番号}
 
 ## テスト計画
+
 - [ ] {テスト項目}
 ```
 

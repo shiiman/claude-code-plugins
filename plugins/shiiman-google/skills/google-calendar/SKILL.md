@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Calendar の予定を今日/週/月で取得します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

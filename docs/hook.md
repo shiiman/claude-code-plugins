@@ -22,24 +22,24 @@ plugins/{plugin-name}/.claude/settings.json
 
 ## Hook イベント
 
-| イベント | 説明 | matcher |
-|----------|------|---------|
-| `PreToolUse` | ツール実行前（ブロック可能） | 必須 |
-| `PostToolUse` | ツール実行後 | 必須 |
-| `UserPromptSubmit` | ユーザープロンプト送信時 | 不要 |
-| `Notification` | 通知時 | 不要 |
-| `Stop` | レスポンス完了時 | 不要 |
-| `SubagentStop` | サブエージェント完了時 | 不要 |
-| `PreCompact` | Compact 操作前 | 不要 |
-| `SessionStart` | セッション開始時 | 不要 |
-| `SessionEnd` | セッション終了時 | 不要 |
+| イベント           | 説明                         | matcher |
+| ------------------ | ---------------------------- | ------- |
+| `PreToolUse`       | ツール実行前（ブロック可能） | 必須    |
+| `PostToolUse`      | ツール実行後                 | 必須    |
+| `UserPromptSubmit` | ユーザープロンプト送信時     | 不要    |
+| `Notification`     | 通知時                       | 不要    |
+| `Stop`             | レスポンス完了時             | 不要    |
+| `SubagentStop`     | サブエージェント完了時       | 不要    |
+| `PreCompact`       | Compact 操作前               | 不要    |
+| `SessionStart`     | セッション開始時             | 不要    |
+| `SessionEnd`       | セッション終了時             | 不要    |
 
 ## Hook タイプ
 
-| タイプ | 説明 |
-|--------|------|
+| タイプ    | 説明                |
+| --------- | ------------------- |
 | `command` | Bash コマンドを実行 |
-| `prompt` | LLM（Haiku）で評価 |
+| `prompt`  | LLM（Haiku）で評価  |
 
 ## 設定形式
 
@@ -76,12 +76,12 @@ plugins/{plugin-name}/.claude/settings.json
 
 ## マッチャーパターン
 
-| パターン | 説明 | 例 |
-|----------|------|-----|
-| 完全一致 | 正確なツール名 | `Bash`, `Write` |
-| ワイルドカード | すべてのツール | `*` または `""` |
-| 正規表現 | OR / パターンマッチ | `Edit\|Write`, `Notebook.*` |
-| MCP ツール | MCP サーバーのツール | `mcp__github__.*` |
+| パターン       | 説明                 | 例                          |
+| -------------- | -------------------- | --------------------------- |
+| 完全一致       | 正確なツール名       | `Bash`, `Write`             |
+| ワイルドカード | すべてのツール       | `*` または `""`             |
+| 正規表現       | OR / パターンマッチ  | `Edit\|Write`, `Notebook.*` |
+| MCP ツール     | MCP サーバーのツール | `mcp__github__.*`           |
 
 ## 利用可能なツール名
 

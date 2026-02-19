@@ -5,10 +5,12 @@
 ## 前提条件
 
 - Python 3.10 以上
+- Node.js（Prettier 用）
 - 依存パッケージのインストール:
 
 ```bash
 pip install -r requirements.txt
+npm install
 ```
 
 ## インストール
@@ -56,16 +58,16 @@ pip install -r requirements.txt
 
 #### 2. プラグインをインストール
 
-| プラグイン | 説明 | インストールコマンド |
-| ---------- | ---- | -------------------- |
-| [`shiiman-claude`](plugins/shiiman-claude/) | Claude Code プロジェクト設定管理プラグイン - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins` |
-| [`shiiman-git`](plugins/shiiman-git/) | Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供 | `/plugin install shiiman-git@shiiman-claude-code-plugins` |
-| [`shiiman-github`](plugins/shiiman-github/) | GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供 | `/plugin install shiiman-github@shiiman-claude-code-plugins` |
-| [`shiiman-workflow`](plugins/shiiman-workflow/) | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供 | `/plugin install shiiman-workflow@shiiman-claude-code-plugins` |
-| [`shiiman-google`](plugins/shiiman-google/) | Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins` |
-| [`shiiman-go`](plugins/shiiman-go/) | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン | `/plugin install shiiman-go@shiiman-claude-code-plugins` |
-| [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
-| [`shiiman-slack`](plugins/shiiman-slack/) | Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供 | `/plugin install shiiman-slack@shiiman-claude-code-plugins` |
+| プラグイン                                        | 説明                                                                                                                                | インストールコマンド                                            |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [`shiiman-claude`](plugins/shiiman-claude/)       | Claude Code プロジェクト設定管理プラグイン - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins`    |
+| [`shiiman-git`](plugins/shiiman-git/)             | Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供                             | `/plugin install shiiman-git@shiiman-claude-code-plugins`       |
+| [`shiiman-github`](plugins/shiiman-github/)       | GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供                                            | `/plugin install shiiman-github@shiiman-claude-code-plugins`    |
+| [`shiiman-workflow`](plugins/shiiman-workflow/)   | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供                             | `/plugin install shiiman-workflow@shiiman-claude-code-plugins`  |
+| [`shiiman-google`](plugins/shiiman-google/)       | Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供                 | `/plugin install shiiman-google@shiiman-claude-code-plugins`    |
+| [`shiiman-go`](plugins/shiiman-go/)               | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン                          | `/plugin install shiiman-go@shiiman-claude-code-plugins`        |
+| [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査                 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
+| [`shiiman-slack`](plugins/shiiman-slack/)         | Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供                                                     | `/plugin install shiiman-slack@shiiman-claude-code-plugins`     |
 
 **インストール例**:
 
@@ -96,12 +98,12 @@ pip install -r requirements.txt
 
 ## 利用可能なコマンド
 
-| コマンド | 説明 |
-|----------|------|
-| `/plugin-create` | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
-| `/skill-create` | プラグインにスキルを追加 |
-| `/subagent-create` | プラグインにサブエージェントを追加 |
-| `/hook-create` | プラグインにフックを追加 |
+| コマンド           | 説明                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `/plugin-create`   | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
+| `/skill-create`    | プラグインにスキルを追加                                |
+| `/subagent-create` | プラグインにサブエージェントを追加                      |
+| `/hook-create`     | プラグインにフックを追加                                |
 
 ## 利用可能なスキル
 
@@ -109,23 +111,23 @@ pip install -r requirements.txt
 
 ### プラグイン管理
 
-| スキル | プラグイン | トリガー例 | 説明 |
-|--------|-----------|------------|------|
-| plugin-create | - | 「プラグイン作成」「プラグイン一括作成」 | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
-| skill-create | - | 「スキル作成」「新しいスキル」 | プラグインにスキルを追加 |
-| subagent-create | - | 「サブエージェント作成」「エージェント作成」 | プラグインにサブエージェントを追加 |
-| hook-create | - | 「フック作成」「新しいフック」 | プラグインにフックを追加 |
+| スキル          | プラグイン | トリガー例                                   | 説明                                                    |
+| --------------- | ---------- | -------------------------------------------- | ------------------------------------------------------- |
+| plugin-create   | -          | 「プラグイン作成」「プラグイン一括作成」     | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
+| skill-create    | -          | 「スキル作成」「新しいスキル」               | プラグインにスキルを追加                                |
+| subagent-create | -          | 「サブエージェント作成」「エージェント作成」 | プラグインにサブエージェントを追加                      |
+| hook-create     | -          | 「フック作成」「新しいフック」               | プラグインにフックを追加                                |
 
 ### ワークフロー
 
-| スキル | プラグイン | トリガー例 | 説明 |
-|--------|-----------|------------|------|
-| workflow-single-issue | shiiman-workflow | 「シングル Issue フロー」「Issue から PR まで」 | Issue 作成から PR 作成まで自動実行するシングルエージェントフロー |
-| workflow-multi-issue | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」 | MCP マルチエージェントで Issue から PR まで並列実行 |
-| workflow-single | shiiman-workflow | 「シングルフロー」「軽量フロー」 | Issue/PR なしで計画書からタスク実行する軽量フロー |
-| workflow-multi | shiiman-workflow | 「マルチフロー」「並列軽量フロー」 | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー |
-| workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行 |
-| workflow-agent-team | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」 | Agent Team で Issue/PR なしに並列実行する軽量フロー |
+| スキル                    | プラグイン       | トリガー例                                              | 説明                                                             |
+| ------------------------- | ---------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| workflow-single-issue     | shiiman-workflow | 「シングル Issue フロー」「Issue から PR まで」         | Issue 作成から PR 作成まで自動実行するシングルエージェントフロー |
+| workflow-multi-issue      | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」              | MCP マルチエージェントで Issue から PR まで並列実行              |
+| workflow-single           | shiiman-workflow | 「シングルフロー」「軽量フロー」                        | Issue/PR なしで計画書からタスク実行する軽量フロー                |
+| workflow-multi            | shiiman-workflow | 「マルチフロー」「並列軽量フロー」                      | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー   |
+| workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行                         |
+| workflow-agent-team       | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」       | Agent Team で Issue/PR なしに並列実行する軽量フロー              |
 
 GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、`shiiman-github` プラグインのスキルを利用してください。
 Git ローカル操作（コミット、worktree等）は `shiiman-git` プラグインのスキルを利用してください。
@@ -174,3 +176,17 @@ plugins/my-plugin/
 3. `.claude-plugin/marketplace.json` - 該当エントリのバージョンを更新（plugin.json と一致させる）
 
 詳細な手順は [docs/plugin.md](docs/plugin.md) の「プラグインの更新手順」を参照してください。
+
+## Markdown フォーマット
+
+Prettier で `.md` ファイルを統一フォーマットしています。
+
+```bash
+# フォーマット実行
+npm run format
+
+# フォーマットチェック（CI 用）
+npm run format:check
+```
+
+設定: `.prettierrc`（`proseWrap: "preserve"` で日本語の折り返しを維持）

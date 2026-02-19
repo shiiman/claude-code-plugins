@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Slack の未読メッセージを確認します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -39,6 +38,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
 ```
 
 オプション:
+
 - `--max <number>`: 最大取得件数（デフォルト: 20）
 - `--format <table|json>`: 出力形式（デフォルト: table）
 
@@ -64,6 +64,7 @@ PRレビューお願いします
 ### 3. 優先度の提示
 
 未読メッセージの優先度を判断:
+
 - メンション付き: 高優先度
 - DMやプライベートチャンネル: 中優先度
 - パブリックチャンネル: 通常優先度

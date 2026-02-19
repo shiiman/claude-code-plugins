@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Slack チャンネルを既読にします（一括既読化）。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

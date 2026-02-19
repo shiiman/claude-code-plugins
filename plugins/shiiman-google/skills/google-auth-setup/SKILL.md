@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google OAuth クライアント（デスクトップアプリ）の作成手順を案内します。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:

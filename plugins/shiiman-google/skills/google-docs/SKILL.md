@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Docs ドキュメントの新規作成・テキスト追加を行います。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -38,11 +37,11 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py create \
   --content "初期テキスト"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--name` | Yes | ドキュメント名 |
-| `--folder-id` | No | 保存先フォルダID |
-| `--content` | No | 初期テキスト |
+| オプション    | 必須 | 説明             |
+| ------------- | ---- | ---------------- |
+| `--name`      | Yes  | ドキュメント名   |
+| `--folder-id` | No   | 保存先フォルダID |
+| `--content`   | No   | 初期テキスト     |
 
 ### テキスト追加
 
@@ -53,8 +52,8 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_docs.py update \
   --append
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--doc-id` | Yes | ドキュメントID |
-| `--content` | Yes | 追加テキスト |
-| `--append` | No | 末尾に追加（省略時は先頭に挿入） |
+| オプション  | 必須 | 説明                             |
+| ----------- | ---- | -------------------------------- |
+| `--doc-id`  | Yes  | ドキュメントID                   |
+| `--content` | Yes  | 追加テキスト                     |
+| `--append`  | No   | 末尾に追加（省略時は先頭に挿入） |

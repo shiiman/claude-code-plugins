@@ -17,11 +17,11 @@ claude plugin install shiiman-git@shiiman-claude-code-plugins
 
 ### スキル
 
-| スキル | トリガー例 | 説明 |
-|--------|------------|------|
-| git-add-commit | 「コミット」「コミットして」 | セキュリティチェック + ステージング + コミット |
-| git-worktree | 「worktree 作成」「gtr list」 | gtr で worktree を管理 |
-| git-worktree-setup | 「worktree セットアップ」「gtr 設定」 | gtr インストールと .gtrconfig 設定 |
+| スキル             | トリガー例                            | 説明                                           |
+| ------------------ | ------------------------------------- | ---------------------------------------------- |
+| git-add-commit     | 「コミット」「コミットして」          | セキュリティチェック + ステージング + コミット |
+| git-worktree       | 「worktree 作成」「gtr list」         | gtr で worktree を管理                         |
+| git-worktree-setup | 「worktree セットアップ」「gtr 設定」 | gtr インストールと .gtrconfig 設定             |
 
 ## 必要条件
 

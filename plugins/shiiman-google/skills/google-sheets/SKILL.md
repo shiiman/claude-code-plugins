@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Sheets スプレッドシートの新規作成・セル更新を行います。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -37,10 +36,10 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_sheets.py create \
   --folder-id "フォルダID"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--name` | Yes | スプレッドシート名 |
-| `--folder-id` | No | 保存先フォルダID |
+| オプション    | 必須 | 説明               |
+| ------------- | ---- | ------------------ |
+| `--name`      | Yes  | スプレッドシート名 |
+| `--folder-id` | No   | 保存先フォルダID   |
 
 ### セル更新
 
@@ -51,11 +50,11 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_sheets.py update \
   --values '[["値1","値2"],["値3","値4"]]'
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--sheet-id` | Yes | スプレッドシートID |
-| `--range` | Yes | セル範囲（例: A1, A1:B2） |
-| `--values` | Yes | 値（JSON 配列形式） |
+| オプション   | 必須 | 説明                      |
+| ------------ | ---- | ------------------------- |
+| `--sheet-id` | Yes  | スプレッドシートID        |
+| `--range`    | Yes  | セル範囲（例: A1, A1:B2） |
+| `--values`   | Yes  | 値（JSON 配列形式）       |
 
 ### 行追加
 

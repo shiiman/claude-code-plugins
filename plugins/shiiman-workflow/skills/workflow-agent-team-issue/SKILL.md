@@ -1,7 +1,18 @@
 ---
 name: workflow-agent-team-issue
 description: Agent Team で Issue から PR まで並列実行する開発フロー。「workflow-agent-team-issue」「エージェントチーム Issue フロー」「チーム Issue 開発」「Agent Team Issue」「Issue から並列実装」「チームで PR 作成」「Agent Team で Issue 対応」などで起動。workflow-multi-issue の MCP 使用部分を Agent Team に置き換えて実行。
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, EnterPlanMode, TodoWrite]
+allowed-tools:
+  [
+    Read,
+    Write,
+    Edit,
+    Bash,
+    Glob,
+    Grep,
+    AskUserQuestion,
+    EnterPlanMode,
+    TodoWrite,
+  ]
 context: fork
 user-invocable: true
 argument-hint: "[タスク説明] [--plan|--help]"
@@ -65,13 +76,16 @@ Issue 本文テンプレート:
 
 ```markdown
 ## 概要
+
 {目的・背景}
 
 ## タスク一覧
+
 - [ ] Task 1: {subtask}
 - [ ] Task 2: {subtask}
 
 ## 完了条件
+
 - 全 Task が完了
 - テスト通過
 ```
@@ -247,17 +261,21 @@ PR 本文テンプレート:
 
 ```markdown
 ## 概要
+
 {変更内容}
 
 ## 並列実行サマリー
-| チームメイト | タスク | 状態 |
-|-------------|--------|------|
-| worker-1 | Task 1 | ✅ 完了 |
+
+| チームメイト | タスク | 状態    |
+| ------------ | ------ | ------- |
+| worker-1     | Task 1 | ✅ 完了 |
 
 ## 関連 Issue
+
 Closes #{issue_number}
 
 ## テスト計画
+
 - [ ] {test_item}
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "shiiman-go",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Go 言語開発を支援するプラグイン（品質総合チェック、モジュール更新）",
   "author": {
     "name": "shiiman"

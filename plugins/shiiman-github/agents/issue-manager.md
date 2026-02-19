@@ -97,22 +97,22 @@ gh issue view {issue番号} --json title,body,labels,assignees,state
 
 ## Issue タイトルの命名規則
 
-| タイプ | プレフィックス | 例 |
-|--------|----------------|-----|
-| バグ | `[Bug]` | `[Bug] ログイン時にエラー` |
-| 機能 | `[Feature]` | `[Feature] ダークモード対応` |
-| 改善 | `[Improvement]` | `[Improvement] 検索速度向上` |
-| ドキュメント | `[Docs]` | `[Docs] README 更新` |
-| リファクタ | `[Refactor]` | `[Refactor] 認証ロジック整理` |
+| タイプ       | プレフィックス  | 例                            |
+| ------------ | --------------- | ----------------------------- |
+| バグ         | `[Bug]`         | `[Bug] ログイン時にエラー`    |
+| 機能         | `[Feature]`     | `[Feature] ダークモード対応`  |
+| 改善         | `[Improvement]` | `[Improvement] 検索速度向上`  |
+| ドキュメント | `[Docs]`        | `[Docs] README 更新`          |
+| リファクタ   | `[Refactor]`    | `[Refactor] 認証ロジック整理` |
 
 ## 出力形式
 
 ### Issue サマリー
 
-| # | タイトル | ステータス | ラベル | アサイニー |
-|---|----------|------------|--------|------------|
-| 1 | [Bug] ログインエラー | Open | bug, high | @user1 |
-| 2 | [Feature] ダークモード | In Progress | enhancement | @user2 |
+| #   | タイトル               | ステータス  | ラベル      | アサイニー |
+| --- | ---------------------- | ----------- | ----------- | ---------- |
+| 1   | [Bug] ログインエラー   | Open        | bug, high   | @user1     |
+| 2   | [Feature] ダークモード | In Progress | enhancement | @user2     |
 
 ## 使用例
 

@@ -9,7 +9,6 @@ argument-hint: "[--help]"
 
 Google Forms フォームの新規作成・質問追加を行います。
 
-
 ## Help
 
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
@@ -37,10 +36,10 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_forms.py create \
   --description "フォームの説明"
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--name` | Yes | フォーム名 |
-| `--description` | No | フォームの説明 |
+| オプション      | 必須 | 説明           |
+| --------------- | ---- | -------------- |
+| `--name`        | Yes  | フォーム名     |
+| `--description` | No   | フォームの説明 |
 
 ### 質問追加
 
@@ -53,10 +52,10 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_forms.py add-question \
   --required
 ```
 
-| オプション | 必須 | 説明 |
-|-----------|------|------|
-| `--form-id` | Yes | フォームID |
-| `--question` | Yes | 質問文 |
-| `--type` | Yes | 質問タイプ（TEXT, PARAGRAPH, RADIO, CHECKBOX, DROP_DOWN, SCALE, DATE, TIME） |
-| `--options` | No | 選択肢（カンマ区切り、RADIO/CHECKBOX/DROP_DOWN 時） |
-| `--required` | No | 必須フラグ |
+| オプション   | 必須 | 説明                                                                         |
+| ------------ | ---- | ---------------------------------------------------------------------------- |
+| `--form-id`  | Yes  | フォームID                                                                   |
+| `--question` | Yes  | 質問文                                                                       |
+| `--type`     | Yes  | 質問タイプ（TEXT, PARAGRAPH, RADIO, CHECKBOX, DROP_DOWN, SCALE, DATE, TIME） |
+| `--options`  | No   | 選択肢（カンマ区切り、RADIO/CHECKBOX/DROP_DOWN 時）                          |
+| `--required` | No   | 必須フラグ                                                                   |
