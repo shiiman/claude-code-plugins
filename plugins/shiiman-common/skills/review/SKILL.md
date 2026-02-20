@@ -1,7 +1,7 @@
 ---
 name: shiiman-common:review
 description: ローカル変更を Claude + codex + セキュリティの 3 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
-allowed-tools: [Read, Bash, Glob, Grep, Edit, Task, AskUserQuestion]
+allowed-tools: [Read, Write, Bash, Glob, Grep, Edit, Task, AskUserQuestion]
 argument-hint: "[--help]"
 context: fork
 ---
@@ -99,11 +99,17 @@ diff:
 プロンプト:
 
 ```
-以下のコマンドを実行し、出力をそのまま返してください:
+以下のコマンドを実行し、出力をそのまま返してください。
+Bash ツールの timeout パラメータは 360000（6分）に設定してください。
 
+timeout 300 codex review --uncommitted
+
+上記で timeout コマンドが見つからない場合は代わりに以下を実行:
 codex review --uncommitted
 
-コマンドが見つからない場合は「codex コマンドが見つかりません。npm install -g @openai/codex でインストールしてください。」と返してください。
+codex コマンド自体が見つからない場合は「codex コマンドが見つかりません。npm install -g @openai/codex でインストールしてください。」と返してください。
+コマンドの終了コードが 124 の場合、Bash ツールがタイムアウトした場合、またはその他のエラーが発生した場合は、タイムアウトの可能性を考慮して以下を返してください:
+「Codex レビューがタイムアウトしました（300秒）。差分が大きい場合は手動で `codex review --uncommitted` を実行してください。」
 ```
 
 ### 3. 統合レポート出力
@@ -138,6 +144,101 @@ codex review --uncommitted
 - 改善提案: それ以外の指摘すべて
 - 総合判定: 重要指摘が 0 件なら「OK」、1 件以上なら「要修正」
 
+### 3.5. レビュー結果をファイルに保存
+
+統合レポートをコンソール表示した後、`.claude/tmp/` にマークダウンファイルとして保存する。
+
+#### 手順
+
+1. Bash ツールでタイムスタンプとリポジトリ情報を取得:
+
+```bash
+TS="$(date +%Y%m%d-%H%M%S)"
+DATE="$(date +%Y-%m-%d)"
+REPO_NAME="$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")"
+BRANCH="$(git branch --show-current 2>/dev/null || echo 'unknown')"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+mkdir -p "${REPO_ROOT}/.claude/tmp"
+echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
+```
+
+2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、3 エージェントの結果を統合して記述する:
+
+```markdown
+# 統合レビューレポート
+
+**実施日**: {DATE}
+**対象**: {REPO_NAME}
+**ブランチ**: {BRANCH}
+**調査カテゴリ**: コード品質 / セキュリティ / Codex
+
+---
+
+## 概要
+
+{REPO_NAME} に対し、3つの観点から並列レビューを実施した。
+各観点で専門的な分析を行い、検出された問題点を統合して優先度付きのタスクリストとしてまとめた。
+
+| カテゴリ               | 評価     | 検出数 |
+| ---------------------- | -------- | ------ |
+| 📝 コード品質 (Claude) | 🟢/🟡/🔴 | N      |
+| 🔒 セキュリティ        | 🟢/🟡/🔴 | N      |
+| 🤖 Codex               | 🟢/🟡/🔴 | N      |
+
+---
+
+## 結論
+
+**総合評価**: 🟢/🟡/🔴 [1行で総評]
+
+[2-3行で具体的な結論。最も重要な発見と推奨アクションを凝縮]
+
+> [!IMPORTANT]
+> {最重要の横断的課題（なければ省略）}
+
+---
+
+## 問題点
+
+{全問題を優先度順（P1→P2→P3）にフラットに一覧。該当なしの場合は「指摘なし」。以下のチェックボックスリスト形式で記述}
+```
+
+各問題点は以下のチェックボックスリスト形式で記述（P1 → P2 → P3 の順序で並べる）:
+
+```markdown
+- [ ] `{ID}` | {優先度} | {カテゴリアイコン}{カテゴリ名} | {概要}
+  <details>
+  <summary>詳細</summary>
+
+  **該当箇所**: `{ファイル:行}`
+
+  **詳細**: {問題の詳細説明}
+
+  **修正案**: {具体的な修正案}
+
+  </details>
+```
+
+**ID 体系**: `QUAL-NNN`（コード品質）/ `SEC-NNN`（セキュリティ）/ `CDX-NNN`（Codex）
+
+**優先度基準**:
+
+- 🔴P1 = Critical/High のセキュリティ、データ損失リスク
+- 🟠P2 = 中程度のセキュリティ、重要な品質問題
+- 🟡P3 = コード品質改善、軽微な指摘
+
+**評価の判定基準**:
+
+- 🟢 検出数 0 件
+- 🟡 軽微な指摘のみ（P3 のみ）
+- 🔴 重要指摘あり（P1 または P2 が存在）
+
+3. ファイル保存後にパスをユーザーに表示:
+
+```
+📄 レビュー結果を保存しました: {REPO_ROOT}/.claude/tmp/{TS}-review.md
+```
+
 ### 4. ユーザー確認
 
 AskUserQuestion ツールで次の選択肢を提示:
@@ -159,5 +260,7 @@ AskUserQuestion ツールで次の選択肢を提示:
 - ✅ 3 エージェントは必ず並列起動する（Task ツールの並列呼び出し）
 - ✅ diff が空の場合は早期終了する
 - ✅ codex コマンドが未インストールでもエラーにしない
+- ✅ Codex レビューは Bash ツールの timeout を 360000 に設定する
+- ✅ 統合レポートは `.claude/tmp/{TS}-review.md` にも保存する
 - ❌ diff なしでレビューを実行しない
 - ❌ ユーザー確認なしに修正を適用しない
