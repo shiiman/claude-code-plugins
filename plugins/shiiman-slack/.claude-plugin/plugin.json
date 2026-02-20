@@ -1,6 +1,6 @@
 {
   "name": "shiiman-slack",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供",
   "author": {
     "name": "shiiman"
