@@ -41,7 +41,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --query "name contai
 ### プロファイル指定で検索
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py search --profile <profile-name> --query "name contains '<検索キーワード>'"
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_drive.py --profile <profile-name> search --query "name contains '<検索キーワード>'"
 ```
 
 ## 検索クエリ例

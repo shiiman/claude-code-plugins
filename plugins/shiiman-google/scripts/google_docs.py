@@ -256,6 +256,7 @@ def main():
     parser = argparse.ArgumentParser(description="Google Docs 操作")
     parser.add_argument("--format", choices=["table", "json"], default="table", help="出力形式")
     parser.add_argument("--token", help="トークンファイルパス（省略時はアクティブプロファイル）")
+    parser.add_argument("--profile", help="認証プロファイル名（デフォルト: アクティブプロファイル）")
 
     subparsers = parser.add_subparsers(dest="command", help="サブコマンド")
 
@@ -293,7 +294,12 @@ def main():
         sys.exit(1)
 
     # トークンパス決定
-    token_path = args.token if args.token else get_token_path()
+    if args.token:
+        token_path = args.token
+    elif args.profile:
+        token_path = get_token_path(args.profile)
+    else:
+        token_path = get_token_path()
     if not token_path:
         print_error("アクティブなプロファイルがありません。'google_auth.py login' で認証してください。")
         sys.exit(1)

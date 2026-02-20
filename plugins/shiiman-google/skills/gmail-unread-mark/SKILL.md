@@ -37,7 +37,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --ids <message-id
 ### 複数メッセージを一括で既読化
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --ids <id1>,<id2>,<id3>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --ids <id1> <id2> <id3>
 ```
 
 ### 未読メッセージを一括で既読化
@@ -49,12 +49,12 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --all
 ### プロファイル指定
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py mark-read --profile <profile-name> --all
+python ${CLAUDE_PLUGIN_ROOT}/scripts/google_gmail.py --profile <profile-name> mark-read --all
 ```
 
 ## オプション
 
-- `--ids <id1,id2,...>`: 既読化するメッセージIDのリスト
+- `--ids <id1> <id2> ...`: 既読化するメッセージIDのリスト（スペース区切り）
 - `--all`: 全ての未読メッセージを既読化
 
 ## 関連操作

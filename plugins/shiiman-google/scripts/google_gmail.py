@@ -447,6 +447,7 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Gmail 操作ツール")
     parser.add_argument("--token", help="トークンファイルパス")
+    parser.add_argument("--profile", help="認証プロファイル名（デフォルト: アクティブプロファイル）")
     parser.add_argument(
         "--format",
         choices=["table", "json"],
@@ -521,6 +522,8 @@ def main() -> None:
     # トークンパスの決定
     if args.token:
         token_path = args.token
+    elif args.profile:
+        token_path = get_token_path(args.profile)
     else:
         token_path = get_token_path()
 
