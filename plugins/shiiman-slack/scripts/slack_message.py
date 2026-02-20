@@ -3,6 +3,7 @@
 
 import os
 import sys
+import time
 import argparse
 from typing import List, Dict
 
@@ -71,6 +72,41 @@ def get_unread_messages(
 
 
 @handle_api_error
+def get_all_unread_messages(client, limit=20, summary=False, format_type="table"):
+    """全チャンネルの未読メッセージを取得して表示する"""
+    channels = _scan_all_channels_unread(client, max_per_channel=limit, summary_only=summary)
+    if not channels:
+        print("未読メッセージはありません。")
+        return
+    if summary:
+        rows = [[ch["channel_name"], str(ch["unread_count"])] for ch in channels]
+        format_output(rows, ["channel_name", "unread_count"], format_type)
+    else:
+        # ユーザーIDを収集してまとめて解決するためのマップを作成
+        user_ids = set()
+        for ch in channels:
+            for msg in ch["messages"]:
+                uid = msg.get("user", "")
+                if uid:
+                    user_ids.add(uid)
+        # resolve_user_names は [{user: id, ...}] 形式のリストを受け取るため変換
+        uid_dicts = [{"user": uid} for uid in user_ids]
+        resolved = resolve_user_names(client, uid_dicts)
+        user_map = {item["user"]: item.get("user_name", item["user"]) for item in resolved}
+        all_messages = []
+        for ch in channels:
+            for msg in ch["messages"]:
+                uid = msg.get("user", "")
+                all_messages.append([
+                    ch["channel_name"],
+                    msg.get("ts", ""),
+                    user_map.get(uid, uid),
+                    msg.get("text", ""),
+                ])
+        format_output(all_messages, ["channel_name", "ts", "user_name", "text"], format_type)
+
+
+@handle_api_error
 def mark_as_read(channel: str) -> None:
     """チャンネルを既読にする。
 
@@ -100,6 +136,42 @@ def mark_as_read(channel: str) -> None:
 
     print(f"チャンネルを既読にしました。")
     print(f"  チャンネル: {channel}")
+
+
+@handle_api_error
+def mark_all_as_read(client):
+    """全チャンネルの未読を既読化する"""
+    channels = _scan_all_channels_unread(client, summary_only=True)
+    if not channels:
+        print("未読チャンネルはありません。")
+        return
+    success_count = 0
+    fail_count = 0
+    for ch in channels:
+        try:
+            hist_resp = client.conversations_history(channel=ch["channel_id"], limit=1)
+            messages = hist_resp.get("messages", [])
+            if not messages:
+                continue
+            latest_ts = messages[0]["ts"]
+            client.conversations_mark(channel=ch["channel_id"], ts=latest_ts)
+            success_count += 1
+        except SlackApiError as e:
+            if e.response.status_code == 429:
+                retry_after = int(e.response.headers.get("Retry-After", 10))
+                time.sleep(retry_after)
+                try:
+                    hist_resp = client.conversations_history(channel=ch["channel_id"], limit=1)
+                    messages = hist_resp.get("messages", [])
+                    if messages:
+                        latest_ts = messages[0]["ts"]
+                        client.conversations_mark(channel=ch["channel_id"], ts=latest_ts)
+                        success_count += 1
+                        continue
+                except Exception:
+                    pass
+            fail_count += 1
+    print(f"既読化完了: {success_count} チャンネル成功, {fail_count} チャンネル失敗")
 
 
 def _get_unread_mentions_accurate(
@@ -192,6 +264,67 @@ def _get_unread_mentions_accurate(
     return mentions
 
 
+def _scan_all_channels_unread(client, max_per_channel=20, summary_only=False) -> List[Dict]:
+    """全チャンネルをスキャンし、未読のあるチャンネル情報を返す"""
+    result = []
+    cursor = None
+    while True:
+        resp = client.conversations_list(
+            types="public_channel,private_channel,mpim,im",
+            exclude_archived=True,
+            limit=200,
+            cursor=cursor,
+        )
+        for ch in resp.get("channels", []):
+            if not ch.get("is_member", False):
+                continue
+            channel_id = ch["id"]
+            channel_name = ch.get("name") or ch.get("user") or channel_id
+            # unread_count_display を確認
+            try:
+                info_resp = client.conversations_info(channel=channel_id, include_num_members=False)
+                unread_count = info_resp["channel"].get("unread_count_display", 0)
+            except Exception:
+                continue
+            if unread_count == 0:
+                continue
+            messages = []
+            if not summary_only:
+                try:
+                    last_read = info_resp["channel"].get("last_read", "0")
+                    hist_resp = client.conversations_history(
+                        channel=channel_id,
+                        oldest=last_read,
+                        limit=max_per_channel,
+                    )
+                    messages = hist_resp.get("messages", [])
+                except SlackApiError as e:
+                    if e.response.status_code == 429:
+                        retry_after = int(e.response.headers.get("Retry-After", 10))
+                        time.sleep(retry_after)
+                        try:
+                            hist_resp = client.conversations_history(
+                                channel=channel_id,
+                                oldest=last_read,
+                                limit=max_per_channel,
+                            )
+                            messages = hist_resp.get("messages", [])
+                        except Exception:
+                            pass
+                    else:
+                        pass
+            result.append({
+                "channel_id": channel_id,
+                "channel_name": channel_name,
+                "unread_count": unread_count,
+                "messages": messages,
+            })
+        cursor = resp.get("response_metadata", {}).get("next_cursor")
+        if not cursor:
+            break
+    return result
+
+
 @handle_api_error
 def get_mentions(
     max_results: int = 20,
@@ -264,12 +397,13 @@ def main() -> None:
 
     # unread サブコマンド
     unread_parser = subparsers.add_parser("unread", help="未読メッセージ一覧")
-    unread_parser.add_argument("--channel", required=True, help="チャンネルID")
+    unread_parser.add_argument("--channel", required=False, default=None, help="チャンネルID（省略時は全チャンネル）")
     unread_parser.add_argument("--max", type=int, default=20, help="最大取得件数")
+    unread_parser.add_argument("--summary", action="store_true", help="サマリーのみ表示")
 
     # mark-read サブコマンド
     mark_parser = subparsers.add_parser("mark-read", help="既読化")
-    mark_parser.add_argument("--channel", required=True, help="チャンネルID")
+    mark_parser.add_argument("--channel", required=False, default=None, help="チャンネルID（省略時は全チャンネル）")
 
     # mentions サブコマンド
     mentions_parser = subparsers.add_parser("mentions", help="メンション一覧（デフォルト: 未読のみ）")
@@ -279,10 +413,18 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "unread":
-        get_unread_messages(args.channel, args.max, args.format)
+        if args.channel:
+            get_unread_messages(args.channel, args.max, args.format)
+        else:
+            client = get_slack_client()
+            get_all_unread_messages(client, args.max, args.summary, args.format)
 
     elif args.command == "mark-read":
-        mark_as_read(args.channel)
+        if args.channel:
+            mark_as_read(args.channel)
+        else:
+            client = get_slack_client()
+            mark_all_as_read(client)
 
     elif args.command == "mentions":
         get_mentions(args.max, args.format, args.all)
