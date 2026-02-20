@@ -33,14 +33,15 @@ Slack の未読メッセージを確認します。
 Pythonスクリプトで未読メッセージ一覧を取得:
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py unread \
-  --format table
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py --format table unread \
+  --channel <CHANNEL_ID>
 ```
 
 オプション:
 
+- `--channel <CHANNEL_ID>`: チャンネルID（必須）
 - `--max <number>`: 最大取得件数（デフォルト: 20）
-- `--format <table|json>`: 出力形式（デフォルト: table）
+- `--format <table|json>`: 出力形式（デフォルト: table）※サブコマンドの前に指定
 
 ### 2. 結果の整形
 

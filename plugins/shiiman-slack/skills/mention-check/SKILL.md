@@ -45,9 +45,8 @@ Slack で自分へのメンションを確認します。
 
 ```bash
 # Pythonスクリプトでメンション取得
-python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py mentions \
-  --max 20 \
-  --format table
+python ${CLAUDE_PLUGIN_ROOT}/scripts/slack_message.py --format table mentions \
+  --max 20
 ```
 
 ## 出力例
