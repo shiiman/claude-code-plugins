@@ -33,20 +33,7 @@ User Token がない場合はエラーになります。
 
 ### User Token の設定
 
-`.claude/settings.local.json` または環境変数で設定：
-
-```json
-{
-  "mcpServers": {
-    "slack": {
-      "env": {
-        "SLACK_BOT_TOKEN": "xoxb-your-bot-token",
-        "SLACK_USER_TOKEN": "xoxp-your-user-token"
-      }
-    }
-  }
-}
-```
+`/shiiman-slack:user-setup` でトークンを設定してください。
 
 ### 必要なスコープ
 

@@ -71,11 +71,9 @@ marketing       鈴木次郎    @you 新しい企画について相談したい�
 - **パーマリンク**: 各メンションへの直接リンクを表示
 - **チャンネル名**: メンションがあったチャンネルを表示
 
-## 必要な環境変数
+## トークン設定
 
-```bash
-export SLACK_BOT_TOKEN="xoxb-your-bot-token"
-```
+`/shiiman-slack:user-setup` でトークンを設定してください。
 
 ## 必要なスコープ
 
