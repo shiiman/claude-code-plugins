@@ -68,11 +68,35 @@ Claude Code CLI のバージョン確認と更新を行います。
 
 #### plugin-update
 
-1. `claude plugin list` でインストール済みプラグイン一覧を取得
-2. 各プラグインの現在のバージョンを記録
-3. 実行前にユーザー確認を行う
-4. 各プラグインに対して `claude plugin update <name>` を実行
-5. 更新前後のバージョンを比較して結果を報告
+1. marketplace キャッシュを最新化:
+
+```bash
+# known_marketplaces.json から marketplace 一覧と installLocation を取得
+cat ~/.claude/plugins/known_marketplaces.json
+```
+
+各 marketplace の `installLocation` で `git pull` を実行:
+
+```bash
+git -C <installLocation> pull 2>&1
+```
+
+2. `~/.claude/settings.json` の `enabledPlugins` から有効プラグイン一覧を取得:
+
+```bash
+cat ~/.claude/settings.json
+```
+
+`enabledPlugins` のキーは `<plugin>@<marketplace>` 形式。値が `true` のもののみ対象。
+
+3. 各プラグインの更新前バージョンを記録:
+
+`~/.claude/plugins/cache/<marketplace>/<plugin>/` 配下のバージョンディレクトリ名から現在のバージョンを特定（最も新しいもの）。
+
+4. 実行前にユーザー確認を行う
+5. 各プラグインに対して `claude plugin install <plugin>@<marketplace>` を実行
+6. 更新後のバージョンを確認し、更新前後のバージョンを比較して結果を報告
+7. 更新があった場合「Claude CLI を再起動すると反映されます」と案内
 
 ## 出力フォーマット
 
