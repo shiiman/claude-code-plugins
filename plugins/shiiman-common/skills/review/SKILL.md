@@ -108,7 +108,7 @@ timeout 300 codex review --uncommitted
 codex review --uncommitted
 
 codex コマンド自体が見つからない場合は「codex コマンドが見つかりません。npm install -g @openai/codex でインストールしてください。」と返してください。
-コマンドの終了コードが 124 の場合、または Bash ツールがタイムアウトした場合は以下を返してください:
+コマンドの終了コードが 124 の場合、Bash ツールがタイムアウトした場合、またはその他のエラーが発生した場合は、タイムアウトの可能性を考慮して以下を返してください:
 「Codex レビューがタイムアウトしました（300秒）。差分が大きい場合は手動で `codex review --uncommitted` を実行してください。」
 ```
 
@@ -154,11 +154,12 @@ codex コマンド自体が見つからない場合は「codex コマンドが�
 
 ```bash
 TS="$(date +%Y%m%d-%H%M%S)"
+DATE="$(date +%Y-%m-%d)"
 REPO_NAME="$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")"
 BRANCH="$(git branch --show-current 2>/dev/null || echo 'unknown')"
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 mkdir -p "${REPO_ROOT}/.claude/tmp"
-echo "${TS}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
+echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 ```
 
 2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、3 エージェントの結果を統合して記述する:
@@ -166,7 +167,7 @@ echo "${TS}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 ```markdown
 # 統合レビューレポート
 
-**実施日**: {YYYY-MM-DD（TS から抽出）}
+**実施日**: {DATE}
 **対象**: {REPO_NAME}
 **ブランチ**: {BRANCH}
 **調査カテゴリ**: コード品質 / セキュリティ / Codex
@@ -199,7 +200,7 @@ echo "${TS}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 
 ## 問題点
 
-{全問題を優先度順（P1→P2→P3）にフラットに一覧。該当なしの場合は「指摘なし」}
+{全問題を優先度順（P1→P2→P3）にフラットに一覧。該当なしの場合は「指摘なし」。以下のチェックボックスリスト形式で記述}
 ```
 
 各問題点は以下のチェックボックスリスト形式で記述（P1 → P2 → P3 の順序で並べる）:
@@ -235,7 +236,7 @@ echo "${TS}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 3. ファイル保存後にパスをユーザーに表示:
 
 ```
-📄 レビュー結果を保存しました: .claude/tmp/{TS}-review.md
+📄 レビュー結果を保存しました: {REPO_ROOT}/.claude/tmp/{TS}-review.md
 ```
 
 ### 4. ユーザー確認
