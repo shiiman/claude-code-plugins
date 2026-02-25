@@ -138,7 +138,6 @@ AskUserQuestion で最大 4 つまで選択肢を提示できる前提で、テ�
 | パラメータ      | 説明                                                                     | デフォルト   |
 | --------------- | ------------------------------------------------------------------------ | ------------ |
 | `report_format` | フォーマット（Briefing Doc / Study Guide / Blog Post / Create Your Own） | Briefing Doc |
-| `language`      | 出力言語（BCP-47 コード）                                                | ja           |
 | `source_ids`    | 対象ソース（省略で全ソース）                                             | 全ソース     |
 
 ユーザーが「デフォルトで」「そのままで」と回答した場合はデフォルト値（またはテンプレート推奨値）を使用する。
@@ -153,7 +152,6 @@ mcp__notebooklm-mcp__studio_create(
   artifact_type="report",
   custom_prompt="{custom_prompt}",
   report_format="{report_format}",  # デフォルト: Briefing Doc
-  language="{language}",  # デフォルト: ja
   source_ids=["{source_id1}", "{source_id2}", ...]
 )
 ```
