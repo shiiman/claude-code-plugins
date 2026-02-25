@@ -29,9 +29,9 @@ claude plugin install shiiman-common@shiiman-claude-code-plugins
 
 **レビュー観点:**
 
-1. **コード品質レビュー (Claude)** — 命名・設計・テスト・可読性を評価
-2. **セキュリティレビュー** — OWASP Top 10 基準で脆弱性チェック
-3. **Codex レビュー** — `codex review --uncommitted` を実行
+1. **コード品質レビュー (Claude / 8 観点並列)** — コード品質・設計・テスト・可読性・パフォーマンス・エラーハンドリング・ベストプラクティス・保守性
+2. **セキュリティレビュー** — ビルトイン `/security-review` スキルによる脆弱性チェック
+3. **Codex レビュー** — `codex exec --full-auto` で 8 観点の並列レビューを実行
 
 レビュー後、指摘の修正をインタラクティブに実行可能。
 
@@ -50,5 +50,6 @@ AI 関連 CLI ツール（claude-code, codex, cursor-cli, gemini-cli）を brew 
 
 ## 必要条件
 
+- Claude Code v2.1.56 以上（ビルトイン `/security-review` スキル使用のため）
 - Homebrew がインストール済み（brew-upgrade-ai 用）
 - codex CLI がインストール済み（review の Codex レビュー用、未インストールでもスキップ可）
