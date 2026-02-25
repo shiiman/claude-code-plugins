@@ -1,6 +1,6 @@
 # shiiman-google
 
-Google Workspace 操作（認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理）を Claude Code から実行するプラグイン。
+Google Workspace 操作（認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理、NotebookLM リサーチ・アーティファクト作成）を Claude Code から実行するプラグイン。
 
 ## インストール
 
@@ -17,6 +17,8 @@ Google Workspace 操作（認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps 
 ```bash
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
+
+NotebookLM スキル（`notebooklm-*`）を使用する場合は、別途 `notebooklm-mcp` MCP サーバーの設定が必要です。
 
 ## 機能一覧
 
@@ -57,6 +59,14 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 | gmail-unread-check | 「未読メール」「Gmail 未読」 | 未読メッセージ一覧を取得 |
 | gmail-unread-mark  | 「既読にして」「全部既読」   | 未読を既読に変更         |
 
+### NotebookLM
+
+| スキル                  | トリガー例                                      | 説明                                             |
+| ----------------------- | ----------------------------------------------- | ------------------------------------------------ |
+| notebooklm-deepresearch | 「ディープリサーチ」「深い調査」                | ノートブック作成 + ディープリサーチ + インポート |
+| notebooklm-infographic  | 「インフォグラフィック作成」「NotebookLM 図解」 | ノートブックからインフォグラフィック生成         |
+| notebooklm-slide        | 「NotebookLM スライド」「スライドデッキ作成」   | ノートブックからスライドデッキ生成               |
+
 ## 使い方
 
 ### 1. OAuth クライアント設定
@@ -94,6 +104,14 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 「フォームに質問を追加して」
 ```
 
+### 5. NotebookLM 操作例
+
+```
+「ディープリサーチして」          # ノートブック作成 + Web リサーチ
+「インフォグラフィック作成して」  # ノートブックからインフォグラフィック生成
+「NotebookLM でスライド作成して」 # ノートブックからスライドデッキ生成
+```
+
 ## 参考ドキュメント
 
 - [認証・トークン運用リファレンス](docs/auth-reference.md) — OAuth の保存先・スコープ一覧
@@ -117,7 +135,7 @@ plugins/shiiman-google/
 │   ├── google_sheets.py         # Sheets
 │   ├── google_slides.py         # Slides
 │   └── google_apps_script.py    # Apps Script
-└── skills/                      # 自然言語トリガースキル（12スキル）
+└── skills/                      # 自然言語トリガースキル（15スキル）
     ├── auth-setup/
     ├── auth-login/
     ├── profile-switch/
@@ -129,11 +147,15 @@ plugins/shiiman-google/
     ├── apps-script/
     ├── calendar/
     ├── gmail-unread-check/
-    └── gmail-unread-mark/
+    ├── gmail-unread-mark/
+    ├── notebooklm-deepresearch/
+    ├── notebooklm-infographic/
+    └── notebooklm-slide/
 ```
 
 ## バージョン履歴
 
+- **v3.2.0** - NotebookLM スキル追加（deepresearch / infographic / slide）
 - **v3.0.0** - スキル名リネーム（`google-xxx` → `shiiman-google:xxx`）
 - **v2.0.0** - スキル整理（41→12スキル）、create+update 統合、`google-` プレフィックス統一
 - **v1.5.1** - 初期版（41スキル）

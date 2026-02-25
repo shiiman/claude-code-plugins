@@ -98,12 +98,13 @@ npm install
 
 ## 利用可能なコマンド
 
-| コマンド           | 説明                                                    |
-| ------------------ | ------------------------------------------------------- |
-| `/plugin-create`   | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
-| `/skill-create`    | プラグインにスキルを追加                                |
-| `/subagent-create` | プラグインにサブエージェントを追加                      |
-| `/hook-create`     | プラグインにフックを追加                                |
+| コマンド              | 説明                                                    |
+| --------------------- | ------------------------------------------------------- |
+| `/plugin-create`      | 新しいプラグインを作成（プラグインのみ / 機能込み一括） |
+| `/skill-create`       | プラグインにスキルを追加                                |
+| `/subagent-create`    | プラグインにサブエージェントを追加                      |
+| `/hook-create`        | プラグインにフックを追加                                |
+| `/marketplace-toggle` | マーケットプレイスを dev（symlink）/ prd（git）に切替   |
 
 ## 利用可能なスキル
 
@@ -128,6 +129,22 @@ npm install
 | workflow-multi            | shiiman-workflow | 「マルチフロー」「並列軽量フロー」                      | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー   |
 | workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行                         |
 | workflow-agent-team       | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」       | Agent Team で Issue/PR なしに並列実行する軽量フロー              |
+
+### 開発ツール
+
+| スキル             | プラグイン | トリガー例                               | 説明                                                      |
+| ------------------ | ---------- | ---------------------------------------- | --------------------------------------------------------- |
+| marketplace-toggle | -          | 「マーケットプレイス切替」「dev モード」 | installLocation を symlink（dev）/ git clone（prd）に切替 |
+
+**dev モード**: `installLocation` をプロジェクトディレクトリへの symlink に差し替え。ローカルのプラグイン変更が即座に反映される（Claude Code の再起動は必要）。
+
+**prd モード**: `installLocation` を元の git clone に復元し `git pull` で最新化。
+
+```bash
+/marketplace-toggle dev      # ローカル開発モードに切り替え
+/marketplace-toggle prd      # git モードに戻す
+/marketplace-toggle status   # 現在のモードを確認
+```
 
 GitHub の Issue/PR 操作は、このリポジトリのローカル `.claude` スキルではなく、`shiiman-github` プラグインのスキルを利用してください。
 Git ローカル操作（コミット、worktree等）は `shiiman-git` プラグインのスキルを利用してください。

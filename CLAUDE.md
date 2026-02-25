@@ -43,6 +43,10 @@ plugins/{plugin-name}/
 - `/shiiman-workflow:agent-team-issue` - Agent Team flow: Issue creation → parallel implementation → PR (trigger: "Agent Team Issue")
 - `/shiiman-workflow:issue-branch-pr-create` - Backward flow: existing changes → Issue → branch → commit → PR (trigger: "変更から Issue と PR", "Backward フロー")
 
+### Development
+
+- `/marketplace-toggle` - Toggle marketplace installLocation between dev (symlink) / prd (git clone) (trigger: "マーケットプレイス切替", "dev モード", "prd モード")
+
 ### GitHub Operations
 
 Issue and PR operations are handled by `shiiman-github` plugin skills, not by local `.claude` skills in this repository.

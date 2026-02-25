@@ -251,6 +251,15 @@ After creating an agent file, register it in the plugin's `plugin.json`:
 
 Ensure `name` in `plugin.json` matches the frontmatter `name` and the filename.
 
+## Plugin Development Workflow
+
+When developing or testing plugin changes locally, use the `/marketplace-toggle` skill to switch the marketplace source:
+
+- **dev mode** (`/marketplace-toggle dev`): Replaces `installLocation` (`~/.claude/plugins/marketplaces/shiiman-claude-code-plugins`) with a symlink to the project directory. Local changes (including uncommitted) are reflected after Claude Code restart.
+- **prd mode** (`/marketplace-toggle prd`): Restores the original git clone and runs `git pull`. Uses the latest published version from the remote repository.
+
+This is required because Claude Code reads plugin files from `installLocation`, not from the working directory. Simply editing files in `plugins/` does not update installed plugins without this toggle.
+
 ## Markdown Formatting
 
 All `.md` files (including agent definitions) are formatted with Prettier.
