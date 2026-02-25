@@ -35,6 +35,7 @@ NotebookLM のノートブックからレポート（Briefing Doc / Study Guide 
 - `mcp__notebooklm-mcp__studio_status`
 - `mcp__notebooklm-mcp__artifact_download`
 - `mcp__notebooklm-mcp__artifact_export`
+- `mcp__notebooklm-mcp__refresh_auth`
 
 ## ワークフロー
 
@@ -110,10 +111,14 @@ AskUserQuestion でプロンプトの入力方式を選択してもらう:
 | `action-plan` | アクションプラン       | ソースから具体的な行動計画・タスクリストを抽出 | Briefing Doc       |
 | `pros-cons`   | メリット・デメリット   | 特定のトピックの長所・短所を整理して評価       | Briefing Doc       |
 
-AskUserQuestion で 4 つずつ選択肢を提示する（AskUserQuestion は最大 4 選択肢のため、2 回に分けて表示）。
+AskUserQuestion で最大 4 つまで選択肢を提示できる前提で、テンプレート選択は 2 段階で行う。
 
-1 回目: briefing, study-guide, faq, blog-post
-2 回目（1 回目で「他のテンプレートを見る」を選んだ場合）: executive, comparison, action-plan, pros-cons
+1 回目: テンプレートグループの選択
+
+- 「汎用テンプレート（briefing / study-guide / faq / blog-post）」
+- 「ビジネステンプレート（executive / comparison / action-plan / pros-cons）」
+
+2 回目: 選択したグループに含まれる 4 テンプレートから 1 つを選択する。
 
 選択されたテンプレートの `.md` ファイルを Read で読み込み:
 
@@ -133,6 +138,7 @@ AskUserQuestion で 4 つずつ選択肢を提示する（AskUserQuestion は最
 | パラメータ      | 説明                                                                     | デフォルト   |
 | --------------- | ------------------------------------------------------------------------ | ------------ |
 | `report_format` | フォーマット（Briefing Doc / Study Guide / Blog Post / Create Your Own） | Briefing Doc |
+| `language`      | 出力言語（BCP-47 コード）                                                | ja           |
 | `source_ids`    | 対象ソース（省略で全ソース）                                             | 全ソース     |
 
 ユーザーが「デフォルトで」「そのままで」と回答した場合はデフォルト値（またはテンプレート推奨値）を使用する。
@@ -147,6 +153,7 @@ mcp__notebooklm-mcp__studio_create(
   artifact_type="report",
   custom_prompt="{custom_prompt}",
   report_format="{report_format}",  # デフォルト: Briefing Doc
+  language="{language}",  # デフォルト: ja
   source_ids=["{source_id1}", "{source_id2}", ...]
 )
 ```
