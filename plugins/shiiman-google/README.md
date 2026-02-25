@@ -66,6 +66,7 @@ NotebookLM スキル（`notebooklm-*`）を使用する場合は、別途 `noteb
 | notebooklm-deepresearch | 「ディープリサーチ」「深い調査」                | ノートブック作成 + ディープリサーチ + インポート |
 | notebooklm-infographic  | 「インフォグラフィック作成」「NotebookLM 図解」 | ノートブックからインフォグラフィック生成         |
 | notebooklm-slide        | 「NotebookLM スライド」「スライドデッキ作成」   | ノートブックからスライドデッキ生成               |
+| notebooklm-report       | 「NotebookLM レポート」「レポート作成」         | ノートブックからレポート・ドキュメント生成       |
 
 ## 使い方
 
@@ -110,6 +111,7 @@ NotebookLM スキル（`notebooklm-*`）を使用する場合は、別途 `noteb
 「ディープリサーチして」          # ノートブック作成 + Web リサーチ
 「インフォグラフィック作成して」  # ノートブックからインフォグラフィック生成
 「NotebookLM でスライド作成して」 # ノートブックからスライドデッキ生成
+「NotebookLM でレポート作成して」 # ノートブックからレポート生成
 ```
 
 ## 参考ドキュメント
@@ -135,7 +137,7 @@ plugins/shiiman-google/
 │   ├── google_sheets.py         # Sheets
 │   ├── google_slides.py         # Slides
 │   └── google_apps_script.py    # Apps Script
-└── skills/                      # 自然言語トリガースキル（15スキル）
+└── skills/                      # 自然言語トリガースキル（16スキル）
     ├── auth-setup/
     ├── auth-login/
     ├── profile-switch/
@@ -150,11 +152,13 @@ plugins/shiiman-google/
     ├── gmail-unread-mark/
     ├── notebooklm-deepresearch/
     ├── notebooklm-infographic/
-    └── notebooklm-slide/
+    ├── notebooklm-slide/
+    └── notebooklm-report/
 ```
 
 ## バージョン履歴
 
+- **v3.3.0** - NotebookLM レポートスキル追加（notebooklm-report）
 - **v3.2.0** - NotebookLM スキル追加（deepresearch / infographic / slide）
 - **v3.0.0** - スキル名リネーム（`google-xxx` → `shiiman-google:xxx`）
 - **v2.0.0** - スキル整理（41→12スキル）、create+update 統合、`google-` プレフィックス統一

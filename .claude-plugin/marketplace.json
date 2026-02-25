@@ -47,7 +47,7 @@
     {
       "name": "shiiman-google",
       "description": "Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理、NotebookLM リサーチ・アーティファクト作成を提供",
-      "version": "3.2.0",
+      "version": "3.3.0",
       "source": "./plugins/shiiman-google",
       "category": "productivity"
     },
