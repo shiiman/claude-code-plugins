@@ -57,7 +57,7 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
 - `tmux` が利用可能
 - `gh` コマンドが利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
-- macOS で `Ghostty` または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
+- macOS で `cmux`、`Ghostty`、または `iTerm2` を推奨（未導入時は `Terminal.app` / 現在端末へフォールバック）
 
 ## 実行モード判定（重要）
 

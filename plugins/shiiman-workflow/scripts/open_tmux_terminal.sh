@@ -4,12 +4,12 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  open_tmux_terminal.sh --session <name> --repo-root <path> [--terminal <auto|ghostty|iterm2|terminal>] [--state-file <path>] [--dry-run]
+  open_tmux_terminal.sh --session <name> --repo-root <path> [--terminal <auto|cmux|ghostty|iterm2|terminal>] [--state-file <path>] [--dry-run]
 
 Options:
   --session <name>      tmux session name (allowed: [A-Za-z0-9._:-])
   --repo-root <path>    repository root path
-  --terminal <value>    auto | ghostty | iterm2 | terminal (default: auto)
+  --terminal <value>    auto | cmux | ghostty | iterm2 | terminal (default: auto)
   --state-file <path>   write launch metadata for cleanup script
   --dry-run             print selected behavior without opening terminals
   -h, --help            show this help
@@ -28,6 +28,7 @@ STATE_WINDOW_CLOSE_SUPPORTED="0"
 STATE_ITERM_WINDOW_ID=""
 STATE_TERMINAL_WINDOW_ID=""
 STATE_GHOSTTY_PID=""
+STATE_CMUX_PID=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -89,7 +90,7 @@ if [[ -n "$STATE_FILE" ]]; then
 fi
 
 case "$TERMINAL" in
-  auto|ghostty|iterm2|terminal)
+  auto|cmux|ghostty|iterm2|terminal)
     ;;
   *)
     echo "invalid --terminal value: $TERMINAL" >&2
@@ -110,6 +111,7 @@ record_state() {
   STATE_ITERM_WINDOW_ID="${4:-}"
   STATE_TERMINAL_WINDOW_ID="${5:-}"
   STATE_GHOSTTY_PID="${6:-}"
+  STATE_CMUX_PID="${7:-}"
 }
 
 write_state_file() {
@@ -125,6 +127,7 @@ WINDOW_CLOSE_SUPPORTED=$STATE_WINDOW_CLOSE_SUPPORTED
 ITERM_WINDOW_ID=$STATE_ITERM_WINDOW_ID
 TERMINAL_WINDOW_ID=$STATE_TERMINAL_WINDOW_ID
 GHOSTTY_PID=$STATE_GHOSTTY_PID
+CMUX_PID=$STATE_CMUX_PID
 EOF
 }
 
@@ -152,6 +155,172 @@ escape_applescript() {
   value="${value//\"/\\\"}"
   printf '%s' "$value"
 }
+
+# --- cmux ---
+
+get_cmux_path() {
+  local cmux_path
+  cmux_path="$(command -v cmux 2>/dev/null || true)"
+  if [[ -n "$cmux_path" ]]; then
+    printf '%s' "$cmux_path"
+    return 0
+  fi
+  if [[ -f "/Applications/cmux.app/Contents/MacOS/cmux" ]]; then
+    printf '%s' "/Applications/cmux.app/Contents/MacOS/cmux"
+    return 0
+  fi
+  return 1
+}
+
+is_cmux_available() {
+  get_cmux_path >/dev/null 2>&1 || [[ -d "/Applications/cmux.app" ]]
+}
+
+is_cmux_running() {
+  local stdout
+  local applescript
+  applescript=$(
+    cat <<'EOF'
+if application "cmux" is running then
+    return "true"
+else
+    return "false"
+end if
+EOF
+  )
+  if stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+    [[ "$stdout" == "true" ]]
+    return
+  fi
+  pgrep -x cmux >/dev/null 2>&1
+}
+
+collect_cmux_pids() {
+  pgrep -x cmux 2>/dev/null | awk 'NF { print $0 }' | sort -u
+}
+
+pick_new_cmux_pid() {
+  local before="$1"
+  local after="$2"
+  local pid
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] || continue
+    if ! printf '%s\n' "$before" | grep -Fxq "$pid"; then
+      printf '%s' "$pid"
+      return 0
+    fi
+  done <<< "$after"
+  return 1
+}
+
+open_cmux_workspace() {
+  local escaped_cmd
+  escaped_cmd="$(escape_applescript "$TMUX_CMD")"
+  local applescript
+  applescript=$(cat <<EOF
+set the clipboard to "$escaped_cmd"
+tell application "cmux"
+    activate
+end tell
+tell application "System Events"
+    if exists process "cmux" then
+        tell process "cmux"
+            keystroke "n" using command down
+            delay 0.5
+            keystroke "v" using command down
+            delay 0.1
+            keystroke return
+        end tell
+    else
+        error "cmux process not found"
+    end if
+end tell
+EOF
+)
+  osascript -e "$applescript" >/dev/null 2>&1
+}
+
+open_cmux_new_window() {
+  local cmux_path
+  cmux_path="$(get_cmux_path 2>/dev/null || true)"
+
+  local script_file
+  script_file="$(mktemp /tmp/cmux_session_XXXXXX.sh)"
+  cat >| "$script_file" <<SCRIPT
+#!/bin/bash
+tmux new-session -A -s "$SESSION" -c "$REPO_ROOT"
+SCRIPT
+  chmod +x "$script_file"
+
+  if [[ -n "$cmux_path" ]]; then
+    "$cmux_path" --working-directory="$REPO_ROOT" --title="$SESSION" -e "$script_file" &
+    disown
+  elif [[ -d "/Applications/cmux.app" ]]; then
+    open -na cmux.app --args --working-directory="$REPO_ROOT" --title="$SESSION" -e "$script_file" >/dev/null 2>&1
+  else
+    rm -f "$script_file"
+    return 1
+  fi
+}
+
+open_in_cmux() {
+  local before_pids=""
+  local after_pids=""
+  local cmux_pid=""
+
+  if ! is_cmux_available; then
+    return 1
+  fi
+
+  if is_cmux_running; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] cmux is running: open new workspace and run: $TMUX_CMD"
+      record_state "cmux" "workspace" "0"
+      return 0
+    fi
+    if open_cmux_workspace; then
+      if wait_for_tmux_session 15 0.2; then
+        echo "Opened tmux in a new cmux workspace."
+        record_state "cmux" "workspace" "0"
+        return 0
+      fi
+      log "cmux workspace command was sent, but tmux session '$SESSION' was not created."
+    else
+      log "cmux workspace open failed."
+    fi
+    log "Falling back to a new cmux window."
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[DRY-RUN] cmux is not running: open new window and run: $TMUX_CMD"
+    record_state "cmux" "window" "0"
+    return 0
+  fi
+
+  before_pids="$(collect_cmux_pids)"
+  if ! open_cmux_new_window; then
+    log "cmux new-window launch failed."
+    return 1
+  fi
+  if ! wait_for_tmux_session 25 0.2; then
+    log "cmux new-window command finished, but tmux session '$SESSION' was not created."
+    return 1
+  fi
+
+  after_pids="$(collect_cmux_pids)"
+  cmux_pid="$(pick_new_cmux_pid "$before_pids" "$after_pids" || true)"
+  if [[ -n "$cmux_pid" ]]; then
+    record_state "cmux" "window" "1" "" "" "" "$cmux_pid"
+  else
+    log "WARN: cmux window PID could not be identified. window cleanup will be skipped."
+    record_state "cmux" "window" "0"
+  fi
+
+  echo "Opened tmux in a new cmux window."
+  return 0
+}
+
+# --- Ghostty ---
 
 collect_ghostty_pids() {
   {
@@ -428,6 +597,14 @@ open_in_current_shell() {
 OPENED=0
 
 case "$TERMINAL" in
+  cmux)
+    if open_in_cmux; then
+      OPENED=1
+    else
+      echo "failed to open in cmux" >&2
+      exit 1
+    fi
+    ;;
   ghostty)
     if open_in_ghostty; then
       OPENED=1
@@ -453,14 +630,16 @@ case "$TERMINAL" in
     fi
     ;;
   auto)
-    if open_in_ghostty; then
+    if open_in_cmux; then
+      OPENED=1
+    elif open_in_ghostty; then
       OPENED=1
     elif open_in_iterm2; then
       OPENED=1
     elif open_in_terminal_app; then
       OPENED=1
     else
-      echo "Ghostty/iTerm2/Terminal.app unavailable. Falling back to current shell."
+      echo "cmux/Ghostty/iTerm2/Terminal.app unavailable. Falling back to current shell."
       if open_in_current_shell; then
         OPENED=1
       fi
