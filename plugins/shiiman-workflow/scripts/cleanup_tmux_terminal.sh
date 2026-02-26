@@ -24,6 +24,7 @@ WINDOW_CLOSE_SUPPORTED="0"
 ITERM_WINDOW_ID=""
 TERMINAL_WINDOW_ID=""
 GHOSTTY_PID=""
+CMUX_PID=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -70,6 +71,13 @@ warn() {
   echo "[cleanup_tmux_terminal][WARN] $*" >&2
 }
 
+escape_applescript() {
+  local value="${1:-}"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+  printf '%s' "$value"
+}
+
 load_state_file() {
   local key=""
   local value=""
@@ -93,12 +101,13 @@ load_state_file() {
       ITERM_WINDOW_ID) ITERM_WINDOW_ID="$value" ;;
       TERMINAL_WINDOW_ID) TERMINAL_WINDOW_ID="$value" ;;
       GHOSTTY_PID) GHOSTTY_PID="$value" ;;
+      CMUX_PID) CMUX_PID="$value" ;;
       *) ;;
     esac
   done < "$STATE_FILE"
 
   case "$TERMINAL_BACKEND" in
-    ""|ghostty|iterm2|terminal|current_shell) ;;
+    ""|cmux|ghostty|iterm2|terminal|current_shell) ;;
     *)
       warn "invalid TERMINAL_BACKEND in state file: $TERMINAL_BACKEND"
       TERMINAL_BACKEND=""
@@ -106,7 +115,7 @@ load_state_file() {
   esac
 
   case "$OPEN_MODE" in
-    ""|tab|window|current_shell) ;;
+    ""|tab|window|workspace|current_shell) ;;
     *)
       warn "invalid OPEN_MODE in state file: $OPEN_MODE"
       OPEN_MODE=""
@@ -135,6 +144,11 @@ load_state_file() {
     warn "invalid GHOSTTY_PID in state file: $GHOSTTY_PID"
     GHOSTTY_PID=""
   fi
+
+  if [[ -n "$CMUX_PID" && ! "$CMUX_PID" =~ ^[0-9]+$ ]]; then
+    warn "invalid CMUX_PID in state file: $CMUX_PID"
+    CMUX_PID=""
+  fi
 }
 
 kill_tmux_session() {
@@ -158,41 +172,100 @@ kill_tmux_session() {
 }
 
 close_ghostty_window() {
-  if [[ -z "$GHOSTTY_PID" ]]; then
-    warn "Ghostty PID is empty. window close is skipped."
-    return 0
+  local stdout=""
+  local applescript=""
+
+  # PID ベースで終了を試みる（window モードで PID がある場合）
+  if [[ -n "$GHOSTTY_PID" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] close Ghostty: try PID $GHOSTTY_PID, then fallback to title match '$SESSION'"
+      return 0
+    fi
+
+    if kill -0 "$GHOSTTY_PID" 2>/dev/null; then
+      if kill -TERM "$GHOSTTY_PID" 2>/dev/null; then
+        return 0
+      fi
+      warn "failed to terminate Ghostty PID: $GHOSTTY_PID; trying AppleScript title match."
+    else
+      log "Ghostty PID is not running anymore: $GHOSTTY_PID; trying AppleScript title match."
+    fi
   fi
 
+  # フォールバック: ウィンドウタイトルで特定して Cmd+W（tab/window 共通）
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[DRY-RUN] kill -TERM \"$GHOSTTY_PID\""
+    echo "[DRY-RUN] close Ghostty tab/window by title match: '$SESSION'"
     return 0
   fi
 
-  if ! kill -0 "$GHOSTTY_PID" 2>/dev/null; then
-    warn "Ghostty PID is not running anymore: $GHOSTTY_PID"
+  applescript=$(cat <<EOF
+tell application "System Events"
+    if exists process "Ghostty" then
+        tell process "Ghostty"
+            set windowList to windows
+            repeat with w in windowList
+                if name of w contains "$SESSION" then
+                    perform action "AXRaise" of w
+                    delay 0.3
+                    keystroke "w" using command down
+                    return "found"
+                end if
+            end repeat
+            return "not_found"
+        end tell
+    else if exists process "ghostty" then
+        tell process "ghostty"
+            set windowList to windows
+            repeat with w in windowList
+                if name of w contains "$SESSION" then
+                    perform action "AXRaise" of w
+                    delay 0.3
+                    keystroke "w" using command down
+                    return "found"
+                end if
+            end repeat
+            return "not_found"
+        end tell
+    else
+        return "not_running"
+    end if
+end tell
+EOF
+)
+
+  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+    warn "failed to close Ghostty tab/window by title match for session: $SESSION"
     return 0
   fi
 
-  if ! kill -TERM "$GHOSTTY_PID" 2>/dev/null; then
-    warn "failed to terminate Ghostty PID: $GHOSTTY_PID"
-  fi
+  case "$stdout" in
+    found)
+      log "Ghostty tab/window closed by title match: $SESSION"
+      ;;
+    not_found)
+      warn "Ghostty window with title containing '$SESSION' was not found."
+      ;;
+    not_running)
+      warn "Ghostty process is not running."
+      ;;
+    *)
+      warn "unexpected Ghostty close result: $stdout"
+      ;;
+  esac
 }
 
 close_iterm2_window() {
   local stdout=""
   local applescript=""
 
-  if [[ -z "$ITERM_WINDOW_ID" ]]; then
-    warn "iTerm2 window id is empty. window close is skipped."
-    return 0
-  fi
+  # window id ベースのクローズ（window モード）
+  if [[ -n "$ITERM_WINDOW_ID" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] close iTerm2 window id $ITERM_WINDOW_ID"
+      return 0
+    fi
 
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[DRY-RUN] close iTerm2 window id $ITERM_WINDOW_ID"
-    return 0
-  fi
-
-  applescript=$(cat <<EOF
+    applescript=$(cat <<EOF
 tell application "iTerm"
     if not (exists window id $ITERM_WINDOW_ID) then
         return "missing"
@@ -202,31 +275,72 @@ tell application "iTerm"
 end tell
 EOF
 )
-  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
-    warn "failed to close iTerm2 window id: $ITERM_WINDOW_ID"
+    if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+      warn "failed to close iTerm2 window id: $ITERM_WINDOW_ID"
+      return 0
+    fi
+
+    if [[ "$stdout" != "closed" ]]; then
+      warn "iTerm2 window was not closed (status: $stdout, id: $ITERM_WINDOW_ID)"
+    fi
     return 0
   fi
 
-  if [[ "$stdout" != "closed" ]]; then
-    warn "iTerm2 window was not closed (status: $stdout, id: $ITERM_WINDOW_ID)"
+  # フォールバック: セッション名でタブを検索してクローズ（tab モード）
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[DRY-RUN] close iTerm2 tab by session name match: '$SESSION'"
+    return 0
   fi
+
+  local escaped_session
+  escaped_session="$(escape_applescript "$SESSION")"
+  applescript=$(cat <<EOF
+tell application "iTerm"
+    repeat with w in windows
+        repeat with t in tabs of w
+            repeat with s in sessions of t
+                if name of s contains "$escaped_session" then
+                    close t
+                    return "found"
+                end if
+            end repeat
+        end repeat
+    end repeat
+    return "not_found"
+end tell
+EOF
+)
+
+  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+    warn "failed to close iTerm2 tab by session name match for: $SESSION"
+    return 0
+  fi
+
+  case "$stdout" in
+    found)
+      log "iTerm2 tab closed by session name match: $SESSION"
+      ;;
+    not_found)
+      warn "iTerm2 tab with session containing '$SESSION' was not found."
+      ;;
+    *)
+      warn "unexpected iTerm2 close result: $stdout"
+      ;;
+  esac
 }
 
 close_terminal_window() {
   local stdout=""
   local applescript=""
 
-  if [[ -z "$TERMINAL_WINDOW_ID" ]]; then
-    warn "Terminal.app window id is empty. window close is skipped."
-    return 0
-  fi
+  # window id ベースのクローズ（window モード）
+  if [[ -n "$TERMINAL_WINDOW_ID" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] close Terminal.app window id $TERMINAL_WINDOW_ID"
+      return 0
+    fi
 
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[DRY-RUN] close Terminal.app window id $TERMINAL_WINDOW_ID"
-    return 0
-  fi
-
-  applescript=$(cat <<EOF
+    applescript=$(cat <<EOF
 tell application "Terminal"
     if not (exists window id $TERMINAL_WINDOW_ID) then
         return "missing"
@@ -236,37 +350,163 @@ tell application "Terminal"
 end tell
 EOF
 )
-  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
-    warn "failed to close Terminal.app window id: $TERMINAL_WINDOW_ID"
+    if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+      warn "failed to close Terminal.app window id: $TERMINAL_WINDOW_ID"
+      return 0
+    fi
+
+    if [[ "$stdout" != "closed" ]]; then
+      warn "Terminal.app window was not closed (status: $stdout, id: $TERMINAL_WINDOW_ID)"
+    fi
     return 0
   fi
 
-  if [[ "$stdout" != "closed" ]]; then
-    warn "Terminal.app window was not closed (status: $stdout, id: $TERMINAL_WINDOW_ID)"
+  # フォールバック: ウィンドウタイトルで特定して Cmd+W（tab モード）
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[DRY-RUN] close Terminal.app tab by title match: '$SESSION'"
+    return 0
   fi
+
+  applescript=$(cat <<EOF
+tell application "System Events"
+    if exists process "Terminal" then
+        tell process "Terminal"
+            set windowList to windows
+            repeat with w in windowList
+                if name of w contains "$SESSION" then
+                    perform action "AXRaise" of w
+                    delay 0.3
+                    keystroke "w" using command down
+                    return "found"
+                end if
+            end repeat
+            return "not_found"
+        end tell
+    else
+        return "not_running"
+    end if
+end tell
+EOF
+)
+
+  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+    warn "failed to close Terminal.app tab by title match for session: $SESSION"
+    return 0
+  fi
+
+  case "$stdout" in
+    found)
+      log "Terminal.app tab closed by title match: $SESSION"
+      ;;
+    not_found)
+      warn "Terminal.app window with title containing '$SESSION' was not found."
+      ;;
+    not_running)
+      warn "Terminal.app process is not running."
+      ;;
+    *)
+      warn "unexpected Terminal.app close result: $stdout"
+      ;;
+  esac
+}
+
+close_cmux_window() {
+  local stdout=""
+  local applescript=""
+
+  # PID ベースで終了を試みる
+  if [[ -n "$CMUX_PID" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] close cmux window: try PID $CMUX_PID, then fallback to title match '$SESSION'"
+      return 0
+    fi
+
+    if kill -0 "$CMUX_PID" 2>/dev/null; then
+      if kill -TERM "$CMUX_PID" 2>/dev/null; then
+        return 0
+      fi
+      warn "failed to terminate cmux PID: $CMUX_PID; trying AppleScript title match."
+    else
+      log "cmux PID is not running anymore: $CMUX_PID; trying AppleScript title match."
+    fi
+  fi
+
+  # フォールバック: ウィンドウタイトルで特定して Cmd+W
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[DRY-RUN] close cmux window by title match: '$SESSION'"
+    return 0
+  fi
+
+  applescript=$(cat <<EOF
+tell application "System Events"
+    if exists process "cmux" then
+        tell process "cmux"
+            set windowList to windows
+            repeat with w in windowList
+                if name of w contains "$SESSION" then
+                    perform action "AXRaise" of w
+                    delay 0.3
+                    keystroke "w" using command down
+                    return "found"
+                end if
+            end repeat
+            return "not_found"
+        end tell
+    else
+        return "not_running"
+    end if
+end tell
+EOF
+)
+
+  if ! stdout="$(osascript -e "$applescript" 2>/dev/null)"; then
+    warn "failed to close cmux window by title match for session: $SESSION"
+    return 0
+  fi
+
+  case "$stdout" in
+    found)
+      log "cmux window closed by title match: $SESSION"
+      ;;
+    not_found)
+      warn "cmux window with title containing '$SESSION' was not found."
+      ;;
+    not_running)
+      warn "cmux process is not running."
+      ;;
+    *)
+      warn "unexpected cmux close result: $stdout"
+      ;;
+  esac
 }
 
 kill_tmux_session
 load_state_file
 
-if [[ "$OPEN_MODE" != "window" ]]; then
-  log "open mode is '$OPEN_MODE'; window close is not required."
-  exit 0
-fi
-
-if [[ "$WINDOW_CLOSE_SUPPORTED" != "1" ]]; then
-  warn "window close is not supported for this launch state."
+if [[ "$OPEN_MODE" == "current_shell" || -z "$OPEN_MODE" ]]; then
+  log "open mode is '$OPEN_MODE'; terminal close is not applicable."
   exit 0
 fi
 
 case "$TERMINAL_BACKEND" in
+  cmux)
+    # window: PID kill → タイトルマッチ Cmd+W フォールバック
+    # workspace: タイトルマッチ Cmd+W（PID なしのため直接フォールバック）
+    close_cmux_window
+    ;;
   ghostty)
+    # window: PID kill → タイトルマッチ Cmd+W フォールバック
+    # tab: タイトルマッチ Cmd+W（PID なしのため直接フォールバック）
     close_ghostty_window
     ;;
   iterm2)
+    # window: window id ベースのクローズ
+    # tab: セッション名マッチでタブクローズ
     close_iterm2_window
     ;;
   terminal)
+    # window: window id ベースのクローズ
+    # tab: タイトルマッチ Cmd+W
     close_terminal_window
     ;;
   current_shell|"")
