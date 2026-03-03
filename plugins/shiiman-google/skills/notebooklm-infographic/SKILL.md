@@ -80,14 +80,56 @@ mcp__notebooklm-mcp__note_create(
 
 作成されたノートブックの `notebook_id` を保持する。
 
-### 3. プロンプト方式の選択
+### 3. ビジュアルスタイルの選択
+
+AskUserQuestion でビジュアルスタイルを選択してもらう:
+
+- **おまかせ（auto_select）** — NotebookLM が最適なスタイルを自動選択（推奨）
+- **スタイルを指定する** — 10 種のビジュアルスタイルから手動で選択
+
+「おまかせ」の場合は `infographic_style = "auto_select"` を設定してステップ 4 へ進む。
+
+「スタイルを指定する」の場合、AskUserQuestion で 3 つずつ選択肢を提示する（テンプレート 3 つ +「他のスタイルを見る」で 4 枠を使い、3 回に分けて表示）。
+
+**スタイル一覧（グループ 1）:**
+
+| ID             | 名前               | 説明                                     |
+| -------------- | ------------------ | ---------------------------------------- |
+| `sketch_note`  | スケッチノート     | 手書き風のカジュアルなノートスタイル     |
+| `professional` | プロフェッショナル | ビジネス向けの洗練されたスタイル         |
+| `bento_grid`   | ベントグリッド     | 格子状に情報を整理するモダンなレイアウト |
+
+**スタイル一覧（グループ 2）:**
+
+| ID              | 名前                 | 説明                                 |
+| --------------- | -------------------- | ------------------------------------ |
+| `editorial`     | エディトリアル       | 雑誌・出版物風のデザインスタイル     |
+| `instructional` | インストラクショナル | 教材・マニュアル向けの説明的スタイル |
+| `bricks`        | ブリック             | ブロック状の構造的なレイアウト       |
+
+**スタイル一覧（グループ 3）:**
+
+| ID           | 名前                 | 説明                                     |
+| ------------ | -------------------- | ---------------------------------------- |
+| `clay`       | クレイ               | 粘土・3D 風のやわらかいビジュアル        |
+| `anime`      | アニメ               | アニメ・イラスト風のカラフルなスタイル   |
+| `kawaii`     | カワイイ             | かわいい・ポップなデザインスタイル       |
+| `scientific` | サイエンティフィック | 学術・科学向けの正確で整然としたスタイル |
+
+1 回目: sketch_note, professional, bento_grid, 他のスタイルを見る
+2 回目（1 回目で「他のスタイルを見る」を選んだ場合）: editorial, instructional, bricks, 他のスタイルを見る
+3 回目（2 回目で「他のスタイルを見る」を選んだ場合）: clay, anime, kawaii, scientific
+
+選択されたスタイルの ID を `infographic_style` として保持する。
+
+### 4. プロンプト方式の選択
 
 AskUserQuestion でプロンプトの入力方式を選択してもらう:
 
 - **テンプレートから選ぶ** — プリセットテンプレートを使用（推奨）
 - **カスタムプロンプトを入力** — 自由にプロンプトを入力
 
-#### 3a. テンプレート選択の場合
+#### 4a. テンプレート選択の場合
 
 `assets/prompts/` 配下のテンプレートファイルを Read で読み込み、一覧を提示する。
 
@@ -98,21 +140,27 @@ AskUserQuestion でプロンプトの入力方式を選択してもらう:
 | `summary`    | 要約・概要             | ソース全体の要点を図解にまとめる       | landscape        | standard          |
 | `comparison` | 比較・対比             | 複数の対象を並べて特徴・メリデメを比較 | landscape        | detailed          |
 | `timeline`   | タイムライン・プロセス | 時系列の流れやステップを順序立てて図解 | landscape        | standard          |
-| `statistics` | 統計・データ           | 数値データやトレンドをビジュアル化     | portrait         | detailed          |
 
 **テンプレート一覧（グループ 2）:**
 
-| ID           | 名前               | 説明                                   | 推奨 orientation | 推奨 detail_level |
-| ------------ | ------------------ | -------------------------------------- | ---------------- | ----------------- |
-| `list`       | リスト・ランキング | 項目を順位や重要度順に整理して一覧化   | portrait         | standard          |
-| `flowchart`  | フローチャート     | 意思決定やプロセスの分岐を視覚化       | landscape        | detailed          |
-| `hierarchy`  | 階層・構造         | 組織図・分類・ピラミッド等の階層を図解 | portrait         | standard          |
-| `geographic` | 地理・マップ       | 地域ごとのデータや位置関係を地図で表現 | landscape        | detailed          |
+| ID           | 名前               | 説明                                 | 推奨 orientation | 推奨 detail_level |
+| ------------ | ------------------ | ------------------------------------ | ---------------- | ----------------- |
+| `statistics` | 統計・データ       | 数値データやトレンドをビジュアル化   | portrait         | detailed          |
+| `list`       | リスト・ランキング | 項目を順位や重要度順に整理して一覧化 | portrait         | standard          |
+| `flowchart`  | フローチャート     | 意思決定やプロセスの分岐を視覚化     | landscape        | detailed          |
 
-AskUserQuestion で 4 つずつ選択肢を提示する（AskUserQuestion は最大 4 選択肢のため、2 回に分けて表示）。
+**テンプレート一覧（グループ 3）:**
 
-1 回目: summary, comparison, timeline, statistics
-2 回目（1 回目で「他のテンプレートを見る」を選んだ場合）: list, flowchart, hierarchy, geographic
+| ID           | 名前         | 説明                                   | 推奨 orientation | 推奨 detail_level |
+| ------------ | ------------ | -------------------------------------- | ---------------- | ----------------- |
+| `hierarchy`  | 階層・構造   | 組織図・分類・ピラミッド等の階層を図解 | portrait         | standard          |
+| `geographic` | 地理・マップ | 地域ごとのデータや位置関係を地図で表現 | landscape        | detailed          |
+
+AskUserQuestion で 3 つずつ選択肢を提示する（AskUserQuestion は最大 4 選択肢のため、テンプレート 3 つ +「他のテンプレートを見る」で 4 枠を使い、3 回に分けて表示）。
+
+1 回目: summary, comparison, timeline, 他のテンプレートを見る
+2 回目（1 回目で「他のテンプレートを見る」を選んだ場合）: statistics, list, flowchart, 他のテンプレートを見る
+3 回目（2 回目で「他のテンプレートを見る」を選んだ場合）: hierarchy, geographic
 
 選択されたテンプレートの `.md` ファイルを Read で読み込み:
 
@@ -121,11 +169,11 @@ AskUserQuestion で 4 つずつ選択肢を提示する（AskUserQuestion は最
 
 推奨値をユーザーに提示し、「このパラメータで作成しますか？」と確認する。変更したい場合は個別に上書き可能。
 
-#### 3b. カスタムプロンプトの場合
+#### 4b. カスタムプロンプトの場合
 
 従来どおり AskUserQuestion で自由入力を受け付ける。
 
-### 4. その他パラメータ
+### 5. その他パラメータ
 
 テンプレート選択で推奨値が設定されていない場合、または変更したい場合に AskUserQuestion で入力を受ける:
 
@@ -139,7 +187,7 @@ AskUserQuestion で 4 つずつ選択肢を提示する（AskUserQuestion は最
 
 `source_ids` を指定したい場合は、`mcp__notebooklm-mcp__source_list(notebook_id)` でソース一覧を取得して選択肢を提示する。
 
-### 5. インフォグラフィック作成
+### 6. インフォグラフィック作成
 
 ```
 mcp__notebooklm-mcp__studio_create(
@@ -148,13 +196,14 @@ mcp__notebooklm-mcp__studio_create(
   custom_prompt="{custom_prompt}",
   orientation="{orientation}",
   detail_level="{detail_level}",
+  infographic_style="{infographic_style}",
   source_ids=["{source_id1}", "{source_id2}", ...]
 )
 ```
 
 指定されなかったオプションパラメータは省略する。
 
-### 6. 初回待機
+### 7. 初回待機
 
 インフォグラフィック生成のため、まず 1 分待機する。
 
@@ -162,23 +211,23 @@ mcp__notebooklm-mcp__studio_create(
 sleep 60
 ```
 
-### 7. ポーリング（完了待ち）
+### 8. ポーリング（完了待ち）
 
 以下の手順でステータスをポーリングする:
 
 1. `mcp__notebooklm-mcp__studio_status(notebook_id="{notebook_id}")` を呼び出す
 2. status を確認:
-   - **完了** → `artifact_id` を取得してステップ 8 へ
+   - **完了** → `artifact_id` を取得してステップ 9 へ
    - **処理中** → Bash `sleep 30` で 30 秒待機してから再度 1 へ
    - **エラー** → ユーザーにエラー内容を報告して終了
 3. 最大 10 分（初回 1 分 + ポーリング 18 回 × 30 秒）まで繰り返す
 4. タイムアウトした場合はユーザーに「インフォグラフィック作成がまだ完了していません。NotebookLM の Web UI で直接確認してください。」と報告する
 
-### 8. ダウンロード確認
+### 9. ダウンロード確認
 
 AskUserQuestion でダウンロードするか確認する。
 
-### 9. ダウンロード
+### 10. ダウンロード
 
 ユーザーが「はい」の場合:
 
