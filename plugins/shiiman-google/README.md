@@ -158,6 +158,7 @@ plugins/shiiman-google/
 
 ## バージョン履歴
 
+- **v3.4.0** - notebooklm-infographic にビジュアルスタイル選択（11 種）を追加
 - **v3.3.0** - NotebookLM レポートスキル追加（notebooklm-report）
 - **v3.2.0** - NotebookLM スキル追加（deepresearch / infographic / slide）
 - **v3.0.0** - スキル名リネーム（`google-xxx` → `shiiman-google:xxx`）
