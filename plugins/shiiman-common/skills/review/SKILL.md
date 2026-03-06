@@ -1,6 +1,6 @@
 ---
 name: shiiman-common:review
-description: ローカル変更を Claude + codex + セキュリティの 3 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
+description: ローカル変更を Claude + Codex + security + simplify の 4 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
 allowed-tools:
   [Read, Write, Bash, Glob, Grep, Edit, Task, Skill, AskUserQuestion]
 argument-hint: "[--help]"
@@ -9,7 +9,7 @@ context: fork
 
 # Review
 
-ローカル変更を Claude + Codex + セキュリティの 3 観点で並列レビューし、統合結果を表示します。
+ローカル変更を Claude + Codex + セキュリティ + Simplify の 4 観点で並列レビューし、統合結果を表示します。
 
 ## Help
 
@@ -19,7 +19,7 @@ context: fork
 /shiiman-common:review - 統合レビュー
 
 概要:
-  ローカル変更を 3 つの観点（コード品質・セキュリティ・Codex）で
+  ローカル変更を 4 つの観点（コード品質・セキュリティ・Codex・Simplify）で
   並列レビューし、統合結果を表示します。
 
 使用方法:
@@ -48,11 +48,11 @@ Bash ツールで以下を**並列実行**して変更差分を取得:
 変更をステージするか、ファイルを編集してから再実行してください。
 ```
 
-### 2. 3 エージェント並列レビュー
+### 2. 4 エージェント並列レビュー
 
-Task ツールで以下の 3 エージェントを**並列起動**する。
+Task ツールで以下の 4 エージェントを**並列起動**する。
 2-1 と 2-3 には取得した diff の全文をプロンプトに含める。
-2-2 はビルトイン `/security-review` スキルを実行するため、diff の受け渡しは不要。
+2-2 と 2-4 はビルトインスキルを実行するため、diff の受け渡しは不要。
 
 #### 2-1. Claude 品質レビュー（subagent_type: general-purpose）
 
@@ -207,9 +207,28 @@ codex exec --full-auto "$PROMPT"
 実行後、Codex の出力結果をそのまま返してください。
 ```
 
+#### 2-4. Simplify レビュー（subagent_type: general-purpose）
+
+ビルトイン `/simplify` スキルを利用する。
+
+プロンプト:
+
+```
+ビルトイン `/simplify` スキルを実行してください。
+
+手順:
+1. ToolSearch ツールで Skill ツールをロード:
+   query: "select:Skill"
+2. Skill ツールを呼び出し、skillName に "simplify" を指定:
+   引数は不要です（スキルが自動で変更コードを分析します）。
+
+実行後、スキルの出力結果をそのまま返してください。
+スキルが見つからない場合やエラーが発生した場合は、エラーメッセージをそのまま返してください。
+```
+
 ### 3. 統合レポート出力
 
-3 エージェントの結果を以下のフォーマットで統合して出力:
+4 エージェントの結果を以下のフォーマットで統合して出力:
 
 ```markdown
 ## 統合レビュー結果
@@ -225,6 +244,10 @@ codex exec --full-auto "$PROMPT"
 ### 3. Codex レビュー
 
 {codex review の出力}
+
+### 4. Simplify レビュー
+
+{/simplify の出力結果}
 
 ### サマリー
 
@@ -257,7 +280,7 @@ mkdir -p "${REPO_ROOT}/.claude/tmp"
 echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 ```
 
-2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、3 エージェントの結果を統合して記述する:
+2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、4 エージェントの結果を統合して記述する:
 
 ```markdown
 # 統合レビューレポート
@@ -265,13 +288,13 @@ echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 **実施日**: {DATE}
 **対象**: {REPO_NAME}
 **ブランチ**: {BRANCH}
-**調査カテゴリ**: コード品質 / セキュリティ / Codex
+**調査カテゴリ**: コード品質 / セキュリティ / Codex / Simplify
 
 ---
 
 ## 概要
 
-{REPO_NAME} に対し、3つの観点から並列レビューを実施した。
+{REPO_NAME} に対し、4つの観点から並列レビューを実施した。
 各観点で専門的な分析を行い、検出された問題点を統合して優先度付きのタスクリストとしてまとめた。
 
 | カテゴリ                           | 評価     | 検出数 |
@@ -279,6 +302,7 @@ echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 | 📝 コード品質 (Claude / 8 観点)    | 🟢/🟡/🔴 | N      |
 | 🔒 セキュリティ (/security-review) | 🟢/🟡/🔴 | N      |
 | 🤖 Codex                           | 🟢/🟡/🔴 | N      |
+| 🔧 Simplify (/simplify)            | 🟢/🟡/🔴 | N      |
 
 ---
 
@@ -314,7 +338,7 @@ echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
   </details>
 ```
 
-**ID 体系**: `QUAL-NNN`（コード品質 8 観点）/ `SEC-NNN`（セキュリティ）/ `CDX-NNN`（Codex）
+**ID 体系**: `QUAL-NNN`（コード品質 8 観点）/ `SEC-NNN`（セキュリティ）/ `CDX-NNN`（Codex）/ `SMP-NNN`（Simplify）
 
 **優先度基準**:
 
@@ -358,9 +382,10 @@ AskUserQuestion ツールで次の選択肢を提示:
 
 ## 重要な注意事項
 
-- ✅ 3 エージェントは必ず並列起動する（Task ツールの並列呼び出し）
+- ✅ 4 エージェントは必ず並列起動する（Task ツールの並列呼び出し）
 - ✅ diff が空の場合は早期終了する
 - ✅ codex コマンドが未インストールでもエラーにしない
+- ✅ /simplify スキルが未対応でもエラーにしない
 - ✅ Codex レビューは Bash ツールの timeout を 600000 に設定する
 - ✅ 統合レポートは `.claude/tmp/{TS}-review.md` にも保存する
 - ❌ diff なしでレビューを実行しない
