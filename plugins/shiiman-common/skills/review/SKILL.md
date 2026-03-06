@@ -1,6 +1,6 @@
 ---
 name: shiiman-common:review
-description: ローカル変更を Claude + codex + セキュリティ + simplify の 4 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
+description: ローカル変更を Claude + Codex + security + simplify の 4 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
 allowed-tools:
   [Read, Write, Bash, Glob, Grep, Edit, Task, Skill, AskUserQuestion]
 argument-hint: "[--help]"
@@ -280,7 +280,7 @@ mkdir -p "${REPO_ROOT}/.claude/tmp"
 echo "${TS}|${DATE}|${REPO_NAME}|${BRANCH}|${REPO_ROOT}"
 ```
 
-2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、3 エージェントの結果を統合して記述する:
+2. Write ツールで `{REPO_ROOT}/.claude/tmp/{TS}-review.md` を作成。以下のテンプレートに沿って、4 エージェントの結果を統合して記述する:
 
 ```markdown
 # 統合レビューレポート
@@ -385,6 +385,7 @@ AskUserQuestion ツールで次の選択肢を提示:
 - ✅ 4 エージェントは必ず並列起動する（Task ツールの並列呼び出し）
 - ✅ diff が空の場合は早期終了する
 - ✅ codex コマンドが未インストールでもエラーにしない
+- ✅ /simplify スキルが未対応でもエラーにしない
 - ✅ Codex レビューは Bash ツールの timeout を 600000 に設定する
 - ✅ 統合レポートは `.claude/tmp/{TS}-review.md` にも保存する
 - ❌ diff なしでレビューを実行しない
