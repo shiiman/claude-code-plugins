@@ -140,7 +140,7 @@ bash "$OPEN_TMUX_SCRIPT" \
 ### ステップ 5: tmux 内で Claude Code を起動
 
 ```bash
-claude --dangerously-skip-permissions
+claude --dangerously-skip-permissions --teammate-mode tmux
 ```
 
 ### ステップ 6: 送信スクリプトを設定（multi-agent-mcp の送信方式）
