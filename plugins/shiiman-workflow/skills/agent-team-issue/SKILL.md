@@ -113,7 +113,7 @@ bash "$OPEN_TMUX_SCRIPT" \
 ### ステップ 4: tmux 内で Claude Code を起動
 
 ```bash
-claude --dangerously-skip-permissions --teammate-mode tmux
+CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 claude --dangerously-skip-permissions --teammate-mode tmux
 ```
 
 ### ステップ 5: 送信スクリプトを設定（multi-agent-mcp の送信方式）
@@ -159,7 +159,8 @@ EOF
 # パス参照のみを送信
 REQUEST_FILE="$(mktemp)"
 cat >| "$REQUEST_FILE" <<EOF
-Agent Team を作成して、Issue #{issue_number} の対応を開始してください。計画書に従って実装してください。
+TeamCreate ツールを使って Agent Team を作成し、Issue #{issue_number} の対応を開始してください。計画書に従って実装してください。
+並列実行には必ず TeamCreate ツールを使用してください（Agent ツールではなく TeamCreate です）。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
 
@@ -310,7 +311,8 @@ EOF
 # パス参照のみを送信
 FIX_FILE="$(mktemp)"
 cat >| "$FIX_FILE" <<EOF
-Agent Team を作成して、修正指示に従って実装を開始してください。
+TeamCreate ツールを使って Agent Team を作成し、修正指示に従って実装を開始してください。
+並列実行には必ず TeamCreate ツールを使用してください（Agent ツールではなく TeamCreate です）。
 報告書などのアウトプットがある場合は "${REPO_ROOT}/.claude/tmp" に出力してください。
 ${COMMIT_NOTICE}
 
