@@ -184,7 +184,7 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 ## 依存プラグイン
 
 - **shiiman-git**: コミット操作（`shiiman-git:add-commit`）
-- **shiiman-github**: Issue 作成・ブランチ作成・PR 作成（`shiiman-github:issue-create`、`shiiman-github:branch-create`、`shiiman-github:pr-create`）
+- **shiiman-github**: Issue 作成・worktree/ブランチ作成・PR 作成（`shiiman-github:issue-create`、`shiiman-github:worktree-create`、`shiiman-github:branch-create`、`shiiman-github:pr-create`）
 
 ## 必要条件
 
