@@ -17,7 +17,7 @@ allowed-tools:
   ]
 context: fork
 user-invocable: true
-argument-hint: "[タスク説明] [--plan|--no-git|--help]"
+argument-hint: "[タスク説明] [--plan|--branch|--no-git|--help]"
 ---
 
 # Multi Flow
@@ -33,19 +33,21 @@ MCP マルチエージェントで Issue/PR なしに並列実行する軽量フ
 
 概要:
   MCP マルチエージェントで Issue/PR なしに並列実行する。
-  ブランチ作成 → MCP 初期化 → Admin/Worker 並列実行 → コミットメッセージ出力。
+  worktree/ブランチ作成 → MCP 初期化 → Admin/Worker 並列実行 → コミットメッセージ出力。
 
 使用方法:
   /shiiman-workflow:multi [タスク説明] [オプション]
 
 オプション:
   --plan    plan mode で計画書を新規作成してから実行
+  --branch  worktree の代わりにブランチを作成
   --no-git  git を使わず no-git モードで実行
   --help    このヘルプを表示
 
 例:
-  /shiiman-workflow:multi                        # 既存計画書から実行
+  /shiiman-workflow:multi                        # 既存計画書から実行（worktree）
   /shiiman-workflow:multi --plan                 # 計画書を作成してから実行
+  /shiiman-workflow:multi --branch               # ブランチ作成モードで実行
   /shiiman-workflow:multi "API リファクタリング"  # タスク説明から直接実行
   /shiiman-workflow:multi --no-git               # git なしモードで実行
 ```
@@ -129,7 +131,13 @@ slug = {task_slug}
 if slug が空なら slug = "no-git-task"
 ```
 
-### ステップ 3: git モード時のみブランチ作成
+### ステップ 3: git モード時のみ worktree / ブランチ作成
+
+**デフォルト（`--branch` なし）**:
+
+Skill ツールで `shiiman-github:worktree-create` を呼び出す。
+
+**`--branch` 指定時**:
 
 Skill ツールで `shiiman-github:branch-create` を呼び出す。
 
@@ -340,6 +348,10 @@ git モード:
 ```text
 ## 実装完了
 
+### 作成されたブランチ / worktree
+- {ブランチ名}
+- パス: {worktree のパス}（worktree モード時のみ）
+
 ### 推奨コミットメッセージ
 {Conventional Commits 形式}
 
@@ -350,6 +362,11 @@ git モード:
 git push -u origin feature/{slug}
 
 必要に応じて gh pr create
+
+### worktree クリーンアップ（worktree モード時のみ）
+
+PR マージ後、不要になった worktree を削除してください:
+`/shiiman-git:worktree` で gtr rm または gtr clean を実行
 ```
 
 no-git モード:

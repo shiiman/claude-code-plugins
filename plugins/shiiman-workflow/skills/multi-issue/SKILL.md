@@ -17,7 +17,7 @@ allowed-tools:
   ]
 context: fork
 user-invocable: true
-argument-hint: "[タスク説明] [--plan|--help]"
+argument-hint: "[タスク説明] [--plan|--branch|--help]"
 ---
 
 # Multi Issue Flow
@@ -33,18 +33,20 @@ MCP マルチエージェントで Issue から PR まで並列実行する開�
 
 概要:
   MCP マルチエージェントで Issue 作成から PR 作成まで並列実行する。
-  Issue 作成 → MCP 初期化 → Admin/Worker 並列実行 → コミット → PR 作成。
+  Issue 作成 → worktree/ブランチ作成 → MCP 初期化 → Admin/Worker 並列実行 → コミット → PR 作成。
 
 使用方法:
   /shiiman-workflow:multi-issue [タスク説明] [オプション]
 
 オプション:
-  --plan  plan mode で計画書を新規作成してから実行
-  --help  このヘルプを表示
+  --plan    plan mode で計画書を新規作成してから実行
+  --branch  worktree の代わりにブランチを作成
+  --help    このヘルプを表示
 
 例:
-  /shiiman-workflow:multi-issue                        # 既存計画書から実行
+  /shiiman-workflow:multi-issue                        # 既存計画書から実行（worktree）
   /shiiman-workflow:multi-issue --plan                 # 計画書を作成してから実行
+  /shiiman-workflow:multi-issue --branch               # ブランチ作成モードで実行
   /shiiman-workflow:multi-issue "認証機能を並列実装"    # タスク説明から直接実行
 ```
 
@@ -103,7 +105,13 @@ Skill ツールで `shiiman-github:issue-create --no-confirm` を呼び出す。
 - テストが通過していること
 ```
 
-### ステップ 2: ベースブランチ作成
+### ステップ 2: worktree / ベースブランチ作成
+
+**デフォルト（`--branch` なし）**:
+
+Skill ツールで `shiiman-github:worktree-create {issue番号}` を呼び出す。
+
+**`--branch` 指定時**:
 
 Skill ツールで `shiiman-github:branch-create {issue番号}` を呼び出す。
 
@@ -323,9 +331,18 @@ Closes #{issue番号}
 ### 作成された Issue
 - #{issue番号}: {タイトル}
 
+### 作成されたブランチ / worktree
+- {ブランチ名}
+- パス: {worktree のパス}（worktree モード時のみ）
+
 ### 作成された PR
 - PR #{pr番号}: {タイトル}
 - URL: {pr_url}
 
 PR がマージされると Issue #{issue番号} は自動的にクローズされます。
+
+### worktree クリーンアップ（worktree モード時のみ）
+
+PR マージ後、不要になった worktree を削除してください:
+`/shiiman-git:worktree` で gtr rm または gtr clean を実行
 ```

@@ -17,7 +17,7 @@ allowed-tools:
   ]
 context: fork
 user-invocable: true
-argument-hint: "[タスク説明] [--plan|--help]"
+argument-hint: "[タスク説明] [--plan|--branch|--help]"
 ---
 
 # Single Flow
@@ -33,18 +33,20 @@ Issue/PR なしで計画書からタスクを実行し、コミットメッセ�
 
 概要:
   Issue/PR なしで計画書からタスクを実行し、コミットメッセージを出力する。
-  ブランチ作成 → 実装 → 自己レビュー → コミットメッセージ出力。
+  worktree/ブランチ作成 → 実装 → 自己レビュー → コミットメッセージ出力。
 
 使用方法:
   /shiiman-workflow:single [タスク説明] [オプション]
 
 オプション:
-  --plan  plan mode で計画書を新規作成してから実行
-  --help  このヘルプを表示
+  --plan    plan mode で計画書を新規作成してから実行
+  --branch  worktree の代わりにブランチを作成
+  --help    このヘルプを表示
 
 例:
-  /shiiman-workflow:single                        # 既存計画書から実行
+  /shiiman-workflow:single                        # 既存計画書から実行（worktree）
   /shiiman-workflow:single --plan                 # 計画書を作成してから実行
+  /shiiman-workflow:single --branch               # ブランチ作成モードで実行
   /shiiman-workflow:single "ログイン機能を追加"    # タスク説明から直接実行
 ```
 
@@ -142,7 +144,13 @@ ls -t ~/.claude/plans/*.md | head -1
 
 ## 共通ステップ（全モード共通）
 
-### ステップ 1: ブランチ作成
+### ステップ 1: worktree / ブランチ作成
+
+**デフォルト（`--branch` なし）**:
+
+Skill ツールで `shiiman-github:worktree-create` を呼び出す。
+
+**`--branch` 指定時**:
 
 Skill ツールで `shiiman-github:branch-create` を呼び出す。
 
@@ -217,8 +225,9 @@ git diff
 ```
 ## 実装完了
 
-### 作成されたブランチ
+### 作成されたブランチ / worktree
 - {ブランチ名}
+- パス: {worktree のパス}（worktree モード時のみ）
 
 ### 変更サマリー
 {git diff --stat の出力}
@@ -250,6 +259,11 @@ git push -u origin {ブランチ名}
 ```
 
 必要に応じて PR 作成: `gh pr create`
+
+### worktree クリーンアップ（worktree モード時のみ）
+
+PR マージ後、不要になった worktree を削除してください:
+`/shiiman-git:worktree` で gtr rm または gtr clean を実行
 ```
 
 ## 重要な注意事項

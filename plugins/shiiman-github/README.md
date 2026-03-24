@@ -27,6 +27,7 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 | pr-review       | 「PR レビュー」「PR 承認」    | PR をレビュー・承認（--approve で簡易承認）              |
 | pr-review-check | 「レビュー対応」              | PR に付いたレビューコメントを確認し対応                  |
 | setup           | 「GitHub 設定をセットアップ」 | GitHub リポジトリ設定ファイルのセットアップ              |
+| worktree-create | 「worktree 作成」             | gtr で worktree 作成（Issue 番号・ブランチ名・自動命名） |
 
 ### エージェント
 
@@ -55,6 +56,7 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 - `git status`, `git log`, `git diff`, `git branch`, `git show`
 - `git fetch`, `git pull`, `git add`, `git commit`
 - `git checkout`, `git switch`
+- `git gtr new`, `git gtr --version`
 
 **拒否（危険なコマンド）:**
 

@@ -16,7 +16,7 @@ allowed-tools:
   ]
 context: fork
 user-invocable: true
-argument-hint: "[タスク説明] [--plan|--help]"
+argument-hint: "[タスク説明] [--plan|--branch|--help]"
 ---
 
 # Agent Team Issue Flow
@@ -39,12 +39,14 @@ Agent Team で Issue 作成から PR 作成までを並列実行するフロー�
   /shiiman-workflow:agent-team-issue [タスク説明] [オプション]
 
 オプション:
-  --plan  plan mode で計画書を新規作成してから実行
-  --help  このヘルプを表示
+  --plan    plan mode で計画書を新規作成してから実行
+  --branch  worktree の代わりにブランチを作成
+  --help    このヘルプを表示
 
 例:
-  /shiiman-workflow:agent-team-issue                        # 既存計画書から実行
+  /shiiman-workflow:agent-team-issue                        # 既存計画書から実行（worktree）
   /shiiman-workflow:agent-team-issue --plan                 # 計画書を作成してから実行
+  /shiiman-workflow:agent-team-issue --branch               # ブランチ作成モードで実行
   /shiiman-workflow:agent-team-issue "認証機能を並列実装"    # タスク説明から直接実行
 ```
 
@@ -88,7 +90,13 @@ Issue 本文テンプレート:
 - テスト通過
 ```
 
-### ステップ 2: ブランチ作成
+### ステップ 2: worktree / ブランチ作成
+
+**デフォルト（`--branch` なし）**:
+
+Skill ツールで `shiiman-github:worktree-create {issue番号}` を呼び出す。
+
+**`--branch` 指定時**:
 
 Skill ツールで `shiiman-github:branch-create {issue番号}` を呼び出す。
 
@@ -286,9 +294,18 @@ Closes #{issue_number}
 ### 作成された Issue
 - #{issue_number}: {issue_title}
 
+### 作成されたブランチ / worktree
+- {ブランチ名}
+- パス: {worktree のパス}（worktree モード時のみ）
+
 ### 作成された PR
 - PR #{pr_number}: {pr_title}
 - URL: {pr_url}
+
+### worktree クリーンアップ（worktree モード時のみ）
+
+PR マージ後、不要になった worktree を削除してください:
+`/shiiman-git:worktree` で gtr rm または gtr clean を実行
 ```
 
 ### NG（修正依頼）の場合
