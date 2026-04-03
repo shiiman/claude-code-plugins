@@ -170,21 +170,27 @@ diff:
 
 #### 2-3. Codex レビュー（subagent_type: general-purpose）
 
-ビルトイン `/codex:review` スキルを利用する。
+`codex review` CLI を直接呼び出す（`CLAUDE_PLUGIN_ROOT` が未設定の環境でも動作するよう Skill 経由ではなく CLI を使用）。
 
 プロンプト:
 
 ```
-ビルトイン `/codex:review` スキルを実行してください。
+`codex review` CLI を使ってコードレビューを実行してください。
 
 手順:
-1. ToolSearch ツールで Skill ツールをロード:
-   query: "select:Skill"
-2. Skill ツールを呼び出し、skill に "codex:review" を指定:
-   args に "--wait" を指定（フォアグラウンドで実行し完了を待つ）。
+1. Bash ツールで現在のデフォルトブランチを取得する:
+   ```bash
+   gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'
+   ```
 
-実行後、スキルの出力結果をそのまま返してください。
-スキルが見つからない場合やエラーが発生した場合は、エラーメッセージをそのまま返してください。
+2. Bash ツールで codex review を実行する（--base にデフォルトブランチを指定）:
+   ```bash
+   codex review --base <デフォルトブランチ名>
+   ```
+   タイムアウトは 120000ms（2分）を設定すること。
+
+実行後、コマンドの出力結果をそのまま返してください。
+コマンドが見つからない場合やエラーが発生した場合は、エラーメッセージをそのまま返してください。
 ```
 
 #### 2-4. Simplify レビュー（subagent_type: general-purpose）
