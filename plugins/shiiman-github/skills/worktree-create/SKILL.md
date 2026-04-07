@@ -114,7 +114,20 @@ git gtr new {ブランチ名} --from-current
 cd {worktree のパス}
 ```
 
-### 5. 結果報告
+### 5. mise trust（mise.toml が存在する場合）
+
+`mise` のセキュリティ仕様により、新しい worktree パスでは `mise.toml` が未信頼扱いになる。
+`mise.toml` が存在する場合は信頼登録を実行する。
+
+```bash
+if [ -f "mise.toml" ]; then
+  mise trust mise.toml
+fi
+```
+
+失敗した場合はエラーを表示するが、処理は継続する（mise を使わない環境では不要なため）。
+
+### 6. 結果報告
 
 **Issue 指定時**:
 

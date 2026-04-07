@@ -174,14 +174,14 @@ diff:
 
 プロンプト:
 
-```
+````
 `codex review` CLI を使ってコードレビューを実行してください。
 
 手順:
 1. Bash ツールで現在のデフォルトブランチを取得する:
    ```bash
    gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'
-   ```
+````
 
 2. Bash ツールで codex review を実行する（--base にデフォルトブランチを指定）:
    ```bash
@@ -191,6 +191,7 @@ diff:
 
 実行後、コマンドの出力結果をそのまま返してください。
 コマンドが見つからない場合やエラーが発生した場合は、エラーメッセージをそのまま返してください。
+
 ```
 
 #### 2-4. Simplify レビュー（subagent_type: general-purpose）
@@ -200,9 +201,11 @@ diff:
 プロンプト:
 
 ```
+
 ビルトイン `/simplify` スキルを実行してください。
 
 手順:
+
 1. ToolSearch ツールで Skill ツールをロード:
    query: "select:Skill"
 2. Skill ツールを呼び出し、skillName に "simplify" を指定:
@@ -210,7 +213,8 @@ diff:
 
 実行後、スキルの出力結果をそのまま返してください。
 スキルが見つからない場合やエラーが発生した場合は、エラーメッセージをそのまま返してください。
-```
+
+````
 
 ### 3. 統合レポート出力
 
@@ -240,7 +244,7 @@ diff:
 - 重要指摘: {count} 件
 - 改善提案: {count} 件
 - 総合判定: {OK / 要修正}
-```
+````
 
 **カウントルール**:
 
