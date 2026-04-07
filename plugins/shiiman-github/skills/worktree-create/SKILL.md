@@ -96,8 +96,8 @@ if [ -z "$DEFAULT_BRANCH" ]; then
 fi
 git fetch origin "$DEFAULT_BRANCH"
 
-# gtr で worktree を作成
-git gtr new {ブランチ名}
+# gtr で worktree を作成（デフォルトブランチをベースに指定）
+git gtr new {ブランチ名} --from "origin/${DEFAULT_BRANCH}"
 ```
 
 ユーザーがベースブランチを明示した場合は、`--from-current` オプションを使用:
