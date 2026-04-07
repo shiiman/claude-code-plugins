@@ -129,6 +129,9 @@ Skill ツールで `shiiman-github:branch-create` を呼び出す。
 no-git モードではこのステップをスキップする。
 ユーザーがベースブランチを明示した場合は、そちらを優先する。
 
+> **Note:** `shiiman-github:worktree-create` は `mise trust` を自動実行するため、追加対応は不要。
+> `mise.toml` が存在しない環境では自動スキップされる。
+
 ### ステップ 4: 共通スクリプトで tmux セッションを起動
 
 ```bash

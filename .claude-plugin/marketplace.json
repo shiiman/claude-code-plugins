@@ -33,14 +33,14 @@
     {
       "name": "shiiman-github",
       "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、worktree、GitHub Actions、リポジトリ設定管理を提供",
-      "version": "4.1.0",
+      "version": "4.2.0",
       "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
-      "version": "4.3.0",
+      "version": "4.3.1",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },
