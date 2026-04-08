@@ -16,7 +16,7 @@ allowed-tools:
   ]
 context: fork
 user-invocable: true
-argument-hint: "[タスク説明] [--plan|--branch|--no-git|--help]"
+argument-hint: "[タスク説明] [--plan|--branch|--no-git|--no-review|--help]"
 ---
 
 # Agent Team Flow
@@ -39,10 +39,11 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
   /shiiman-workflow:agent-team [タスク説明] [オプション]
 
 オプション:
-  --plan    plan mode で計画書を新規作成してから実行
-  --branch  worktree の代わりにブランチを作成
-  --no-git  git を使わず no-git モードで実行
-  --help    このヘルプを表示
+  --plan       plan mode で計画書を新規作成してから実行
+  --branch     worktree の代わりにブランチを作成
+  --no-git     git を使わず no-git モードで実行
+  --no-review  完了報告前の shiiman-common:review をスキップ
+  --help       このヘルプを表示
 
 例:
   /shiiman-workflow:agent-team                        # 既存計画書から実行（worktree）
@@ -50,6 +51,7 @@ Agent Team で Issue/PR なしに並列実装を進める軽量フロー。
   /shiiman-workflow:agent-team --branch               # ブランチ作成モードで実行
   /shiiman-workflow:agent-team "API リファクタリング"  # タスク説明から直接実行
   /shiiman-workflow:agent-team --no-git               # git なしモードで実行
+  /shiiman-workflow:agent-team --no-review            # レビューをスキップして実行
 ```
 
 ## 前提条件
@@ -188,6 +190,10 @@ COMMIT_NOTICE=""
 if [ "$FLOW_MODE" = "git" ]; then
   COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 fi
+REVIEW_NOTICE=""
+if [ "{no_review_flag}" != "true" ]; then
+  REVIEW_NOTICE="/shiiman-common:review を実行して指摘内容をすべて自動修正し、"
+fi
 
 # 計画書をファイルに保存
 TS="$(date +%Y%m%d-%H%M%S)"
@@ -208,7 +214,7 @@ ${COMMIT_NOTICE}
 計画書ファイル: ${PLAN_FILE}
 Read ツールで上記ファイルを読み込んでから実装を進めてください。
 
-完了時は以下を報告してください。
+実装完了後、${REVIEW_NOTICE}以下を報告してください。
 - 実装サマリー
 - 変更ファイル
 - テスト結果
@@ -348,6 +354,10 @@ COMMIT_NOTICE=""
 if [ "$FLOW_MODE" = "git" ]; then
   COMMIT_NOTICE="コミット（git add / commit / push）は行わないでください。"
 fi
+REVIEW_NOTICE=""
+if [ "{no_review_flag}" != "true" ]; then
+  REVIEW_NOTICE="/shiiman-common:review を実行して指摘内容をすべて自動修正し、"
+fi
 
 # 修正依頼をファイルに保存
 TS="$(date +%Y%m%d-%H%M%S)"
@@ -368,7 +378,7 @@ ${COMMIT_NOTICE}
 修正依頼ファイル: ${FIX_REQUEST_FILE}
 Read ツールで上記ファイルを読み込んでから修正を進めてください。
 
-上記を反映し、完了時は実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
+上記を反映し、${REVIEW_NOTICE}実装サマリー・変更ファイル・テスト結果・残課題を再報告してください。
 完了時は以下コマンドを実行して macOS 通知を送ってください。
 osascript -e 'display notification "Agent Team 修正対応が完了しました" with title "workflow-agent-team" sound name "default"'
 EOF
