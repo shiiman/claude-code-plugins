@@ -413,8 +413,23 @@ EOF
 close_cmux_window() {
   local stdout=""
   local applescript=""
+  local cmux_path=""
+  cmux_path="$(command -v cmux 2>/dev/null || true)"
 
-  # PID ベースで終了を試みる
+  # CLI でワークスペースをクローズ（workspace モード）
+  if [[ "$OPEN_MODE" == "workspace" && -n "$cmux_path" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[DRY-RUN] cmux close-workspace --workspace \"$SESSION\""
+      return 0
+    fi
+    if "$cmux_path" close-workspace --workspace "$SESSION" >/dev/null 2>&1; then
+      log "cmux workspace closed via CLI: $SESSION"
+      return 0
+    fi
+    warn "cmux close-workspace failed; falling back to title match."
+  fi
+
+  # PID ベースで終了を試みる（window モード / フォールバック）
   if [[ -n "$CMUX_PID" ]]; then
     if [[ "$DRY_RUN" -eq 1 ]]; then
       echo "[DRY-RUN] close cmux window: try PID $CMUX_PID, then fallback to title match '$SESSION'"

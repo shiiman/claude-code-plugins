@@ -7,6 +7,7 @@
     "allow": [
       "Bash(git fetch:*)",
       "Bash(git checkout:*)",
+      "Bash(git checkout *)",
       "Bash(git pull:*)",
       "Bash(git branch:*)",
       "Bash(git push -u origin feature/:*)",
@@ -23,6 +24,11 @@
       "Bash(gh run:*)",
       "Bash(python:*)",
       "Bash(python3:*)",
+      "Bash(make lint-all)",
+      "Bash(make lint-go)",
+      "Bash(go vet *)",
+      "Bash(tmux list-sessions *)",
+      "Bash(cmux ping)",
       "Skill(*)"
     ],
     "deny": [
