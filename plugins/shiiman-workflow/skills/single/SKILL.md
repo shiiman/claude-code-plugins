@@ -40,11 +40,16 @@ argument-hint: "[タスク説明]"
 
 使用方法:
   /shiiman-workflow:single [タスク説明]
+  /shiiman-workflow:single --help
+
+オプション:
+  --help  このヘルプを表示
 
 例:
   /shiiman-workflow:single                          # 既存計画書から実装（あれば）
   /shiiman-workflow:single "ログイン機能を追加"      # タスク説明から実装
   /shiiman-workflow:single "認証を実装して PR まで"  # Issue/PR 連携ありで実装
+  /shiiman-workflow:single --help                   # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
   - 「計画を立ててから」  → plan mode で計画書を作成してから実装

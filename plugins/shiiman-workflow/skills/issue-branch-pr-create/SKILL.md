@@ -4,7 +4,7 @@ description: 既存変更から Issue → ブランチ → コミット・プッ
 allowed-tools: [Read, Bash, Glob, Grep, Skill, AskUserQuestion]
 context: fork
 user-invocable: true
-argument-hint: ""
+argument-hint: "[--help]"
 ---
 
 # Issue Branch PR Create（Backward フロー）
@@ -24,9 +24,14 @@ argument-hint: ""
 
 使用方法:
   /shiiman-workflow:issue-branch-pr-create
+  /shiiman-workflow:issue-branch-pr-create --help
+
+オプション:
+  --help  このヘルプを表示
 
 例:
-  /shiiman-workflow:issue-branch-pr-create   # 既存変更から Issue・PR を作成（既定はブランチ）
+  /shiiman-workflow:issue-branch-pr-create         # 既存変更から Issue・PR を作成（既定はブランチ）
+  /shiiman-workflow:issue-branch-pr-create --help  # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
   - 「worktree で」  → ブランチではなく worktree を作成（既存変更は stash 経由で移動）

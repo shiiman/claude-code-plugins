@@ -40,11 +40,16 @@ Agent Team（tmux + TeamCreate）で並列実装する開発フロー。
 
 使用方法:
   /shiiman-workflow:agent-team [タスク説明]
+  /shiiman-workflow:agent-team --help
+
+オプション:
+  --help  このヘルプを表示
 
 例:
   /shiiman-workflow:agent-team                          # 既存計画書から並列実装（あれば）
   /shiiman-workflow:agent-team "API を並列リファクタ"    # タスク説明から並列実装
   /shiiman-workflow:agent-team "認証を実装して PR まで"  # Issue/PR 連携ありで並列実装
+  /shiiman-workflow:agent-team --help                   # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
   - 「計画を立ててから」  → plan mode で計画書を作成してから実装
@@ -183,7 +188,7 @@ fi
 
 # 計画書をファイルに保存
 TS="$(date +%Y%m%d-%H%M%S)"
-PLAN_FILE="${REPO_ROOT}/.claude/tmp/${TS}-{slugまたはissue}-plan.md"
+PLAN_FILE="${REPO_ROOT}/.claude/tmp/${TS}-${SESSION}-plan.md"
 mkdir -p "${REPO_ROOT}/.claude/tmp"
 cat >| "$PLAN_FILE" <<EOF
 {plan_or_task}

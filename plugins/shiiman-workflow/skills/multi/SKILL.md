@@ -40,11 +40,16 @@ multi-agent-mcp の Owner/Admin/Worker で並列実装する開発フロー。
 
 使用方法:
   /shiiman-workflow:multi [タスク説明]
+  /shiiman-workflow:multi --help
+
+オプション:
+  --help  このヘルプを表示
 
 例:
   /shiiman-workflow:multi                            # 既存計画書から並列実装（あれば）
   /shiiman-workflow:multi "API を並列リファクタ"      # タスク説明から並列実装
   /shiiman-workflow:multi "認証を実装して PR まで"    # Issue/PR 連携ありで並列実装
+  /shiiman-workflow:multi --help                     # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
   - 「計画を立ててから」  → plan mode で計画書を作成してから実装
@@ -153,10 +158,12 @@ mcp__multi-agent-mcp__init_tmux_workspace(
     auto_setup_gtr=true,
     session_id="{session_id}",
     caller_agent_id="{owner_id}"
+    # no-git モードのときのみ、以下を追加:
+    # enable_git=false,
 )
 ```
 
-**no-git モードでは `enable_git=false` を必ず追加で渡す。**
+**no-git モードでは `enable_git=false` を必ず追加で渡す（git モードでは省略してよい）。**
 
 ### ステップ 5: Admin エージェント作成
 
