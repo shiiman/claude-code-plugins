@@ -58,16 +58,16 @@ npm install
 
 #### 2. プラグインをインストール
 
-| プラグイン                                        | 説明                                                                                                                                | インストールコマンド                                            |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [`shiiman-claude`](plugins/shiiman-claude/)       | Claude Code プロジェクト設定管理プラグイン - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供 | `/plugin install shiiman-claude@shiiman-claude-code-plugins`    |
-| [`shiiman-git`](plugins/shiiman-git/)             | Git ローカル操作 - コミット、worktree、gitignore チェック、コミットメッセージ設定、gtrconfig 生成を提供                             | `/plugin install shiiman-git@shiiman-claude-code-plugins`       |
-| [`shiiman-github`](plugins/shiiman-github/)       | GitHub API / gh CLI 操作 - Issue、PR、ブランチ、GitHub Actions、リポジトリ設定管理を提供                                            | `/plugin install shiiman-github@shiiman-claude-code-plugins`    |
-| [`shiiman-workflow`](plugins/shiiman-workflow/)   | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供                             | `/plugin install shiiman-workflow@shiiman-claude-code-plugins`  |
-| [`shiiman-google`](plugins/shiiman-google/)       | Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理を提供                 | `/plugin install shiiman-google@shiiman-claude-code-plugins`    |
-| [`shiiman-go`](plugins/shiiman-go/)               | Go 言語開発支援 - フォーマット、静的解析、テスト、依存関係管理、ビルド、パフォーマンス計測、脆弱性スキャン                          | `/plugin install shiiman-go@shiiman-claude-code-plugins`        |
-| [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform/Terragrunt 管理 - コマンド実行、バージョン管理、モジュール管理、state 操作、import 支援、セキュリティ監査                 | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
-| [`shiiman-slack`](plugins/shiiman-slack/)         | Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供                                                     | `/plugin install shiiman-slack@shiiman-claude-code-plugins`     |
+| プラグイン                                        | 説明                                                                                                                                                           | インストールコマンド                                            |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [`shiiman-claude`](plugins/shiiman-claude/)       | Claude Code プロジェクト設定管理 - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供                                      | `/plugin install shiiman-claude@shiiman-claude-code-plugins`    |
+| [`shiiman-git`](plugins/shiiman-git/)             | Git ローカル操作 - ステージング・コミット、worktree 管理・セットアップを提供                                                                                   | `/plugin install shiiman-git@shiiman-claude-code-plugins`       |
+| [`shiiman-github`](plugins/shiiman-github/)       | GitHub API / gh CLI 操作 - Issue、PR、ブランチ、worktree、GitHub Actions、リポジトリ設定管理を提供                                                             | `/plugin install shiiman-github@shiiman-claude-code-plugins`    |
+| [`shiiman-workflow`](plugins/shiiman-workflow/)   | 開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team の開発フローを提供（Issue/PR 連携・git・計画書はフラグ不要で自動判断）                         | `/plugin install shiiman-workflow@shiiman-claude-code-plugins`  |
+| [`shiiman-google`](plugins/shiiman-google/)       | Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理、NotebookLM リサーチ・アーティファクト作成を提供 | `/plugin install shiiman-google@shiiman-claude-code-plugins`    |
+| [`shiiman-go`](plugins/shiiman-go/)               | Go 言語開発を支援するプラグイン（品質総合チェック、モジュール更新）                                                                                            | `/plugin install shiiman-go@shiiman-claude-code-plugins`        |
+| [`shiiman-terraform`](plugins/shiiman-terraform/) | Terraform リソース import 支援プラグイン                                                                                                                       | `/plugin install shiiman-terraform@shiiman-claude-code-plugins` |
+| [`shiiman-slack`](plugins/shiiman-slack/)         | Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供                                                                                | `/plugin install shiiman-slack@shiiman-claude-code-plugins`     |
 
 **インストール例**:
 
@@ -121,14 +121,14 @@ npm install
 
 ### ワークフロー
 
-| スキル                    | プラグイン       | トリガー例                                              | 説明                                                             |
-| ------------------------- | ---------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
-| workflow-single-issue     | shiiman-workflow | 「シングル Issue フロー」「Issue から PR まで」         | Issue 作成から PR 作成まで自動実行するシングルエージェントフロー |
-| workflow-multi-issue      | shiiman-workflow | 「マルチ Issue フロー」「並列 Issue 開発」              | MCP マルチエージェントで Issue から PR まで並列実行              |
-| workflow-single           | shiiman-workflow | 「シングルフロー」「軽量フロー」                        | Issue/PR なしで計画書からタスク実行する軽量フロー                |
-| workflow-multi            | shiiman-workflow | 「マルチフロー」「並列軽量フロー」                      | MCP マルチエージェントで Issue/PR なしに並列実行する軽量フロー   |
-| workflow-agent-team-issue | shiiman-workflow | 「Agent Team Issue」「エージェントチーム Issue フロー」 | Agent Team で Issue から PR まで並列実行                         |
-| workflow-agent-team       | shiiman-workflow | 「エージェントチームフロー」「Agent Team で実装」       | Agent Team で Issue/PR なしに並列実行する軽量フロー              |
+フラグ不要。Issue/PR 連携・git・計画書・ブランチ/worktree は発話・引数から自動判断し、曖昧なときだけ確認する（v5.0.0）。実行スタイルでスキルを選ぶ。
+
+| スキル                 | プラグイン       | トリガー例                           | 説明                                                   |
+| ---------------------- | ---------------- | ------------------------------------ | ------------------------------------------------------ |
+| single                 | shiiman-workflow | 「シングルフロー」「順次実装」       | 1 エージェントで順次実装                               |
+| multi                  | shiiman-workflow | 「マルチフロー」「並列で実装」       | MCP マルチエージェント（Owner/Admin/Worker）で並列実装 |
+| agent-team             | shiiman-workflow | 「エージェントチームフロー」         | Agent Team（tmux + TeamCreate）で並列実装              |
+| issue-branch-pr-create | shiiman-workflow | 「変更から Issue と PR」「Backward」 | 既存変更から Issue・ブランチ・PR を作る逆方向フロー    |
 
 ### 開発ツール
 

@@ -1,6 +1,7 @@
 ---
 name: shiiman-google:notebooklm-deepresearch
-description: NotebookLM でディープリサーチを実行する。「ディープリサーチ」「深い調査」「NotebookLM リサーチ」「Web 調査」「ノートブック調査」「深掘りリサーチ」「NotebookLM で調べて」などで起動。notebooklm-mcp を使用。
+description: NotebookLM でディープリサーチ（Web 調査）を実行する。「NotebookLM リサーチ」「NotebookLM で調査」「NotebookLM ディープリサーチ」「NotebookLM で調べて」などで起動。notebooklm-mcp を使用。
+allowed-tools: [Read, Bash, AskUserQuestion, mcp__notebooklm-mcp__*]
 argument-hint: "[--help]"
 ---
 

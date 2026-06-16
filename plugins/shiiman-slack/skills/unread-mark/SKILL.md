@@ -1,6 +1,6 @@
 ---
 name: shiiman-slack:unread-mark
-description: Slack チャンネルを既読にする（全チャンネル一括既読化対応）。「既読にして」「既読化」「チャンネル既読」「未読を消す」「既読マーク」「全部読んだことにして」「既読にしたい」「全部既読」「一括既読」などで起動。Pythonスクリプト `slack_message.py mark-read` を使用。
+description: Slack チャンネルを既読にする（全チャンネル一括既読化対応）。「Slack を既読にして」「Slack 既読化」「Slack チャンネル既読」「Slack の未読を消す」「Slack 既読マーク」「Slack を全部読んだことにして」「Slack 全部既読」「Slack を一括既読」などで起動。Pythonスクリプト `slack_message.py mark-read` を使用。
 allowed-tools: [Bash]
 argument-hint: "[--help]"
 ---

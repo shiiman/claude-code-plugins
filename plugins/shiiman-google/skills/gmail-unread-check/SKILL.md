@@ -1,6 +1,6 @@
 ---
 name: shiiman-google:gmail-unread-check
-description: Gmail の未読メッセージ一覧を取得する。「未読メール」「Gmail 未読」「未読一覧」「未読メールを見たい」「未読メッセージ」「メールの未読」「全アカウントの未読」などで起動。
+description: Gmail の未読メッセージ一覧を取得する。「未読メール」「Gmail 未読」「Gmail の未読一覧」「未読メールを見たい」「メールの未読」「Gmail 未読メッセージ」「全アカウントの未読メール」などで起動。
 allowed-tools: [Read, Bash]
 argument-hint: "[--help]"
 ---

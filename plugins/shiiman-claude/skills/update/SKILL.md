@@ -1,6 +1,6 @@
 ---
 name: shiiman-claude:update
-description: Claude Code CLI のバージョン確認・更新、プラグイン一括更新を実行する。「Claude を更新」「Claude Code をアップデート」「claude update」「Claude のバージョン確認」「最新版にして」「Claude を最新に」「Claude 本体更新」「プラグイン更新」「plugin update」「プラグインをアップデート」などで起動。引数があれば優先し、なければ発話内容から version/update/plugin-update を判定。
+description: Claude Code CLI 本体のバージョン確認・更新と、インストール済みプラグインの一括更新を実行する。「Claude Code を更新」「claude update」「Claude のバージョン確認」「Claude 本体更新」「プラグイン更新」「plugin update」などで起動。引数があれば優先し、なければ発話内容から version/update/plugin-update を判定。brew での AI CLI 一括更新は shiiman-common:brew-upgrade-ai。
 allowed-tools: [Bash, AskUserQuestion]
 argument-hint: "[version|update|plugin-update] [--help]"
 ---

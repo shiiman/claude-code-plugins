@@ -1,7 +1,7 @@
 {
   "name": "shiiman-workflow",
-  "version": "4.4.1",
-  "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team での Issue 管理付き・なしのフローを提供",
+  "version": "5.0.0",
+  "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team の開発フローを提供（Issue/PR 連携・git・計画書はフラグ不要で自動判断）",
   "author": {
     "name": "shiiman"
   },

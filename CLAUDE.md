@@ -35,12 +35,11 @@ plugins/{plugin-name}/
 
 ### Workflow
 
-- `/shiiman-workflow:single-issue` - Single-agent flow: Issue creation → implementation → PR (trigger: "シングル Issue フロー")
-- `/shiiman-workflow:multi-issue` - Multi-agent flow: parallel Issue-based development with MCP (trigger: "マルチ Issue フロー")
-- `/shiiman-workflow:single` - Lightweight single-agent flow without Issue/PR (trigger: "シングルフロー")
-- `/shiiman-workflow:multi` - Lightweight multi-agent parallel flow without Issue/PR (trigger: "マルチフロー")
-- `/shiiman-workflow:agent-team` - Agent Team lightweight parallel flow without Issue/PR (trigger: "エージェントチームフロー")
-- `/shiiman-workflow:agent-team-issue` - Agent Team flow: Issue creation → parallel implementation → PR (trigger: "Agent Team Issue")
+Flags are not required. Each skill auto-detects git state, plan handling, branch/worktree, and Issue/PR linkage from the conversation, and confirms only ambiguous points via AskUserQuestion. Pick the skill by execution style.
+
+- `/shiiman-workflow:single` - Single-agent sequential implementation (trigger: "シングルフロー", "順次実装")
+- `/shiiman-workflow:multi` - MCP multi-agent (Owner/Admin/Worker) parallel implementation (trigger: "マルチフロー", "並列で実装")
+- `/shiiman-workflow:agent-team` - Agent Team (tmux + TeamCreate) parallel implementation (trigger: "エージェントチームフロー", "チームで実装")
 - `/shiiman-workflow:issue-branch-pr-create` - Backward flow: existing changes → Issue → branch → commit → PR (trigger: "変更から Issue と PR", "Backward フロー")
 
 ### Development

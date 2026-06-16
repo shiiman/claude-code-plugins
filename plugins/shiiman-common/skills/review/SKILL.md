@@ -1,6 +1,6 @@
 ---
 name: shiiman-common:review
-description: ローカル変更を Claude + Codex + security + simplify の 4 観点で並列レビューし統合結果を表示。「レビュー」「コードレビュー」「セキュリティチェック」「変更をレビュー」「review」「レビューして」「コード確認」などで起動。
+description: ローカル変更（未コミット/ステージ済み）を Claude + Codex + security + simplify の 4 観点で並列レビューし統合結果を表示。「ローカルレビュー」「変更をレビュー」「コミット前レビュー」「手元の変更をチェック」「review」などで起動。GitHub の PR ではなく作業中の変更が対象。
 allowed-tools:
   [Read, Write, Bash, Glob, Grep, Edit, Task, Skill, AskUserQuestion]
 argument-hint: "[--help]"

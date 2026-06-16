@@ -1,6 +1,6 @@
 ---
 name: shiiman-github:worktree-create
-description: worktree を作成する。「worktree 作成」「ワークツリー作成」「worktree を作って」「worktree 切って」「Issue から worktree」「作業用 worktree」「gtr new」などで起動。Issue 番号・ブランチ名の直接指定・コンテキストからの自動命名に対応。
+description: 新しい worktree を作成する。「worktree 作成」「worktree を作って」「worktree 切って」「Issue から worktree」「作業用 worktree」「gtr new」などで起動。Issue 番号・ブランチ名の直接指定・コンテキストからの自動命名に対応。一覧・削除・クリーンアップは shiiman-git:worktree。
 allowed-tools: [Read, Bash]
 argument-hint: "[Issue番号|ブランチ名] [--help]"
 ---

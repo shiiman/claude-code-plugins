@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:setup
-description: GitHub 設定ファイルをセットアップする。「GitHub 設定をセットアップ」「.github を作って」「Issue テンプレート作成」「PR テンプレート作成」「GitHub 設定を初期化」「リポジトリ設定をセットアップ」「ラベル設定を作成」などで起動。.github ディレクトリに必要な設定ファイルを一括生成。
+description: GitHub 設定ファイルをセットアップする。「GitHub 設定をセットアップ」「.github を作って」「Issue テンプレート作成」「PR テンプレート作成」「GitHub 設定を初期化」「リポジトリ設定をセットアップ」「ラベル設定を作成」などで起動。.github ディレクトリに必要な設定ファイルを一括生成。「何が作られるか確認」と伝えれば生成予定の一覧表示のみ行う。
 allowed-tools: [Read, Write, Bash, Glob, AskUserQuestion]
-argument-hint: "[--dry-run|--force|--help]"
+argument-hint: "[--help]"
 ---
 
 # Setup GitHub
@@ -21,18 +21,28 @@ argument-hint: "[--dry-run|--force|--help]"
   ラベル定義、GitHub Actions workflow を一括生成する。
 
 使用方法:
-  /shiiman-github:setup [オプション]
+  /shiiman-github:setup
 
 オプション:
-  --dry-run  生成予定のファイル一覧を表示（実行しない）
-  --force    既存ファイルを上書き
-  --help     このヘルプを表示
+  --help  このヘルプを表示
+
+実行モードの伝え方（フラグの代わり）:
+  「確認だけ」「何が作られるか見たい」  → 生成予定のファイル一覧のみ表示（生成しない）
+  指定なし                             → ファイルを生成（既存ファイルは確認してから上書き）
 
 例:
-  /shiiman-github:setup              # 設定ファイルを生成
-  /shiiman-github:setup --dry-run    # 生成予定のファイルを確認
-  /shiiman-github:setup --force      # 既存ファイルを上書きして生成
+  /shiiman-github:setup           # 設定ファイルを生成
+  「何が作られるか先に見せて」      # 生成予定のファイルを確認
 ```
+
+## 起動時の自動判断（フラグの代わり）
+
+引数・発話から実行モードを判定する。明示がなければ「生成」とする。
+
+| モード | 条件                                       | 動作                                            |
+| ------ | ------------------------------------------ | ----------------------------------------------- |
+| 確認   | 「確認だけ」「見せて」「プレビュー」等あり | 生成予定のファイル一覧のみ表示して終了          |
+| 生成   | 既定                                       | ファイルを生成（既存は AskUserQuestion で確認） |
 
 ## 生成されるファイル
 
@@ -58,8 +68,15 @@ argument-hint: "[--dry-run|--force|--help]"
 
 **既存ファイルがある場合**:
 
-- `--force` なし: 上書きするか確認
-- `--force` あり: 確認なしで上書き
+`AskUserQuestion` で上書き可否を必ず確認する（既存設定を失う不可逆操作のため）。
+
+```text
+question: "既存の .github 設定ファイルがあります。どうしますか？"
+options:
+  - 上書きする: 既存ファイルを生成内容で置き換える
+  - 既存を残す: 既存ファイルはスキップし、未作成のファイルのみ生成
+  - 中止する: 生成を行わず終了
+```
 
 ### ステップ 2: プロジェクト情報収集
 
