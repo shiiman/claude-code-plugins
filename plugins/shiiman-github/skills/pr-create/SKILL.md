@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:pr-create
-description: 現在のブランチから PR を作成または更新する。「PR 作成」「PR を作って」「プルリク作成」「pull request」「PR 出して」「プルリクエスト」「レビュー依頼したい」「PR 更新」などで起動。変更内容を分析し適切な PR を生成。
+description: 現在のブランチから PR を作成または更新する。「PR 作成」「PR を作って」「プルリク作成」「pull request」「PR 出して」「プルリクエスト」「レビュー依頼したい」「PR 更新」などで起動。変更内容を分析し適切な PR を生成。「ドラフトで」「develop 向けに」などは発話から判断する。
 allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[タイトル] [--base <branch>|--draft|--no-confirm|--help]"
+argument-hint: "[タイトル]"
 context: fork
 ---
 
@@ -23,21 +23,33 @@ context: fork
   ブランチ名から関連 Issue を自動検出し、PR テンプレートに従って本文を生成。
 
 使用方法:
-  /shiiman-github:pr-create [タイトル] [オプション]
+  /shiiman-github:pr-create [タイトル]
 
 オプション:
-  --help           このヘルプを表示
-  --base <branch>  宛先ブランチを指定（デフォルト: リポジトリのデフォルトブランチ）
-  --draft          ドラフト PR として作成
-  --no-confirm     PR 内容確認をスキップして即座に作成
+  --help  このヘルプを表示
+
+指定の伝え方（フラグの代わり）:
+  「ドラフトで」「draft で」      → ドラフト PR として作成
+  「develop 向けに」「base は X」  → 宛先ブランチを指定（既定: リポジトリのデフォルトブランチ）
 
 例:
-  /shiiman-github:pr-create                    # PR を作成または更新
-  /shiiman-github:pr-create --draft            # ドラフト PR を作成
-  /shiiman-github:pr-create "タイトル"          # タイトルを指定して PR 作成
-  /shiiman-github:pr-create --base develop     # develop ブランチ向けに PR 作成
-  /shiiman-github:pr-create --no-confirm       # 確認なしで PR を作成
+  /shiiman-github:pr-create               # PR を作成または更新
+  /shiiman-github:pr-create "タイトル"     # タイトルを指定して PR 作成
+  「ドラフトで PR を作って」                # ドラフト PR を作成
+  「develop 向けに PR を作成」              # develop ブランチ向けに PR 作成
+
+内部呼び出し用:
+  --no-confirm  PR 内容確認をスキップして即座に作成（workflow から渡される）
 ```
+
+## 起動時の自動判断（フラグの代わり）
+
+引数・発話から PR の作成条件を判定する。明示がなければ既定を採用する。
+
+| 項目         | 既定                   | 判断ルール                                        |
+| ------------ | ---------------------- | ------------------------------------------------- |
+| 宛先ブランチ | リポジトリのデフォルト | 「develop 向けに」「base は X」等の発話があれば X |
+| ドラフト     | 通常 PR                | 「ドラフトで」「draft で」「WIP」等あれば draft   |
 
 ## ワークフロー
 
@@ -145,7 +157,7 @@ Closes #{issue番号}
 - [x] 動作確認済み"
 ```
 
-`--draft` 指定時は `gh pr create --draft` を使用。
+ドラフトと判定した場合は `gh pr create --draft` を使用。宛先ブランチを判定した場合は `gh pr create --base {branch}` を付与する（既定はリポジトリのデフォルトブランチ）。
 
 **更新の場合**:
 

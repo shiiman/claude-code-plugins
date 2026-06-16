@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:issue-list
-description: オープン Issue の一覧を優先順位付きで表示する。「Issue 一覧」「Issue リスト」「オープン Issue」「Issue を見せて」「チケット一覧」「未解決 Issue」「Issue 確認」などで起動。優先度順にソートして表示。
+description: オープン Issue の一覧を優先順位付きで表示する。「Issue 一覧」「Issue リスト」「オープン Issue」「Issue を見せて」「チケット一覧」「未解決 Issue」「Issue 確認」などで起動。優先度順にソートして表示。「クローズ済みも」「自分の」などの絞り込みは発話から判断する。
 allowed-tools: [Bash]
-argument-hint: "[--all|--mine|--help]"
+argument-hint: "[--help]"
 ---
 
 # List Issues
@@ -21,37 +21,50 @@ argument-hint: "[--all|--mine|--help]"
   ラベルに基づく優先度ソートに対応。
 
 使用方法:
-  /shiiman-github:issue-list [オプション]
+  /shiiman-github:issue-list
 
 オプション:
-  --all   クローズ済みも含めて表示
-  --mine  自分がアサインされたもののみ
   --help  このヘルプを表示
 
+絞り込みの伝え方（フラグの代わり）:
+  「クローズ済みも」「全部」  → クローズ済みも含めて表示
+  「自分の」「自分担当」      → 自分がアサインされた Issue のみ
+
 例:
-  /shiiman-github:issue-list          # オープン Issue を表示
-  /shiiman-github:issue-list --all    # 全 Issue を表示
-  /shiiman-github:issue-list --mine   # 自分担当の Issue を表示
+  /shiiman-github:issue-list       # オープン Issue を表示
+  「クローズした Issue も見せて」   # 全 Issue を表示
+  「自分の Issue 一覧」             # 自分担当の Issue を表示
 ```
 
 ## 実行手順
 
-1. `gh issue list` コマンドで Issue 一覧を取得
+### 1. 表示範囲を判定（フラグの代わり）
+
+引数・発話から表示範囲を決める。明示がなければ既定（オープンのみ・全担当）とする。読み取り専用のため確認は不要。
+
+| 項目 | 既定     | 判断ルール                                       |
+| ---- | -------- | ------------------------------------------------ |
+| 状態 | オープン | 「クローズ済みも」「全部」→ 全状態               |
+| 担当 | 全員     | 「自分の」「自分担当」→ 自分がアサインされたもの |
+
+### 2. Issue 一覧を取得
+
+判定した範囲に応じて `gh issue list` を実行する。
 
 ```bash
-# オープンのみ（デフォルト）
+# オープンのみ（既定）
 gh issue list --json number,title,labels,assignees,createdAt --limit 50
 
-# クローズ済みも含める（--all）
+# クローズ済みも含める（「クローズ済みも」と判定した場合）
 gh issue list --state all --json number,title,labels,assignees,createdAt,state --limit 50
 
-# 自分がアサインされたもの（--mine）
+# 自分がアサインされたもの（「自分の」と判定した場合）
 gh issue list --assignee @me --json number,title,labels,assignees,createdAt --limit 50
 ```
 
-2. 優先順位でソート（ラベル: priority-high > priority-medium > priority-low）
+### 3. 優先順位でソート（ラベル: priority-high > priority-medium > priority-low）
 
-3. 以下の形式で表示
+### 4. 以下の形式で表示
 
 ## 出力フォーマット
 

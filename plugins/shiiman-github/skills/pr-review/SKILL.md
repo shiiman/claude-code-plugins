@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:pr-review
-description: GitHub の PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「PR のセキュリティレビュー」「PR のパフォーマンスレビュー」「PR 承認」「approve して」「LGTM」などで起動。対象は GitHub 上の PR（手元の変更は shiiman-common:review）。
-allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[PR番号] [--submit|--approve|--request-changes|--help]"
+description: GitHub の PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「PR のセキュリティレビュー」「PR のパフォーマンスレビュー」「PR 承認」「approve して」「LGTM」などで起動。対象は GitHub 上の PR（手元の変更は shiiman-common:review）。既定はローカル表示のみで、投稿・承認は発話から判断し実行前に必ず確認する。
+allowed-tools: [Read, Bash, Glob, Grep, AskUserQuestion]
+argument-hint: "[PR番号]"
 context: fork
 agent: shiiman-github:reviewer
 ---
@@ -22,24 +22,37 @@ PR をレビューし、結果をローカル表示または GitHub に投稿し
 
 概要:
   PR をレビューし、結果をローカル表示または GitHub に投稿する。
-  デフォルトはローカル表示のみ。--submit で GitHub に投稿。
+  既定はローカル表示のみ。投稿・承認は発話から判断し、実行前に必ず確認する。
 
 使用方法:
-  /shiiman-github:pr-review [PR番号] [オプション]
+  /shiiman-github:pr-review [PR番号]
 
 オプション:
-  --help             このヘルプを表示
-  --submit           GitHub にレビューコメントを投稿
-  --approve          Approve として投稿（単独使用可、--submit なしでも GitHub に投稿）
-  --request-changes  Request Changes としてレビュー投稿（--submit 必須）
+  --help  このヘルプを表示
+
+出力先・レビュー結果の伝え方（フラグの代わり）:
+  指定なし                  → ローカル表示のみ（GitHub には投稿しない）
+  「GitHub に投稿して」      → レビューコメントを GitHub に投稿
+  「approve」「承認」「LGTM」 → Approve として投稿
+  「要修正」「変更要求」      → Request Changes として投稿
 
 例:
-  /shiiman-github:pr-review                           # 現在のブランチの PR をレビュー（ローカル表示）
-  /shiiman-github:pr-review 123                       # PR #123 をレビュー（ローカル表示）
-  /shiiman-github:pr-review --submit                  # レビュー結果を GitHub に投稿
-  /shiiman-github:pr-review 123 --submit --approve    # PR #123 をレビューして Approve
-  /shiiman-github:pr-review --approve                 # 現在のブランチの PR を承認（簡易承認）
+  /shiiman-github:pr-review        # 現在のブランチの PR をレビュー（ローカル表示）
+  /shiiman-github:pr-review 123    # PR #123 をレビュー（ローカル表示）
+  「PR #123 をレビューして投稿して」 # レビューして GitHub に投稿
+  「PR #123 を approve して」       # PR #123 を承認
 ```
+
+## 起動時の自動判断（フラグの代わり）
+
+引数・発話から出力先とレビュー結果を判定する。**明示がなければローカル表示のみ**（誤投稿防止の安全側）とする。
+
+| 項目         | 既定         | 判断ルール                                                        |
+| ------------ | ------------ | ----------------------------------------------------------------- |
+| 出力先       | ローカル表示 | 「投稿して」「GitHub に」「approve」「要修正」等あれば投稿        |
+| レビュー結果 | コメント     | 「approve」「承認」「LGTM」→ Approve／「要修正」→ Request Changes |
+
+**GitHub への投稿・承認・変更要求は取り消しにくい外部操作のため、実行前に必ず `AskUserQuestion` で確認する**（後述のステップ 6）。判断に迷う場合はローカル表示にとどめる。
 
 ## ワークフロー
 
@@ -112,7 +125,7 @@ gh pr diff {pr番号}
 
 ### 6. 結果の出力
 
-**`--submit` なし（デフォルト）**: ローカルに結果を表示
+**ローカル表示のみ（既定）**: ローカルに結果を表示し、ここで終了する
 
 ```
 ## コードレビュー結果
@@ -136,16 +149,27 @@ gh pr diff {pr番号}
 {low_priority_issues}
 ```
 
-**`--submit` あり**: GitHub にコメント投稿
+**投稿と判定した場合**: GitHub に投稿する前に、`AskUserQuestion` で必ず確認する（外部・不可逆操作）。
+
+```text
+question: "レビュー結果を GitHub に投稿しますか？"
+options:
+  - コメントとして投稿: gh pr review --comment で投稿
+  - Approve として投稿: gh pr review --approve で承認
+  - Request Changes として投稿: gh pr review --request-changes で変更要求
+  - 投稿しない: ローカル表示のみで終了
+```
+
+確認で投稿が選ばれた場合のみ、対応するコマンドを実行する。
 
 ```bash
-# --approve も --request-changes もない場合
+# コメントとして投稿
 gh pr review {pr番号} --comment --body "{レビュー内容}"
 
-# --approve の場合
+# Approve として投稿
 gh pr review {pr番号} --approve --body "{レビュー内容}"
 
-# --request-changes の場合
+# Request Changes として投稿
 gh pr review {pr番号} --request-changes --body "{レビュー内容}"
 ```
 
@@ -160,9 +184,9 @@ PR #{pr番号} のレビューを完了しました。
 改善提案: {suggestion_count}件
 ```
 
-## 簡易承認フロー（--approve 単独使用時）
+## 簡易承認フロー（「approve」「LGTM」のみ伝えられた場合）
 
-`--approve` を `--submit` なしで単独使用した場合、レビューをスキップして承認のみ実行する。
+レビュー依頼なしで「approve」「承認」「LGTM」だけ伝えられた場合、詳細レビューをスキップして承認のみ行う。承認は GitHub への外部・不可逆操作のため、実行前に必ず `AskUserQuestion` で確認する。
 
 ### 1. PR 状態の確認
 
@@ -176,7 +200,9 @@ gh pr view {pr番号} --json title,state,reviews,mergeable,statusCheckRollup
 - CI が通っているか
 - マージ可能な状態か
 
-### 2. 承認実行
+### 2. 承認実行（確認後）
+
+`AskUserQuestion` で承認の実行可否を確認し、承認が選ばれた場合のみ実行する。
 
 ```bash
 gh pr review {pr番号} --approve --body "{承認コメント}"
@@ -220,9 +246,9 @@ LGTM! 🎉
 
 ## 重要な注意事項
 
-- ✅ `--submit` がない場合はローカルに結果を表示するだけ（誤投稿防止）
-- ✅ `--approve` は単独使用可（簡易承認として GitHub に直接投稿）
-- ✅ `--request-changes` は `--submit` が必須
+- ✅ 投稿の意図が明示されない場合はローカル表示のみ（誤投稿防止の安全側）
+- ✅ GitHub への投稿・承認・変更要求は実行前に必ず AskUserQuestion で確認する
+- ✅ 「approve」「LGTM」のみの場合は簡易承認フローへ（確認後に承認）
 - ✅ 具体的な改善提案を含める
 - ✅ 良い点も指摘する
 - ✅ 重要度を明確にする

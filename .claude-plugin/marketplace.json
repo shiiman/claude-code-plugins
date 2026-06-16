@@ -12,7 +12,7 @@
     {
       "name": "shiiman-claude",
       "description": "Claude Code プロジェクト設定管理 - MCP サーバー管理、Claude 設定管理、Claude リソース一覧表示、Claude Code CLI 更新を提供",
-      "version": "2.0.2",
+      "version": "2.1.0",
       "source": "./plugins/shiiman-claude",
       "category": "utility"
     },
@@ -33,7 +33,7 @@
     {
       "name": "shiiman-github",
       "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、worktree、GitHub Actions、リポジトリ設定管理を提供",
-      "version": "4.2.2",
+      "version": "4.3.0",
       "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },
@@ -54,7 +54,7 @@
     {
       "name": "shiiman-go",
       "description": "Go 言語開発を支援するプラグイン（品質総合チェック、モジュール更新）",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "source": "./plugins/shiiman-go",
       "category": "developer-tools"
     },

@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:issue-create
-description: GitHub Issue を作成する。タスクは Issue 本文内でチェックボックスに分割。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。--branch でブランチ、--worktree で worktree も自動作成。
-allowed-tools: [Read, Bash, Glob, Grep]
-argument-hint: "[--branch|--worktree|--no-confirm|--help]"
+description: GitHub Issue を作成する。タスクは Issue 本文内でチェックボックスに分割。「Issue 作成」「Issue を作って」「タスクを Issue に」「Issue 追加」「チケット作成」「Issue を切る」「タスクを分割して Issue」などで起動。「ブランチも」「worktree も」と伝えれば作成後にブランチ/worktree も用意する。
+allowed-tools: [Read, Bash, Glob, Grep, AskUserQuestion]
+argument-hint: "[タスク説明]"
 context: fork
 ---
 
@@ -20,22 +20,26 @@ GitHub Issue を作成します。タスクは Issue 本文内でチェックボ
 概要:
   GitHub Issue を作成します。
   タスクは Issue 本文内でチェックボックスに分割します。
-  --branch で Issue 作成後にブランチ、--worktree で worktree も自動作成。
+  「ブランチも」「worktree も」と伝えれば作成後にブランチ/worktree も用意します。
 
 使用方法:
-  /shiiman-github:issue-create [オプション]
+  /shiiman-github:issue-create [タスク説明]
 
 オプション:
-  --branch      Issue 作成後にブランチを自動作成
-  --worktree    Issue 作成後に worktree を自動作成（gtr 使用）
-  --no-confirm  ユーザー確認をスキップして即座に Issue を作成
-  --help        このヘルプを表示
+  --help  このヘルプを表示
+
+後続作成の伝え方（フラグの代わり）:
+  「ブランチも作って」    → Issue 作成後にブランチを作成
+  「worktree も」         → Issue 作成後に worktree を作成（gtr 使用）
+  指定なし                → 作成後にブランチ/worktree を作るか確認
 
 例:
-  /shiiman-github:issue-create              # Issue を作成
-  /shiiman-github:issue-create --branch     # Issue 作成後にブランチも作成
-  /shiiman-github:issue-create --worktree   # Issue 作成後に worktree も作成
-  /shiiman-github:issue-create --no-confirm # 確認なしで Issue を作成
+  /shiiman-github:issue-create                    # Issue を作成
+  「Issue を作ってブランチも切って」               # Issue 作成後にブランチも作成
+  「Issue を作って worktree も用意して」           # Issue 作成後に worktree も作成
+
+内部呼び出し用:
+  --no-confirm  ユーザー確認をスキップして即座に作成（workflow から渡される）
 ```
 
 ## ワークフロー
@@ -124,23 +128,31 @@ Issue を作成しました:
 - URL: {issue_url}
 ```
 
-### 6. ブランチもしくは worktree 作成の提案
+### 6. ブランチもしくは worktree 作成（フラグの代わり）
 
-**`--branch` 指定時**:
+引数・発話から後続作成の要否を判定する。
+
+**「ブランチも」と判定した場合**:
 
 作成した Issue の番号で `branch-create` の手順に従いブランチを自動作成する。
 
-**`--worktree` 指定時**:
+**「worktree も」と判定した場合**:
 
 作成した Issue の番号で `worktree-create` の手順に従い worktree を自動作成する。
 
-**`--branch` / `--worktree` なし**:
+**発話に明示がない場合**:
 
-ユーザーに「ブランチまたは worktree を作成しますか？」と確認:
+`AskUserQuestion` で 1 回だけ確認する（読み取りではなく作成を伴うため）。
 
-- ブランチ → 作成した Issue の番号で `branch-create` の手順に従いブランチを作成
-- worktree → 作成した Issue の番号で `worktree-create` の手順に従い worktree を作成
-- いいえ → スキップ
+```text
+question: "ブランチまたは worktree を作成しますか？"
+options:
+  - ブランチを作成: 作成した Issue の番号で branch-create を実行
+  - worktree を作成: 作成した Issue の番号で worktree-create を実行
+  - 作成しない: Issue 作成のみで終了
+```
+
+`--no-confirm` での内部呼び出し時（workflow など）は、呼び出し側の指定に従い、確認をスキップして指定された後続作成のみ行う。
 
 ## Issue タイトルの形式
 
@@ -165,4 +177,4 @@ Issue を作成しました:
 - ✅ 完了条件を明確にする
 - ✅ 具体的なアクションを記述
 - ❌ 曖昧なタスク記述
-- ❌ `--branch` と `--worktree` の同時指定不可（同時指定時はエラーを表示して終了）
+- ❌ ブランチと worktree の同時作成はしない（どちらか一方のみ。両方求められた場合は worktree を優先して確認）

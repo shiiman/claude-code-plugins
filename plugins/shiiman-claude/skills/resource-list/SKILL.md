@@ -1,8 +1,8 @@
 ---
 name: shiiman-claude:resource-list
-description: プロジェクトの Claude Code リソース一覧を表示する。「Claude リソース一覧」「スキル一覧」「エージェント一覧」「フック一覧」「プロジェクトリソース確認」「何があるか確認」「リソースを見せて」などで起動。
+description: プロジェクトの Claude Code リソース一覧を表示する。「Claude リソース一覧」「スキル一覧」「エージェント一覧」「フック一覧」「プロジェクトリソース確認」「何があるか確認」「リソースを見せて」などで起動。表示対象（スキル/エージェント/フック）は発話から判断する。
 allowed-tools: [Read, Glob]
-argument-hint: "[--skills|--agents|--hooks|--help]"
+argument-hint: "[--help]"
 ---
 
 # Claude Resource List
@@ -20,26 +20,28 @@ argument-hint: "[--skills|--agents|--hooks|--help]"
   プロジェクトの Claude Code リソース（スキル・エージェント・フック）を一覧表示する。
 
 使用方法:
-  /shiiman-claude:resource-list [オプション]
+  /shiiman-claude:resource-list
 
 オプション:
-  --skills  スキルのみ表示
-  --agents  エージェントのみ表示
-  --hooks   フックのみ表示
-  --help    このヘルプを表示
+  --help  このヘルプを表示
+
+表示対象の伝え方（フラグの代わり）:
+  「スキル」「スキル一覧」      → スキルのみ表示
+  「エージェント」「agent」     → エージェントのみ表示
+  「フック」「hook」            → フックのみ表示
+  指定なし                     → すべて表示
 
 例:
-  /shiiman-claude:resource-list              # すべてのリソースを表示
-  /shiiman-claude:resource-list --skills     # スキルのみ表示
-  /shiiman-claude:resource-list --agents     # エージェントのみ表示
+  /shiiman-claude:resource-list   # すべてのリソースを表示
+  「スキル一覧を見せて」           # スキルのみ表示
+  「エージェント一覧」             # エージェントのみ表示
 ```
 
 ## 実行手順
 
-### 1. 表示対象を決定
+### 1. 表示対象を決定（フラグの代わり）
 
-- 引数が指定されていれば引数を優先
-- 引数がない場合は発話内容から `skills` / `agents` / `hooks` / `all` を判定
+発話内容から `skills` / `agents` / `hooks` / `all` を判定する。明示がなければ `all`（すべて表示）とする。読み取り専用のため確認は不要。
 
 ### 2. リソースを収集
 

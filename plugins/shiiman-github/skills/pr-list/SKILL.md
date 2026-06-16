@@ -1,8 +1,8 @@
 ---
 name: shiiman-github:pr-list
-description: オープン PR の一覧を優先順位付きで表示する。「PR 一覧」「PR リスト」「オープン PR」「PR を見せて」「プルリク一覧」「レビュー待ち PR」「PR 確認」などで起動。レビュー状態と優先度順にソートして表示。
+description: オープン PR の一覧を優先順位付きで表示する。「PR 一覧」「PR リスト」「オープン PR」「PR を見せて」「プルリク一覧」「レビュー待ち PR」「PR 確認」などで起動。レビュー状態と優先度順にソートして表示。「マージ済みも」「自分の」などの絞り込みは発話から判断する。
 allowed-tools: [Bash]
-argument-hint: "[--all|--mine|--help]"
+argument-hint: "[--help]"
 ---
 
 # List PRs
@@ -20,37 +20,50 @@ argument-hint: "[--all|--mine|--help]"
   オープン PR の一覧をレビュー状態と優先順位付きで表示する。
 
 使用方法:
-  /shiiman-github:pr-list [オプション]
+  /shiiman-github:pr-list
 
 オプション:
-  --all   マージ済みも含めて表示
-  --mine  自分が作成したもののみ
   --help  このヘルプを表示
 
+絞り込みの伝え方（フラグの代わり）:
+  「マージ済みも」「全部」  → マージ済みも含めて表示
+  「自分の」「自分作成」    → 自分が作成した PR のみ
+
 例:
-  /shiiman-github:pr-list          # オープン PR を表示
-  /shiiman-github:pr-list --all    # 全 PR を表示
-  /shiiman-github:pr-list --mine   # 自分作成の PR を表示
+  /shiiman-github:pr-list        # オープン PR を表示
+  「マージ済みの PR も見せて」    # 全 PR を表示
+  「自分の PR 一覧」              # 自分作成の PR を表示
 ```
 
 ## 実行手順
 
-1. `gh pr list` コマンドで PR 一覧を取得
+### 1. 表示範囲を判定（フラグの代わり）
+
+引数・発話から表示範囲を決める。明示がなければ既定（オープンのみ・全作成者）とする。読み取り専用のため確認は不要。
+
+| 項目   | 既定     | 判断ルール                             |
+| ------ | -------- | -------------------------------------- |
+| 状態   | オープン | 「マージ済みも」「全部」→ 全状態       |
+| 作成者 | 全員     | 「自分の」「自分作成」→ 自分の PR のみ |
+
+### 2. PR 一覧を取得
+
+判定した範囲に応じて `gh pr list` を実行する。
 
 ```bash
-# オープンのみ（デフォルト）
+# オープンのみ（既定）
 gh pr list --json number,title,headRefName,author,reviewDecision,updatedAt --limit 50
 
-# マージ済みも含める（--all）
+# マージ済みも含める（「マージ済みも」と判定した場合）
 gh pr list --state all --json number,title,headRefName,author,reviewDecision,updatedAt,state --limit 50
 
-# 自分が作成したもの（--mine）
+# 自分が作成したもの（「自分の」と判定した場合）
 gh pr list --author @me --json number,title,headRefName,author,reviewDecision,updatedAt --limit 50
 ```
 
-2. レビュー状態と優先順位でソート
+### 3. レビュー状態と優先順位でソート
 
-3. 以下の形式で表示
+### 4. 以下の形式で表示
 
 ## 出力フォーマット
 
