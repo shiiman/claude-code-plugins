@@ -1,6 +1,6 @@
 ---
 name: shiiman-google:gmail-unread-mark
-description: Gmail の未読を既読化する。「既読にする」「未読を既読」「メールを既読化」「Gmail 既読化」「未読を消す」「メールを開封扱い」「一括既読」などで起動。
+description: Gmail の未読を既読化する。「メールを既読にする」「メールの未読を既読」「メールを既読化」「Gmail 既読化」「Gmail の未読を消す」「メールを開封扱い」「メールを一括既読」などで起動。
 allowed-tools: [Read, Bash]
 argument-hint: "[--help]"
 ---

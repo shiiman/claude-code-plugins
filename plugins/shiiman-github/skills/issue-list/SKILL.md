@@ -1,6 +1,6 @@
 ---
 name: shiiman-github:issue-list
-description: オープン Issue の一覧を優先順位付きで表示する。「Issue 一覧」「Issue リスト」「オープン Issue」「Issue を見せて」「チケット一覧」「未解決 Issue」「Issue 確認」などで起動。優先度順にソートして表示。「クローズ済みも」「自分の」などの絞り込みは発話から判断する。
+description: オープン Issue の一覧を優先順位付きで表示する。「Issue 一覧」「Issue リスト」「オープン Issue」「Issue を見せて」「チケット一覧」「未解決 Issue」「Issue 確認」などで起動。優先度順にソートして表示。「クローズ済みも」「自分の Issue」などの絞り込みは発話から判断する。
 allowed-tools: [Bash]
 argument-hint: "[--help]"
 ---

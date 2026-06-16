@@ -1,6 +1,7 @@
 ---
 name: shiiman-google:notebooklm-slide
 description: NotebookLM でスライドデッキを作成する。「NotebookLM スライド」「NotebookLM スライドデッキ」「NotebookLM プレゼン」「NotebookLM デッキ」などで起動。notebooklm-mcp を使用。
+allowed-tools: [Read, Bash, AskUserQuestion, mcp__notebooklm-mcp__*]
 argument-hint: "[--help]"
 ---
 

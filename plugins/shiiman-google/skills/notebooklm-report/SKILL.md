@@ -1,6 +1,7 @@
 ---
 name: shiiman-google:notebooklm-report
 description: NotebookLM でレポート・ブリーフィングを作成する。「NotebookLM レポート」「NotebookLM ブリーフィング」「NotebookLM 学習ガイド」「NotebookLM ブログポスト」などで起動。notebooklm-mcp を使用。
+allowed-tools: [Read, Bash, AskUserQuestion, mcp__notebooklm-mcp__*]
 argument-hint: "[--help]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: shiiman-slack:unread-check
-description: Slack の未読メッセージを確認する（全チャンネル横断確認対応）。「Slack未読確認」「未読メッセージ」「未読ある？」「Slackの未読」「未読を見せて」「未読チェック」「未読メール確認」「全チャンネルの未読」「未読サマリー」などで起動。Pythonスクリプト `slack_message.py unread` を使用。
+description: Slack の未読メッセージを確認する（全チャンネル横断確認対応）。「Slack未読確認」「Slack の未読メッセージ」「Slack 未読ある？」「Slackの未読」「Slack 未読を見せて」「Slack 未読チェック」「全チャンネルの未読」「Slack 未読サマリー」などで起動。Pythonスクリプト `slack_message.py unread` を使用。
 allowed-tools: [Bash]
 argument-hint: "[--help]"
 ---

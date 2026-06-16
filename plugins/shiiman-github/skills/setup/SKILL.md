@@ -1,6 +1,6 @@
 ---
 name: shiiman-github:setup
-description: GitHub 設定ファイルをセットアップする。「GitHub 設定をセットアップ」「.github を作って」「Issue テンプレート作成」「PR テンプレート作成」「GitHub 設定を初期化」「リポジトリ設定をセットアップ」「ラベル設定を作成」などで起動。.github ディレクトリに必要な設定ファイルを一括生成。「確認だけ」と伝えれば生成予定の一覧表示のみ行う。
+description: GitHub 設定ファイルをセットアップする。「GitHub 設定をセットアップ」「.github を作って」「Issue テンプレート作成」「PR テンプレート作成」「GitHub 設定を初期化」「リポジトリ設定をセットアップ」「ラベル設定を作成」などで起動。.github ディレクトリに必要な設定ファイルを一括生成。「何が作られるか確認」と伝えれば生成予定の一覧表示のみ行う。
 allowed-tools: [Read, Write, Bash, Glob, AskUserQuestion]
 argument-hint: "[--help]"
 ---

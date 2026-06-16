@@ -1,6 +1,7 @@
 ---
 name: shiiman-go:check
 description: Go プロジェクトの品質を総合チェックする。「Go チェック」「go check」「コード品質チェック」「lint して」「テスト実行」「脆弱性スキャン」「パフォーマンス確認」「コードレビュー」「品質確認」「総合診断」などで起動。テスト・静的解析・脆弱性スキャン・ベンチマーク・コードレビューを並列実行し統合レポートを出力。
+allowed-tools: [Read, Bash, Glob, Grep, Task]
 argument-hint: "[--help]"
 ---
 
