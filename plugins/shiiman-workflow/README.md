@@ -4,8 +4,9 @@
 
 ## 概要
 
-シングルエージェント/マルチエージェントでの開発フローを提供します。
-Issue 管理付き・なしの両方のパターンに対応。
+シングル / マルチエージェント / Agent Team での開発フローを提供します。
+
+**フラグは不要です。** タスクを伝えれば、git の状態・発話内容から実行条件（Issue/PR 連携・計画書・ブランチ・git）を自動判断し、曖昧な点だけ確認します。実行スタイル（順次 / MCP 並列 / Agent Team 並列）はスキルの選択で決めます。
 
 ## インストール
 
@@ -13,178 +14,99 @@ Issue 管理付き・なしの両方のパターンに対応。
 claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 ```
 
-## 機能比較
+## スキル一覧
 
-| スキル                 | Issue | ブランチ | PR  | エージェント | 用途                                                        |
-| ---------------------- | ----- | -------- | --- | ------------ | ----------------------------------------------------------- |
-| single-issue           | ✅    | ✅       | ✅  | シングル     | 標準的な開発フロー                                          |
-| single                 | ❌    | ✅       | ❌  | シングル     | 軽量な実装タスク                                            |
-| multi-issue            | ✅    | ✅       | ✅  | マルチ       | 大規模な開発タスク                                          |
-| multi                  | ❌    | ✅/❌    | ❌  | マルチ       | 並列実装タスク（`--no-git` / 自動判定で非git対応）          |
-| agent-team-issue       | ✅    | ✅       | ✅  | Agent Team   | Agent Team で Issue から PR まで                            |
-| agent-team             | ❌    | ✅/❌    | ❌  | Agent Team   | Agent Team 軽量並列実装（`--no-git` / 自動判定で非git対応） |
-| issue-branch-pr-create | ✅    | ✅       | ✅  | シングル     | 変更から Issue と PR を作成する Backward フロー             |
+| スキル                 | 実行スタイル     | Issue/PR 連携      | 用途                                          |
+| ---------------------- | ---------------- | ------------------ | --------------------------------------------- |
+| single                 | シングル（順次） | 発話・引数から自動 | 1 エージェントで順次実装                      |
+| multi                  | MCP マルチ       | 発話・引数から自動 | Owner/Admin/Worker で並列実装（大規模）       |
+| agent-team             | Agent Team       | 発話・引数から自動 | tmux + TeamCreate で並列実装                  |
+| issue-branch-pr-create | シングル         | 必須（Backward）   | 既存変更から Issue・PR を作成する逆方向フロー |
+
+> **v5.0.0 で `*-issue` 系を統合**: `single-issue` / `multi-issue` / `agent-team-issue` は廃止され、それぞれ `single` / `multi` / `agent-team` に統合されました。Issue/PR まで作るかは発話（「PR まで」「コミットだけ」等）から判断し、曖昧なときだけ確認します。
+
+## フラグ廃止と自動判断
+
+旧バージョンのフラグは、以下のルールで自動判断します（ユーザーは何も覚える必要がありません）。
+
+| 旧フラグ        | 新しい決め方                                                                   |
+| --------------- | ------------------------------------------------------------------------------ |
+| `--no-git`      | `git rev-parse --is-inside-work-tree` で git/no-git を完全自動判定             |
+| `--branch`      | 既定は worktree。「ブランチで」等の発話で branch に切替                        |
+| `--plan`        | 「計画を立てて」等で plan mode / タスク説明あり → 直接 / なし → 既存計画書探索 |
+| `--no-review`   | 既定はレビュー実行。「レビュー不要」等でスキップ（agent-team）                 |
+| `-issue` の有無 | 「Issue」「PR」等あり → 連携あり / 「コミットだけ」等 → 連携なし / 曖昧 → 確認 |
 
 ## スキル
 
-### single-issue
-
-Issue から PR まで自動実行するシングルエージェントフロー。
-
-**トリガー例**: 「シングル Issue フロー」「Issue から PR まで」「single-issue」
-
-**フロー**:
-
-```
-計画書 → Issue → ブランチ → 実装 → レビュー → コミット → PR
-```
-
-**実行モード**:
-
-- 引数なし: 既存の計画書から実行
-- `--plan`: 計画書を作成してから実行
-- `タスク説明`: 計画書なしで直接実行
-
 ### single
 
-Issue/PR なしで軽量に実行するフロー。
+1 エージェントで計画書またはタスク説明を順次実装するフロー。
 
-**トリガー例**: 「シングルフロー」「軽量フロー」「single」
-
-**フロー**:
-
-```
-計画書 → ブランチ → 実装 → レビュー → コミットメッセージ出力
-```
-
-**特徴**:
-
-- Issue を作成しない
-- ブランチを作成する（feature/{slug} 形式）
-- PR を作成しない
-- コミットメッセージを出力して終了（手動でコミット）
-
-### multi-issue
-
-MCP マルチエージェントで並列実行する開発フロー。
-
-**トリガー例**: 「マルチ Issue フロー」「並列 Issue 開発」「multi-issue」
-
-**前提条件**:
-
-- multi-agent-mcp インストール済み
-- tmux インストール済み
+**トリガー例**: 「シングルフロー」「1 人で実装」「順次実装」
 
 **フロー**:
 
 ```
-計画書 → Issue → MCP初期化 → 並列実行 → 統合 → レビュー → コミット → PR
+[Issue/PR 連携あり] Issue 作成 →
+ブランチ/worktree 作成 → 実装 → セキュリティ＆自己レビュー → ユーザー確認 →
+[連携あり] コミット → プッシュ案内 → PR 作成 ／ [連携なし] コミットメッセージ出力
 ```
+
+### multi
+
+multi-agent-mcp の Owner/Admin/Worker で並列実装するフロー。
+
+**トリガー例**: 「マルチフロー」「マルチエージェントで実装」「並列で実装」
+
+**前提条件**: multi-agent-mcp / tmux がインストール済み
 
 **階層**:
 
 - Owner（呼び出し元）: 全体を統括
 - Admin（1）: タスク分配と Worker 管理
-- Worker（max 16）: 各サブタスクを並列実行
-
-### multi
-
-MCP マルチエージェントで並列実行する軽量フロー。
-
-**トリガー例**: 「マルチフロー」「並列フロー」「multi」
-
-**前提条件**:
-
-- multi-agent-mcp インストール済み
-- tmux インストール済み
-
-**フロー**:
-
-```
-git モード: 計画書 → ブランチ → MCP初期化 → 並列実行 → 統合 → レビュー → コミットメッセージ出力
-no-git モード: 計画書 → MCP初期化(enable_git=false) → 並列実行 → 統合 → レビュー
-```
-
-**特徴**:
-
-- Issue を作成しない
-- git 管理プロジェクトではブランチを作成する（feature/{slug} 形式）
-- `--no-git` 指定時、または `git rev-parse --is-inside-work-tree` 失敗時は no-git モードへ切替
-- no-git モードでは `init_tmux_workspace(..., enable_git=false)` で実行
-- PR を作成しない
-- 複数 Worker が並列実行
-- git モードでは統合後にコミットメッセージを出力
-
-### agent-team-issue
-
-Agent Team で Issue から PR まで並列実行する開発フロー。
-
-**トリガー例**: 「agent-team-issue」「エージェントチーム Issue フロー」「Agent Team Issue」
-
-**フロー**:
-
-```text
-計画書 → Issue → ブランチ → ターミナル + tmux 起動 → Agent Team 実装 → レビュー → コミット → PR
-```
-
-**特徴**:
-
-- `multi-issue` の MCP 使用部分を Agent Team 実行に置き換え
-- `claude --dangerously-skip-permissions` で Agent Team 実行
-- ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
-- 承認時クリーンアップは `plugins/shiiman-workflow/scripts/cleanup_tmux_terminal.sh` を使用（tmux は常に終了、ターミナルの tab/workspace/window をクローズ）
-- ターミナル選択順は `cmux -> ghostty -> iterm2 -> Terminal.app -> current shell`
-- tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
-- 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
+- Worker（最大 16）: 各サブタスクを並列実行
 
 ### agent-team
 
-Agent Team で Issue/PR なしに並列実行する軽量フロー。
+Agent Team（tmux + TeamCreate）で並列実装するフロー。`multi` の MCP 依存部分を Agent Team 実行に置き換えたもの。
 
-**トリガー例**: 「agent-team」「エージェントチームフロー」「Agent Team で実装」
+**トリガー例**: 「エージェントチームフロー」「Agent Team で実装」「チームで実装」
 
-**フロー**:
-
-```text
-git モード: 計画書 → ブランチ → ターミナル + tmux 起動 → Agent Team 実装 → レビュー → コミットメッセージ出力
-no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実装 → レビュー
-```
+**前提条件**: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` / `claude` / `tmux`
 
 **特徴**:
 
-- `multi` の MCP 使用部分を Agent Team 実行に置き換え
-- `claude --dangerously-skip-permissions` で Agent Team 実行
-- `--no-git` 指定時、または `git rev-parse --is-inside-work-tree` 失敗時は no-git モードへ切替
-- no-git モードではブランチ作成と push 前提手順を行わない
-- 問題時は Agent Team に再指示してループ可能
-- ターミナル起動は `plugins/shiiman-workflow/scripts/open_tmux_terminal.sh` を使用（既存起動時は新規タブ、未起動時は新規ウィンドウ先頭タブ）
-- 承認時クリーンアップは `plugins/shiiman-workflow/scripts/cleanup_tmux_terminal.sh` を使用（tmux は常に終了、ターミナルの tab/workspace/window をクローズ）
-- ターミナル選択順は `cmux -> ghostty -> iterm2 -> Terminal.app -> current shell`
+- 並列実行には必ず TeamCreate ツールを使用（Agent ツールではない）
+- ターミナル起動は `scripts/open_tmux_terminal.sh`、クリーンアップは `scripts/cleanup_tmux_terminal.sh`、メッセージ送信は `scripts/send_claude_tmux_message.sh` を使用
+- ターミナル選択順は `cmux → Ghostty → iTerm2 → Terminal.app → current shell`
 - tmux メッセージ送信先 target は固定値ではなく tmux 実値から動的解決
-- 2 つの Agent Team スキルで共通利用する送信スクリプトは `plugins/shiiman-workflow/scripts/send_claude_tmux_message.sh` を使用
+- 既定で完了報告前に `/shiiman-common:review` を実行（「レビュー不要」でスキップ）
 
 ### issue-branch-pr-create
 
-既存の変更内容から Issue と PR を作成する Backward フロー。
+既存の変更内容から Issue と PR を作成する Backward（逆方向）フロー。
 
 **トリガー例**: 「変更から Issue と PR」「既存変更を PR に」「Backward フロー」
 
 **フロー**:
 
 ```
-変更検出 → Issue 作成 → ブランチ作成 → コミット → プッシュ提示 → PR 作成
+変更検出 → Issue 作成 → ブランチ/worktree 作成 → コミット → プッシュ提示 → PR 作成
 ```
 
 **特徴**:
 
 - ワーキングツリーの変更やコミット済み未プッシュの変更から自動で Issue と PR を作成
-- 通常のフローと逆方向（Backward）で、既に実装済みの変更を Issue/PR 化する
+- 通常フローと逆方向で、既に実装済みの変更を Issue/PR 化する
+- 既定はブランチ。「worktree で」の発話で worktree（既存変更は stash 経由で移動）
 - プッシュはコマンド提示のみ（自動実行しない）
 
 ## 依存プラグイン
 
-- **shiiman-git**: コミット操作（`shiiman-git:add-commit`）
+- **shiiman-git**: コミット操作（`shiiman-git:add-commit`）、worktree の一覧・削除・クリーンアップ（`shiiman-git:worktree`）
 - **shiiman-github**: Issue 作成・worktree/ブランチ作成・PR 作成（`shiiman-github:issue-create`、`shiiman-github:worktree-create`、`shiiman-github:branch-create`、`shiiman-github:pr-create`）
+- **shiiman-common**: 完了前レビュー（`shiiman-common:review`、agent-team で使用）
 
 ## 必要条件
 
@@ -193,12 +115,12 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 - GitHub CLI (`gh`) がインストール済み
 - `gh auth login` で認証済み
 
-### マルチエージェントスキル（multi-\*）
+### multi の追加要件
 
 - multi-agent-mcp がインストール済み
 - tmux がインストール済み
 
-### Agent Team スキル（agent-team-\*）
+### agent-team の追加要件
 
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を有効化
 - `CLAUDE_PLUGIN_ROOT` が利用可能なプラグイン実行コンテキストで実行
@@ -208,20 +130,12 @@ no-git モード: 計画書 → ターミナル + tmux 起動 → Agent Team 実
 
 ## バージョン履歴
 
+- v5.0.0: `single-issue` / `multi-issue` / `agent-team-issue` を `single` / `multi` / `agent-team` に統合（7→4 スキル）。全フラグ（`--plan` / `--branch` / `--issue` / `--no-git` / `--no-review`）を廃止し、git・worktree/branch・計画書・レビュー・Issue/PR 連携を発話・引数から自動判断する方式へ変更（破壊的変更）
 - v4.1.0: cmux をターミナル最優先として追加（cmux → Ghostty → iTerm2 → Terminal.app → Current Shell）、全ターミナルで tab/workspace/window クローズに対応
 - v4.0.0: git/GitHub 操作を Skill 呼び出しに置き換え、issue-branch-pr-create スキルを追加、push を自動実行からコマンド提示に変更（破壊的変更）
 - v3.0.0: 全スキルから `workflow-` プレフィックスを除去しリネーム（破壊的変更）
 - v2.0.0: 全スキルを `workflow-*` 形式にリネーム（破壊的変更）
-- v1.8.7: ブランチ作成手順を `main` 固定から `gh repo view --json defaultBranchRef` によるデフォルトブランチ取得へ変更
-- v1.8.6: Agent Team Issue の Step 6 送信テンプレート先頭を `Agent Team を作成して` へ修正し、実行意図を明確化
-- v1.8.5: `open_tmux_terminal.sh` に `--state-file` を追加し、`cleanup_tmux_terminal.sh` を新規追加。Agent Team 承認時は tmux を常に終了し、window 起動時のみ terminal をクローズする仕様へ変更
-- v1.8.4: Agent Team スキルの送信テンプレートを `>|` に統一して `zsh noclobber` を回避。`send_claude_tmux_message.sh` に空ファイルガードを追加
-- v1.8.3: Agent Team 承認時のクリーンアップを「送信指示」から「実行側の直接実行」に変更し、依頼テンプレート形式を統一
-- v1.8.2: Ghostty 起動フォールバックと tmux target 解決を修正（`0.0` 固定を廃止し実値解決へ変更）
-- v1.8.1: Agent Team スキルのターミナル起動を共通化し、既存起動時の新規タブ化と文字化け対策を修正
-- v1.8.0: マルチ / Agent Team 軽量フローに `--no-git` と git/no-git 自動分岐を追加（非gitディレクトリ対応）
-- v1.7.4: Phase 5 の変更確認手順を統一（`git status --short --branch` + `git diff` + `git diff --cached`）
-- v1.7.1: Agent Team スキルを仕様準拠に修正（Ghostty/iTerm2 + tmux + Agent Team 実行フローへ統一）
+- v1.8.0: マルチ / Agent Team 軽量フローに `--no-git` と git/no-git 自動分岐を追加（非git ディレクトリ対応）
 - v1.5.0: SKILL.md を約 60% スリム化。MCP 側で Admin/Worker 指示を自動生成
-- v1.4.0: Worker 数をデフォルト 6、最大 16 に変更。MCP 自動機能（ペルソナ、メモリ、7セクション構造）を統合
+- v1.4.0: Worker 数をデフォルト 6、最大 16 に変更。MCP 自動機能（ペルソナ、メモリ、7 セクション構造）を統合
 - v1.0.0: 初期リリース（shiiman-git の dev-flow から移行）

@@ -1,6 +1,6 @@
 ---
 name: shiiman-google:notebooklm-infographic
-description: NotebookLM でインフォグラフィックを作成する。「インフォグラフィック作成」「インフォグラフィック」「NotebookLM 図解」「ノートブック インフォグラフィック」「図を作って」「ビジュアル化」「NotebookLM 視覚化」などで起動。notebooklm-mcp を使用。
+description: NotebookLM でインフォグラフィックを作成する。「NotebookLM インフォグラフィック」「NotebookLM で図解」「NotebookLM 視覚化」「NotebookLM でインフォグラフィック」などで起動。notebooklm-mcp を使用。
 argument-hint: "[--help]"
 ---
 

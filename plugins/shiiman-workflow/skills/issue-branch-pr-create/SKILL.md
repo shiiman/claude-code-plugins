@@ -4,7 +4,7 @@ description: 既存変更から Issue → ブランチ → コミット・プッ
 allowed-tools: [Read, Bash, Glob, Grep, Skill, AskUserQuestion]
 context: fork
 user-invocable: true
-argument-hint: "[--worktree|--help]"
+argument-hint: ""
 ---
 
 # Issue Branch PR Create（Backward フロー）
@@ -23,15 +23,13 @@ argument-hint: "[--worktree|--help]"
   Issue → ブランチ/worktree → コミット → プッシュ提示 → PR を自動作成する。
 
 使用方法:
-  /shiiman-workflow:issue-branch-pr-create [オプション]
-
-オプション:
-  --worktree  ブランチの代わりに worktree を作成（既存変更は手動で移動が必要）
-  --help      このヘルプを表示
+  /shiiman-workflow:issue-branch-pr-create
 
 例:
-  /shiiman-workflow:issue-branch-pr-create              # 既存変更から Issue・PR を作成（ブランチ）
-  /shiiman-workflow:issue-branch-pr-create --worktree   # worktree 作成モードで実行
+  /shiiman-workflow:issue-branch-pr-create   # 既存変更から Issue・PR を作成（既定はブランチ）
+
+指定の伝え方（フラグの代わり）:
+  - 「worktree で」  → ブランチではなく worktree を作成（既存変更は stash 経由で移動）
 ```
 
 ## フロー概要
@@ -106,14 +104,16 @@ Args: --no-confirm {変更内容のサマリー}
 
 **デフォルトブランチ上の場合のみ実行**。feature ブランチ上ならスキップ。
 
-**デフォルト（`--worktree` なし）**:
+既定はブランチ。発話に「worktree で」等があれば worktree を作成する。
+
+**ブランチ（既定）**:
 
 ```
 Skill: shiiman-github:branch-create
 Args: {issue番号}
 ```
 
-**`--worktree` 指定時**:
+**worktree（「worktree で」と指示された場合）**:
 
 ⚠️ worktree は別ディレクトリに作成されるため、既存の未コミット変更の移動が必要です。
 以下の手順で変更を移動する:
@@ -194,7 +194,7 @@ Args: --no-confirm
 
 PR がマージされると Issue #{issue番号} は自動的にクローズされます。
 
-### worktree クリーンアップ（--worktree モード時のみ）
+### worktree クリーンアップ（worktree 作成時のみ）
 
 PR マージ後、不要になった worktree を削除してください:
 `/shiiman-git:worktree` で gtr rm または gtr clean を実行

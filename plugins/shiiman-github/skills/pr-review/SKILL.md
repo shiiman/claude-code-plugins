@@ -1,6 +1,6 @@
 ---
 name: shiiman-github:pr-review
-description: PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「コードレビュー」「レビューして」「セキュリティレビュー」「パフォーマンスレビュー」「PR 承認」「approve して」「LGTM」などで起動。
+description: GitHub の PR をレビューしてローカル表示または GitHub に投稿する。「PR レビュー」「PR をレビュー」「PR のセキュリティレビュー」「PR のパフォーマンスレビュー」「PR 承認」「approve して」「LGTM」などで起動。対象は GitHub 上の PR（手元の変更は shiiman-common:review）。
 allowed-tools: [Read, Bash, Glob, Grep]
 argument-hint: "[PR番号] [--submit|--approve|--request-changes|--help]"
 context: fork

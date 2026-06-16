@@ -1,6 +1,6 @@
 ---
 name: shiiman-git:worktree
-description: gtr で worktree を管理。「worktree 作成」「gtr new」「gtr list」「gtr rm」「worktree 削除」「クリーンアップ」「マージ済み削除」「ワークツリー」などで起動。
+description: gtr で worktree を一覧・削除・クリーンアップする（管理操作）。「worktree 一覧」「gtr list」「gtr rm」「worktree 削除」「worktree クリーンアップ」「マージ済み worktree 削除」などで起動。新規作成は shiiman-github:worktree-create を使う。
 allowed-tools: [Read, Bash, Glob, Grep]
 argument-hint: "[--help]"
 ---
