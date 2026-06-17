@@ -19,7 +19,7 @@
     {
       "name": "shiiman-common",
       "description": "共通開発ツール - ローカル変更の統合レビュー（Claude + Codex + セキュリティ + Simplify）、AI CLI 一括更新を提供",
-      "version": "1.5.1",
+      "version": "1.5.2",
       "source": "./plugins/shiiman-common",
       "category": "developer-tools"
     },
