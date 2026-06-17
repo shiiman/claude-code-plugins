@@ -17,7 +17,7 @@ AI 関連 CLI ツールを brew で一括アップグレードします。
 /shiiman-common:brew-upgrade-ai - AI ツール一括更新
 
 概要:
-  AI 関連 CLI ツール（claude-code, codex, cursor-cli, gemini-cli）を
+  AI 関連 CLI ツール（claude-code@latest, codex, cursor-cli, gemini-cli）を
   brew で一括アップグレードします。
 
 使用方法:
@@ -32,12 +32,12 @@ AI 関連 CLI ツールを brew で一括アップグレードします。
 
 ## 対象ツール
 
-| brew パッケージ名 | ツール名    |
-| ----------------- | ----------- |
-| claude-code       | Claude Code |
-| codex             | Codex       |
-| cursor-cli        | Cursor CLI  |
-| gemini-cli        | Gemini CLI  |
+| brew パッケージ名                           | ツール名    |
+| ------------------------------------------- | ----------- |
+| claude-code@latest（fallback: claude-code） | Claude Code |
+| codex                                       | Codex       |
+| cursor-cli                                  | Cursor CLI  |
+| gemini-cli                                  | Gemini CLI  |
 
 ## ワークフロー
 
@@ -45,18 +45,18 @@ AI 関連 CLI ツールを brew で一括アップグレードします。
 
 Bash ツールで以下を**並列実行**し、各ツールのインストール状態・パッケージ種別・現在のバージョンを取得:
 
-- `brew list --cask --versions claude-code 2>/dev/null || brew list --versions claude-code 2>/dev/null || echo "NOT_INSTALLED"`
+- `brew list --cask --versions claude-code@latest 2>/dev/null || brew list --cask --versions claude-code 2>/dev/null || brew list --versions claude-code 2>/dev/null || echo "NOT_INSTALLED"`
 - `brew list --cask --versions codex 2>/dev/null || brew list --versions codex 2>/dev/null || echo "NOT_INSTALLED"`
 - `brew list --cask --versions cursor-cli 2>/dev/null || brew list --versions cursor-cli 2>/dev/null || echo "NOT_INSTALLED"`
 - `brew list --cask --versions gemini-cli 2>/dev/null || brew list --versions gemini-cli 2>/dev/null || echo "NOT_INSTALLED"`
 
 判定ルール:
 
-- `brew list --cask --versions` で取得できた場合: `type=cask`
-- `brew list --versions` で取得できた場合: `type=formula`
+- `brew list --cask --versions` で取得できた場合: `type=cask`、出力先頭トークンを実際のパッケージ名として記録（例: `claude-code@latest`）
+- `brew list --versions` で取得できた場合: `type=formula`、コマンドに渡したパッケージ名をそのまま記録
 - どちらも取得できない場合: `NOT_INSTALLED`
 
-未インストール（`NOT_INSTALLED`）のツールはスキップ対象として記録。
+未インストール（`NOT_INSTALLED`）のツールはスキップ対象として記録。手順 2・3 では記録したパッケージ名を使う。
 
 ### 2. アップグレード実行
 
@@ -88,12 +88,14 @@ Bash ツールで以下を**並列実行**し、各ツールのインストー�
 ```markdown
 ## AI ツール更新結果
 
-| ツール      | 旧バージョン | 新バージョン | 状態           |
-| ----------- | ------------ | ------------ | -------------- |
-| claude-code | x.x.x        | y.y.y        | 更新済み       |
-| codex       | x.x.x        | x.x.x        | 最新           |
-| cursor-cli  | -            | -            | 未インストール |
-| gemini-cli  | x.x.x        | y.y.y        | 更新済み       |
+| ツール             | 旧バージョン | 新バージョン | 状態           |
+| ------------------ | ------------ | ------------ | -------------- |
+| claude-code@latest | x.x.x        | y.y.y        | 更新済み       |
+| codex              | x.x.x        | x.x.x        | 最新           |
+| cursor-cli         | -            | -            | 未インストール |
+| gemini-cli         | x.x.x        | y.y.y        | 更新済み       |
+
+> 「ツール」列には手順 1 で記録した実際のパッケージ名（Claude Code なら `claude-code@latest` または `claude-code`）を表示する。
 ```
 
 **状態の表記**:
@@ -108,6 +110,7 @@ Bash ツールで以下を**並列実行**し、各ツールのインストー�
 ## 重要な注意事項
 
 - ✅ `claude-code` / `codex` / `cursor-cli` は環境によって cask 管理の場合があるため、必ず `cask` → `formula` の順で確認する
+- ✅ Claude Code は `claude-code@latest`（cask） → `claude-code`（cask） → `claude-code`（formula）の順で確認し、ヒットしたパッケージ名を upgrade・再確認でそのまま使う
 - ✅ 未インストールのツールはスキップ（エラーにしない）
 - ✅ 各 brew upgrade は並列実行して高速化
 - ✅ 旧バージョン・新バージョンを比較して状態を判定

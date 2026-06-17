@@ -38,11 +38,11 @@ claude plugin install shiiman-common@shiiman-claude-code-plugins
 
 ### brew-upgrade-ai
 
-AI 関連 CLI ツール（claude-code, codex, cursor-cli, gemini-cli）を brew で一括アップグレードします。
+AI 関連 CLI ツール（claude-code@latest, codex, cursor-cli, gemini-cli）を brew で一括アップグレードします。
 
 **対象ツール:**
 
-- Claude Code (`claude-code`)
+- Claude Code (`claude-code@latest`、fallback: `claude-code`)
 - Codex (`codex`)
 - Cursor CLI (`cursor-cli`)
 - Gemini CLI (`gemini-cli`)
