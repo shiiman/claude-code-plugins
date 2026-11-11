@@ -19,35 +19,35 @@
     {
       "name": "shiiman-common",
       "description": "共通開発ツール - ローカル変更の統合レビュー（Claude + Codex + セキュリティ + Simplify）、AI CLI 一括更新を提供",
-      "version": "1.5.2",
+      "version": "1.5.3",
       "source": "./plugins/shiiman-common",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-git",
       "description": "Git ローカル操作 - ステージング・コミット、worktree 管理・セットアップを提供",
-      "version": "4.1.1",
+      "version": "5.0.0",
       "source": "./plugins/shiiman-git",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-github",
       "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、worktree、GitHub Actions、リポジトリ設定管理を提供",
-      "version": "4.3.1",
+      "version": "5.0.0",
       "source": "./plugins/shiiman-github",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-workflow",
       "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team の開発フローを提供（Issue/PR 連携・git・計画書はフラグ不要で自動判断）",
-      "version": "5.0.0",
+      "version": "6.0.0",
       "source": "./plugins/shiiman-workflow",
       "category": "developer-tools"
     },
     {
       "name": "shiiman-google",
       "description": "Google Workspace 操作 - 認証、Drive 検索、Docs/Sheets/Slides/Forms/Apps Script 編集、Calendar、Gmail 未読管理、NotebookLM リサーチ・アーティファクト作成を提供",
-      "version": "3.4.2",
+      "version": "3.4.3",
       "source": "./plugins/shiiman-google",
       "category": "productivity"
     },
@@ -68,7 +68,7 @@
     {
       "name": "shiiman-slack",
       "description": "Slack 通知管理 - 未読確認、既読化、メンション確認・返信、プロフィール更新を提供",
-      "version": "4.1.2",
+      "version": "4.1.3",
       "source": "./plugins/shiiman-slack",
       "category": "productivity"
     }

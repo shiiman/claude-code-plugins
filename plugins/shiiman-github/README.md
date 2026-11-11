@@ -16,18 +16,18 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 
 ### スキル
 
-| スキル          | トリガー例                    | 説明                                                         |
-| --------------- | ----------------------------- | ------------------------------------------------------------ |
-| actions-debug   | 「Actions エラー」            | GitHub Actions のエラーを調査                                |
-| branch-create   | 「ブランチ作成」              | feature ブランチ作成（Issue 番号・ブランチ名・自動命名）     |
-| issue-create    | 「Issue 作成」                | GitHub Issue を作成（タスクはチェックボックスで分割）        |
-| issue-list      | 「Issue 一覧」                | オープン Issue の一覧を優先順位付きで表示                    |
-| pr-create       | 「PR 作成」                   | PR を作成または更新                                          |
-| pr-list         | 「PR 一覧」                   | オープン PR の一覧を表示                                     |
-| pr-review       | 「PR レビュー」「PR 承認」    | PR をレビュー・承認（既定はローカル表示、投稿/承認は確認後） |
-| pr-review-check | 「レビュー対応」              | PR に付いたレビューコメントを確認し対応                      |
-| setup           | 「GitHub 設定をセットアップ」 | GitHub リポジトリ設定ファイルのセットアップ                  |
-| worktree-create | 「worktree 作成」             | gtr で worktree 作成（Issue 番号・ブランチ名・自動命名）     |
+| スキル          | トリガー例                    | 説明                                                                             |
+| --------------- | ----------------------------- | -------------------------------------------------------------------------------- |
+| actions-debug   | 「Actions エラー」            | GitHub Actions のエラーを調査                                                    |
+| branch-create   | 「ブランチ作成」              | feature ブランチ作成（Issue 番号・ブランチ名・自動命名）                         |
+| issue-create    | 「Issue 作成」                | GitHub Issue を作成（タスクはチェックボックスで分割）                            |
+| issue-list      | 「Issue 一覧」                | オープン Issue の一覧を優先順位付きで表示                                        |
+| pr-create       | 「PR 作成」                   | PR を作成または更新                                                              |
+| pr-list         | 「PR 一覧」                   | オープン PR の一覧を表示                                                         |
+| pr-review       | 「PR レビュー」「PR 承認」    | PR をレビュー・承認（既定はローカル表示、投稿/承認は明示的な依頼がある場合のみ） |
+| pr-review-check | 「レビュー対応」              | PR に付いたレビューコメントを確認し対応                                          |
+| setup           | 「GitHub 設定をセットアップ」 | GitHub リポジトリ設定ファイルのセットアップ                                      |
+| worktree-create | 「worktree 作成」             | gtr で worktree 作成（Issue 番号・ブランチ名・自動命名）                         |
 
 ### エージェント
 
@@ -96,3 +96,9 @@ gh auth status  # 認証状態確認
 
 - リポジトリへの適切な権限があるか確認
 - Organization リポジトリの場合は SSO 認証を確認
+
+## バージョン履歴
+
+- v5.0.0: Issue・PR・レビューの許可済み操作の重複確認を廃止。PR 作成に必要なコミット・通常の push を実行し、レビュー修正だけの依頼では外部投稿を追加しない。配布 Actions を更新（承認・push 動作の変更）
+
+配布する Actions テンプレートは Node 24 対応版を使用します。self-hosted runner では runner 2.327.1 以上が必要です。

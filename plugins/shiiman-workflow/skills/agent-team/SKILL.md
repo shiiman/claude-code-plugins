@@ -1,6 +1,6 @@
 ---
 name: shiiman-workflow:agent-team
-description: Agent Team（tmux + TeamCreate）で並列実装する開発フロー。「エージェントチームフロー」「workflow-agent-team」「Agent Team で実装」「チームで実装」「チーム並列開発」などで起動。Issue/PR まで作るかは発話・引数から判断し、曖昧なら確認する。
+description: Agent Team（tmux + TeamCreate）で並列実装する開発フロー。「エージェントチームフロー」「workflow-agent-team」「Agent Team で実装」「チームで実装」「チーム並列開発」などで起動。依頼された範囲の実装・検証と許可済みの仕上げ操作を、重複確認せず進める。
 allowed-tools:
   [
     Read,
@@ -48,14 +48,15 @@ Agent Team（tmux + TeamCreate）で並列実装する開発フロー。
 例:
   /shiiman-workflow:agent-team                          # 既存計画書から並列実装（あれば）
   /shiiman-workflow:agent-team "API を並列リファクタ"    # タスク説明から並列実装
-  /shiiman-workflow:agent-team "認証を実装して PR まで"  # Issue/PR 連携ありで並列実装
+  /shiiman-workflow:agent-team "認証を実装して PR まで"  # 並列実装・コミット・通常の push・PR 作成
   /shiiman-workflow:agent-team --help                   # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
   - 「計画を立ててから」  → plan mode で計画書を作成してから実装
   - 「ブランチで」        → worktree ではなくブランチを作成
-  - 「Issue / PR まで」   → Issue 作成・PR 作成まで実施
-  - 「コミットだけ」      → Issue/PR を作らずコミットメッセージ出力で終了
+  - 「PR まで」           → コミット・通常の push・PR 作成まで実施
+  - 「Issue と PR まで」   → Issue 作成も含めて実施
+  - 「コミットだけ」      → 検証後にコミットし、push・Issue・PR は作成しない
   - 「レビュー不要」      → 完了報告前の /shiiman-common:review をスキップ
 ```
 
@@ -70,24 +71,24 @@ Agent Team（tmux + TeamCreate）で並列実装する開発フロー。
 
 ユーザーにフラグを入力させない。以下を順に決定する。**引数・発話に明示があればそれを最優先**し、明示がなければ自動判断、それでも曖昧な項目だけ後述の手順で確認する。
 
-| 項目              | 既定       | 判断ルール                                                                                                      |
-| ----------------- | ---------- | --------------------------------------------------------------------------------------------------------------- |
-| git / no-git      | 自動       | `git rev-parse --is-inside-work-tree` 成功なら git。失敗なら no-git（ブランチ作成を省略）                       |
-| worktree / branch | worktree   | 「ブランチで」「worktree なし」等の発話があれば branch                                                          |
-| 計画書の扱い      | 後述の判定 | 「計画を立てて」「plan で」→ plan mode。引数にタスク説明あり → 直接。なし → 既存計画書を探索                    |
-| レビュー          | 実行する   | 「レビュー不要」「レビューなし」等の発話があればスキップ                                                        |
-| Issue/PR 連携     | **要確認** | 「Issue」「PR」「プルリク」等あり → 連携あり。「コミットだけ」「Issue 不要」等 → 連携なし。どちらも無ければ確認 |
+| 項目              | 既定       | 判断ルール                                                                                   |
+| ----------------- | ---------- | -------------------------------------------------------------------------------------------- |
+| git / no-git      | 自動       | `git rev-parse --is-inside-work-tree` 成功なら git。失敗なら no-git（ブランチ作成を省略）    |
+| worktree / branch | worktree   | 「ブランチで」「worktree なし」等の発話があれば branch                                       |
+| 計画書の扱い      | 後述の判定 | 「計画を立てて」「plan で」→ plan mode。引数にタスク説明あり → 直接。なし → 既存計画書を探索 |
+| レビュー          | 実行する   | 「レビュー不要」「レビューなし」等の発話があればスキップ                                     |
 
-### Issue/PR 連携の確認
+### 許可された完了範囲
 
-発話・引数から判断できない場合のみ、`AskUserQuestion` で 1 回だけ確認する。
+現在の依頼と既存の許可から、操作ごとに実行範囲を判断する。
 
-```text
-question: "どこまで実施しますか？"
-options:
-  - 軽量（コミットメッセージ出力のみ）: Issue/PR を作らず、変更とコミットメッセージの提示で終了
-  - Issue/PR まで作成: Issue 作成 → 並列実装 → コミット → PR 作成まで実施
-```
+- 実装だけの依頼: 実装・レビュー・検証を行い、コミットや Issue・PR を作るかの追加質問はせず終了する。
+- コミットだけの依頼: チェック後に対象変更をコミットする。push や Issue・PR 作成は行わない。
+- PR 作成の依頼: 必要な実装・検証・対象変更のコミット・通常の feature branch push を完了して PR を作成する。Issue は依頼されているか、許可済みのワークフローで必要な場合だけ作成する。
+- Issue 作成の依頼: 依頼された Issue と明示された後続操作だけを行う。必要に応じて確認済みの既存 Issue を参照する。
+- 「push しない」などの明示的な制約を優先する。範囲を黙って広げず、具体的な阻害要因を報告する。
+
+許可済みの操作に `--no-confirm`、計画承認、完了時の再承認を要求しない。後続の仕上げ手順も個別に許可された操作だけを実行し、依頼されていない手順は省略する。重要な範囲変更、破壊的操作、高影響操作が発生する場合は許可を再確認する。
 
 ### git の状態判定
 
@@ -100,18 +101,18 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1
 
 ### 計画書の扱いの判定
 
-1. 「計画を立ててから」等の依頼がある → **plan mode**: `EnterPlanMode` で計画書を作成・承認してから実装フェーズへ
+1. 「計画を立ててから」等の依頼がある → **計画作成**: 計画を説明してから依頼された実装を進める。承認待ちを明示された場合だけ `EnterPlanMode` で承認を待つ
 2. 引数にタスク説明がある → **直接実行**: タスク説明をそのまま実装の指針にする
 3. 引数なし → **既存計画書**: 最新の計画書を読み込む（`ls -t ~/.claude/plans/*.md | head -1`）。見つからなければタスク説明を促して終了
 
 ### session 名 / slug ルール
 
-- Issue/PR 連携あり → `agent-team-issue-{issue番号}`
-- 連携なし → `agent-team-{slug}`（slug はタスク内容から英語キーワード。生成できなければ `no-git-task`）
+- 確認済みの関連 Issue がある場合 → `agent-team-issue-{issue番号}`
+- 関連 Issue がない場合 → `agent-team-{slug}`（slug はタスク内容から英語キーワード。生成できなければ `no-git-task`）
 
 ## Phase 1: セットアップと Agent Team 起動
 
-### ステップ A: Issue 作成（Issue/PR 連携ありのときのみ）
+### ステップ A: 許可されている場合だけ Issue を作成
 
 Skill ツールで `shiiman-github:issue-create --no-confirm` を呼び出す。本文は「## 概要 / ## タスク一覧（チェックボックス）/ ## 完了条件」で構成。作成された Issue 番号を session 名と後続に使う。
 
@@ -121,7 +122,7 @@ git モードのみ実施（no-git はスキップ）。
 
 - worktree（既定）: Skill ツールで `shiiman-github:worktree-create` を呼び出す
 - ブランチ: Skill ツールで `shiiman-github:branch-create` を呼び出す
-- Issue/PR 連携ありの場合は Issue 番号を引数に渡す
+- 確認済みの関連 Issue がある場合だけ Issue 番号を渡す。なければタスクに基づく名前を使う。
 
 > **Note:** `shiiman-github:worktree-create` は `mise trust` を自動実行する（`mise.toml` がなければスキップ）。
 
@@ -229,9 +230,9 @@ tmux capture-pane -pt "$CAPTURE_TARGET" | tail -n 120
 
 ## Phase 2-4: Agent Team の自律実行
 
-Agent Team が計画書を分解して実装を進める。呼び出し元は待機する。
+Agent Team が計画書を分解して実装を進める。呼び出し元は利用可能な状態確認や tmux 出力で完了を監視し、完了報告を確認したらユーザーの追加指示を待たず Phase 5 へ進む。
 
-## Phase 5: 結果確認と承認フロー
+## Phase 5: 結果確認と許可範囲内の続行
 
 ### ステップ 1: 変更内容を確認
 
@@ -245,16 +246,13 @@ git diff --cached
 
 no-git モード: Agent Team の最終報告（実装サマリー・変更ファイル・テスト結果・残課題）を確認。
 
-### ステップ 2: ユーザー承認を取得（🔴 必須）
+### ステップ 2: 結果と許可の確認
 
-```text
-AskUserQuestion:
-  question: "実装内容を承認しますか？"
-  options:
-    - OK（承認）: 後続処理へ進む
-    - NG（修正依頼）: 修正内容を送って再実行
-    - 保留: 手動確認後に再開
-```
+実際の差分と検証結果を確認し、範囲内の対応すべき指摘を修正する。実装と後続操作が許可済みなら自動で続行する。重要な未解決の判断や未許可の影響についてだけ質問し、形式的な「OK」を待たない。
+
+クリーンアップツールが削除する対象を確認する。今回のタスクが所有するエージェントと一時リソースだけを片付け、worktree・変更・有用なユーザーの作業は保持する。ツールで範囲を保証できなければ削除せず報告する。
+
+修正が必要な場合は、以下の再送手順で必要な修正だけを実行する。問題がなければ再承認を待たず後続処理へ進む。
 
 ### NG（修正依頼）の場合
 
@@ -291,9 +289,9 @@ rm -f "$FIX_FILE"
 
 tmux セッションを維持して待機。明示的な再開指示が来るまでクリーンアップしない。
 
-### OK（承認）の場合
+### 検証完了後の処理
 
-1. クリーンアップ（tmux は常に終了、window 起動時のみ terminal をクローズ）:
+1. 今回新規に作成し所有していると確認できた tmux session・window だけをクリーンアップする。既存 session への attach や所有が不明な場合は、以下の削除コマンドを実行せず保持して報告する:
 
    ```bash
    bash "$CLEANUP_SCRIPT" --session "$SESSION" --state-file "$TERMINAL_STATE_FILE"
@@ -311,22 +309,17 @@ tmux セッションを維持して待機。明示的な再開指示が来るま
 
 ## 仕上げ
 
-### Issue/PR 連携あり
+### 許可された仕上げ操作
 
-1. Issue の全チェックボックスを完了に更新:
-
-   ```bash
-   gh issue edit {issue番号} --body "$(gh issue view {issue番号} --json body -q '.body' | sed 's/- \[ \]/- [x]/g')"
-   ```
-
-2. コミット: Skill ツールで `shiiman-git:add-commit --no-confirm` を呼び出す
-3. プッシュ案内（自動実行しない）: `git push -u origin feature/{issue番号}`
-4. PR 作成: Skill ツールで `shiiman-github:pr-create --no-confirm` を呼び出す。本文は「## 概要 / ## 並列実行サマリー（チームメイト×タスクの表）/ ## 関連 Issue（`Closes #{issue番号}`）/ ## テスト計画」
-5. 完了報告（Issue 番号・ブランチ/worktree・PR 番号/URL・worktree クリーンアップ案内）
+1. 更新が許可された Issue のうち、実際に完了したタスクだけをチェックする。未完了タスクを完了にしない。
+2. コミット: `shiiman-git:add-commit` スキルのワークフローに従い、`--no-confirm` オプションでコミットする
+3. push または PR 作成が許可されていれば、remote・送信先・対象コミットを確認して実際の feature branch を通常の push で公開する。この許可だけで force-push、デフォルトブランチへの push、無関係な作業の公開は行わない。
+4. PR 作成: `shiiman-github:pr-create` スキルのワークフローに従い、`--no-confirm` オプションで PR を作成する。日本語で概要・並列タスクの結果・検証結果を記載する。`Closes #N` は確認済みの関連 Issue がある場合だけ含め、なければ Issue 欄を省略する。
+5. 実際の変更・チェック・完了した操作を報告する。Issue・PR の番号と URL は存在する場合だけ含め、未実行の操作を完了と主張しない。
 
 ### Issue/PR 連携なし（軽量）
 
-**コミット・プッシュ・PR 作成は行わない。** 推奨コミットメッセージを出力して終了する。
+実装だけの依頼では、変更と検証結果を報告して終了し、コミット・push・Issue・PR 作成は行わない。コミットだけの明示的な依頼では、検証して対象変更をコミットし、結果を報告する。任意の後続操作を追加で質問しない。
 
 ```text
 ## 実装完了
@@ -335,11 +328,10 @@ tmux セッションを維持して待機。明示的な再開指示が来るま
 - {ブランチ名} / パス: {worktree のパス}（worktree モード時のみ）
 
 ### 推奨コミットメッセージ
-{Conventional Commits 形式（`.claude/settings.json` の git.commitMessage 設定があればそれに従う）}
+{リポジトリとグローバル指示に従う Conventional Commits メッセージ}
 
-### 次のステップ
-git push -u origin feature/{slug}
-必要に応じて gh pr create
+### 検証結果
+{実行したチェック・結果・残課題}
 
 ### worktree クリーンアップ（worktree モード時のみ）
 PR マージ後、`/shiiman-git:worktree` で gtr rm または gtr clean を実行してください。
@@ -355,6 +347,6 @@ PR マージ後、`/shiiman-git:worktree` で gtr rm または gtr clean を実�
 
 - ✅ ユーザーにフラグを入力させない（git・worktree/branch・計画書・レビュー・Issue/PR を自動判断、曖昧なら確認）
 - ✅ 並列実行には必ず TeamCreate ツールを使う（Agent ツールではない）
-- ✅ クリーンアップ前に必ずユーザー確認を行う
+- タスク所有の一時リソースだけを片付け、有用な作業や worktree を保持する。形式的な完了承認は求めない。
 - ✅ コミットメッセージは `.claude/settings.json` の設定に従う（なければ Conventional Commits）
-- ❌ Issue/PR 連携なしのときは自動でコミット・プッシュ・PR を作らない
+- コミット・push・Issue・PR は操作ごとに許可された範囲だけを実行する。

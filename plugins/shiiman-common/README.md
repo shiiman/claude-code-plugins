@@ -54,3 +54,7 @@ AI 関連 CLI ツール（claude-code@latest, codex, cursor-cli, gemini-cli）�
 - Claude Code v2.1.56 以上（ビルトイン `/security-review` スキル使用のため）
 - Homebrew がインストール済み（brew-upgrade-ai 用）
 - codex CLI がインストール済み（review の Codex レビュー用、未インストールでもスキップ可）
+
+## バージョン履歴
+
+- v1.5.3: レビューのみとレビュー・修正の依頼を区別し、許可済みの修正で確認を繰り返さないよう調整

@@ -6,7 +6,7 @@
 
 シングル / マルチエージェント / Agent Team での開発フローを提供します。
 
-**フラグは不要です。** タスクを伝えれば、git の状態・発話内容から実行条件（Issue/PR 連携・計画書・ブランチ・git）を自動判断し、曖昧な点だけ確認します。実行スタイル（順次 / MCP 並列 / Agent Team 並列）はスキルの選択で決めます。
+**フラグは不要です。** タスクを伝えれば、git の状態・発話内容から実行条件（Issue/PR 連携・計画書・ブランチ・git）を自動判断し、軽微な点は判断して進め、重要な範囲・リスクの判断だけ確認します。実行スタイル（順次 / MCP 並列 / Agent Team 並列）はスキルの選択で決めます。
 
 ## インストール
 
@@ -23,19 +23,19 @@ claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 | agent-team             | Agent Team       | 発話・引数から自動 | tmux + TeamCreate で並列実装                  |
 | issue-branch-pr-create | シングル         | 必須（Backward）   | 既存変更から Issue・PR を作成する逆方向フロー |
 
-> **v5.0.0 で `*-issue` 系を統合**: `single-issue` / `multi-issue` / `agent-team-issue` は廃止され、それぞれ `single` / `multi` / `agent-team` に統合されました。Issue/PR まで作るかは発話（「PR まで」「コミットだけ」等）から判断し、曖昧なときだけ確認します。
+> **v5.0.0 で `*-issue` 系を統合**: `single-issue` / `multi-issue` / `agent-team-issue` は廃止され、それぞれ `single` / `multi` / `agent-team` に統合されました。現在は発話から操作ごとの許可を判断し、明示がなければ実装・検証のみで終了します。「コミットだけ」はコミットまで、「PR まで」は必要なコミット・通常の push・PR 作成まで進めます。Issue は依頼済みの場合だけ作成します。
 
 ## フラグ廃止と自動判断
 
 旧バージョンのフラグは、以下のルールで自動判断します（ユーザーは何も覚える必要がありません）。
 
-| 旧フラグ        | 新しい決め方                                                                   |
-| --------------- | ------------------------------------------------------------------------------ |
-| `--no-git`      | `git rev-parse --is-inside-work-tree` で git/no-git を完全自動判定             |
-| `--branch`      | 既定は worktree。「ブランチで」等の発話で branch に切替                        |
-| `--plan`        | 「計画を立てて」等で plan mode / タスク説明あり → 直接 / なし → 既存計画書探索 |
-| `--no-review`   | 既定はレビュー実行。「レビュー不要」等でスキップ（agent-team）                 |
-| `-issue` の有無 | 「Issue」「PR」等あり → 連携あり / 「コミットだけ」等 → 連携なし / 曖昧 → 確認 |
+| 旧フラグ        | 新しい決め方                                                                                    |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| `--no-git`      | `git rev-parse --is-inside-work-tree` で git/no-git を完全自動判定                              |
+| `--branch`      | 既定は worktree。「ブランチで」等の発話で branch に切替                                         |
+| `--plan`        | 「計画を立てて」等で plan mode / タスク説明あり → 直接 / なし → 既存計画書探索                  |
+| `--no-review`   | 既定はレビュー実行。「レビュー不要」等でスキップ（agent-team）                                  |
+| `-issue` の有無 | 実装のみが既定。「コミットだけ」「PR まで」「Issue と PR まで」を区別し、許可された操作だけ実行 |
 
 ## スキル
 
@@ -48,9 +48,9 @@ claude plugin install shiiman-workflow@shiiman-claude-code-plugins
 **フロー**:
 
 ```
-[Issue/PR 連携あり] Issue 作成 →
-ブランチ/worktree 作成 → 実装 → セキュリティ＆自己レビュー → ユーザー確認 →
-[連携あり] コミット → プッシュ案内 → PR 作成 ／ [連携なし] コミットメッセージ出力
+[Issue 作成が依頼済みの場合のみ] Issue 作成 →
+ブランチ/worktree 作成 → 実装 → セキュリティ＆自己レビュー → 検証 →
+[許可された操作だけ] コミット → 通常の push → PR 作成 → 結果報告
 ```
 
 ### multi
@@ -92,7 +92,7 @@ Agent Team（tmux + TeamCreate）で並列実装するフロー。`multi` の MC
 **フロー**:
 
 ```
-変更検出 → Issue 作成 → ブランチ/worktree 作成 → コミット → プッシュ提示 → PR 作成
+変更検出 → Issue 作成 → ブランチ/worktree 作成 → コミット → 通常の push → PR 作成
 ```
 
 **特徴**:
@@ -100,7 +100,7 @@ Agent Team（tmux + TeamCreate）で並列実装するフロー。`multi` の MC
 - ワーキングツリーの変更やコミット済み未プッシュの変更から自動で Issue と PR を作成
 - 通常フローと逆方向で、既に実装済みの変更を Issue/PR 化する
 - 既定はブランチ。「worktree で」の発話で worktree（既存変更は stash 経由で移動）
-- プッシュはコマンド提示のみ（自動実行しない）
+- PR 作成に必要な通常の feature branch push は実行する。force-push やデフォルトブランチへの push は別の許可が必要
 
 ## 依存プラグイン
 
@@ -129,6 +129,8 @@ Agent Team（tmux + TeamCreate）で並列実装するフロー。`multi` の MC
 - macOS で cmux、Ghostty、または iTerm2 を推奨（未導入時は Terminal.app / 現在端末にフォールバック）
 
 ## バージョン履歴
+
+- v6.0.0: 実装のみ・コミットのみ・PR 作成までの範囲を分離し、不要な Issue 作成・完了承認・手動 push 待ちを廃止。許可済みの操作を検証後に続行（承認・push 動作の変更）
 
 - v5.0.0: `single-issue` / `multi-issue` / `agent-team-issue` を `single` / `multi` / `agent-team` に統合（7→4 スキル）。全フラグ（`--plan` / `--branch` / `--issue` / `--no-git` / `--no-review`）を廃止し、git・worktree/branch・計画書・レビュー・Issue/PR 連携を発話・引数から自動判断する方式へ変更（破壊的変更）
 - v4.1.0: cmux をターミナル最優先として追加（cmux → Ghostty → iTerm2 → Terminal.app → Current Shell）、全ターミナルで tab/workspace/window クローズに対応

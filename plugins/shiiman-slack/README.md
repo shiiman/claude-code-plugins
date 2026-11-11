@@ -175,6 +175,8 @@ plugins/shiiman-slack/
 
 ## バージョン履歴
 
+- v4.1.3: slack-sdk を 3.46.0 に更新（共通 requirements.txt）
+
 - v4.1.0: 全チャンネル未読一覧・一括既読化機能を追加。`--summary` オプションで高速サマリー表示に対応
 - v4.0.0: スキル名を `slack-xxx` → `shiiman-slack:xxx` 形式にリネーム
 - v3.0.0: スキルを 17 → 6 に整理。不要スキル（MCP ラッパー、低使用頻度機能）を削除し、全スキルを `slack-` プレフィックスでリネーム
