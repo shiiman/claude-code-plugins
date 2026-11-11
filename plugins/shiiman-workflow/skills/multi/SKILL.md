@@ -1,6 +1,6 @@
 ---
 name: shiiman-workflow:multi
-description: MCP マルチエージェント（Owner/Admin/Worker）で並列実装する開発フロー。「マルチフロー」「workflow-multi」「マルチエージェントで実装」「並列で実装」「複数人で実装」「並列開発」などで起動。Issue/PR まで作るかは発話・引数から判断し、曖昧なら確認する。
+description: マルチエージェントで並列実装する開発フロー。「shiiman-workflow:multi」「マルチフロー」「並列で実装」などで起動。依頼された範囲の実装・検証と、許可済みのコミット・Issue・push・PR 作成を重複確認せず行う。
 allowed-tools:
   [
     Read,
@@ -22,7 +22,7 @@ argument-hint: "[タスク説明]"
 
 # Multi Flow
 
-multi-agent-mcp の Owner/Admin/Worker で並列実装する開発フロー。
+multi-agent-mcp（Owner/Admin/Worker）で並列実装する開発フロー。
 
 フラグは不要。タスクを伝えれば、git の状態・発話内容から実行条件を自動判断し、曖昧な点だけ確認する。
 
@@ -31,36 +31,37 @@ multi-agent-mcp の Owner/Admin/Worker で並列実装する開発フロー。
 `$ARGUMENTS` に `--help` が含まれる場合、以下を表示して終了:
 
 ```text
-/shiiman-workflow:multi - MCP マルチエージェント開発フロー
+shiiman-workflow:multi - マルチエージェント開発フロー
 
 概要:
-  multi-agent-mcp の Owner/Admin/Worker で並列実装する。
+  multi-agent-mcp（Owner/Admin/Worker）で並列実装する。
   実装条件（Issue/PR・計画書・ブランチ・git）はフラグ不要で自動判断し、
-  曖昧な点だけ AskUserQuestion で確認する。
+  曖昧な点だけ確認する。
 
 使用方法:
-  /shiiman-workflow:multi [タスク説明]
-  /shiiman-workflow:multi --help
+  shiiman-workflow:multi [タスク説明]
+  shiiman-workflow:multi --help
 
 オプション:
   --help  このヘルプを表示
 
 例:
-  /shiiman-workflow:multi                            # 既存計画書から並列実装（あれば）
-  /shiiman-workflow:multi "API を並列リファクタ"      # タスク説明から並列実装
-  /shiiman-workflow:multi "認証を実装して PR まで"    # Issue/PR 連携ありで並列実装
-  /shiiman-workflow:multi --help                     # ヘルプを表示
+  shiiman-workflow:multi                            # 既存計画書から並列実装（あれば）
+  shiiman-workflow:multi "API を並列リファクタ"      # タスク説明から並列実装
+  shiiman-workflow:multi "認証を実装して PR まで"    # 並列実装・コミット・push・PR 作成
+  shiiman-workflow:multi --help                     # ヘルプを表示
 
 指定の伝え方（フラグの代わり）:
-  - 「計画を立ててから」  → plan mode で計画書を作成してから実装
+  - 「計画を立ててから」  → 計画書を作成してから実装
   - 「ブランチで」        → worktree ではなくブランチを作成
-  - 「Issue / PR まで」   → Issue 作成・PR 作成まで実施
-  - 「コミットだけ」      → Issue/PR を作らずコミットメッセージ出力で終了
+  - 「PR まで」           → コミット・通常の push・PR 作成まで実施
+  - 「Issue と PR まで」   → Issue 作成も含めて実施
+  - 「コミットだけ」      → 検証後にコミットし、push・Issue・PR は作成しない
 ```
 
 ## 前提条件
 
-- multi-agent-mcp がインストール済み（**必須**）
+- multi-agent-mcpが利用可能（**必須**）
 - tmux がインストール済み（**必須**）
 - `gh` コマンドが利用可能
 - `gh auth status` が成功する（GitHub CLI 認証済み）
@@ -75,32 +76,32 @@ MCP_MODEL_PROFILE_ACTIVE=performance  # standard または performance
 
 ## ⚠️ caller_agent_id について（重要）
 
-**全ての MCP ツールには `caller_agent_id` パラメータが必須です。**
+**全ての multi-agent-mcp ツールには `caller_agent_id` パラメータが必須です。**
 
-- `create_agent()` の戻り値から自分の ID を取得し、`{owner_id}` として保存
-- 以降の全ツール呼び出しで `caller_agent_id="{owner_id}"` を指定
+- `mcp__multi-agent-mcp__create_agent()` の戻り値から自分の ID を取得し、`{owner_id}` として保存
+- 以降の multi-agent-mcp ツール呼び出しで `caller_agent_id="{owner_id}"` を指定
 
 ## 起動時の自動判断（フラグの代わり）
 
-ユーザーにフラグを入力させない。以下を順に決定する。**引数・発話に明示があればそれを最優先**し、明示がなければ自動判断、それでも曖昧な項目だけ後述の手順で確認する。
+ユーザーにフラグを入力させない。以下を順に決定する。**発話・タスク説明に明示があればそれを最優先**し、明示がなければ自動判断、それでも曖昧な項目だけ後述の手順で確認する。
 
-| 項目              | 既定       | 判断ルール                                                                                                      |
-| ----------------- | ---------- | --------------------------------------------------------------------------------------------------------------- |
-| git / no-git      | 自動       | `git rev-parse --is-inside-work-tree` 成功なら git。失敗なら no-git（ブランチ作成を省略）                       |
-| worktree / branch | worktree   | 「ブランチで」「worktree なし」等の発話があれば branch                                                          |
-| 計画書の扱い      | 後述の判定 | 「計画を立てて」「plan で」→ plan mode。引数にタスク説明あり → 直接。なし → 既存計画書を探索                    |
-| Issue/PR 連携     | **要確認** | 「Issue」「PR」「プルリク」等あり → 連携あり。「コミットだけ」「Issue 不要」等 → 連携なし。どちらも無ければ確認 |
+| 項目              | 既定       | 判断ルール                                                                                |
+| ----------------- | ---------- | ----------------------------------------------------------------------------------------- |
+| git / no-git      | 自動       | `git rev-parse --is-inside-work-tree` 成功なら git。失敗なら no-git（ブランチ作成を省略） |
+| worktree / branch | worktree   | 「ブランチで」「worktree なし」等の発話があれば branch                                    |
+| 計画書の扱い      | 後述の判定 | 「計画を立てて」「plan で」→ 計画書作成。タスク説明あり → 直接。なし → 既存計画書を探索   |
 
-### Issue/PR 連携の確認
+### 許可された完了範囲
 
-発話・引数から判断できない場合のみ、`AskUserQuestion` で 1 回だけ確認する。
+現在の依頼と既存の許可から、操作ごとに実行範囲を判断する。
 
-```text
-question: "どこまで実施しますか？"
-options:
-  - 軽量（コミットメッセージ出力のみ）: Issue/PR を作らず、変更とコミットメッセージの提示で終了
-  - Issue/PR まで作成: Issue 作成 → 並列実装 → コミット → PR 作成まで実施
-```
+- 実装だけの依頼: 実装・レビュー・検証を行い、コミットや Issue・PR を作るかの追加質問はせず終了する。
+- コミットだけの依頼: チェック後に対象変更をコミットする。push や Issue・PR 作成は行わない。
+- PR 作成の依頼: 必要な実装・検証・対象変更のコミット・通常の feature branch push を完了して PR を作成する。Issue は依頼されているか、許可済みのワークフローで必要な場合だけ作成する。
+- Issue 作成の依頼: 依頼された Issue と明示された後続操作だけを行う。必要に応じて確認済みの既存 Issue を参照する。
+- 「push しない」などの明示的な制約を優先する。範囲を黙って広げず、具体的な阻害要因を報告する。
+
+許可済みの操作に `--no-confirm`、計画承認、完了時の再承認を要求しない。後続の仕上げ手順も個別に許可された操作だけを実行し、依頼されていない手順は省略する。重要な範囲変更、破壊的操作、高影響操作が発生する場合は許可を再確認する。
 
 ### git の状態判定
 
@@ -113,28 +114,28 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1
 
 ### 計画書の扱いの判定
 
-1. 「計画を立ててから」等の依頼がある → **plan mode**: `EnterPlanMode` で計画書を作成・承認してから実装フェーズへ
-2. 引数にタスク説明がある → **直接実行**: タスク説明をそのまま実装の指針にする
-3. 引数なし → **既存計画書**: 最新の計画書を読み込む（`ls -t ~/.claude/plans/*.md | head -1`）。見つからなければタスク説明を促して終了
+1. 「計画を立ててから」等の依頼がある → **計画作成**: `.claude/plans/` に計画を保存する。実装も依頼されていれば説明後に続行し、計画承認を明示的に求められた場合や重要な未解決の判断がある場合だけ待機する
+2. タスク説明がある → **直接実行**: タスク説明をそのまま実装の指針にする
+3. タスク説明なし → **既存計画書**: 最新の計画書を読み込む（`ls -t ~/.claude/plans/*.md | head -1`）。見つからなければタスク説明を促して終了
 
 ### session_id / slug ルール
 
-- Issue/PR 連携あり → `session_id` に Issue 番号を使用
-- 連携なし → タスク内容から簡潔な英語 slug を生成（生成できなければ `no-git-task`）
+- 確認済みの関連 Issue がある場合は、その番号を `session_id` に使う。
+- なければ PR 作成の有無によらず、タスクに基づく簡潔な英語 slug を `session_id` に使う。
 
 ## Phase 1: セットアップ + Admin 起動
 
-### ステップ A: Issue 作成（Issue/PR 連携ありのときのみ）
+### ステップ A: 許可されている場合だけ Issue を作成
 
-Skill ツールで `shiiman-github:issue-create --no-confirm` を呼び出す。本文は「## 概要 / ## タスク一覧（チェックボックス）/ ## 完了条件」で構成。作成された Issue 番号を `session_id` と後続に使う。
+`shiiman-github:issue-create` スキルのワークフローに従い、`--no-confirm` オプションで Issue を作成する。本文は「## 概要 / ## タスク一覧（チェックボックス）/ ## 完了条件」で構成。作成された Issue 番号を `session_id` と後続に使う。
 
 ### ステップ 1: ブランチ / worktree 作成
 
 git モードのみ実施（no-git はスキップ）。
 
-- worktree（既定）: Skill ツールで `shiiman-github:worktree-create` を呼び出す
-- ブランチ: Skill ツールで `shiiman-github:branch-create` を呼び出す
-- Issue/PR 連携ありの場合は Issue 番号を引数に渡す
+- worktree（既定）: `shiiman-github:worktree-create` スキルのワークフローに従う
+- ブランチ: `shiiman-github:branch-create` スキルのワークフローに従う
+- 確認済みの関連 Issue がある場合だけ Issue 番号を渡し、なければタスクに基づくブランチ名を使う。
 
 ### ステップ 2: Owner エージェント作成
 
@@ -149,7 +150,7 @@ owner_result = mcp__multi-agent-mcp__create_agent(role="owner", working_dir="パ
 mcp__multi-agent-mcp__get_role_guide(role="owner", caller_agent_id="{owner_id}")
 ```
 
-### ステップ 4: MCP ワークスペース初期化
+### ステップ 4: ワークスペース初期化
 
 ```text
 mcp__multi-agent-mcp__init_tmux_workspace(
@@ -190,7 +191,7 @@ mcp__multi-agent-mcp__send_task(
 
 ### ステップ 7: Admin の完了を待機
 
-macOS 通知で Admin からの完了報告が届く。ユーザーから「完了通知来てるか確認して」と指示されたら Phase 5 へ。
+利用可能なエージェントの状態確認・待機ツールで完了を監視し、完了したら Phase 5 へ進む。続行のためにユーザーから状態確認を依頼されるのを待たない。
 
 ```text
 mcp__multi-agent-mcp__get_dashboard_summary(caller_agent_id="{owner_id}")
@@ -199,9 +200,9 @@ mcp__multi-agent-mcp__read_messages(agent_id="{owner_id}", caller_agent_id="{own
 
 ## Phase 2-4: Admin/Worker の自律実行
 
-**MCP が自動制御。Owner は待機のみ。**
+**自動制御。Owner は待機のみ。**
 
-## Phase 5: 結果確認 + ユーザー承認
+## Phase 5: 結果を検証して続行
 
 ### ステップ 1: 完了報告と変更内容を表示
 
@@ -219,39 +220,20 @@ git diff --cached
 
 no-git モード: Admin の最終報告（実装サマリー・変更ファイル・テスト結果・残課題）を表示。
 
-### ステップ 2: ユーザー確認（🔴 必須）
+### ステップ 2: 結果と許可の確認
 
-**⚠️ クリーンアップの前に必ずユーザー確認を行う。**
+実際の差分と検証結果を確認し、範囲内の対応すべき指摘を修正する。実装と後続操作が許可済みなら自動で続行する。重要な未解決の判断や未許可の影響についてだけ質問し、形式的な「OK」を待たない。
 
-```text
-AskUserQuestion:
-  question: "実装内容を承認しますか？"
-  options:
-    - OK（承認）: 後続処理へ進む
-    - NG（修正依頼）: 修正内容を指定して Admin に再指示
-    - 保留: 手動で確認してから判断
-```
+クリーンアップツールが削除する対象を確認する。今回のタスクが所有するエージェントと一時リソースだけを片付け、worktree・変更・有用なユーザーの作業は保持する。ツールで範囲を保証できなければ削除せず報告する。
 
-### NG（修正依頼）の場合
+### 検証後の処理
 
-```text
-mcp__multi-agent-mcp__send_message(
-    sender_id="{owner_id}", receiver_id="{admin_id}",
-    message_type="request", content="修正依頼: {ユーザーの修正内容}",
-    caller_agent_id="{owner_id}"
-)
-```
-
-→ Phase 2-4 に戻り、Admin が修正タスクを実行。
-
-### OK（承認）の場合
-
-1. Admin に承認通知:
+1. Admin に検証完了と許可済みの後続操作への移行を通知する。
 
    ```text
    mcp__multi-agent-mcp__send_message(
        sender_id="{owner_id}", receiver_id="{admin_id}",
-       message_type="task_approved", content="ユーザー確認完了。実装を承認します。",
+       message_type="task_approved", content="検証完了。許可済みの範囲で後続処理へ進みます。",
        caller_agent_id="{owner_id}"
    )
    ```
@@ -274,17 +256,17 @@ mcp__multi-agent-mcp__send_message(
 
 ## 仕上げ
 
-### Issue/PR 連携あり
+### 許可された仕上げ操作
 
-1. Issue の全チェックボックスを完了に更新
-2. コミット: Skill ツールで `shiiman-git:add-commit --no-confirm` を呼び出す
-3. プッシュ案内（自動実行しない）: `git push -u origin feature/{session_id}`
-4. PR 作成: Skill ツールで `shiiman-github:pr-create --no-confirm` を呼び出す。本文は「## 概要 / ## 並列実行サマリー（Worker×Task の表）/ ## 関連 Issue（`Closes #{issue番号}`）/ ## テスト計画」
-5. 完了報告（Issue 番号・ブランチ/worktree・PR 番号/URL・worktree クリーンアップ案内）
+1. 更新が許可された Issue のうち、実際に完了したタスクだけをチェックする。未完了タスクを完了にしない。
+2. コミット: `shiiman-git:add-commit` スキルのワークフローに従い、`--no-confirm` オプションでコミットする
+3. push または PR 作成が許可されていれば、remote・送信先・対象コミットを確認して実際の feature branch を通常の push で公開する。この許可だけで force-push、デフォルトブランチへの push、無関係な作業の公開は行わない。
+4. PR 作成: `shiiman-github:pr-create` スキルのワークフローに従い、`--no-confirm` オプションで PR を作成する。日本語で概要・並列タスクの結果・検証結果を記載する。`Closes #N` は確認済みの関連 Issue がある場合だけ含め、なければ Issue 欄を省略する。
+5. 実際の変更・チェック・完了した操作を報告する。Issue・PR の番号と URL は存在する場合だけ含め、未実行の操作を完了と主張しない。
 
 ### Issue/PR 連携なし（軽量）
 
-**コミット・プッシュ・PR 作成は行わない。** 推奨コミットメッセージを出力して終了する。
+実装だけの依頼では、変更と検証結果を報告して終了し、コミット・push・Issue・PR 作成は行わない。コミットだけの明示的な依頼では、検証して対象変更をコミットし、結果を報告する。任意の後続操作を追加で質問しない。
 
 ```text
 ## 実装完了
@@ -293,11 +275,10 @@ mcp__multi-agent-mcp__send_message(
 - {ブランチ名} / パス: {worktree のパス}（worktree モード時のみ）
 
 ### 推奨コミットメッセージ
-{Conventional Commits 形式（`.claude/settings.json` の git.commitMessage 設定があればそれに従う）}
+{リポジトリとグローバル指示に従う Conventional Commits メッセージ}
 
-### 次のステップ
-git push -u origin feature/{session_id}
-必要に応じて gh pr create
+### 検証結果
+{実行したチェック・結果・残課題}
 
 ### worktree クリーンアップ（worktree モード時のみ）
 PR マージ後、`/shiiman-git:worktree` で gtr rm または gtr clean を実行してください。
@@ -306,8 +287,8 @@ PR マージ後、`/shiiman-git:worktree` で gtr rm または gtr clean を実�
 ## 重要な注意事項
 
 - ✅ ユーザーにフラグを入力させない（git・worktree/branch・計画書・Issue/PR を自動判断、曖昧なら確認）
-- ✅ 全 MCP ツールに `caller_agent_id` を渡す
+- ✅ multi-agent-mcp のツールにだけ `caller_agent_id` を渡す
 - ✅ no-git モードでは `enable_git=false` と `branch_name` 省略を徹底
-- ✅ クリーンアップ前に必ずユーザー確認を行う
-- ✅ コミットメッセージは `.claude/settings.json` の設定に従う（なければ Conventional Commits）
-- ❌ Issue/PR 連携なしのときは自動でコミット・プッシュ・PR を作らない
+- クリーンアップの範囲と作業の保護を確認し、形式的な完了承認は追加しない。
+- コミットの規約はリポジトリとグローバル指示に従い、未対応の設定キーを仮定しない。
+- 外部操作や Git の仕上げ操作は、それぞれ許可された範囲内だけで実行する。

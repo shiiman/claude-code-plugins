@@ -1,6 +1,6 @@
 {
   "name": "shiiman-github",
-  "version": "4.3.1",
+  "version": "5.0.0",
   "description": "GitHub API / gh CLI 操作 - Issue、PR、ブランチ、worktree、GitHub Actions、リポジトリ設定管理を提供",
   "author": {
     "name": "shiiman"

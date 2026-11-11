@@ -43,6 +43,8 @@ claude plugin install shiiman-github@shiiman-claude-code-plugins
 
 ## バージョン履歴
 
+- v5.0.0: 許可済みのコミットを再確認せず実行し、push・PR 作成が依頼済みなら必要な通常の feature branch push まで進める（承認・push 動作の変更）
+
 - v4.0.0: スキル名から `git-` プレフィックスを削除（git-add-commit → add-commit, git-worktree → worktree, git-worktree-setup → worktree-setup）（破壊的変更）
 - v3.0.0: git-commit → git-add-commit にリネーム、git-gitignore-check を統合、git-commit-message-setup を削除、git-worktree を gtr v2.1.0 対応に更新、git-gtrconfig-setup → git-worktree-setup にリネーム（破壊的変更）
 - v2.0.0: shiiman-github プラグインへのスキル分離に伴い、GitHub 操作スキルを移動。全スキルを `git-` プレフィックス付きにリネーム（破壊的変更）

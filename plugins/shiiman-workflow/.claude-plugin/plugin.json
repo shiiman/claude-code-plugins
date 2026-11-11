@@ -1,6 +1,6 @@
 {
   "name": "shiiman-workflow",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "開発ワークフロー自動化 - シングル/マルチエージェント/Agent Team の開発フローを提供（Issue/PR 連携・git・計画書はフラグ不要で自動判断）",
   "author": {
     "name": "shiiman"

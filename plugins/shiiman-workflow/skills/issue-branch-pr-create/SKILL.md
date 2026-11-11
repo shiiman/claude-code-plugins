@@ -1,6 +1,6 @@
 ---
 name: shiiman-workflow:issue-branch-pr-create
-description: 既存変更から Issue → ブランチ → コミット・プッシュ（コマンド提示）→ PR を作成する Backward フロー。「変更から Issue と PR」「既存変更を PR に」「diff から Issue」「変更を Issue 化」「Backward フロー」などで起動。
+description: 既存変更から Issue → ブランチ → コミット・通常の push→ PR を作成する Backward フロー。「変更から Issue と PR」「既存変更を PR に」「diff から Issue」「変更を Issue 化」「Backward フロー」などで起動。
 allowed-tools: [Read, Bash, Glob, Grep, Skill, AskUserQuestion]
 context: fork
 user-invocable: true
@@ -9,7 +9,7 @@ argument-hint: "[--help]"
 
 # Issue Branch PR Create（Backward フロー）
 
-既存の変更内容から Issue → ブランチ → コミット → プッシュ提示 → PR を作成する Backward フロー。
+既存の変更内容から Issue → ブランチ → コミット → push → PR を作成する Backward フロー。
 
 ## Help
 
@@ -20,7 +20,7 @@ argument-hint: "[--help]"
 
 概要:
   ワーキングツリーの変更やコミット済み未プッシュの変更から
-  Issue → ブランチ/worktree → コミット → プッシュ提示 → PR を自動作成する。
+  Issue → ブランチ/worktree → コミット → push → PR を自動作成する。
 
 使用方法:
   /shiiman-workflow:issue-branch-pr-create
@@ -40,17 +40,17 @@ argument-hint: "[--help]"
 ## フロー概要
 
 ```
-既存変更 → 確認 → Issue 作成 → ブランチ/worktree 作成 → コミット → プッシュ提示 → PR 作成
+既存変更 → 確認 → Issue 作成 → ブランチ/worktree 作成 → コミット → push → PR 作成
 ```
 
 ## 状態分岐テーブル
 
 | ブランチ | 変更状態           | Issue      | Branch   | Commit   | Push | PR   |
 | -------- | ------------------ | ---------- | -------- | -------- | ---- | ---- |
-| default  | 未コミットあり     | 実行       | 実行     | 実行     | 提示 | 実行 |
-| default  | コミット済み未push | 実行       | 実行     | スキップ | 提示 | 実行 |
-| feature  | 未コミットあり     | 実行       | スキップ | 実行     | 提示 | 実行 |
-| feature  | コミット済み未push | 実行       | スキップ | スキップ | 提示 | 実行 |
+| default  | 未コミットあり     | 実行       | 実行     | 実行     | 実行 | 実行 |
+| default  | コミット済み未push | 実行       | 実行     | スキップ | 実行 | 実行 |
+| feature  | 未コミットあり     | 実行       | スキップ | 実行     | 実行 | 実行 |
+| feature  | コミット済み未push | 実行       | スキップ | スキップ | 実行 | 実行 |
 | any      | 変更なし           | エラー終了 | -        | -        | -    | -    |
 
 ## 実行フロー
@@ -159,19 +159,11 @@ Skill: shiiman-git:add-commit
 Args: --no-confirm
 ```
 
-### ステップ 5: プッシュコマンド提示
+### ステップ 5: 許可された feature branch の push
 
-**重要**: プッシュは自動実行しない。コマンドを表示するのみ。
+この Issue から PR までのフロー全体の明示的な依頼には、Issue・branch・コミット・通常の push・PR 作成を含む。remote・対象 feature branch・送信対象のコミットを確認して `git push -u origin {branch}` を実行する。この許可だけで force-push、デフォルトブランチへの push、無関係な変更の送信は行わない。
 
-```
-## プッシュコマンド
-
-以下のコマンドでリモートにプッシュしてください:
-
-\`\`\`bash
-git push -u origin {branch}
-\`\`\`
-```
+「push しない」と明示されている場合はそれを守り、未公開コミットのため PR 作成を完了できないことを報告する。push できたものとして続行したり PR 作成済みと主張したりしない。既存の許可で十分であり、`--no-confirm` は任意の互換オプションで、指定自体が許可を与えるものではない。
 
 ### ステップ 6: PR 作成
 
@@ -207,10 +199,10 @@ PR マージ後、不要になった worktree を削除してください:
 
 ## 重要な注意事項
 
-- ✅ プッシュは自動実行せず、コマンドを提示するのみ
+- 許可された PR 作成フローに必要な通常の feature branch push を実行する。
 - ✅ 変更がない場合はエラー終了する
 - ✅ デフォルトブランチ上の場合のみブランチを作成する
 - ✅ 未コミット変更がある場合のみコミットを実行する
 - ✅ Issue 作成・コミット・PR 作成は Skill ツール経由で実行する
 - ❌ 変更がないまま Issue や PR を作成しない
-- ❌ プッシュを自動実行しない
+- 既存の許可がある操作は再確認せず、force-push・デフォルトブランチへの push・無関係な変更の公開には許可を広げない。

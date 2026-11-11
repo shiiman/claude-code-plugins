@@ -145,7 +145,8 @@ class TestVersionConsistency:
     """plugin.json と marketplace.json のバージョン一致を検証"""
 
     @pytest.fixture(scope="class")
-    def marketplace_versions(self) -> dict[str, str]:
+    @classmethod
+    def marketplace_versions(cls) -> dict[str, str]:
         """marketplace.json のプラグイン名 → バージョンマッピング"""
         data = _load_marketplace()
         return {p["name"]: p["version"] for p in data["plugins"]}
