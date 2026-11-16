@@ -5,4 +5,4 @@ google-auth-oauthlib==1.5.0
 google-auth-httplib2==0.4.4
 
 # shiiman-slack プラグイン用
-slack-sdk==3.46.0
+slack-sdk==3.47.0
