@@ -1,8 +1,8 @@
 # shiiman-google プラグイン用
 google-api-python-client==2.202.0
-google-auth==2.62.2
+google-auth==2.63.1
 google-auth-oauthlib==1.5.0
 google-auth-httplib2==0.4.4
 
 # shiiman-slack プラグイン用
-slack-sdk==3.47.0
+slack-sdk==3.48.0
